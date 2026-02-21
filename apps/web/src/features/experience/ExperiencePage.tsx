@@ -27,7 +27,7 @@ export default function ExperiencePage() {
               to={`/experience/${item.id}`}
               className="block rounded-lg border border-gray-700 bg-card p-6 transition-colors hover:border-blue-500"
             >
-              <div className="mb-4 flex items-start gap-4">
+              <div className="flex items-start gap-4">
                 {companyLogos[item.company] && (
                   <img
                     src={companyLogos[item.company]}
@@ -57,22 +57,20 @@ export default function ExperiencePage() {
                     <span>•</span>
                     <span>{item.location}</span>
                   </div>
+                  <div className="mt-3 flex flex-wrap gap-2">
+                    {item.technologies.map((tech) => (
+                      <span
+                        key={tech}
+                        className="rounded-full bg-blue-100 px-3 py-1 text-sm text-blue-800 dark:bg-blue-900 dark:text-blue-200"
+                      >
+                        {tech}
+                      </span>
+                    ))}
+                  </div>
+                  <p className="mt-3 text-sm text-gray-400">
+                    Click to view details →
+                  </p>
                 </div>
-              </div>
-              <ul className="mb-4 list-disc space-y-2 pl-5 text-gray-300">
-                {item.description.map((desc) => (
-                  <li key={desc}>{desc}</li>
-                ))}
-              </ul>
-              <div className="flex flex-wrap gap-2">
-                {item.technologies.map((tech) => (
-                  <span
-                    key={tech}
-                    className="rounded-full bg-blue-100 px-3 py-1 text-sm text-blue-800 dark:bg-blue-900 dark:text-blue-200"
-                  >
-                    {tech}
-                  </span>
-                ))}
               </div>
             </Link>
           ))}
