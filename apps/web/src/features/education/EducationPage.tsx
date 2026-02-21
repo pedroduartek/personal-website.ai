@@ -1,7 +1,10 @@
 import PageSEO from '../../components/seo/PageSEO'
 import { education } from '../../content/education'
+import { conferences } from '../../content/conferences'
 import polytechnicLogo from '../../images/polytechnic_setubal.png'
 import formabaseLogo from '../../images/formabase.png'
+import azureDevSummitLogo from '../../images/azure_dev_summit.png'
+import webSummitLogo from '../../images/web_summit.png'
 
 export default function EducationPage() {
   const institutionLogos: Record<string, string> = {
@@ -9,11 +12,16 @@ export default function EducationPage() {
     Formabase: formabaseLogo,
   }
 
+  const conferenceLogos: Record<string, string> = {
+    'Azure Dev Summit': azureDevSummitLogo,
+    'Web Summit': webSummitLogo,
+  }
+
   return (
     <>
       <PageSEO
-        title="Education"
-        description="Academic background and certifications"
+        title="Education & Conferences"
+        description="Academic background, certifications, and conference participation"
       />
       <div className="container mx-auto px-4 py-16">
         <h1 className="mb-8 text-4xl font-bold text-white">Education</h1>
@@ -86,6 +94,65 @@ export default function EducationPage() {
                       View Certificate
                     </a>
                   )}
+                </div>
+              </div>
+            </article>
+          ))}
+        </div>
+
+        {/* Conferences & Events Section */}
+        <h2 className="mb-6 mt-12 text-3xl font-bold text-white">
+          Conferences & Events
+        </h2>
+        <div className="space-y-6">
+          {conferences.map((item) => (
+            <article
+              key={item.id}
+              className="rounded-lg border border-gray-700 bg-card p-6"
+            >
+              <div className="mb-4 flex items-start gap-4">
+                {conferenceLogos[item.name] && (
+                  <img
+                    src={conferenceLogos[item.name]}
+                    alt={`${item.name} logo`}
+                    className="h-16 w-16 rounded object-contain"
+                  />
+                )}
+                <div className="flex-1">
+                  <div className="mb-2 flex items-center gap-2">
+                    <h3 className="text-2xl font-bold text-white">
+                      {item.name}
+                    </h3>
+                    <span
+                      className={`rounded px-2 py-1 text-xs font-semibold ${
+                        item.type === 'presented'
+                          ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200'
+                          : item.type === 'organized'
+                            ? 'bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200'
+                            : 'bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-200'
+                      }`}
+                    >
+                      {item.type}
+                    </span>
+                  </div>
+                  {item.title && (
+                    <p className="mb-2 text-lg font-semibold text-gray-300">
+                      {item.title}
+                    </p>
+                  )}
+                  {item.description && (
+                    <p className="mb-3 text-gray-400">{item.description}</p>
+                  )}
+                  <div className="flex items-center gap-4 text-sm text-gray-400">
+                    <time>
+                      {new Date(item.date).toLocaleDateString('en-US', {
+                        year: 'numeric',
+                        month: 'long',
+                      })}
+                    </time>
+                    <span>•</span>
+                    <span>{item.location}</span>
+                  </div>
                 </div>
               </div>
             </article>
