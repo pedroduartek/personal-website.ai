@@ -16,19 +16,36 @@ export default function HomePage() {
         <section className="mb-16">
           <h1 className="mb-4 text-5xl font-bold text-white">{profile.name}</h1>
           <p className="mb-4 text-2xl text-gray-300">{profile.role}</p>
-          <p className="mb-8 text-lg text-gray-400">{profile.bio}</p>
+          <div className="mb-8 max-w-3xl">
+            <p className="mb-4 text-lg text-gray-300">
+              Welcome! I'm a backend software engineer with 6 years of
+              experience in C#/.NET, microservices, and event-driven systems.
+            </p>
+            <p className="mb-4 text-lg text-gray-300">
+              This website itself is a learning project. As someone who knows
+              close to nothing about frontend development, I'm using AI-assisted
+              tools to build this site and learn React, TypeScript, and modern
+              frontend practices along the way. You can find more details about
+              this project in the Personal Projects section.
+            </p>
+            <p className="mb-4 text-lg text-gray-300">
+              It's an experiment in leveraging AI for developer
+              productivity—using the same curiosity and automation mindset I
+              apply to backend systems and my Home Assistant lab.
+            </p>
+          </div>
           <div className="flex gap-4">
             <Link
               to="/experience"
               className="rounded-lg bg-blue-600 px-6 py-3 font-semibold text-white hover:bg-blue-700"
             >
-              View Experience
+              Professional Experience
             </Link>
             <Link
               to="/projects"
               className="rounded-lg border border-gray-700 px-6 py-3 font-semibold text-white hover:bg-gray-800"
             >
-              See Projects
+              Personal Projects
             </Link>
             <Link
               to="/contact"
@@ -41,7 +58,7 @@ export default function HomePage() {
 
         <section>
           <h2 className="mb-6 text-3xl font-bold text-white">
-            Featured Projects
+            Featured Personal Projects
           </h2>
           <div className="grid gap-6 md:grid-cols-3">
             {featuredProjects.map((project) => (
