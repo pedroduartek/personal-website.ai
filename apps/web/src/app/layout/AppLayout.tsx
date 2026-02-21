@@ -16,7 +16,6 @@ export default function AppLayout() {
           <Outlet />
         </Suspense>
       </main>
-      <Footer />
     </div>
   )
 }
@@ -33,7 +32,9 @@ function Header() {
             <NavLink to="/about">About</NavLink>
             <NavLink to="/experience">Professional Experience</NavLink>
             <NavLink to="/education">Education</NavLink>
+            <NavLink to="/skills">Skills</NavLink>
             <NavLink to="/projects">Personal Projects</NavLink>
+            <NavLink to="/cv">Download CV</NavLink>
             <NavLink to="/contact">Contact</NavLink>
           </div>
         </div>
@@ -47,42 +48,5 @@ function NavLink({ to, children }: { to: string; children: React.ReactNode }) {
     <Link to={to} className="text-gray-300 hover:text-white">
       {children}
     </Link>
-  )
-}
-
-function Footer() {
-  return (
-    <footer className="border-t border-gray-800">
-      <div className="container mx-auto px-4 py-8">
-        <div className="flex flex-col items-center justify-between gap-4 sm:flex-row">
-          <p className="text-sm text-gray-400">
-            © {new Date().getFullYear()} All rights reserved.
-          </p>
-          <div className="flex gap-6">
-            <Link to="/cv" className="text-sm text-gray-400 hover:text-white">
-              Download CV
-            </Link>
-            <Link
-              to="/skills"
-              className="text-sm text-gray-400 hover:text-white"
-            >
-              Skills
-            </Link>
-            <Link
-              to="/conferences"
-              className="text-sm text-gray-400 hover:text-white"
-            >
-              Conferences
-            </Link>
-            <Link
-              to="/education"
-              className="text-sm text-gray-400 hover:text-white"
-            >
-              Education
-            </Link>
-          </div>
-        </div>
-      </div>
-    </footer>
   )
 }
