@@ -176,11 +176,9 @@ export default function CVPage() {
     <>
       <PageSEO title="Download CV" description="Download my CV as PDF" />
       <div className="container mx-auto px-4 py-16">
-        <h1 className="mb-8 text-4xl font-bold text-gray-900 dark:text-white">
-          Download CV
-        </h1>
+        <h1 className="mb-8 text-4xl font-bold text-white">Download CV</h1>
         <div className="max-w-2xl">
-          <p className="mb-6 text-lg text-gray-700 dark:text-gray-300">
+          <p className="mb-6 text-lg text-gray-300">
             Download my CV as a PDF for easy sharing and printing. The CV
             contains my complete professional experience, education, and skills.
           </p>

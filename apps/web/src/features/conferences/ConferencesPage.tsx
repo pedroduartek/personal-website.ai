@@ -9,19 +9,17 @@ export default function ConferencesPage() {
         description="Conference presentations, talks, and events"
       />
       <div className="container mx-auto px-4 py-16">
-        <h1 className="mb-8 text-4xl font-bold text-gray-900 dark:text-white">
+        <h1 className="mb-8 text-4xl font-bold text-white">
           Conferences & Talks
         </h1>
         <div className="space-y-6">
           {conferences.map((item) => (
             <article
               key={item.id}
-              className="rounded-lg border border-gray-200 p-6 dark:border-gray-800"
+              className="rounded-lg border border-gray-700 bg-card p-6"
             >
               <div className="mb-2 flex items-center gap-2">
-                <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
-                  {item.name}
-                </h2>
+                <h2 className="text-2xl font-bold text-white">{item.name}</h2>
                 <span
                   className={`rounded px-2 py-1 text-xs font-semibold ${
                     item.type === 'presented'
@@ -35,16 +33,14 @@ export default function ConferencesPage() {
                 </span>
               </div>
               {item.title && (
-                <p className="mb-2 text-lg font-semibold text-gray-700 dark:text-gray-300">
+                <p className="mb-2 text-lg font-semibold text-gray-300">
                   {item.title}
                 </p>
               )}
               {item.description && (
-                <p className="mb-3 text-gray-600 dark:text-gray-400">
-                  {item.description}
-                </p>
+                <p className="mb-3 text-gray-400">{item.description}</p>
               )}
-              <div className="mb-3 flex items-center gap-4 text-sm text-gray-600 dark:text-gray-400">
+              <div className="mb-3 flex items-center gap-4 text-sm text-gray-400">
                 <time>
                   {new Date(item.date).toLocaleDateString('en-US', {
                     year: 'numeric',

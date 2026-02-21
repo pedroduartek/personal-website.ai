@@ -3,35 +3,20 @@ import type { ConferenceItem } from './types'
 export const conferences: ConferenceItem[] = [
   {
     id: '1',
-    name: 'ReactConf 2025',
-    type: 'presented',
+    name: 'Azure Dev Summit',
+    type: 'attended',
     date: '2025-10',
-    location: 'San Francisco, CA',
-    title: 'Building Scalable React Applications',
+    location: 'Conference Location',
     description:
-      'Presented best practices for building and maintaining large-scale React applications',
-    links: {
-      slides: 'https://slides.example.com/reactconf-2025',
-      video: 'https://youtube.com/watch?v=example',
-    },
+      'Microsoft technology focused conference spanning 4 days. Included a full-day workshop building an app with Aspire.',
   },
   {
     id: '2',
-    name: 'TypeScript Summit 2024',
-    type: 'attended',
-    date: '2024-09',
-    location: 'Remote',
-    description:
-      'Attended talks on advanced TypeScript patterns and best practices',
-  },
-  {
-    id: '3',
-    name: 'Local Tech Meetup',
+    name: 'Web Summit',
     type: 'organized',
-    date: '2024-06',
-    location: 'Your City',
-    title: 'Monthly React Developers Meetup',
-    description:
-      'Organized monthly meetups for local React developers to share knowledge and network',
+    date: '2019-11',
+    location: 'Lisbon, Portugal',
+    title: 'Volunteer',
+    description: 'Helped organizing in the days prior to the event.',
   },
 ]

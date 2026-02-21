@@ -13,9 +13,7 @@ describe('ProjectDetailPage', () => {
       </MemoryRouter>,
     )
 
-    expect(
-      screen.getByText('Project Management Tool'),
-    ).toBeInTheDocument()
+    expect(screen.getByText('Project Management Tool')).toBeInTheDocument()
   })
 
   it('shows not found for invalid slug', () => {

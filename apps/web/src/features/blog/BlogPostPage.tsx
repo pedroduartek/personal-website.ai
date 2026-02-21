@@ -22,7 +22,7 @@ export default function BlogPostPage() {
   if (loading) {
     return (
       <div className="container mx-auto px-4 py-16">
-        <p className="text-gray-600 dark:text-gray-300">Loading...</p>
+        <p className="text-gray-300">Loading...</p>
       </div>
     )
   }
@@ -30,9 +30,7 @@ export default function BlogPostPage() {
   if (!post) {
     return (
       <div className="container mx-auto px-4 py-16">
-        <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
-          Post not found
-        </h1>
+        <h1 className="text-2xl font-bold text-white">Post not found</h1>
       </div>
     )
   }
@@ -42,10 +40,8 @@ export default function BlogPostPage() {
       <PageSEO title={post.title} description={post.excerpt} />
       <article className="container mx-auto px-4 py-16">
         <header className="mb-8">
-          <h1 className="mb-4 text-4xl font-bold text-gray-900 dark:text-white">
-            {post.title}
-          </h1>
-          <time className="mb-4 block text-gray-600 dark:text-gray-400">
+          <h1 className="mb-4 text-4xl font-bold text-white">{post.title}</h1>
+          <time className="mb-4 block text-gray-400">
             {new Date(post.date).toLocaleDateString('en-US', {
               year: 'numeric',
               month: 'long',
@@ -56,7 +52,7 @@ export default function BlogPostPage() {
             {post.tags.map((tag) => (
               <span
                 key={tag}
-                className="rounded-full bg-gray-100 px-3 py-1 text-sm text-gray-700 dark:bg-gray-800 dark:text-gray-300"
+                className="rounded-full bg-gray-800 px-3 py-1 text-sm text-gray-300"
               >
                 {tag}
               </span>
