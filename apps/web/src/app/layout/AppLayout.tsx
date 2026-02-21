@@ -31,8 +31,8 @@ function Header() {
           </Link>
           <div className="flex gap-6">
             <NavLink to="/about">About</NavLink>
-            <NavLink to="/experience">Experience</NavLink>
-            <NavLink to="/projects">Projects</NavLink>
+            <NavLink to="/experience">Professional Experience</NavLink>
+            <NavLink to="/projects">Personal Projects</NavLink>
             <NavLink to="/contact">Contact</NavLink>
           </div>
         </div>
