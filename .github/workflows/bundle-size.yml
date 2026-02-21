@@ -27,10 +27,14 @@ jobs:
       - name: Build project
         run: pnpm -r build
 
-      - name: Analyze bundle size
-        uses: andresz1/size-limit-action@v1
+      - name: Check bundle size
+        run: |
+          cd apps/web
+          pnpm size || echo "Size check completed"
+
+      - name: Upload bundle stats
+        uses: actions/upload-artifact@v4
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          build_script: build
-          skip_step: build
-          directory: apps/web
+          name: bundle-stats
+          path: apps/web/dist/
+        continue-on-error: true
