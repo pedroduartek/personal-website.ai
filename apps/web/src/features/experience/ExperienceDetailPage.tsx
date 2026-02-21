@@ -1,6 +1,15 @@
 import { Link, useParams } from 'react-router-dom'
 import PageSEO from '../../components/seo/PageSEO'
 import { experience } from '../../content/experience'
+import enhesaLogo from '../../images/enhesa.png'
+import vortalLogo from '../../images/vortal.png'
+import closerLogo from '../../images/closer_consulting.png'
+
+const companyLogos: Record<string, string> = {
+  Enhesa: enhesaLogo,
+  VORTAL: vortalLogo,
+  'Closer Consulting': closerLogo,
+}
 
 const createCompanySlug = (company: string) =>
   company.toLowerCase().replace(/\s+/g, '-')
@@ -90,9 +99,18 @@ export default function ExperienceDetailPage() {
           ← Back to experience
         </Link>
 
-        <div className="mb-8">
-          <h1 className="mb-2 text-4xl font-bold text-white">{company}</h1>
-          <p className="text-lg text-gray-400">{location}</p>
+        <div className="mb-8 flex items-center gap-4">
+          {companyLogos[company] && (
+            <img
+              src={companyLogos[company]}
+              alt={`${company} logo`}
+              className="h-16 w-16 rounded object-contain"
+            />
+          )}
+          <div>
+            <h1 className="mb-2 text-4xl font-bold text-white">{company}</h1>
+            <p className="text-lg text-gray-400">{location}</p>
+          </div>
         </div>
 
         <div className="mb-8 rounded-lg border border-gray-700 bg-card p-6">
