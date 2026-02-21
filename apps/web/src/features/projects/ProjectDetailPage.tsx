@@ -1,0 +1,123 @@
+import { Link, useParams } from 'react-router-dom'
+import PageSEO from '../../components/seo/PageSEO'
+import { projects } from '../../content/projects'
+
+export default function ProjectDetailPage() {
+  const { slug } = useParams<{ slug: string }>()
+  const project = projects.find((p) => p.slug === slug)
+
+  if (!project) {
+    return (
+      <div className="container mx-auto px-4 py-16">
+        <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
+          Project not found
+        </h1>
+        <Link
+          to="/projects"
+          className="mt-4 inline-block text-blue-600 hover:underline"
+        >
+          ← Back to projects
+        </Link>
+      </div>
+    )
+  }
+
+  return (
+    <>
+      <PageSEO title={project.title} description={project.description} />
+      <div className="container mx-auto px-4 py-16">
+        <Link
+          to="/projects"
+          className="mb-6 inline-block text-blue-600 hover:underline dark:text-blue-400"
+        >
+          ← Back to projects
+        </Link>
+
+        <h1 className="mb-4 text-4xl font-bold text-gray-900 dark:text-white">
+          {project.title}
+        </h1>
+
+        <p className="mb-6 text-xl text-gray-700 dark:text-gray-300">
+          {project.description}
+        </p>
+
+        <div className="mb-8 flex flex-wrap gap-2">
+          {project.technologies.map((tech) => (
+            <span
+              key={tech}
+              className="rounded-full bg-blue-100 px-3 py-1 text-sm text-blue-800 dark:bg-blue-900 dark:text-blue-200"
+            >
+              {tech}
+            </span>
+          ))}
+        </div>
+
+        <div className="mb-6 grid gap-6 md:grid-cols-2">
+          <section className="rounded-lg border border-gray-200 p-6 dark:border-gray-800">
+            <h2 className="mb-3 text-xl font-semibold text-gray-900 dark:text-white">
+              The Problem
+            </h2>
+            <p className="text-gray-700 dark:text-gray-300">
+              {project.problem}
+            </p>
+          </section>
+
+          <section className="rounded-lg border border-gray-200 p-6 dark:border-gray-800">
+            <h2 className="mb-3 text-xl font-semibold text-gray-900 dark:text-white">
+              The Approach
+            </h2>
+            <p className="text-gray-700 dark:text-gray-300">
+              {project.approach}
+            </p>
+          </section>
+        </div>
+
+        {project.links && (
+          <div className="mb-6 flex gap-4">
+            {project.links.demo && (
+              <a
+                href={project.links.demo}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="rounded-lg bg-blue-600 px-4 py-2 text-white hover:bg-blue-700"
+              >
+                View Demo
+              </a>
+            )}
+            {project.links.github && (
+              <a
+                href={project.links.github}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="rounded-lg border border-gray-300 px-4 py-2 text-gray-900 hover:bg-gray-50 dark:border-gray-700 dark:text-white dark:hover:bg-gray-800"
+              >
+                View Code
+              </a>
+            )}
+          </div>
+        )}
+
+        <div className="text-sm text-gray-600 dark:text-gray-400">
+          <time>
+            {new Date(project.startDate).toLocaleDateString('en-US', {
+              year: 'numeric',
+              month: 'long',
+            })}
+          </time>
+          {project.endDate && (
+            <>
+              {' '}
+              -{' '}
+              <time>
+                {new Date(project.endDate).toLocaleDateString('en-US', {
+                  year: 'numeric',
+                  month: 'long',
+                })}
+              </time>
+            </>
+          )}
+        </div>
+      </div>
+    </>
+  )
+}
