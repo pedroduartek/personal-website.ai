@@ -23,15 +23,15 @@ export default function SkillsPage() {
         title="Skills"
         description="Technical skills and expertise across various technologies"
       />
-      <div className="container mx-auto px-4 py-16 animate-slide-down">
-        <h1 className="mb-8 text-4xl font-bold text-white">Skills</h1>
+      <div className="container mx-auto px-4 py-8 animate-slide-down md:py-16">
+        <h1 className="mb-8 text-3xl font-bold text-white md:text-4xl">Skills</h1>
         <div className="grid gap-8 md:grid-cols-2">
           {skills.map((group) => (
             <section
               key={group.category}
               className="rounded-lg border border-gray-700 bg-card p-6"
             >
-              <h2 className="mb-4 text-2xl font-semibold text-white">
+              <h2 className="mb-4 text-xl font-semibold text-white md:text-2xl">
                 {group.category}
               </h2>
               <div className="space-y-3">

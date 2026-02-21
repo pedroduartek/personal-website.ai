@@ -24,8 +24,8 @@ export default function ExperienceDetailPage() {
 
   if (companyRoles.length === 0) {
     return (
-      <div className="container mx-auto px-4 py-16 animate-slide-down">
-        <h1 className="text-2xl font-bold text-white">Experience not found</h1>
+      <div className="container mx-auto px-4 py-8 animate-slide-down md:py-16">
+        <h1 className="text-xl font-bold text-white md:text-2xl">Experience not found</h1>
         <Link
           to="/experience"
           className="mt-4 inline-block text-blue-600 transition-all duration-200 hover:translate-x-[-4px] hover:underline"
@@ -91,7 +91,7 @@ export default function ExperienceDetailPage() {
         title={`Experience at ${company}`}
         description={companyRoles[0].description[0]}
       />
-      <div className="container mx-auto px-4 py-16 animate-slide-down">
+      <div className="container mx-auto px-4 py-8 animate-slide-down md:py-16">
         <Link
           to="/experience"
           className="mb-6 inline-block text-blue-600 transition-all duration-200 hover:translate-x-[-4px] hover:underline dark:text-blue-400"
@@ -108,8 +108,8 @@ export default function ExperienceDetailPage() {
             />
           )}
           <div>
-            <h1 className="mb-2 text-4xl font-bold text-white">{company}</h1>
-            <p className="text-lg text-gray-400">{location}</p>
+            <h1 className="mb-2 text-3xl font-bold text-white md:text-4xl">{company}</h1>
+            <p className="text-base text-gray-400 md:text-lg">{location}</p>
           </div>
         </div>
 
@@ -136,7 +136,7 @@ export default function ExperienceDetailPage() {
               className="rounded-lg border border-gray-700 bg-card p-6"
             >
               <div className="mb-6">
-                <h2 className="text-2xl font-bold text-white">{role.title}</h2>
+                <h2 className="text-xl font-bold text-white md:text-2xl">{role.title}</h2>
                 <div className="mt-2 flex items-center gap-4 text-gray-400">
                   <time>
                     {new Date(role.startDate).toLocaleDateString('en-US', {
