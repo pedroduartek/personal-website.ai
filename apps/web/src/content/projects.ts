@@ -2,47 +2,23 @@ import type { Project } from './types'
 
 export const projects: Project[] = [
   {
-    slug: 'project-management-tool',
-    title: 'Project Management Tool',
+    slug: 'home-assistant',
+    title: 'Home Assistant: Local-First Smart Home',
     description:
-      'A modern project management application with real-time collaboration features',
+      'Self-hosted Home Assistant OS setup with 50+ Zigbee devices for automation, energy awareness, and comfort optimization',
     problem:
-      'Teams needed a lightweight, intuitive tool for managing projects without the overhead of enterprise solutions',
+      'Wanted to improve day-to-day comfort and reduce friction at home while maintaining a local-first approach that works without internet. Needed a system simple enough for non-technical users while being powerful enough for complex automations.',
     approach:
-      'Built a React-based SPA with real-time updates using WebSockets, focusing on simplicity and speed',
-    technologies: ['React', 'TypeScript', 'Node.js', 'WebSocket', 'MongoDB'],
-    links: {
-      demo: 'https://demo.example.com',
-      github: 'https://github.com/yourusername/project',
-    },
+      'Built a robust Zigbee mesh network using Home Assistant OS with ZHA coordinator and 50+ devices. Focused on reliability through strategic placement of routing devices and weekly updates. Designed automations as event-driven systems with location-based routines, energy monitoring, and security integrations.',
+    technologies: [
+      'Home Assistant OS',
+      'Zigbee (ZHA)',
+      'SkyConnect Coordinator',
+      'Nabu Casa',
+      'Grafana',
+      'IoT Automation',
+    ],
     featured: true,
-    startDate: '2023-01',
-    endDate: '2023-06',
-  },
-  {
-    slug: 'data-visualization-dashboard',
-    title: 'Data Visualization Dashboard',
-    description:
-      'Interactive dashboard for analyzing and visualizing large datasets',
-    problem:
-      'Stakeholders struggled to interpret raw data and needed actionable insights',
-    approach:
-      'Created an interactive dashboard with customizable charts and real-time data processing',
-    technologies: ['React', 'D3.js', 'Python', 'FastAPI', 'PostgreSQL'],
-    featured: true,
-    startDate: '2022-08',
-    endDate: '2022-12',
-  },
-  {
-    slug: 'mobile-app-backend',
-    title: 'Mobile App Backend API',
-    description: 'RESTful API serving a mobile application with 100k+ users',
-    problem: 'Needed a scalable, secure backend for mobile app',
-    approach:
-      'Designed and implemented a microservices architecture with proper authentication and caching',
-    technologies: ['Node.js', 'Express', 'Redis', 'PostgreSQL', 'AWS'],
-    featured: false,
-    startDate: '2021-03',
-    endDate: '2021-09',
+    startDate: '2023-09',
   },
 ]

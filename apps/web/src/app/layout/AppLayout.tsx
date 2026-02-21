@@ -27,13 +27,12 @@ function Header() {
       <nav className="container mx-auto px-4 py-4">
         <div className="flex items-center justify-between">
           <Link to="/" className="text-xl font-bold text-white">
-            Personal Website
+            PEDRODUARTEK
           </Link>
           <div className="flex gap-6">
             <NavLink to="/about">About</NavLink>
             <NavLink to="/experience">Experience</NavLink>
             <NavLink to="/projects">Projects</NavLink>
-            <NavLink to="/blog">Blog</NavLink>
             <NavLink to="/contact">Contact</NavLink>
           </div>
         </div>

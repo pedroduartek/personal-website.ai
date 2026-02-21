@@ -6,14 +6,16 @@ import ProjectDetailPage from '../features/projects/ProjectDetailPage'
 describe('ProjectDetailPage', () => {
   it('renders project details by slug', () => {
     render(
-      <MemoryRouter initialEntries={['/projects/project-management-tool']}>
+      <MemoryRouter initialEntries={['/projects/home-assistant']}>
         <Routes>
           <Route path="/projects/:slug" element={<ProjectDetailPage />} />
         </Routes>
       </MemoryRouter>,
     )
 
-    expect(screen.getByText('Project Management Tool')).toBeInTheDocument()
+    expect(
+      screen.getByText('Home Assistant: Local-First Smart Home'),
+    ).toBeInTheDocument()
   })
 
   it('shows not found for invalid slug', () => {
