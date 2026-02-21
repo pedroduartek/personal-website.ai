@@ -30,6 +30,52 @@ export default function ExperienceDetailPage() {
   const company = companyRoles[0].company
   const location = companyRoles[0].location
 
+  // Get unique technologies for the company, keeping most specific versions
+  const getUniqueTechnologies = () => {
+    // Flatten all technologies with their role index (0 is most recent)
+    const techsWithIndex = companyRoles.flatMap((role, index) =>
+      role.technologies.map((tech) => ({ tech, index })),
+    )
+
+    const uniqueTechs = new Map<string, string>()
+
+    for (const { tech, index } of techsWithIndex) {
+      const normalized = tech.toLowerCase()
+
+      // Check if we already have a similar technology
+      let foundSimilar = false
+      for (const [key, value] of uniqueTechs.entries()) {
+        const existingNormalized = value.toLowerCase()
+
+        // Check if technologies are similar (one contains the other)
+        if (
+          normalized.includes(existingNormalized) ||
+          existingNormalized.includes(normalized)
+        ) {
+          // Keep the more specific one (longer) or the one from a more recent role
+          if (
+            tech.length > value.length ||
+            (tech.length === value.length &&
+              index < parseInt(key.split('-')[1]))
+          ) {
+            uniqueTechs.delete(key)
+            uniqueTechs.set(`${tech}-${index}`, tech)
+          }
+          foundSimilar = true
+          break
+        }
+      }
+
+      if (!foundSimilar) {
+        uniqueTechs.set(`${tech}-${index}`, tech)
+      }
+    }
+
+    return Array.from(uniqueTechs.values())
+  }
+
+  const companyTechnologies = getUniqueTechnologies()
+
   return (
     <>
       <PageSEO
@@ -49,7 +95,23 @@ export default function ExperienceDetailPage() {
           <p className="text-lg text-gray-400">{location}</p>
         </div>
 
-        <div className="space-y-8">
+        <div className="mb-8 rounded-lg border border-gray-700 bg-card p-6">
+          <h2 className="mb-4 text-xl font-semibold text-white">
+            Technologies & Tools
+          </h2>
+          <div className="flex flex-wrap gap-2">
+            {companyTechnologies.map((tech) => (
+              <span
+                key={tech}
+                className="rounded-full bg-blue-100 px-3 py-1 text-sm text-blue-800 dark:bg-blue-900 dark:text-blue-200"
+              >
+                {tech}
+              </span>
+            ))}
+          </div>
+        </div>
+
+        <div className="mb-8 space-y-8">
           {companyRoles.map((role) => (
             <div
               key={role.id}
@@ -74,7 +136,7 @@ export default function ExperienceDetailPage() {
                 </div>
               </div>
 
-              <div className="mb-6">
+              <div>
                 <h3 className="mb-3 text-lg font-semibold text-white">
                   Key Responsibilities & Achievements
                 </h3>
@@ -86,22 +148,6 @@ export default function ExperienceDetailPage() {
                     </li>
                   ))}
                 </ul>
-              </div>
-
-              <div>
-                <h3 className="mb-3 text-lg font-semibold text-white">
-                  Technologies & Tools
-                </h3>
-                <div className="flex flex-wrap gap-2">
-                  {role.technologies.map((tech) => (
-                    <span
-                      key={tech}
-                      className="rounded-full bg-blue-100 px-3 py-1 text-sm text-blue-800 dark:bg-blue-900 dark:text-blue-200"
-                    >
-                      {tech}
-                    </span>
-                  ))}
-                </div>
               </div>
             </div>
           ))}
