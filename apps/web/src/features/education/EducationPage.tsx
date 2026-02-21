@@ -76,7 +76,7 @@ export default function EducationPage() {
                     <a
                       href={item.certificateUrl}
                       download
-                      className="mt-4 inline-flex items-center gap-2 rounded-lg border border-gray-600 bg-gray-800 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-gray-700"
+                      className="mt-4 inline-flex items-center gap-2 rounded-lg border border-gray-600 bg-gray-800 px-4 py-2 text-sm font-medium text-white transition-all duration-200 hover:scale-105 hover:bg-gray-700 hover:shadow-lg"
                     >
                       <svg
                         className="h-4 w-4"

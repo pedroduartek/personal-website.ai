@@ -12,7 +12,7 @@ export default function HomeAssistantProjectPage() {
       <div className="container mx-auto px-4 py-16 animate-slide-down">
         <Link
           to="/projects"
-          className="mb-6 inline-block text-blue-600 hover:underline dark:text-blue-400"
+          className="mb-6 inline-block text-blue-600 transition-all duration-200 hover:translate-x-[-4px] hover:underline dark:text-blue-400"
         >
           ← Back to projects
         </Link>

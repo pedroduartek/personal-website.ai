@@ -37,19 +37,19 @@ export default function HomePage() {
           <div className="flex gap-4">
             <Link
               to="/experience"
-              className="rounded-lg bg-blue-600 px-6 py-3 font-semibold text-white hover:bg-blue-700"
+              className="rounded-lg bg-blue-600 px-6 py-3 font-semibold text-white transition-all duration-200 hover:scale-105 hover:bg-blue-700 hover:shadow-lg hover:shadow-blue-600/50"
             >
               Professional Experience
             </Link>
             <Link
               to="/projects"
-              className="rounded-lg border border-gray-700 px-6 py-3 font-semibold text-white hover:bg-gray-800"
+              className="rounded-lg border border-gray-700 px-6 py-3 font-semibold text-white transition-all duration-200 hover:scale-105 hover:bg-gray-800 hover:shadow-lg"
             >
               Personal Projects
             </Link>
             <Link
               to="/contact"
-              className="rounded-lg border border-gray-700 px-6 py-3 font-semibold text-white hover:bg-gray-800"
+              className="rounded-lg border border-gray-700 px-6 py-3 font-semibold text-white transition-all duration-200 hover:scale-105 hover:bg-gray-800 hover:shadow-lg"
             >
               Contact Me
             </Link>
@@ -65,7 +65,7 @@ export default function HomePage() {
               <Link
                 key={project.slug}
                 to={`/projects/${project.slug}`}
-                className="group rounded-lg border border-gray-700 bg-card p-6 hover:border-blue-500"
+                className="group rounded-lg border border-gray-700 bg-card p-6 transition-all duration-300 hover:scale-[1.02] hover:border-blue-500 hover:shadow-lg hover:shadow-blue-500/10"
               >
                 <h3 className="mb-2 text-xl font-semibold text-white">
                   {project.title}

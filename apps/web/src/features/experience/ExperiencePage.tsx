@@ -86,7 +86,7 @@ export default function ExperiencePage() {
               <Link
                 key={company}
                 to={`/experience/${createCompanySlug(company)}`}
-                className="block rounded-lg border border-gray-700 bg-card p-6 transition-colors hover:border-blue-500"
+                className="block rounded-lg border border-gray-700 bg-card p-6 transition-all duration-300 hover:scale-[1.02] hover:border-blue-500 hover:shadow-lg hover:shadow-blue-500/10"
               >
                 <div className="mb-6 flex items-center gap-4">
                   {companyLogos[company] && (

@@ -16,7 +16,7 @@ export default function ProjectsPage() {
             <Link
               key={project.slug}
               to={`/projects/${project.slug}`}
-              className="group rounded-lg border border-gray-700 bg-card p-6 transition-colors hover:border-blue-500"
+              className="group rounded-lg border border-gray-700 bg-card p-6 transition-all duration-300 hover:scale-[1.02] hover:border-blue-500 hover:shadow-lg hover:shadow-blue-500/10"
             >
               {project.featured && (
                 <span className="mb-2 inline-block rounded bg-blue-600 px-2 py-1 text-xs font-semibold text-white">

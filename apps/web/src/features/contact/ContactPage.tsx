@@ -19,7 +19,7 @@ export default function ContactPage() {
               <h2 className="mb-2 text-xl font-semibold text-white">Email</h2>
               <a
                 href={`mailto:${profile.email}`}
-                className="text-blue-600 hover:underline dark:text-blue-400"
+                className="text-blue-600 transition-all duration-200 hover:translate-x-1 hover:underline dark:text-blue-400"
               >
                 {profile.email}
               </a>
@@ -33,7 +33,7 @@ export default function ContactPage() {
                 href={profile.linkedin}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-blue-600 hover:underline dark:text-blue-400"
+                className="text-blue-600 transition-all duration-200 hover:translate-x-1 hover:underline dark:text-blue-400"
               >
                 Connect on LinkedIn
               </a>
@@ -48,7 +48,7 @@ export default function ContactPage() {
                   href={profile.github}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-blue-600 hover:underline dark:text-blue-400"
+                  className="text-blue-600 transition-all duration-200 hover:translate-x-1 hover:underline dark:text-blue-400"
                 >
                   View GitHub Profile
                 </a>
@@ -64,7 +64,7 @@ export default function ContactPage() {
                   href={profile.twitter}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-blue-600 hover:underline dark:text-blue-400"
+                  className="text-blue-600 transition-all duration-200 hover:translate-x-1 hover:underline dark:text-blue-400"
                 >
                   Follow on Twitter
                 </a>

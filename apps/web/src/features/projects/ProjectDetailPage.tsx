@@ -12,7 +12,7 @@ export default function ProjectDetailPage() {
         <h1 className="text-2xl font-bold text-white">Project not found</h1>
         <Link
           to="/projects"
-          className="mt-4 inline-block text-blue-600 hover:underline"
+          className="mt-4 inline-block text-blue-600 transition-all duration-200 hover:translate-x-[-4px] hover:underline"
         >
           ← Back to projects
         </Link>
@@ -26,7 +26,7 @@ export default function ProjectDetailPage() {
       <div className="container mx-auto px-4 py-16 animate-slide-down">
         <Link
           to="/projects"
-          className="mb-6 inline-block text-blue-600 hover:underline dark:text-blue-400"
+          className="mb-6 inline-block text-blue-600 transition-all duration-200 hover:translate-x-[-4px] hover:underline dark:text-blue-400"
         >
           ← Back to projects
         </Link>
@@ -69,7 +69,7 @@ export default function ProjectDetailPage() {
                 href={project.links.demo}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="rounded-lg bg-blue-600 px-4 py-2 text-white hover:bg-blue-700"
+                className="rounded-lg bg-blue-600 px-4 py-2 text-white transition-all duration-200 hover:scale-105 hover:bg-blue-700 hover:shadow-lg hover:shadow-blue-600/50"
               >
                 View Demo
               </a>

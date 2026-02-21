@@ -19,7 +19,7 @@ export default function ExperienceDetailPage() {
         <h1 className="text-2xl font-bold text-white">Experience not found</h1>
         <Link
           to="/experience"
-          className="mt-4 inline-block text-blue-600 hover:underline"
+          className="mt-4 inline-block text-blue-600 transition-all duration-200 hover:translate-x-[-4px] hover:underline"
         >
           ← Back to experience
         </Link>
@@ -85,7 +85,7 @@ export default function ExperienceDetailPage() {
       <div className="container mx-auto px-4 py-16 animate-slide-down">
         <Link
           to="/experience"
-          className="mb-6 inline-block text-blue-600 hover:underline dark:text-blue-400"
+          className="mb-6 inline-block text-blue-600 transition-all duration-200 hover:translate-x-[-4px] hover:underline dark:text-blue-400"
         >
           ← Back to experience
         </Link>

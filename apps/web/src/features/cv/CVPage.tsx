@@ -16,7 +16,7 @@ export default function CVPage() {
           <a
             href={cvPdf}
             download={`${profile.name.replace(/\s+/g, '_')}_CV.pdf`}
-            className="inline-block rounded-lg bg-blue-600 px-6 py-3 font-semibold text-white hover:bg-blue-700"
+            className="inline-block rounded-lg bg-blue-600 px-6 py-3 font-semibold text-white transition-all duration-200 hover:scale-105 hover:bg-blue-700 hover:shadow-lg hover:shadow-blue-600/50"
           >
             Download CV (PDF)
           </a>
