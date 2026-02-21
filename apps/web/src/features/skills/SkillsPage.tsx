@@ -23,7 +23,7 @@ export default function SkillsPage() {
         title="Skills"
         description="Technical skills and expertise across various technologies"
       />
-      <div className="container mx-auto px-4 py-16">
+      <div className="container mx-auto px-4 py-16 animate-slide-down">
         <h1 className="mb-8 text-4xl font-bold text-white">Skills</h1>
         <div className="grid gap-8 md:grid-cols-2">
           {skills.map((group) => (

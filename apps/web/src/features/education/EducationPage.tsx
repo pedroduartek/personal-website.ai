@@ -23,7 +23,7 @@ export default function EducationPage() {
         title="Education & Conferences"
         description="Academic background, certifications, and conference participation"
       />
-      <div className="container mx-auto px-4 py-16">
+      <div className="container mx-auto px-4 py-16 animate-slide-down">
         <h1 className="mb-8 text-4xl font-bold text-white">Education</h1>
         <div className="space-y-6">
           {education.map((item) => (

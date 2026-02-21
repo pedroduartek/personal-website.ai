@@ -8,7 +8,7 @@ export default function PersonalWebsiteProjectPage() {
         title="AI-Assisted Personal Website"
         description="Modern portfolio website built using AI-assisted development as a backend engineer learning frontend technologies"
       />
-      <div className="container mx-auto px-4 py-16">
+      <div className="container mx-auto px-4 py-16 animate-slide-down">
         <Link
           to="/projects"
           className="mb-6 inline-block text-blue-600 hover:underline dark:text-blue-400"

@@ -15,7 +15,7 @@ export default function ConferencesPage() {
         title="Conferences & Talks"
         description="Conference presentations, talks, and events"
       />
-      <div className="container mx-auto px-4 py-16">
+      <div className="container mx-auto px-4 py-16 animate-slide-down">
         <h1 className="mb-8 text-4xl font-bold text-white">
           Conferences & Talks
         </h1>

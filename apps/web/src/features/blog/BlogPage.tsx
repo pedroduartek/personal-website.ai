@@ -17,7 +17,7 @@ export default function BlogPage() {
 
   if (loading) {
     return (
-      <div className="container mx-auto px-4 py-16">
+      <div className="container mx-auto px-4 py-16 animate-slide-down">
         <p className="text-gray-300">Loading posts...</p>
       </div>
     )
@@ -29,7 +29,7 @@ export default function BlogPage() {
         title="Blog"
         description="Articles about software development, web technologies, and best practices."
       />
-      <div className="container mx-auto px-4 py-16">
+      <div className="container mx-auto px-4 py-16 animate-slide-down">
         <h1 className="mb-8 text-4xl font-bold text-white">Blog</h1>
         <div className="space-y-8">
           {posts.map((post) => (

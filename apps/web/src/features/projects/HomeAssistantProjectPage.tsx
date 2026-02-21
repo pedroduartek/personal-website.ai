@@ -9,7 +9,7 @@ export default function HomeAssistantProjectPage() {
         title="Home Assistant: Local-First Smart Home"
         description="Self-hosted Home Assistant OS setup with 50+ Zigbee devices for automation, energy awareness, and comfort optimization"
       />
-      <div className="container mx-auto px-4 py-16">
+      <div className="container mx-auto px-4 py-16 animate-slide-down">
         <Link
           to="/projects"
           className="mb-6 inline-block text-blue-600 hover:underline dark:text-blue-400"

@@ -5,7 +5,7 @@ export default function ContactPage() {
   return (
     <>
       <PageSEO title="Contact" description="Get in touch with me" />
-      <div className="container mx-auto px-4 py-16">
+      <div className="container mx-auto px-4 py-16 animate-slide-down">
         <h1 className="mb-8 text-4xl font-bold text-white">Contact</h1>
         <div className="max-w-2xl">
           <p className="mb-8 text-lg text-gray-300">

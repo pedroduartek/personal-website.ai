@@ -5,7 +5,7 @@ export default function AboutPage() {
   return (
     <>
       <PageSEO title="About" description={profile.bio} />
-      <div className="container mx-auto px-4 py-16">
+      <div className="container mx-auto px-4 py-16 animate-slide-down">
         <h1 className="mb-8 text-4xl font-bold text-white">About Me</h1>
         <div className="max-w-3xl">
           <p className="mb-4 text-lg text-gray-300">{profile.bio}</p>
