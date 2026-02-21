@@ -13,6 +13,7 @@ export const experience: ExperienceItem[] = [
       'Designed and delivered an Integrations Service enabling configuration-driven integrations without code changes; reduced integration setup time from weeks to hours/days',
       'Led a cross-service initiative reducing production vulnerabilities to zero',
       'Migrated CI/CD pipelines from GoCD to Azure DevOps Pipelines to standardize and automate deployments',
+      'Collaborated with international teams across multiple time zones, working in English as the primary communication language',
     ],
     technologies: [
       'C# .NET 10',
