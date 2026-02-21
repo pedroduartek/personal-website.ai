@@ -28,7 +28,7 @@ function Header() {
           <Link to="/" className="text-xl font-bold text-white">
             PEDRODUARTEK
           </Link>
-          <div className="flex gap-6">
+          <div className="flex gap-3">
             <NavLink to="/about">About</NavLink>
             <NavLink to="/experience">Professional Experience</NavLink>
             <NavLink to="/education">Education</NavLink>
@@ -47,7 +47,7 @@ function NavLink({ to, children }: { to: string; children: React.ReactNode }) {
   return (
     <Link
       to={to}
-      className="text-gray-300 transition-all duration-200 hover:text-white hover:scale-105"
+      className="rounded-lg border border-gray-700 px-4 py-2 text-sm font-medium text-gray-300 transition-all duration-200 hover:border-blue-500 hover:bg-gray-800 hover:text-white hover:shadow-md"
     >
       {children}
     </Link>
