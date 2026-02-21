@@ -1,0 +1,82 @@
+import { Link } from 'react-router-dom'
+import PageSEO from '../../components/seo/PageSEO'
+import { profile } from '../../content/profile'
+import { projects } from '../../content/projects'
+
+export default function HomePage() {
+  const featuredProjects = projects.filter((p) => p.featured).slice(0, 3)
+
+  return (
+    <>
+      <PageSEO
+        title="Home"
+        description={`${profile.name} - ${profile.role}. ${profile.bio}`}
+      />
+      <div className="container mx-auto px-4 py-16">
+        <section className="mb-16">
+          <h1 className="mb-4 text-5xl font-bold text-gray-900 dark:text-white">
+            {profile.name}
+          </h1>
+          <p className="mb-4 text-2xl text-gray-700 dark:text-gray-300">
+            {profile.role}
+          </p>
+          <p className="mb-8 text-lg text-gray-600 dark:text-gray-400">
+            {profile.bio}
+          </p>
+          <div className="flex gap-4">
+            <Link
+              to="/experience"
+              className="rounded-lg bg-blue-600 px-6 py-3 font-semibold text-white hover:bg-blue-700"
+            >
+              View Experience
+            </Link>
+            <Link
+              to="/projects"
+              className="rounded-lg border border-gray-300 px-6 py-3 font-semibold text-gray-900 hover:bg-gray-50 dark:border-gray-700 dark:text-white dark:hover:bg-gray-800"
+            >
+              See Projects
+            </Link>
+            <Link
+              to="/contact"
+              className="rounded-lg border border-gray-300 px-6 py-3 font-semibold text-gray-900 hover:bg-gray-50 dark:border-gray-700 dark:text-white dark:hover:bg-gray-800"
+            >
+              Contact Me
+            </Link>
+          </div>
+        </section>
+
+        <section>
+          <h2 className="mb-6 text-3xl font-bold text-gray-900 dark:text-white">
+            Featured Projects
+          </h2>
+          <div className="grid gap-6 md:grid-cols-3">
+            {featuredProjects.map((project) => (
+              <Link
+                key={project.slug}
+                to={`/projects/${project.slug}`}
+                className="group rounded-lg border border-gray-200 p-6 hover:border-blue-500 dark:border-gray-800 dark:hover:border-blue-500"
+              >
+                <h3 className="mb-2 text-xl font-semibold text-gray-900 dark:text-white">
+                  {project.title}
+                </h3>
+                <p className="mb-4 text-gray-600 dark:text-gray-400">
+                  {project.description}
+                </p>
+                <div className="flex flex-wrap gap-2">
+                  {project.technologies.slice(0, 3).map((tech) => (
+                    <span
+                      key={tech}
+                      className="rounded bg-gray-100 px-2 py-1 text-xs text-gray-700 dark:bg-gray-800 dark:text-gray-300"
+                    >
+                      {tech}
+                    </span>
+                  ))}
+                </div>
+              </Link>
+            ))}
+          </div>
+        </section>
+      </div>
+    </>
+  )
+}
