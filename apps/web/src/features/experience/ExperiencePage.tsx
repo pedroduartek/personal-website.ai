@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom'
 import PageSEO from '../../components/seo/PageSEO'
 import { experience } from '../../content/experience'
 
@@ -12,9 +13,10 @@ export default function ExperiencePage() {
         <h1 className="mb-8 text-4xl font-bold text-white">Experience</h1>
         <div className="space-y-8">
           {experience.map((item) => (
-            <article
+            <Link
               key={item.id}
-              className="rounded-lg border border-gray-700 bg-card p-6"
+              to={`/experience/${item.id}`}
+              className="block rounded-lg border border-gray-700 bg-card p-6 transition-colors hover:border-blue-500"
             >
               <div className="mb-4">
                 <h2 className="text-2xl font-bold text-white">{item.title}</h2>
@@ -52,7 +54,7 @@ export default function ExperiencePage() {
                   </span>
                 ))}
               </div>
-            </article>
+            </Link>
           ))}
         </div>
       </div>

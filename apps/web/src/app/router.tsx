@@ -5,6 +5,9 @@ import AppLayout from './layout/AppLayout'
 const Home = lazy(() => import('../features/home/HomePage'))
 const About = lazy(() => import('../features/about/AboutPage'))
 const Experience = lazy(() => import('../features/experience/ExperiencePage'))
+const ExperienceDetail = lazy(
+  () => import('../features/experience/ExperienceDetailPage'),
+)
 const Projects = lazy(() => import('../features/projects/ProjectsPage'))
 const ProjectDetail = lazy(
   () => import('../features/projects/ProjectDetailPage'),
@@ -27,6 +30,7 @@ export const router = createBrowserRouter([
       { index: true, element: <Home /> },
       { path: 'about', element: <About /> },
       { path: 'experience', element: <Experience /> },
+      { path: 'experience/:id', element: <ExperienceDetail /> },
       { path: 'projects', element: <Projects /> },
       { path: 'projects/:slug', element: <ProjectDetail /> },
       { path: 'education', element: <Education /> },
