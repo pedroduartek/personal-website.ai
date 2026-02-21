@@ -7,6 +7,11 @@ export default {
   darkMode: 'class',
   theme: {
     extend: {
+      colors: {
+        background: '#212830',
+        card: '#262C36',
+        header: '#151B23',
+      },
       typography: {
         DEFAULT: {
           css: {

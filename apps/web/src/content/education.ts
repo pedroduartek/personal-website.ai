@@ -3,17 +3,16 @@ import type { EducationItem } from './types'
 export const education: EducationItem[] = [
   {
     id: '1',
-    institution: 'University Name',
-    degree: 'Bachelor of Science',
-    field: 'Computer Science',
-    startDate: '2016-09',
-    endDate: '2020-05',
-    location: 'City, Country',
+    institution: 'Polytechnic Institute of Setúbal',
+    degree: 'Management Information Systems',
+    field: 'Management Information Systems',
+    startDate: '2017-09',
+    endDate: '2020-06',
+    location: 'Setúbal, Portugal',
     achievements: [
-      'Graduated with honors',
-      "Dean's List for 6 semesters",
-      'Capstone project on distributed systems',
+      'Focused on management and technology across the full information system development lifecycle',
+      'Key courses: Application Development, Database Management, Information Systems (Analysis, Design, Architecture, Project Management, Quality, Security), Mathematics',
     ],
-    gpa: '3.8/4.0',
+    gpa: '15/20',
   },
 ]

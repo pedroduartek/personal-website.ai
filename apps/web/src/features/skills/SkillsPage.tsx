@@ -24,16 +24,14 @@ export default function SkillsPage() {
         description="Technical skills and expertise across various technologies"
       />
       <div className="container mx-auto px-4 py-16">
-        <h1 className="mb-8 text-4xl font-bold text-gray-900 dark:text-white">
-          Skills
-        </h1>
+        <h1 className="mb-8 text-4xl font-bold text-white">Skills</h1>
         <div className="grid gap-8 md:grid-cols-2">
           {skills.map((group) => (
             <section
               key={group.category}
-              className="rounded-lg border border-gray-200 p-6 dark:border-gray-800"
+              className="rounded-lg border border-gray-700 bg-card p-6"
             >
-              <h2 className="mb-4 text-2xl font-semibold text-gray-900 dark:text-white">
+              <h2 className="mb-4 text-2xl font-semibold text-white">
                 {group.category}
               </h2>
               <div className="space-y-3">
@@ -42,9 +40,7 @@ export default function SkillsPage() {
                     key={skill.name}
                     className="flex items-center justify-between"
                   >
-                    <span className="text-gray-900 dark:text-white">
-                      {skill.name}
-                    </span>
+                    <span className="text-white">{skill.name}</span>
                     <span
                       className={`rounded px-2 py-1 text-xs font-semibold ${getLevelColor(skill.level)}`}
                     >
