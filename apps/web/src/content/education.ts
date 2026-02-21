@@ -1,10 +1,11 @@
 import type { EducationItem } from './types'
+import formabaseCertificate from '../CV/Certificado Pedro Duarte.pdf'
 
 export const education: EducationItem[] = [
   {
     id: '1',
-    institution: 'Polytechnic Institute of Setúbal',
-    degree: 'Management Information Systems',
+    institution: 'Polytechnic Institute Of Setúbal',
+    degree: "Bachelor's Degree",
     field: 'Management Information Systems',
     startDate: '2017-09',
     endDate: '2020-06',
@@ -14,5 +15,16 @@ export const education: EducationItem[] = [
       'Key courses: Application Development, Database Management, Information Systems (Analysis, Design, Architecture, Project Management, Quality, Security), Mathematics',
     ],
     gpa: '15/20',
+  },
+  {
+    id: '2',
+    institution: 'Formabase',
+    degree: 'Certificate',
+    field: 'Web Creation',
+    startDate: '2017-02',
+    endDate: '2017-02',
+    location: 'Lisbon, Portugal',
+    achievements: ['PHP, HTML, CSS'],
+    certificateUrl: formabaseCertificate,
   },
 ]
