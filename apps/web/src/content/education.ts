@@ -1,5 +1,5 @@
-import type { EducationItem } from './types'
 import formabaseCertificate from '../CV/Certificado Pedro Duarte.pdf'
+import type { EducationItem } from './types'
 
 export const education: EducationItem[] = [
   {

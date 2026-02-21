@@ -23,7 +23,7 @@ export default function PersonalWebsiteProjectPage() {
         <p className="mb-4 text-lg text-gray-400 md:text-xl">
           A Backend Engineer's Frontend Learning Journey • February 2026
         </p>
-        
+
         <div className="mb-8 flex flex-col gap-3 sm:flex-row sm:items-center">
           <a
             href="https://www.pedroduartek.com"
@@ -188,25 +188,29 @@ export default function PersonalWebsiteProjectPage() {
               <div className="rounded-lg border border-gray-700 bg-card p-4">
                 <p>
                   <strong className="text-white">Modern animations:</strong>{' '}
-                  Slide-down page transitions and hover effects on all interactive elements for professional polish
+                  Slide-down page transitions and hover effects on all
+                  interactive elements for professional polish
                 </p>
               </div>
               <div className="rounded-lg border border-gray-700 bg-card p-4">
                 <p>
                   <strong className="text-white">Mobile responsive:</strong>{' '}
-                  Hamburger menu, responsive typography with Tailwind breakpoints, optimized for all screen sizes
+                  Hamburger menu, responsive typography with Tailwind
+                  breakpoints, optimized for all screen sizes
                 </p>
               </div>
               <div className="rounded-lg border border-gray-700 bg-card p-4">
                 <p>
                   <strong className="text-white">Production deployment:</strong>{' '}
-                  Live at www.pedroduartek.com via Vercel with automatic deployments from GitHub
+                  Live at www.pedroduartek.com via Vercel with automatic
+                  deployments from GitHub
                 </p>
               </div>
               <div className="rounded-lg border border-gray-700 bg-card p-4">
                 <p>
-                  <strong className="text-white">Open source:</strong>{' '}
-                  Full source code available on GitHub, demonstrating code quality and AI collaboration
+                  <strong className="text-white">Open source:</strong> Full
+                  source code available on GitHub, demonstrating code quality
+                  and AI collaboration
                 </p>
               </div>
             </div>
@@ -284,19 +288,27 @@ export default function PersonalWebsiteProjectPage() {
             <div className="rounded-lg border border-gray-700 bg-card p-6">
               <ul className="space-y-3">
                 <li>
-                  <strong className="text-white">Week 1:</strong> Initial setup, component structure, CV data population, custom dark theme
+                  <strong className="text-white">Week 1:</strong> Initial setup,
+                  component structure, CV data population, custom dark theme
                 </li>
                 <li>
-                  <strong className="text-white">Week 2:</strong> Experience detail pages, project showcase, company logos, education section
+                  <strong className="text-white">Week 2:</strong> Experience
+                  detail pages, project showcase, company logos, education
+                  section
                 </li>
                 <li>
-                  <strong className="text-white">Week 3:</strong> Animations, hover effects, button-styled navigation, professional polish
+                  <strong className="text-white">Week 3:</strong> Animations,
+                  hover effects, button-styled navigation, professional polish
                 </li>
                 <li>
-                  <strong className="text-white">Week 4:</strong> Mobile responsiveness (hamburger menu, responsive breakpoints across all pages)
+                  <strong className="text-white">Week 4:</strong> Mobile
+                  responsiveness (hamburger menu, responsive breakpoints across
+                  all pages)
                 </li>
                 <li>
-                  <strong className="text-white">Deployment:</strong> GitHub repository created, Vercel deployment configured, live at www.pedroduartek.com
+                  <strong className="text-white">Deployment:</strong> GitHub
+                  repository created, Vercel deployment configured, live at
+                  www.pedroduartek.com
                 </li>
               </ul>
             </div>
@@ -308,13 +320,20 @@ export default function PersonalWebsiteProjectPage() {
             </h2>
             <div className="rounded-lg border border-gray-700 bg-card p-6">
               <ul className="space-y-2">
-                <li>Add privacy-friendly analytics to track visitor engagement</li>
                 <li>
-                  Activate blog with posts on backend engineering, C#/.NET patterns, and AI-assisted productivity
+                  Add privacy-friendly analytics to track visitor engagement
+                </li>
+                <li>
+                  Activate blog with posts on backend engineering, C#/.NET
+                  patterns, and AI-assisted productivity
                 </li>
                 <li>Continue adding projects as they're completed</li>
-                <li>Performance optimization and lighthouse score improvements</li>
-                <li>SEO enhancements for better discoverability by recruiters</li>
+                <li>
+                  Performance optimization and lighthouse score improvements
+                </li>
+                <li>
+                  SEO enhancements for better discoverability by recruiters
+                </li>
               </ul>
             </div>
           </section>

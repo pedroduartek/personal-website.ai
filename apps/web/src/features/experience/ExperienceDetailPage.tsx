@@ -1,9 +1,9 @@
 import { Link, useParams } from 'react-router-dom'
 import PageSEO from '../../components/seo/PageSEO'
 import { experience } from '../../content/experience'
+import closerLogo from '../../images/closer_consulting.png'
 import enhesaLogo from '../../images/enhesa.png'
 import vortalLogo from '../../images/vortal.png'
-import closerLogo from '../../images/closer_consulting.png'
 
 const companyLogos: Record<string, string> = {
   Enhesa: enhesaLogo,
@@ -25,7 +25,9 @@ export default function ExperienceDetailPage() {
   if (companyRoles.length === 0) {
     return (
       <div className="container mx-auto px-4 py-8 animate-slide-down md:py-16">
-        <h1 className="text-xl font-bold text-white md:text-2xl">Experience not found</h1>
+        <h1 className="text-xl font-bold text-white md:text-2xl">
+          Experience not found
+        </h1>
         <Link
           to="/experience"
           className="mt-4 inline-block text-blue-600 transition-all duration-200 hover:translate-x-[-4px] hover:underline"
@@ -65,7 +67,7 @@ export default function ExperienceDetailPage() {
           if (
             tech.length > value.length ||
             (tech.length === value.length &&
-              index < parseInt(key.split('-')[1]))
+              index < Number.parseInt(key.split('-')[1]))
           ) {
             uniqueTechs.delete(key)
             uniqueTechs.set(`${tech}-${index}`, tech)
@@ -108,7 +110,9 @@ export default function ExperienceDetailPage() {
             />
           )}
           <div>
-            <h1 className="mb-2 text-3xl font-bold text-white md:text-4xl">{company}</h1>
+            <h1 className="mb-2 text-3xl font-bold text-white md:text-4xl">
+              {company}
+            </h1>
             <p className="text-base text-gray-400 md:text-lg">{location}</p>
           </div>
         </div>
@@ -136,7 +140,9 @@ export default function ExperienceDetailPage() {
               className="rounded-lg border border-gray-700 bg-card p-6"
             >
               <div className="mb-6">
-                <h2 className="text-xl font-bold text-white md:text-2xl">{role.title}</h2>
+                <h2 className="text-xl font-bold text-white md:text-2xl">
+                  {role.title}
+                </h2>
                 <div className="mt-2 flex items-center gap-4 text-gray-400">
                   <time>
                     {new Date(role.startDate).toLocaleDateString('en-US', {

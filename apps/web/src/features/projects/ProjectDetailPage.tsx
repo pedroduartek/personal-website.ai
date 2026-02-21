@@ -9,7 +9,9 @@ export default function ProjectDetailPage() {
   if (!project) {
     return (
       <div className="container mx-auto px-4 py-8 animate-slide-down md:py-16">
-        <h1 className="text-xl font-bold text-white md:text-2xl">Project not found</h1>
+        <h1 className="text-xl font-bold text-white md:text-2xl">
+          Project not found
+        </h1>
         <Link
           to="/projects"
           className="mt-4 inline-block text-blue-600 transition-all duration-200 hover:translate-x-[-4px] hover:underline"
@@ -31,9 +33,13 @@ export default function ProjectDetailPage() {
           ← Back to projects
         </Link>
 
-        <h1 className="mb-4 text-3xl font-bold text-white md:text-4xl">{project.title}</h1>
+        <h1 className="mb-4 text-3xl font-bold text-white md:text-4xl">
+          {project.title}
+        </h1>
 
-        <p className="mb-6 text-lg text-gray-300 md:text-xl">{project.description}</p>
+        <p className="mb-6 text-lg text-gray-300 md:text-xl">
+          {project.description}
+        </p>
 
         <div className="mb-8 flex flex-wrap gap-2">
           {project.technologies.map((tech) => (

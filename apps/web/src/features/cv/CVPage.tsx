@@ -1,6 +1,6 @@
+import cvPdf from '../../CV/Pedro_Duarte_CV.pdf'
 import PageSEO from '../../components/seo/PageSEO'
 import { profile } from '../../content/profile'
-import cvPdf from '../../CV/Pedro_Duarte_CV.pdf'
 
 export default function CVPage() {
   return (
