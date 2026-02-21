@@ -1,7 +1,14 @@
 import PageSEO from '../../components/seo/PageSEO'
 import { education } from '../../content/education'
+import polytechnicLogo from '../../images/polytechnic_setubal.png'
+import formabaseLogo from '../../images/formabase.png'
 
 export default function EducationPage() {
+  const institutionLogos: Record<string, string> = {
+    'Polytechnic Institute Of Setúbal': polytechnicLogo,
+    Formabase: formabaseLogo,
+  }
+
   return (
     <>
       <PageSEO
@@ -16,38 +23,71 @@ export default function EducationPage() {
               key={item.id}
               className="rounded-lg border border-gray-700 bg-card p-6"
             >
-              <h2 className="text-2xl font-bold text-white">
-                {item.degree} in {item.field}
-              </h2>
-              <p className="text-lg text-gray-300">{item.institution}</p>
-              <div className="mt-2 flex items-center gap-4 text-sm text-gray-400">
-                <time>
-                  {new Date(item.startDate).toLocaleDateString('en-US', {
-                    year: 'numeric',
-                  })}{' '}
-                  -{' '}
-                  {item.endDate
-                    ? new Date(item.endDate).toLocaleDateString('en-US', {
-                        year: 'numeric',
-                      })
-                    : 'Present'}
-                </time>
-                <span>•</span>
-                <span>{item.location}</span>
-                {item.gpa && (
-                  <>
-                    <span>•</span>
-                    <span>GPA: {item.gpa}</span>
-                  </>
+              <div className="flex gap-4">
+                {institutionLogos[item.institution] && (
+                  <img
+                    src={institutionLogos[item.institution]}
+                    alt={`${item.institution} logo`}
+                    className="h-12 w-12 object-contain"
+                  />
                 )}
+                <div className="flex-1">
+                  <h2 className="text-2xl font-bold text-white">
+                    {item.degree} in {item.field}
+                  </h2>
+                  <p className="text-lg text-gray-300">{item.institution}</p>
+                  <div className="mt-2 flex items-center gap-4 text-sm text-gray-400">
+                    <time>
+                      {new Date(item.startDate).toLocaleDateString('en-US', {
+                        year: 'numeric',
+                      })}{' '}
+                      -{' '}
+                      {item.endDate
+                        ? new Date(item.endDate).toLocaleDateString('en-US', {
+                            year: 'numeric',
+                          })
+                        : 'Present'}
+                    </time>
+                    <span>•</span>
+                    <span>{item.location}</span>
+                    {item.gpa && (
+                      <>
+                        <span>•</span>
+                        <span>GPA: {item.gpa}</span>
+                      </>
+                    )}
+                  </div>
+                  {item.achievements && item.achievements.length > 0 && (
+                    <ul className="mt-4 list-disc space-y-1 pl-5 text-gray-300">
+                      {item.achievements.map((achievement) => (
+                        <li key={achievement}>{achievement}</li>
+                      ))}
+                    </ul>
+                  )}
+                  {item.certificateUrl && (
+                    <a
+                      href={item.certificateUrl}
+                      download
+                      className="mt-4 inline-flex items-center gap-2 rounded-lg border border-gray-600 bg-gray-800 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-gray-700"
+                    >
+                      <svg
+                        className="h-4 w-4"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                        />
+                      </svg>
+                      View Certificate
+                    </a>
+                  )}
+                </div>
               </div>
-              {item.achievements && item.achievements.length > 0 && (
-                <ul className="mt-4 list-disc space-y-1 pl-5 text-gray-300">
-                  {item.achievements.map((achievement) => (
-                    <li key={achievement}>{achievement}</li>
-                  ))}
-                </ul>
-              )}
             </article>
           ))}
         </div>

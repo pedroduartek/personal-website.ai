@@ -32,6 +32,7 @@ function Header() {
           <div className="flex gap-6">
             <NavLink to="/about">About</NavLink>
             <NavLink to="/experience">Professional Experience</NavLink>
+            <NavLink to="/education">Education</NavLink>
             <NavLink to="/projects">Personal Projects</NavLink>
             <NavLink to="/contact">Contact</NavLink>
           </div>

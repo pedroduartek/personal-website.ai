@@ -48,6 +48,7 @@ export interface EducationItem {
   location: string
   achievements?: string[]
   gpa?: string
+  certificateUrl?: string
 }
 
 export interface ConferenceItem {
