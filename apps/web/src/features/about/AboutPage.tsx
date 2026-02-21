@@ -10,14 +10,15 @@ export default function AboutPage() {
         <div className="max-w-3xl">
           <p className="mb-4 text-lg text-gray-300">{profile.bio}</p>
           <p className="mb-4 text-gray-300">
-            I'm passionate about building high-quality software that solves real
-            problems. With experience across the full stack, I enjoy working on
-            everything from user interfaces to backend systems.
+            I'm passionate about building reliable, scalable systems that solve
+            real problems. I believe in writing clean, maintainable code and
+            treating production reliability as a first-class concern.
           </p>
           <p className="mb-6 text-gray-300">
-            When I'm not coding, you can find me attending tech conferences,
-            contributing to open source, or sharing knowledge through technical
-            writing.
+            Outside of work, you'll find me out fishing or riding my motorcycle.
+            I also run a self-hosted Home Assistant setup with 50+ Zigbee
+            devices as a personal lab—it's where I experiment with automation
+            reliability and apply event-driven thinking to real-world scenarios.
           </p>
           <div className="rounded-lg border border-gray-700 bg-card p-6">
             <h2 className="mb-3 text-xl font-semibold text-white">Location</h2>

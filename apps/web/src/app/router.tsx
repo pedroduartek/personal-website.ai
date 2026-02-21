@@ -12,6 +12,9 @@ const Projects = lazy(() => import('../features/projects/ProjectsPage'))
 const ProjectDetail = lazy(
   () => import('../features/projects/ProjectDetailPage'),
 )
+const HomeAssistantProject = lazy(
+  () => import('../features/projects/HomeAssistantProjectPage'),
+)
 const Education = lazy(() => import('../features/education/EducationPage'))
 const Conferences = lazy(
   () => import('../features/conferences/ConferencesPage'),
@@ -32,6 +35,7 @@ export const router = createBrowserRouter([
       { path: 'experience', element: <Experience /> },
       { path: 'experience/:id', element: <ExperienceDetail /> },
       { path: 'projects', element: <Projects /> },
+      { path: 'projects/home-assistant', element: <HomeAssistantProject /> },
       { path: 'projects/:slug', element: <ProjectDetail /> },
       { path: 'education', element: <Education /> },
       { path: 'conferences', element: <Conferences /> },
