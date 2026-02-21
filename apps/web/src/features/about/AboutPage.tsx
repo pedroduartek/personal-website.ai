@@ -6,9 +6,13 @@ export default function AboutPage() {
     <>
       <PageSEO title="About" description={profile.bio} />
       <div className="container mx-auto px-4 py-8 animate-slide-down md:py-16">
-        <h1 className="mb-8 text-3xl font-bold text-white md:text-4xl">About Me</h1>
+        <h1 className="mb-8 text-3xl font-bold text-white md:text-4xl">
+          About Me
+        </h1>
         <div className="max-w-3xl">
-          <p className="mb-4 text-base text-gray-300 md:text-lg">{profile.bio}</p>
+          <p className="mb-4 text-base text-gray-300 md:text-lg">
+            {profile.bio}
+          </p>
           <p className="mb-4 text-base text-gray-300 md:text-base">
             I'm passionate about building reliable, scalable systems that solve
             real problems. I believe in writing clean, maintainable code and

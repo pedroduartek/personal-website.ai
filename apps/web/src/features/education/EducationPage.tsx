@@ -1,9 +1,9 @@
 import PageSEO from '../../components/seo/PageSEO'
-import { education } from '../../content/education'
 import { conferences } from '../../content/conferences'
-import polytechnicLogo from '../../images/polytechnic_setubal.png'
-import formabaseLogo from '../../images/formabase.png'
+import { education } from '../../content/education'
 import azureDevSummitLogo from '../../images/azure_dev_summit.png'
+import formabaseLogo from '../../images/formabase.png'
+import polytechnicLogo from '../../images/polytechnic_setubal.png'
 import webSummitLogo from '../../images/web_summit.png'
 
 export default function EducationPage() {
@@ -24,7 +24,9 @@ export default function EducationPage() {
         description="Academic background, certifications, and conference participation"
       />
       <div className="container mx-auto px-4 py-8 animate-slide-down md:py-16">
-        <h1 className="mb-8 text-3xl font-bold text-white md:text-4xl">Education</h1>
+        <h1 className="mb-8 text-3xl font-bold text-white md:text-4xl">
+          Education
+        </h1>
         <div className="space-y-6">
           {education.map((item) => (
             <article
@@ -43,7 +45,9 @@ export default function EducationPage() {
                   <h2 className="text-xl font-bold text-white md:text-2xl">
                     {item.degree} in {item.field}
                   </h2>
-                  <p className="text-base text-gray-300 md:text-lg">{item.institution}</p>
+                  <p className="text-base text-gray-300 md:text-lg">
+                    {item.institution}
+                  </p>
                   <div className="mt-2 flex flex-col gap-1 text-sm text-gray-400 sm:flex-row sm:items-center sm:gap-4">
                     <time>
                       {new Date(item.startDate).toLocaleDateString('en-US', {
@@ -79,6 +83,8 @@ export default function EducationPage() {
                       className="mt-4 inline-flex items-center gap-2 rounded-lg border border-gray-600 bg-gray-800 px-4 py-2 text-sm font-medium text-white transition-all duration-200 hover:scale-105 hover:bg-gray-700 hover:shadow-lg"
                     >
                       <svg
+                        role="img"
+                        aria-label="Download icon"
                         className="h-4 w-4"
                         fill="none"
                         stroke="currentColor"

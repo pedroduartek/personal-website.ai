@@ -33,11 +33,14 @@ function Header() {
 
           {/* Mobile menu button */}
           <button
+            type="button"
             onClick={() => setIsMenuOpen(!isMenuOpen)}
             className="md:hidden rounded-lg border border-gray-700 p-2 text-gray-300 hover:bg-gray-800 hover:text-white"
             aria-label="Toggle menu"
           >
             <svg
+              role="img"
+              aria-label="Menu icon"
               className="h-6 w-6"
               fill="none"
               stroke="currentColor"
@@ -76,13 +79,27 @@ function Header() {
         {/* Mobile navigation */}
         {isMenuOpen && (
           <div className="md:hidden mt-4 flex flex-col gap-2">
-            <NavLink to="/about" onClick={() => setIsMenuOpen(false)}>About</NavLink>
-            <NavLink to="/experience" onClick={() => setIsMenuOpen(false)}>Professional Experience</NavLink>
-            <NavLink to="/education" onClick={() => setIsMenuOpen(false)}>Education</NavLink>
-            <NavLink to="/skills" onClick={() => setIsMenuOpen(false)}>Skills</NavLink>
-            <NavLink to="/projects" onClick={() => setIsMenuOpen(false)}>Personal Projects</NavLink>
-            <NavLink to="/cv" onClick={() => setIsMenuOpen(false)}>Download CV</NavLink>
-            <NavLink to="/contact" onClick={() => setIsMenuOpen(false)}>Contact</NavLink>
+            <NavLink to="/about" onClick={() => setIsMenuOpen(false)}>
+              About
+            </NavLink>
+            <NavLink to="/experience" onClick={() => setIsMenuOpen(false)}>
+              Professional Experience
+            </NavLink>
+            <NavLink to="/education" onClick={() => setIsMenuOpen(false)}>
+              Education
+            </NavLink>
+            <NavLink to="/skills" onClick={() => setIsMenuOpen(false)}>
+              Skills
+            </NavLink>
+            <NavLink to="/projects" onClick={() => setIsMenuOpen(false)}>
+              Personal Projects
+            </NavLink>
+            <NavLink to="/cv" onClick={() => setIsMenuOpen(false)}>
+              Download CV
+            </NavLink>
+            <NavLink to="/contact" onClick={() => setIsMenuOpen(false)}>
+              Contact
+            </NavLink>
           </div>
         )}
       </nav>
@@ -90,7 +107,11 @@ function Header() {
   )
 }
 
-function NavLink({ to, children, onClick }: { to: string; children: React.ReactNode; onClick?: () => void }) {
+function NavLink({
+  to,
+  children,
+  onClick,
+}: { to: string; children: React.ReactNode; onClick?: () => void }) {
   return (
     <Link
       to={to}

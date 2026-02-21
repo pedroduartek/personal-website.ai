@@ -1,9 +1,9 @@
 import { Link } from 'react-router-dom'
 import PageSEO from '../../components/seo/PageSEO'
 import { experience } from '../../content/experience'
+import closerLogo from '../../images/closer_consulting.png'
 import enhesaLogo from '../../images/enhesa.png'
 import vortalLogo from '../../images/vortal.png'
-import closerLogo from '../../images/closer_consulting.png'
 
 const companyLogos: Record<string, string> = {
   Enhesa: enhesaLogo,
@@ -53,7 +53,7 @@ export default function ExperiencePage() {
           if (
             tech.length > value.length ||
             (tech.length === value.length &&
-              index < parseInt(key.split('-')[1]))
+              index < Number.parseInt(key.split('-')[1]))
           ) {
             uniqueTechs.delete(key)
             uniqueTechs.set(`${tech}-${index}`, tech)
@@ -78,7 +78,9 @@ export default function ExperiencePage() {
         description="Professional experience and work history"
       />
       <div className="container mx-auto px-4 py-8 animate-slide-down md:py-16">
-        <h1 className="mb-8 text-3xl font-bold text-white md:text-4xl">Experience</h1>
+        <h1 className="mb-8 text-3xl font-bold text-white md:text-4xl">
+          Experience
+        </h1>
         <div className="space-y-8">
           {Object.entries(groupedExperiences).map(([company, roles]) => {
             const companyTechnologies = getCompanyTechnologies(roles)
@@ -96,7 +98,9 @@ export default function ExperiencePage() {
                       className="h-12 w-12 rounded object-contain"
                     />
                   )}
-                  <h2 className="text-xl font-bold text-white md:text-2xl">{company}</h2>
+                  <h2 className="text-xl font-bold text-white md:text-2xl">
+                    {company}
+                  </h2>
                 </div>
                 <div className="mb-4 space-y-4">
                   {roles.map((item) => (

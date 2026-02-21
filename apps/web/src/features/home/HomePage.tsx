@@ -14,8 +14,12 @@ export default function HomePage() {
       />
       <div className="container mx-auto px-4 py-8 md:py-16 animate-slide-down">
         <section className="mb-12 md:mb-16">
-          <h1 className="mb-4 text-3xl md:text-5xl font-bold text-white">{profile.name}</h1>
-          <p className="mb-4 text-xl md:text-2xl text-gray-300">{profile.role}</p>
+          <h1 className="mb-4 text-3xl md:text-5xl font-bold text-white">
+            {profile.name}
+          </h1>
+          <p className="mb-4 text-xl md:text-2xl text-gray-300">
+            {profile.role}
+          </p>
           <div className="mb-8 max-w-3xl">
             <p className="mb-4 text-base md:text-lg text-gray-300">
               Welcome! I'm a backend software engineer with 6 years of
