@@ -45,7 +45,10 @@ function Header() {
 
 function NavLink({ to, children }: { to: string; children: React.ReactNode }) {
   return (
-    <Link to={to} className="text-gray-300 hover:text-white">
+    <Link
+      to={to}
+      className="text-gray-300 transition-all duration-200 hover:text-white hover:scale-105"
+    >
       {children}
     </Link>
   )
