@@ -8,7 +8,7 @@ export default function PersonalWebsiteProjectPage() {
         title="AI-Assisted Personal Website"
         description="Modern portfolio website built using AI-assisted development as a backend engineer learning frontend technologies"
       />
-      <div className="container mx-auto px-4 py-16 animate-slide-down">
+      <div className="container mx-auto px-4 py-8 animate-slide-down md:py-16">
         <Link
           to="/projects"
           className="mb-6 inline-block text-blue-600 transition-all duration-200 hover:translate-x-[-4px] hover:underline dark:text-blue-400"
@@ -16,13 +16,32 @@ export default function PersonalWebsiteProjectPage() {
           ← Back to projects
         </Link>
 
-        <h1 className="mb-4 text-4xl font-bold text-white">
+        <h1 className="mb-4 text-3xl font-bold text-white md:text-4xl">
           AI-Assisted Personal Website
         </h1>
 
-        <p className="mb-8 text-xl text-gray-400">
+        <p className="mb-4 text-lg text-gray-400 md:text-xl">
           A Backend Engineer's Frontend Learning Journey • February 2026
         </p>
+        
+        <div className="mb-8 flex flex-col gap-3 sm:flex-row sm:items-center">
+          <a
+            href="https://www.pedroduartek.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 rounded-lg bg-blue-600 px-4 py-2 text-center text-white transition-all duration-200 hover:scale-105 hover:bg-blue-700 hover:shadow-lg hover:shadow-blue-600/50"
+          >
+            View Live Site
+          </a>
+          <a
+            href="https://github.com/pedroduartek/personal-website.ai"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 rounded-lg border border-gray-600 bg-gray-800 px-4 py-2 text-center text-white transition-all duration-200 hover:scale-105 hover:bg-gray-700 hover:shadow-lg"
+          >
+            View on GitHub
+          </a>
+        </div>
 
         <div className="mb-8 flex flex-wrap gap-2">
           {[
@@ -168,14 +187,26 @@ export default function PersonalWebsiteProjectPage() {
               </div>
               <div className="rounded-lg border border-gray-700 bg-card p-4">
                 <p>
-                  <strong className="text-white">CV download:</strong> Direct
-                  PDF download with static asset serving
+                  <strong className="text-white">Modern animations:</strong>{' '}
+                  Slide-down page transitions and hover effects on all interactive elements for professional polish
                 </p>
               </div>
               <div className="rounded-lg border border-gray-700 bg-card p-4">
                 <p>
-                  <strong className="text-white">Blog infrastructure:</strong>{' '}
-                  Markdown-based system ready for future content
+                  <strong className="text-white">Mobile responsive:</strong>{' '}
+                  Hamburger menu, responsive typography with Tailwind breakpoints, optimized for all screen sizes
+                </p>
+              </div>
+              <div className="rounded-lg border border-gray-700 bg-card p-4">
+                <p>
+                  <strong className="text-white">Production deployment:</strong>{' '}
+                  Live at www.pedroduartek.com via Vercel with automatic deployments from GitHub
+                </p>
+              </div>
+              <div className="rounded-lg border border-gray-700 bg-card p-4">
+                <p>
+                  <strong className="text-white">Open source:</strong>{' '}
+                  Full source code available on GitHub, demonstrating code quality and AI collaboration
                 </p>
               </div>
             </div>
@@ -248,17 +279,42 @@ export default function PersonalWebsiteProjectPage() {
 
           <section className="mb-12">
             <h2 className="mb-4 text-2xl font-semibold text-white">
+              Development Timeline
+            </h2>
+            <div className="rounded-lg border border-gray-700 bg-card p-6">
+              <ul className="space-y-3">
+                <li>
+                  <strong className="text-white">Week 1:</strong> Initial setup, component structure, CV data population, custom dark theme
+                </li>
+                <li>
+                  <strong className="text-white">Week 2:</strong> Experience detail pages, project showcase, company logos, education section
+                </li>
+                <li>
+                  <strong className="text-white">Week 3:</strong> Animations, hover effects, button-styled navigation, professional polish
+                </li>
+                <li>
+                  <strong className="text-white">Week 4:</strong> Mobile responsiveness (hamburger menu, responsive breakpoints across all pages)
+                </li>
+                <li>
+                  <strong className="text-white">Deployment:</strong> GitHub repository created, Vercel deployment configured, live at www.pedroduartek.com
+                </li>
+              </ul>
+            </div>
+          </section>
+
+          <section className="mb-12">
+            <h2 className="mb-4 text-2xl font-semibold text-white">
               What's Next
             </h2>
             <div className="rounded-lg border border-gray-700 bg-card p-6">
               <ul className="space-y-2">
-                <li>Add privacy-friendly analytics</li>
+                <li>Add privacy-friendly analytics to track visitor engagement</li>
                 <li>
-                  Activate blog with posts on backend engineering and AI
-                  productivity
+                  Activate blog with posts on backend engineering, C#/.NET patterns, and AI-assisted productivity
                 </li>
                 <li>Continue adding projects as they're completed</li>
-                <li>Further performance optimization</li>
+                <li>Performance optimization and lighthouse score improvements</li>
+                <li>SEO enhancements for better discoverability by recruiters</li>
               </ul>
             </div>
           </section>
