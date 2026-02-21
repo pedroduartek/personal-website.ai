@@ -77,8 +77,8 @@ export default function ExperiencePage() {
         title="Experience"
         description="Professional experience and work history"
       />
-      <div className="container mx-auto px-4 py-16 animate-slide-down">
-        <h1 className="mb-8 text-4xl font-bold text-white">Experience</h1>
+      <div className="container mx-auto px-4 py-8 animate-slide-down md:py-16">
+        <h1 className="mb-8 text-3xl font-bold text-white md:text-4xl">Experience</h1>
         <div className="space-y-8">
           {Object.entries(groupedExperiences).map(([company, roles]) => {
             const companyTechnologies = getCompanyTechnologies(roles)
@@ -96,7 +96,7 @@ export default function ExperiencePage() {
                       className="h-12 w-12 rounded object-contain"
                     />
                   )}
-                  <h2 className="text-2xl font-bold text-white">{company}</h2>
+                  <h2 className="text-xl font-bold text-white md:text-2xl">{company}</h2>
                 </div>
                 <div className="mb-4 space-y-4">
                   {roles.map((item) => (
@@ -104,10 +104,10 @@ export default function ExperiencePage() {
                       key={item.id}
                       className="rounded-lg border border-gray-600 bg-gray-800/50 p-4"
                     >
-                      <h3 className="text-xl font-bold text-white">
+                      <h3 className="text-lg font-bold text-white md:text-xl">
                         {item.title}
                       </h3>
-                      <div className="mt-2 flex items-center gap-4 text-sm text-gray-400">
+                      <div className="mt-2 flex flex-col gap-1 text-sm text-gray-400 sm:flex-row sm:items-center sm:gap-4">
                         <time>
                           {new Date(item.startDate).toLocaleDateString(
                             'en-US',

@@ -8,8 +8,8 @@ export default function ProjectDetailPage() {
 
   if (!project) {
     return (
-      <div className="container mx-auto px-4 py-16 animate-slide-down">
-        <h1 className="text-2xl font-bold text-white">Project not found</h1>
+      <div className="container mx-auto px-4 py-8 animate-slide-down md:py-16">
+        <h1 className="text-xl font-bold text-white md:text-2xl">Project not found</h1>
         <Link
           to="/projects"
           className="mt-4 inline-block text-blue-600 transition-all duration-200 hover:translate-x-[-4px] hover:underline"
@@ -23,7 +23,7 @@ export default function ProjectDetailPage() {
   return (
     <>
       <PageSEO title={project.title} description={project.description} />
-      <div className="container mx-auto px-4 py-16 animate-slide-down">
+      <div className="container mx-auto px-4 py-8 animate-slide-down md:py-16">
         <Link
           to="/projects"
           className="mb-6 inline-block text-blue-600 transition-all duration-200 hover:translate-x-[-4px] hover:underline dark:text-blue-400"
@@ -31,9 +31,9 @@ export default function ProjectDetailPage() {
           ← Back to projects
         </Link>
 
-        <h1 className="mb-4 text-4xl font-bold text-white">{project.title}</h1>
+        <h1 className="mb-4 text-3xl font-bold text-white md:text-4xl">{project.title}</h1>
 
-        <p className="mb-6 text-xl text-gray-300">{project.description}</p>
+        <p className="mb-6 text-lg text-gray-300 md:text-xl">{project.description}</p>
 
         <div className="mb-8 flex flex-wrap gap-2">
           {project.technologies.map((tech) => (
@@ -63,7 +63,7 @@ export default function ProjectDetailPage() {
         </div>
 
         {project.links && (
-          <div className="mb-6 flex gap-4">
+          <div className="mb-6 flex flex-col gap-4 sm:flex-row">
             {project.links.demo && (
               <a
                 href={project.links.demo}

@@ -23,8 +23,8 @@ export default function EducationPage() {
         title="Education & Conferences"
         description="Academic background, certifications, and conference participation"
       />
-      <div className="container mx-auto px-4 py-16 animate-slide-down">
-        <h1 className="mb-8 text-4xl font-bold text-white">Education</h1>
+      <div className="container mx-auto px-4 py-8 animate-slide-down md:py-16">
+        <h1 className="mb-8 text-3xl font-bold text-white md:text-4xl">Education</h1>
         <div className="space-y-6">
           {education.map((item) => (
             <article
@@ -40,11 +40,11 @@ export default function EducationPage() {
                   />
                 )}
                 <div className="flex-1">
-                  <h2 className="text-2xl font-bold text-white">
+                  <h2 className="text-xl font-bold text-white md:text-2xl">
                     {item.degree} in {item.field}
                   </h2>
-                  <p className="text-lg text-gray-300">{item.institution}</p>
-                  <div className="mt-2 flex items-center gap-4 text-sm text-gray-400">
+                  <p className="text-base text-gray-300 md:text-lg">{item.institution}</p>
+                  <div className="mt-2 flex flex-col gap-1 text-sm text-gray-400 sm:flex-row sm:items-center sm:gap-4">
                     <time>
                       {new Date(item.startDate).toLocaleDateString('en-US', {
                         year: 'numeric',
@@ -101,7 +101,7 @@ export default function EducationPage() {
         </div>
 
         {/* Conferences & Events Section */}
-        <h2 className="mb-6 mt-12 text-3xl font-bold text-white">
+        <h2 className="mb-6 mt-12 text-2xl font-bold text-white md:text-3xl">
           Conferences & Events
         </h2>
         <div className="space-y-6">
@@ -120,7 +120,7 @@ export default function EducationPage() {
                 )}
                 <div className="flex-1">
                   <div className="mb-2 flex items-center gap-2">
-                    <h3 className="text-2xl font-bold text-white">
+                    <h3 className="text-xl font-bold text-white md:text-2xl">
                       {item.name}
                     </h3>
                     <span
@@ -136,14 +136,14 @@ export default function EducationPage() {
                     </span>
                   </div>
                   {item.title && (
-                    <p className="mb-2 text-lg font-semibold text-gray-300">
+                    <p className="mb-2 text-base font-semibold text-gray-300 md:text-lg">
                       {item.title}
                     </p>
                   )}
                   {item.description && (
                     <p className="mb-3 text-gray-400">{item.description}</p>
                   )}
-                  <div className="flex items-center gap-4 text-sm text-gray-400">
+                  <div className="flex flex-col gap-1 text-sm text-gray-400 sm:flex-row sm:items-center sm:gap-4">
                     <time>
                       {new Date(item.date).toLocaleDateString('en-US', {
                         year: 'numeric',
