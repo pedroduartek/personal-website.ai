@@ -12,7 +12,7 @@ export default function HomePage() {
         title="Home"
         description={`${profile.name} - ${profile.role}. ${profile.bio}`}
       />
-      <div className="container mx-auto px-4 py-16">
+      <div className="container mx-auto px-4 py-16 animate-slide-down">
         <section className="mb-16">
           <h1 className="mb-4 text-5xl font-bold text-white">{profile.name}</h1>
           <p className="mb-4 text-2xl text-gray-300">{profile.role}</p>

@@ -21,7 +21,7 @@ export default function BlogPostPage() {
 
   if (loading) {
     return (
-      <div className="container mx-auto px-4 py-16">
+      <div className="container mx-auto px-4 py-16 animate-slide-down">
         <p className="text-gray-300">Loading...</p>
       </div>
     )
@@ -29,7 +29,7 @@ export default function BlogPostPage() {
 
   if (!post) {
     return (
-      <div className="container mx-auto px-4 py-16">
+      <div className="container mx-auto px-4 py-16 animate-slide-down">
         <h1 className="text-2xl font-bold text-white">Post not found</h1>
       </div>
     )
@@ -38,7 +38,7 @@ export default function BlogPostPage() {
   return (
     <>
       <PageSEO title={post.title} description={post.excerpt} />
-      <article className="container mx-auto px-4 py-16">
+      <article className="container mx-auto px-4 py-16 animate-slide-down">
         <header className="mb-8">
           <h1 className="mb-4 text-4xl font-bold text-white">{post.title}</h1>
           <time className="mb-4 block text-gray-400">

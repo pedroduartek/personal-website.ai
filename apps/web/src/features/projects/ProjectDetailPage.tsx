@@ -8,7 +8,7 @@ export default function ProjectDetailPage() {
 
   if (!project) {
     return (
-      <div className="container mx-auto px-4 py-16">
+      <div className="container mx-auto px-4 py-16 animate-slide-down">
         <h1 className="text-2xl font-bold text-white">Project not found</h1>
         <Link
           to="/projects"
@@ -23,7 +23,7 @@ export default function ProjectDetailPage() {
   return (
     <>
       <PageSEO title={project.title} description={project.description} />
-      <div className="container mx-auto px-4 py-16">
+      <div className="container mx-auto px-4 py-16 animate-slide-down">
         <Link
           to="/projects"
           className="mb-6 inline-block text-blue-600 hover:underline dark:text-blue-400"

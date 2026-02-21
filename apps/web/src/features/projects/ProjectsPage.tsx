@@ -9,7 +9,7 @@ export default function ProjectsPage() {
         title="Projects"
         description="Portfolio of software projects and side projects"
       />
-      <div className="container mx-auto px-4 py-16">
+      <div className="container mx-auto px-4 py-16 animate-slide-down">
         <h1 className="mb-8 text-4xl font-bold text-white">Projects</h1>
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
           {projects.map((project) => (

@@ -77,7 +77,7 @@ export default function ExperiencePage() {
         title="Experience"
         description="Professional experience and work history"
       />
-      <div className="container mx-auto px-4 py-16">
+      <div className="container mx-auto px-4 py-16 animate-slide-down">
         <h1 className="mb-8 text-4xl font-bold text-white">Experience</h1>
         <div className="space-y-8">
           {Object.entries(groupedExperiences).map(([company, roles]) => {

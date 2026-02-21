@@ -15,7 +15,7 @@ export default function ExperienceDetailPage() {
 
   if (companyRoles.length === 0) {
     return (
-      <div className="container mx-auto px-4 py-16">
+      <div className="container mx-auto px-4 py-16 animate-slide-down">
         <h1 className="text-2xl font-bold text-white">Experience not found</h1>
         <Link
           to="/experience"
@@ -82,7 +82,7 @@ export default function ExperienceDetailPage() {
         title={`Experience at ${company}`}
         description={companyRoles[0].description[0]}
       />
-      <div className="container mx-auto px-4 py-16">
+      <div className="container mx-auto px-4 py-16 animate-slide-down">
         <Link
           to="/experience"
           className="mb-6 inline-block text-blue-600 hover:underline dark:text-blue-400"
