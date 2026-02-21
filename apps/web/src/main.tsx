@@ -1,3 +1,5 @@
+import { Analytics } from '@vercel/analytics/react'
+import { SpeedInsights } from '@vercel/speed-insights/react'
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import { RouterProvider } from 'react-router-dom'
@@ -10,5 +12,7 @@ if (!rootElement) throw new Error('Root element not found')
 createRoot(rootElement).render(
   <StrictMode>
     <RouterProvider router={router} />
+    <Analytics />
+    <SpeedInsights />
   </StrictMode>,
 )
