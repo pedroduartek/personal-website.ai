@@ -69,7 +69,7 @@ export default function PersonalWebsiteProjectPage() {
               learn frontend technologies. As a backend engineer with 6 years of
               C#/.NET experience but minimal frontend knowledge, I wanted to
               build a professional portfolio while learning React, TypeScript,
-              and modern frontend development—without spending months in
+              and modern frontend development without spending months in
               tutorials.
             </p>
             <p className="mb-4">
@@ -263,7 +263,7 @@ export default function PersonalWebsiteProjectPage() {
                 </li>
                 <li>
                   <strong className="text-white">Learning by building:</strong>{' '}
-                  Real projects teach more than tutorials—each feature brought
+                  Real projects teach more than tutorials. Each feature brought
                   new concepts in context
                 </li>
                 <li>

@@ -21,7 +21,7 @@ export default function AboutPage() {
           <p className="mb-6 text-base text-gray-300 md:text-base">
             Outside of work, you'll find me out fishing or riding my motorcycle.
             I also run a self-hosted Home Assistant setup with 50+ Zigbee
-            devices as a personal lab—it's where I experiment with automation
+            devices as a personal lab where I experiment with automation
             reliability and apply event-driven thinking to real-world scenarios.
           </p>
           <div className="rounded-lg border border-gray-700 bg-card p-6">
