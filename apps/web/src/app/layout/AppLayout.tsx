@@ -33,7 +33,7 @@ function Header({
 
   return (
     <header className="border-b border-gray-800 bg-header">
-      <nav className="container mx-auto px-4 py-2">
+      <nav className="px-3 py-2 md:px-6">
         <div className="flex items-center justify-between">
           <Link
             to="/"
@@ -109,8 +109,7 @@ function Header({
           <div className="hidden md:flex gap-3">
             <NavLink to="/about">About</NavLink>
             <NavLink to="/experience">Professional Experience</NavLink>
-            <NavLink to="/education">Education</NavLink>
-            <NavLink to="/skills">Skills</NavLink>
+            <NavLink to="/education">Education</NavLink>            <NavLink to="/conferences">Conferences</NavLink>            <NavLink to="/skills">Skills</NavLink>
             <NavLink to="/projects">Personal Projects</NavLink>
             <NavLink to="/cv">Download CV</NavLink>
             <NavLink to="/contact">Contact</NavLink>

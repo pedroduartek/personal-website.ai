@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom'
 import PageSEO from '../../components/seo/PageSEO'
 import { conferences } from '../../content/conferences'
 import { education } from '../../content/education'
@@ -112,10 +113,8 @@ export default function EducationPage() {
         </h2>
         <div className="space-y-6">
           {conferences.map((item) => (
-            <article
-              key={item.id}
-              className="rounded-lg border border-gray-700 bg-card p-6"
-            >
+            <Link key={item.id} to="/conferences">
+              <article className="rounded-lg border border-gray-700 bg-card p-6 transition-all duration-200 hover:scale-[1.02] hover:bg-gray-800 hover:shadow-lg cursor-pointer">
               <div className="mb-4 flex items-start gap-4">
                 {conferenceLogos[item.name] && (
                   <img
@@ -162,6 +161,7 @@ export default function EducationPage() {
                 </div>
               </div>
             </article>
+            </Link>
           ))}
         </div>
       </div>

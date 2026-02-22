@@ -1,6 +1,7 @@
 import PageSEO from '../../components/seo/PageSEO'
 import { profile } from '../../content/profile'
 import { getExperience } from '../../utils/experience'
+import systemDesign from '../../images/system_design_enhesa.jpg'
 
 export default function AboutPage() {
   const experience = getExperience()
@@ -30,6 +31,13 @@ export default function AboutPage() {
             devices</strong> as a personal lab where I experiment with automation
             reliability and apply event-driven thinking to real-world scenarios.
           </p>
+          <div className="mb-6 rounded-lg border border-gray-700 bg-card p-4">
+            <img 
+              src={systemDesign} 
+              alt="System design work at Enhesa" 
+              className="rounded-lg w-full object-cover"
+            />
+          </div>
           <div className="rounded-lg border border-gray-700 bg-card p-6">
             <h2 className="mb-3 text-xl font-semibold text-white">Location</h2>
             <p className="text-gray-300">{profile.location}</p>
