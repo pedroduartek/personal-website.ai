@@ -9,7 +9,7 @@ export const projects: Project[] = [
     problem:
       'As a backend engineer with 6 years of C#/.NET experience but minimal frontend knowledge, I wanted to build a professional portfolio website while learning modern frontend development. Traditional learning approaches would take months, and I wanted to experiment with AI as a productivity multiplier.',
     approach:
-      'Used AI-assisted development tools to build a production-ready React + TypeScript website from scratch. Leveraged AI for code generation, best practices, and real-time problem-solving while maintaining full ownership of architectural decisions. Focused on learning by doing—implementing features, understanding the patterns, and iterating based on AI guidance.',
+      'Used AI-assisted development tools to build a production-ready React + TypeScript website from scratch. Leveraged AI for code generation, best practices, and real-time problem-solving while maintaining full ownership of architectural decisions. Focused on learning by doing: implementing features, understanding the patterns, and iterating based on AI guidance.',
     technologies: [
       'React 18.3',
       'TypeScript 5.7',

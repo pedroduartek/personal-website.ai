@@ -224,8 +224,8 @@ export default function HomeAssistantProjectPage() {
               </p>
               <p className="mb-4">
                 <strong className="text-white">Quality gate:</strong> My wife
-                uses it daily and is the ultimate tester—if the UX is confusing,
-                it doesn't ship.
+                uses it daily and is the ultimate tester. If the UX is
+                confusing, it doesn't ship.
               </p>
               <img
                 src={haScreenshot}

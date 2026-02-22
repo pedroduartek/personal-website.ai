@@ -33,9 +33,9 @@ export default function HomePage() {
               this project in the Personal Projects section.
             </p>
             <p className="mb-4 text-base md:text-lg text-gray-300">
-              It's an experiment in leveraging AI for developer
-              productivity—using the same curiosity and automation mindset I
-              apply to backend systems and my Home Assistant lab.
+              It's an experiment in leveraging AI for developer productivity,
+              using the same curiosity and automation mindset I apply to backend
+              systems and my Home Assistant lab.
             </p>
           </div>
           <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
