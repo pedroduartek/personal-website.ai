@@ -9,7 +9,12 @@ This folder contains a **Claude Code–friendly** implementation plan for buildi
 - Stack: **React + TypeScript (Vite) + Tailwind + Biome + pnpm**
 - Backend: **none for v1** (static site)
 - Features included in v1: **About, Experience, Projects (detail pages), Education, Conferences, Skills, Contact, Blog, PDF CV**
-- Hosting target after beta: **Cloudflare Pages**
+- Hosting: **Vercel** (auto-deploy disabled, manual deployments)
+- Domain: **personal-website.ai** / **pedroduartek.com**
+- Theme: **Dark theme only**
+
+## Status
+✅ **BETA COMPLETE** - All milestones achieved, site is live and production-ready
 
 ## How to use with Claude Code
 1. Put these files under `docs/plan/` in your repo (or keep them anywhere).

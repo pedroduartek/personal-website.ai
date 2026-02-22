@@ -1,15 +1,34 @@
 # Personal Website
 
-A modern personal website built with React, TypeScript, and Tailwind CSS.
+A modern personal website built with React, TypeScript, and Tailwind CSS, showcasing professional experience, projects, blog posts, and skills.
+
+## Features
+
+- 📝 **Blog** - Technical writing with Markdown support
+- 💼 **Portfolio** - Detailed project showcases with screenshots and lightbox gallery
+- 🎓 **Experience & Education** - Professional timeline and academic background
+- 🎤 **Conferences** - Speaking engagements and event attendance with photo galleries
+- 🛠️ **Skills** - Categorized technical skills with dynamic experience calculation
+- 📄 **PDF CV** - Auto-generated downloadable resume
+- 🌐 **SEO Optimized** - Meta tags and Open Graph support
+- ⚡ **Performance** - Route-based code splitting, optimized bundle size
+- ♿ **Accessible** - Keyboard navigation, semantic HTML, WCAG compliance
+- 🎨 **Dark Theme** - Clean, professional dark UI
 
 ## Tech Stack
 
 - **Frontend**: React 18 + TypeScript
-- **Build Tool**: Vite
-- **Styling**: Tailwind CSS
+- **Build Tool**: Vite 6
+- **Styling**: Tailwind CSS 3.4
+- **Routing**: React Router 6.28
+- **PDF Generation**: @react-pdf/renderer
+- **Image Lightbox**: yet-another-react-lightbox
+- **Markdown**: react-markdown + gray-matter
 - **Testing**: Vitest + React Testing Library
 - **Linting/Formatting**: Biome
 - **Package Manager**: pnpm
+- **Deployment**: Vercel
+- **Analytics**: Vercel Analytics + Speed Insights
 
 ## Project Structure
 
