@@ -6,7 +6,7 @@ export const conferences: ConferenceItem[] = [
     name: 'Azure Dev Summit',
     type: 'attended',
     date: '2025-10',
-    location: 'Conference Location',
+    location: 'Lisbon, Portugal',
     description:
       'Microsoft technology focused conference spanning 4 days. Included a full-day workshop building an app with Aspire.',
   },
