@@ -25,14 +25,19 @@ export default function HomePage() {
           <div className="mb-8 max-w-3xl">
             <p className="mb-4 text-base md:text-lg text-gray-300">
               Welcome! I'm a backend software engineer with {experience.text} of
-              experience in C#/.NET, microservices, and event-driven systems.
+              experience in C#/.NET, microservices, and event-driven systems.{' '}
+              <Link to="/about" className="text-blue-400 hover:text-blue-300 underline">
+                Learn more about me
+              </Link>.
             </p>
             <p className="mb-4 text-base md:text-lg text-gray-300">
               This website itself is a learning project. As someone who knows
               close to nothing about frontend development, I'm using AI-assisted
               tools to build this site and learn React, TypeScript, and modern
-              frontend practices along the way. You can find more details about
-              this project in the Personal Projects section.
+              frontend practices along the way.{' '}
+              <Link to="/projects" className="text-blue-400 hover:text-blue-300 underline">
+                See the full project details
+              </Link>.
             </p>
             <p className="mb-4 text-base md:text-lg text-gray-300">
               It's an experiment in leveraging AI for developer productivity,
@@ -41,6 +46,12 @@ export default function HomePage() {
             </p>
           </div>
           <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
+            <Link
+              to="/about"
+              className="rounded-lg border border-gray-700 px-6 py-3 text-center font-semibold text-white transition-all duration-200 hover:scale-105 hover:bg-gray-800 hover:shadow-lg"
+            >
+              About Me
+            </Link>
             <Link
               to="/experience"
               className="rounded-lg bg-blue-600 px-6 py-3 text-center font-semibold text-white transition-all duration-200 hover:scale-105 hover:bg-blue-700 hover:shadow-lg hover:shadow-blue-600/50"
