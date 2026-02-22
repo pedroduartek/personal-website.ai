@@ -26,18 +26,26 @@ export default function HomePage() {
             <p className="mb-4 text-base md:text-lg text-gray-300">
               Welcome! I'm a backend software engineer with {experience.text} of
               experience in C#/.NET, microservices, and event-driven systems.{' '}
-              <Link to="/about" className="text-blue-400 hover:text-blue-300 underline">
+              <Link
+                to="/about"
+                className="text-blue-400 hover:text-blue-300 underline"
+              >
                 Learn more about me
-              </Link>.
+              </Link>
+              .
             </p>
             <p className="mb-4 text-base md:text-lg text-gray-300">
               This website itself is a learning project. As someone who knows
               close to nothing about frontend development, I'm using AI-assisted
               tools to build this site and learn React, TypeScript, and modern
               frontend practices along the way.{' '}
-              <Link to="/projects" className="text-blue-400 hover:text-blue-300 underline">
+              <Link
+                to="/projects"
+                className="text-blue-400 hover:text-blue-300 underline"
+              >
                 See the full project details
-              </Link>.
+              </Link>
+              .
             </p>
             <p className="mb-4 text-base md:text-lg text-gray-300">
               It's an experiment in leveraging AI for developer productivity,

@@ -5,10 +5,10 @@ import 'yet-another-react-lightbox/styles.css'
 import PageSEO from '../../components/seo/PageSEO'
 import { conferences } from '../../content/conferences'
 import azureDevSummitLogo from '../../images/azure_dev_summit.png'
-import webSummitLogo from '../../images/web_summit.png'
+import azureNickChapsas from '../../images/photo_nickchapsas_azuresummit.jpeg'
 import azureStage1 from '../../images/stage_azuresummit.jpeg'
 import azureStage2 from '../../images/stage_azuresummit_2.jpeg'
-import azureNickChapsas from '../../images/photo_nickchapsas_azuresummit.jpeg'
+import webSummitLogo from '../../images/web_summit.png'
 import webSummitGroup from '../../images/websummit_groupphoto.jpeg'
 
 const conferenceLogos: Record<string, string> = {
@@ -134,17 +134,22 @@ export default function ConferencesPage() {
               {conferencePhotos[item.name] && (
                 <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2 md:grid-cols-3">
                   {conferencePhotos[item.name].map((photo, index) => (
-                    <img
-                      key={index}
-                      src={photo}
-                      alt={`${item.name} photo ${index + 1}`}
+                    <button
+                      key={photo}
+                      type="button"
                       onClick={() => openLightbox(item.name, index)}
-                      className={`rounded-lg object-cover w-full h-48 cursor-pointer hover:opacity-90 transition-opacity ${
-                        item.name === 'Azure Dev Summit' && index === 2
-                          ? 'object-[center_35%]'
-                          : ''
-                      }`}
-                    />
+                      className="rounded-lg overflow-hidden focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    >
+                      <img
+                        src={photo}
+                        alt={`${item.name} ${index + 1}`}
+                        className={`object-cover w-full h-48 hover:opacity-90 transition-opacity ${
+                          item.name === 'Azure Dev Summit' && index === 2
+                            ? 'object-[center_35%]'
+                            : ''
+                        }`}
+                      />
+                    </button>
                   ))}
                 </div>
               )}

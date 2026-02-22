@@ -61,11 +61,11 @@ export default function PersonalWebsiteProjectPage() {
             <h2 className="mb-4 text-2xl font-semibold text-white">Overview</h2>
             <p className="mb-4">
               This website is an experiment in using AI-assisted development to
-              learn frontend technologies. As a backend engineer with {experience.text} of
-              C#/.NET experience but minimal frontend knowledge, I wanted to
-              build a professional portfolio while learning React, TypeScript,
-              and modern frontend development without spending months in
-              tutorials.
+              learn frontend technologies. As a backend engineer with{' '}
+              {experience.text} of C#/.NET experience but minimal frontend
+              knowledge, I wanted to build a professional portfolio while
+              learning React, TypeScript, and modern frontend development
+              without spending months in tutorials.
             </p>
             <p className="mb-4">
               The result: A production-ready portfolio site built in days
@@ -184,7 +184,9 @@ export default function PersonalWebsiteProjectPage() {
               </div>
               <div className="rounded-lg border border-gray-700 bg-card p-4">
                 <p>
-                  <strong className="text-white">Consistent design system:</strong>{' '}
+                  <strong className="text-white">
+                    Consistent design system:
+                  </strong>{' '}
                   Custom dark theme with unified hover effects, animations, and
                   carefully designed color palette for professional polish
                 </p>
@@ -198,9 +200,9 @@ export default function PersonalWebsiteProjectPage() {
               </div>
               <div className="rounded-lg border border-gray-700 bg-card p-4">
                 <p>
-                  <strong className="text-white">Production-ready:</strong>{' '}
-                  Live at www.pedroduartek.com via Vercel with automatic
-                  deployments from GitHub and full source code available
+                  <strong className="text-white">Production-ready:</strong> Live
+                  at www.pedroduartek.com via Vercel with automatic deployments
+                  from GitHub and full source code available
                 </p>
               </div>
             </div>
@@ -288,9 +290,7 @@ export default function PersonalWebsiteProjectPage() {
                 <li>
                   Performance optimization and lighthouse score improvements
                 </li>
-                <li>
-                  SEO enhancements for better discoverability
-                </li>
+                <li>SEO enhancements for better discoverability</li>
               </ul>
             </div>
           </section>
