@@ -14,8 +14,6 @@ This project uses GitHub Actions for continuous integration, quality assurance, 
 - ✅ Builds the production bundle
 - ✅ Ensures code quality before merging
 
-**Why it matters:** Catches bugs and style issues early, ensures consistent code quality.
-
 ---
 
 ### 2. Lighthouse CI (`.github/workflows/lighthouse.yml`)
@@ -27,8 +25,6 @@ This project uses GitHub Actions for continuous integration, quality assurance, 
 - ♿ Validates accessibility (WCAG compliance)
 - 🔍 Checks SEO best practices
 - 📈 Requires minimum 90% score on all categories
-
-**Why it matters:** Performance impacts SEO and user retention. Following web standards ensures a quality experience across all devices.
 
 **View reports:** Results are published to temporary public storage and commented on PRs.
 
@@ -43,8 +39,6 @@ This project uses GitHub Actions for continuous integration, quality assurance, 
 - ⚠️ Runs size-limit checks based on configuration:
   - JavaScript: 250 KB limit
   - CSS: 50 KB limit
-
-**Why it matters:** Prevents accidental bloat, keeps site fast for mobile users. Shows understanding of performance optimization.
 
 **Configuration:** See `size-limit` section in `apps/web/package.json`
 
