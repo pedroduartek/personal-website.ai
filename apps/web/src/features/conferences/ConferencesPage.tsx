@@ -163,6 +163,12 @@ export default function ConferencesPage() {
           maxZoomPixelRatio: 3,
           scrollToZoom: true,
         }}
+        carousel={{
+          finite: true,
+        }}
+        controller={{
+          closeOnBackdropClick: true,
+        }}
       />
     </>
   )
