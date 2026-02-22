@@ -19,6 +19,7 @@ export function CommandPalette({ isOpen, onClose }: CommandPaletteProps) {
   const [search, setSearch] = useState('')
   const [selectedIndex, setSelectedIndex] = useState(0)
   const inputRef = useRef<HTMLInputElement>(null)
+  const selectedItemRef = useRef<HTMLButtonElement>(null)
   const navigate = useNavigate()
 
   const commands: Command[] = [
@@ -178,6 +179,15 @@ export function CommandPalette({ isOpen, onClose }: CommandPaletteProps) {
   }, [search])
 
   useEffect(() => {
+    if (selectedItemRef.current) {
+      selectedItemRef.current.scrollIntoView({
+        block: 'nearest',
+        behavior: 'smooth',
+      })
+    }
+  }, [selectedIndex])
+
+  useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (!isOpen) return
 
@@ -239,6 +249,7 @@ export function CommandPalette({ isOpen, onClose }: CommandPaletteProps) {
                 {filteredCommands.map((command, index) => (
                   <button
                     key={command.id}
+                    ref={index === selectedIndex ? selectedItemRef : null}
                     onClick={command.action}
                     onMouseEnter={() => setSelectedIndex(index)}
                     className={`flex w-full items-center gap-3 rounded-md px-4 py-3 text-left transition-colors ${
