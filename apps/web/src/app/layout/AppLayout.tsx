@@ -39,7 +39,7 @@ function Header({
             to="/"
             className="flex items-center gap-3 text-xl font-bold text-white"
           >
-            <img src={logo} alt="PLD Logo" className="h-10 w-auto" />
+            <img src={logo} alt="PLD Logo" className="h-14 w-auto" />
             PEDRODUARTEK
           </Link>
 
