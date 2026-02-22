@@ -1,22 +1,16 @@
 import PageSEO from '../../components/seo/PageSEO'
 import { skills } from '../../content/skills'
 
-export default function SkillsPage() {
-  const getLevelColor = (
-    level: 'beginner' | 'intermediate' | 'advanced' | 'expert',
-  ) => {
-    const colors = {
-      beginner: 'bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-200',
-      intermediate:
-        'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200',
-      advanced:
-        'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200',
-      expert:
-        'bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200',
-    }
-    return colors[level]
-  }
+function getYearsBadgeColor(years: string): string {
+  const yearNum = parseInt(years)
+  if (yearNum >= 6) return 'bg-blue-600 text-white'
+  if (yearNum === 5) return 'bg-teal-600 text-white'
+  if (yearNum === 4) return 'bg-green-600 text-white'
+  if (yearNum === 3) return 'bg-lime-600 text-white'
+  return 'bg-gray-600 text-gray-200'
+}
 
+export default function SkillsPage() {
   return (
     <>
       <PageSEO
@@ -43,11 +37,11 @@ export default function SkillsPage() {
                     className="flex items-center justify-between"
                   >
                     <span className="text-white">{skill.name}</span>
-                    <span
-                      className={`rounded px-2 py-1 text-xs font-semibold ${getLevelColor(skill.level)}`}
-                    >
-                      {skill.level}
-                    </span>
+                    {skill.years && (
+                      <span className={`rounded px-2 py-1 text-xs font-medium ${getYearsBadgeColor(skill.years)}`}>
+                        {skill.years}
+                      </span>
+                    )}
                   </div>
                 ))}
               </div>

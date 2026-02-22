@@ -73,7 +73,7 @@ export interface SkillGroup {
 
 export interface Skill {
   name: string
-  level: 'beginner' | 'intermediate' | 'advanced' | 'expert'
+  years?: string
 }
 
 export interface BlogPost {
