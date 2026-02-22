@@ -2,7 +2,7 @@ import { Suspense, useState } from 'react'
 import { Link, Outlet } from 'react-router-dom'
 import { CommandPalette } from '../../components/CommandPalette'
 import { useCommandPalette } from '../../hooks/useCommandPalette'
-import logo from '../../images/pld_logo.png'
+import logo from '../../images/pld_logo_header.png'
 
 export default function AppLayout() {
   const { isOpen, close, open } = useCommandPalette()
