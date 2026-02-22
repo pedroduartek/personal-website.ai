@@ -190,19 +190,19 @@ export function CommandPalette({ isOpen, onClose }: CommandPaletteProps) {
           aria-label="Command palette"
         >
           {/* Search Input */}
-          <div className="border-b border-gray-700 p-4">
+          <div className="p-4">
             <input
               ref={inputRef}
               type="text"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               placeholder="Type a command or search..."
-              className="w-full bg-transparent px-2 py-1 text-lg text-white outline-none placeholder:text-gray-500"
+              className="w-full rounded-lg border border-gray-700 bg-gray-800/50 px-4 py-3 text-lg text-white outline-none placeholder:text-gray-500 transition-colors focus:border-gray-600 focus:bg-gray-800 focus:ring-2 focus:ring-gray-700/50"
             />
           </div>
 
           {/* Commands List */}
-          <div className="max-h-96 overflow-y-auto p-2">
+          <div className="max-h-96 overflow-y-auto p-2 border-t border-gray-800">
             {filteredCommands.length === 0 ? (
               <div className="px-4 py-8 text-center text-gray-500">
                 No commands found
