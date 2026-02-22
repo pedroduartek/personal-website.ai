@@ -1,9 +1,14 @@
+import { useState } from 'react'
+import Lightbox from 'yet-another-react-lightbox'
+import Zoom from 'yet-another-react-lightbox/plugins/zoom'
+import 'yet-another-react-lightbox/styles.css'
 import PageSEO from '../../components/seo/PageSEO'
 import { profile } from '../../content/profile'
 import systemDesign from '../../images/system_design_enhesa.jpg'
 import { getExperience } from '../../utils/experience'
 
 export default function AboutPage() {
+  const [lightboxOpen, setLightboxOpen] = useState(false)
   const experience = getExperience()
 
   return (
@@ -66,15 +71,38 @@ export default function AboutPage() {
           </div>
           <div className="md:w-1/3">
             <div className="rounded-lg border border-gray-700 bg-card p-4 sticky top-8">
-              <img
-                src={systemDesign}
-                alt="System design work at Enhesa"
-                className="rounded-lg w-full object-cover"
-              />
+              <button
+                type="button"
+                onClick={() => setLightboxOpen(true)}
+                className="rounded-lg overflow-hidden focus:outline-none focus:ring-2 focus:ring-blue-500 w-full"
+              >
+                <img
+                  src={systemDesign}
+                  alt="System design work at Enhesa"
+                  className="rounded-lg w-full object-cover hover:opacity-90 transition-opacity cursor-pointer"
+                />
+              </button>
             </div>
           </div>
         </div>
       </div>
+
+      <Lightbox
+        open={lightboxOpen}
+        close={() => setLightboxOpen(false)}
+        slides={[{ src: systemDesign }]}
+        plugins={[Zoom]}
+        zoom={{
+          maxZoomPixelRatio: 3,
+          scrollToZoom: true,
+        }}
+        carousel={{
+          finite: true,
+        }}
+        controller={{
+          closeOnBackdropClick: true,
+        }}
+      />
     </>
   )
 }

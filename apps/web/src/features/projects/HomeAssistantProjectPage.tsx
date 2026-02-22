@@ -1,8 +1,13 @@
+import { useState } from 'react'
 import { Link } from 'react-router-dom'
+import Lightbox from 'yet-another-react-lightbox'
+import Zoom from 'yet-another-react-lightbox/plugins/zoom'
+import 'yet-another-react-lightbox/styles.css'
 import PageSEO from '../../components/seo/PageSEO'
 import haScreenshot from '../../images/ha.png'
 
 export default function HomeAssistantProjectPage() {
+  const [lightboxOpen, setLightboxOpen] = useState(false)
   return (
     <>
       <PageSEO
@@ -227,11 +232,17 @@ export default function HomeAssistantProjectPage() {
                 uses it daily and is the ultimate tester. If the UX is
                 confusing, it doesn't ship.
               </p>
-              <img
-                src={haScreenshot}
-                alt="Home Assistant Dashboard"
-                className="mt-6 w-full rounded-lg border border-gray-600"
-              />
+              <button
+                type="button"
+                onClick={() => setLightboxOpen(true)}
+                className="mt-6 w-full rounded-lg overflow-hidden focus:outline-none focus:ring-2 focus:ring-blue-500"
+              >
+                <img
+                  src={haScreenshot}
+                  alt="Home Assistant Dashboard"
+                  className="w-full rounded-lg border border-gray-600 hover:opacity-90 transition-opacity cursor-pointer"
+                />
+              </button>
             </div>
           </section>
 
@@ -316,6 +327,23 @@ export default function HomeAssistantProjectPage() {
           </section>
         </div>
       </div>
+
+      <Lightbox
+        open={lightboxOpen}
+        close={() => setLightboxOpen(false)}
+        slides={[{ src: haScreenshot }]}
+        plugins={[Zoom]}
+        zoom={{
+          maxZoomPixelRatio: 3,
+          scrollToZoom: true,
+        }}
+        carousel={{
+          finite: true,
+        }}
+        controller={{
+          closeOnBackdropClick: true,
+        }}
+      />
     </>
   )
 }
