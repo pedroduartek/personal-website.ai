@@ -1,10 +1,14 @@
 import { Suspense, useState } from 'react'
 import { Link, Outlet } from 'react-router-dom'
+import { CommandPalette } from '../../components/CommandPalette'
+import { useCommandPalette } from '../../hooks/useCommandPalette'
 
 export default function AppLayout() {
+  const { isOpen, close, open } = useCommandPalette()
+
   return (
     <div className="flex min-h-screen flex-col bg-background">
-      <Header />
+      <Header onOpenCommandPalette={open} />
       <main className="flex-1">
         <Suspense
           fallback={
@@ -16,11 +20,12 @@ export default function AppLayout() {
           <Outlet />
         </Suspense>
       </main>
+      <CommandPalette isOpen={isOpen} onClose={close} />
     </div>
   )
 }
 
-function Header() {
+function Header({ onOpenCommandPalette }: { onOpenCommandPalette: () => void }) {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
 
   return (
@@ -30,6 +35,32 @@ function Header() {
           <Link to="/" className="text-xl font-bold text-white">
             PEDRODUARTEK
           </Link>
+
+          {/* Command Palette Button */}
+          <button
+            type="button"
+            onClick={onOpenCommandPalette}
+            className="hidden md:flex items-center gap-2 rounded-lg border border-gray-700 bg-gray-800/50 px-3 py-1.5 text-sm text-gray-400 transition-colors hover:border-gray-600 hover:bg-gray-800 hover:text-gray-300"
+            aria-label="Open command palette"
+          >
+            <svg
+              className="h-4 w-4"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+              />
+            </svg>
+            <span>Search</span>
+            <kbd className="ml-1 rounded bg-gray-700 px-1.5 py-0.5 text-xs text-gray-400">
+              ⌘K
+            </kbd>
+          </button>
 
           {/* Mobile menu button */}
           <button
