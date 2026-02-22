@@ -155,6 +155,15 @@ export default function PersonalWebsiteProjectPage() {
               <div className="rounded-lg border border-gray-700 bg-card p-4">
                 <p>
                   <strong className="text-white">
+                    Command Palette (⌘K / Ctrl+K):
+                  </strong>{' '}
+                  Fuzzy search navigation inspired by modern IDEs, with keyboard
+                  shortcuts and smooth animations for quick site exploration
+                </p>
+              </div>
+              <div className="rounded-lg border border-gray-700 bg-card p-4">
+                <p>
+                  <strong className="text-white">
                     Professional experience showcase:
                   </strong>{' '}
                   Dynamic pages with clickable articles, detailed role
@@ -172,16 +181,9 @@ export default function PersonalWebsiteProjectPage() {
               </div>
               <div className="rounded-lg border border-gray-700 bg-card p-4">
                 <p>
-                  <strong className="text-white">Custom dark theme:</strong>{' '}
-                  Carefully designed color palette with proper accessibility and
-                  contrast ratios
-                </p>
-              </div>
-              <div className="rounded-lg border border-gray-700 bg-card p-4">
-                <p>
-                  <strong className="text-white">Modern animations:</strong>{' '}
-                  Slide-down page transitions and hover effects on all
-                  interactive elements for professional polish
+                  <strong className="text-white">Consistent design system:</strong>{' '}
+                  Custom dark theme with unified hover effects, animations, and
+                  carefully designed color palette for professional polish
                 </p>
               </div>
               <div className="rounded-lg border border-gray-700 bg-card p-4">
@@ -193,16 +195,9 @@ export default function PersonalWebsiteProjectPage() {
               </div>
               <div className="rounded-lg border border-gray-700 bg-card p-4">
                 <p>
-                  <strong className="text-white">Production deployment:</strong>{' '}
+                  <strong className="text-white">Production-ready:</strong>{' '}
                   Live at www.pedroduartek.com via Vercel with automatic
-                  deployments from GitHub
-                </p>
-              </div>
-              <div className="rounded-lg border border-gray-700 bg-card p-4">
-                <p>
-                  <strong className="text-white">Open source:</strong> Full
-                  source code available on GitHub, demonstrating code quality
-                  and AI collaboration
+                  deployments from GitHub and full source code available
                 </p>
               </div>
             </div>
@@ -275,39 +270,6 @@ export default function PersonalWebsiteProjectPage() {
 
           <section className="mb-12">
             <h2 className="mb-4 text-2xl font-semibold text-white">
-              Development Timeline
-            </h2>
-            <div className="rounded-lg border border-gray-700 bg-card p-6">
-              <ul className="space-y-3">
-                <li>
-                  <strong className="text-white">Week 1:</strong> Initial setup,
-                  component structure, CV data population, custom dark theme
-                </li>
-                <li>
-                  <strong className="text-white">Week 2:</strong> Experience
-                  detail pages, project showcase, company logos, education
-                  section
-                </li>
-                <li>
-                  <strong className="text-white">Week 3:</strong> Animations,
-                  hover effects, button-styled navigation, professional polish
-                </li>
-                <li>
-                  <strong className="text-white">Week 4:</strong> Mobile
-                  responsiveness (hamburger menu, responsive breakpoints across
-                  all pages)
-                </li>
-                <li>
-                  <strong className="text-white">Deployment:</strong> GitHub
-                  repository created, Vercel deployment configured, live at
-                  www.pedroduartek.com
-                </li>
-              </ul>
-            </div>
-          </section>
-
-          <section className="mb-12">
-            <h2 className="mb-4 text-2xl font-semibold text-white">
               What's Next
             </h2>
             <div className="rounded-lg border border-gray-700 bg-card p-6">
@@ -324,7 +286,7 @@ export default function PersonalWebsiteProjectPage() {
                   Performance optimization and lighthouse score improvements
                 </li>
                 <li>
-                  SEO enhancements for better discoverability by recruiters
+                  SEO enhancements for better discoverability
                 </li>
               </ul>
             </div>

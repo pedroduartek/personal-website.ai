@@ -28,7 +28,7 @@ This project uses GitHub Actions for continuous integration, quality assurance, 
 - 🔍 Checks SEO best practices
 - 📈 Requires minimum 90% score on all categories
 
-**Why it matters:** Shows recruiters you care about user experience and web standards. Performance impacts SEO and user retention.
+**Why it matters:** Performance impacts SEO and user retention. Following web standards ensures a quality experience across all devices.
 
 **View reports:** Results are published to temporary public storage and commented on PRs.
 
