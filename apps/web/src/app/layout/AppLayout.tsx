@@ -37,8 +37,7 @@ function Header({
   return (
     <header className="border-b border-gray-800 bg-header">
       <nav className="px-3 py-2 md:px-6">
-        {/* Mobile: flex layout with logo and hamburger */}
-        <div className="flex items-center justify-between md:hidden">
+        <div className="flex items-center justify-between gap-4">
           <Link
             to="/"
             className="flex items-center gap-3 text-xl font-bold text-white"
@@ -47,54 +46,11 @@ function Header({
             PEDRODUARTEK
           </Link>
 
-          <button
-            type="button"
-            onClick={() => setIsMenuOpen(!isMenuOpen)}
-            className="rounded-lg border border-gray-700 p-2 text-gray-300 hover:bg-gray-800 hover:text-white"
-            aria-label="Toggle menu"
-          >
-            <svg
-              role="img"
-              aria-label="Menu icon"
-              className="h-6 w-6"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              {isMenuOpen ? (
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M6 18L18 6M6 6l12 12"
-                />
-              ) : (
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M4 6h16M4 12h16M4 18h16"
-                />
-              )}
-            </svg>
-          </button>
-        </div>
-
-        {/* Desktop: grid layout with centered command palette */}
-        <div className="hidden md:grid md:grid-cols-[1fr_auto_1fr] items-center gap-4">
-          <Link
-            to="/"
-            className="flex items-center gap-3 text-xl font-bold text-white"
-          >
-            <img src={logo} alt="PLD Logo" className="h-[70px] w-auto" />
-            PEDRODUARTEK
-          </Link>
-
-          {/* Command Palette Button - Centered */}
+          {/* Command Palette Button - Desktop only, centered */}
           <button
             type="button"
             onClick={onOpenCommandPalette}
-            className="flex items-center gap-2 rounded-lg border border-gray-700 bg-gray-800/50 px-4 py-2 text-sm text-gray-400 transition-colors hover:border-gray-600 hover:bg-gray-800 hover:text-gray-300 min-w-[200px] justify-between"
+            className="hidden md:flex items-center gap-2 rounded-lg border border-gray-700 bg-gray-800/50 px-4 py-2 text-sm text-gray-400 transition-colors hover:border-gray-600 hover:bg-gray-800 hover:text-gray-300 min-w-[200px] justify-between"
             aria-label="Open command palette"
           >
             <svg
@@ -119,16 +75,51 @@ function Header({
             </kbd>
           </button>
 
-          {/* Desktop navigation */}
-          <div className="flex gap-3 justify-end">
-            <NavLink to="/about">About</NavLink>
-            <NavLink to="/experience">Professional Experience</NavLink>
-            <NavLink to="/education">Education</NavLink>
-            <NavLink to="/conferences">Conferences</NavLink>
-            <NavLink to="/skills">Skills</NavLink>
-            <NavLink to="/projects">Personal Projects</NavLink>
-            <NavLink to="/cv">Download CV</NavLink>
-            <NavLink to="/contact">Contact</NavLink>
+          <div className="flex items-center gap-3">
+            {/* Mobile menu button */}
+            <button
+              type="button"
+              onClick={() => setIsMenuOpen(!isMenuOpen)}
+              className="md:hidden rounded-lg border border-gray-700 p-2 text-gray-300 hover:bg-gray-800 hover:text-white"
+              aria-label="Toggle menu"
+            >
+              <svg
+                role="img"
+                aria-label="Menu icon"
+                className="h-6 w-6"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                {isMenuOpen ? (
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M6 18L18 6M6 6l12 12"
+                  />
+                ) : (
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M4 6h16M4 12h16M4 18h16"
+                  />
+                )}
+              </svg>
+            </button>
+
+            {/* Desktop navigation */}
+            <div className="hidden md:flex gap-3">
+              <NavLink to="/about">About</NavLink>
+              <NavLink to="/experience">Professional Experience</NavLink>
+              <NavLink to="/education">Education</NavLink>
+              <NavLink to="/conferences">Conferences</NavLink>
+              <NavLink to="/skills">Skills</NavLink>
+              <NavLink to="/projects">Personal Projects</NavLink>
+              <NavLink to="/cv">Download CV</NavLink>
+              <NavLink to="/contact">Contact</NavLink>
+            </div>
           </div>
         </div>
 
