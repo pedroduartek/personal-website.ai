@@ -2,9 +2,11 @@ import { Link } from 'react-router-dom'
 import PageSEO from '../../components/seo/PageSEO'
 import { profile } from '../../content/profile'
 import { projects } from '../../content/projects'
+import { getExperience } from '../../utils/experience'
 
 export default function HomePage() {
   const featuredProjects = projects.filter((p) => p.featured).slice(0, 3)
+  const experience = getExperience()
 
   return (
     <>
@@ -22,7 +24,7 @@ export default function HomePage() {
           </p>
           <div className="mb-8 max-w-3xl">
             <p className="mb-4 text-base md:text-lg text-gray-300">
-              Welcome! I'm a backend software engineer with 6 years of
+              Welcome! I'm a backend software engineer with {experience.text} of
               experience in C#/.NET, microservices, and event-driven systems.
             </p>
             <p className="mb-4 text-base md:text-lg text-gray-300">
