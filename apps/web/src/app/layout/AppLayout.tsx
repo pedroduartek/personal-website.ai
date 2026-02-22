@@ -157,7 +157,7 @@ function NavLink({
     <Link
       to={to}
       onClick={onClick}
-      className="rounded-lg border border-gray-700 px-4 py-2 text-sm font-medium text-gray-300 transition-all duration-200 hover:border-blue-500 hover:bg-gray-800 hover:text-white hover:shadow-md"
+      className="rounded-lg border border-gray-700 px-4 py-2 text-sm font-medium text-gray-300 transition-all duration-200 hover:scale-105 hover:bg-gray-800 hover:text-white hover:shadow-lg"
     >
       {children}
     </Link>
