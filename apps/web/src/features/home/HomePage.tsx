@@ -69,7 +69,7 @@ export default function HomePage() {
               <Link
                 key={project.slug}
                 to={`/projects/${project.slug}`}
-                className="group rounded-lg border border-gray-700 bg-card p-6 transition-all duration-300 hover:scale-[1.02] hover:border-blue-500 hover:shadow-lg hover:shadow-blue-500/10"
+                className="group rounded-lg border border-gray-700 bg-card p-6 transition-all duration-300 hover:scale-[1.02] hover:bg-gray-800 hover:shadow-lg"
               >
                 <h3 className="mb-2 text-xl font-semibold text-white">
                   {project.title}

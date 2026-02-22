@@ -11,7 +11,7 @@ export default function PersonalWebsiteProjectPage() {
       <div className="container mx-auto px-4 py-8 animate-slide-down md:py-16">
         <Link
           to="/projects"
-          className="mb-6 inline-flex items-center gap-2 rounded-lg border border-gray-700 px-4 py-2 text-sm font-medium text-gray-300 transition-all duration-200 hover:border-blue-500 hover:bg-gray-800 hover:text-white hover:shadow-md"
+          className="mb-6 inline-flex items-center gap-2 rounded-lg border border-gray-700 px-4 py-2 text-sm font-medium text-gray-300 transition-all duration-200 hover:scale-105 hover:bg-gray-800 hover:text-white hover:shadow-lg"
         >
           <span>←</span> Back to projects
         </Link>
