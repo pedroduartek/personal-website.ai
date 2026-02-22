@@ -219,21 +219,19 @@ export function CommandPalette({ isOpen, onClose }: CommandPaletteProps) {
   if (!isOpen) return null
 
   return (
+    // biome-ignore lint/a11y/useKeyWithClickEvents: Keyboard events handled by window listener in useEffect
     <div
       className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm"
       onClick={onClose}
-      onKeyDown={(e) => e.key === 'Escape' && onClose()}
       aria-label="Close command palette"
-      tabIndex={-1}
     >
       <div className="flex min-h-screen items-start justify-center p-4 pt-[20vh]">
+        {/* biome-ignore lint/a11y/useKeyWithClickEvents: Click handler only prevents event bubbling */}
         <div
           className="w-full max-w-2xl rounded-lg border border-gray-700 bg-gray-900 shadow-2xl"
           onClick={(e) => e.stopPropagation()}
-          onKeyDown={(e) => e.stopPropagation()}
           aria-modal="true"
           aria-label="Command palette"
-          tabIndex={-1}
         >
           {/* Search Input */}
           <div className="border-b border-gray-700 p-4">
