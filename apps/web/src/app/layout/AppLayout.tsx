@@ -25,7 +25,9 @@ export default function AppLayout() {
   )
 }
 
-function Header({ onOpenCommandPalette }: { onOpenCommandPalette: () => void }) {
+function Header({
+  onOpenCommandPalette,
+}: { onOpenCommandPalette: () => void }) {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
 
   return (
@@ -48,7 +50,10 @@ function Header({ onOpenCommandPalette }: { onOpenCommandPalette: () => void }) 
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
+              role="img"
+              aria-label="Search icon"
             >
+              <title>Search</title>
               <path
                 strokeLinecap="round"
                 strokeLinejoin="round"
