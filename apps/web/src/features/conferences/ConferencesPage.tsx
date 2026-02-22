@@ -1,3 +1,7 @@
+import { useState } from 'react'
+import Lightbox from 'yet-another-react-lightbox'
+import Zoom from 'yet-another-react-lightbox/plugins/zoom'
+import 'yet-another-react-lightbox/styles.css'
 import PageSEO from '../../components/seo/PageSEO'
 import { conferences } from '../../content/conferences'
 import azureDevSummitLogo from '../../images/azure_dev_summit.png'
@@ -18,6 +22,20 @@ const conferencePhotos: Record<string, string[]> = {
 }
 
 export default function ConferencesPage() {
+  const [lightboxOpen, setLightboxOpen] = useState(false)
+  const [photoIndex, setPhotoIndex] = useState(0)
+  const [currentConference, setCurrentConference] = useState<string>('')
+
+  const openLightbox = (conferenceName: string, index: number) => {
+    setCurrentConference(conferenceName)
+    setPhotoIndex(index)
+    setLightboxOpen(true)
+  }
+
+  const currentPhotos = currentConference
+    ? conferencePhotos[currentConference]?.map((src) => ({ src })) || []
+    : []
+
   return (
     <>
       <PageSEO
@@ -120,7 +138,12 @@ export default function ConferencesPage() {
                       key={index}
                       src={photo}
                       alt={`${item.name} photo ${index + 1}`}
-                      className="rounded-lg object-cover w-full h-48"
+                      onClick={() => openLightbox(item.name, index)}
+                      className={`rounded-lg object-cover w-full h-48 cursor-pointer hover:opacity-90 transition-opacity ${
+                        item.name === 'Azure Dev Summit' && index === 2
+                          ? 'object-[center_35%]'
+                          : ''
+                      }`}
                     />
                   ))}
                 </div>
@@ -129,6 +152,18 @@ export default function ConferencesPage() {
           ))}
         </div>
       </div>
+
+      <Lightbox
+        open={lightboxOpen}
+        close={() => setLightboxOpen(false)}
+        slides={currentPhotos}
+        index={photoIndex}
+        plugins={[Zoom]}
+        zoom={{
+          maxZoomPixelRatio: 3,
+          scrollToZoom: true,
+        }}
+      />
     </>
   )
 }
