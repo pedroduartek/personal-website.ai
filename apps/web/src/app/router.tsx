@@ -1,6 +1,7 @@
 import { lazy } from 'react'
 import { createBrowserRouter } from 'react-router-dom'
 import AppLayout from './layout/AppLayout'
+import ErrorBoundary from '../components/ErrorBoundary'
 
 const Home = lazy(() => import('../features/home/HomePage'))
 const About = lazy(() => import('../features/about/AboutPage'))
@@ -32,6 +33,7 @@ export const router = createBrowserRouter([
   {
     path: '/',
     element: <AppLayout />,
+    errorElement: <ErrorBoundary />,
     children: [
       { index: true, element: <Home /> },
       { path: 'about', element: <About /> },
