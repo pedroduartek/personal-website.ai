@@ -35,36 +35,18 @@ This project uses GitHub Actions for continuous integration, quality assurance, 
 ---
 
 ### 3. Bundle Size Tracking (`.github/workflows/bundle-size.yml`)
-**Triggers:** On every push and pull request to `main`
+**Triggers:** On pull requests to `main`
 
 **What it does:**
 - 📦 Analyzes JavaScript bundle size after build
-- 📉 Comments on PRs showing size differences
-- ⚠️ Alerts if bundle exceeds limits:
-  - JavaScript: 250 KB
-  - CSS: 50 KB
+- 📊 Uploads bundle stats as artifacts for review
+- ⚠️ Runs size-limit checks based on configuration:
+  - JavaScript: 250 KB limit
+  - CSS: 50 KB limit
 
 **Why it matters:** Prevents accidental bloat, keeps site fast for mobile users. Shows understanding of performance optimization.
 
 **Configuration:** See `size-limit` section in `apps/web/package.json`
-
----
-
-### 4. Dependabot (`.github/dependabot.yml`)
-**Triggers:** Weekly on Monday mornings
-
-**What it does:**
-- 🔄 Automatically checks for dependency updates (npm packages + GitHub Actions)
-- 🔐 Identifies security vulnerabilities
-- 📝 Opens PRs with grouped updates (minor/patch together)
-- 🏷️ Auto-labels PRs as "dependencies" and "automated"
-
-**Why it matters:** Keeps dependencies secure and up-to-date without manual effort. Shows maintenance awareness.
-
-**Configuration:**
-- Groups development dependencies together
-- Groups production dependencies together
-- Requires your review before merging
 
 ---
 
@@ -93,8 +75,7 @@ pnpm build
 
 - **CI Status:** Check the Actions tab on GitHub
 - **Lighthouse Reports:** View linked reports in PR comments
-- **Bundle Size:** See size comparisons in PR comments
-- **Dependabot PRs:** Review in Pull Requests tab
+- **Bundle Size:** Download artifacts from workflow runs to review bundle stats
 
 ## Future Enhancements
 

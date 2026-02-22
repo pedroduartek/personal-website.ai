@@ -21,7 +21,7 @@ MUST have in v1:
 
 ## C) Design / UI constraints
 - [x] Style: **Clean + minimal**
-- [x] Theme: **Light + dark toggle**
+- [x] Theme: **Dark theme only**
 - [x] Animations: **Subtle**
 - [x] Styling: **Tailwind CSS**
 
@@ -30,11 +30,11 @@ MUST have in v1:
 - [x] Contact method: **mailto + LinkedIn profile link**
 
 ## E) Hosting (after beta)
-- [x] Preferred hosting: **Cloudflare Pages**
+- [x] Preferred hosting: **Vercel**
 
 ## F) Domain
 - [x] Use a custom domain: **yes**
-- [x] Domain name: **TBD**
+- [x] Domain name: **personal-website.ai** (pedroduartek.com)
 
 ## G) Personal data safety
 - [x] Phone number shown publicly: **no**

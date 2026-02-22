@@ -32,18 +32,6 @@ jobs:
       - name: Run Lighthouse CI
         uses: treosh/lighthouse-ci-action@v11
         with:
-          urls: |
-            http://localhost:4173
-            http://localhost:4173/about
-            http://localhost:4173/experience
-            http://localhost:4173/projects
           uploadArtifacts: true
           temporaryPublicStorage: true
-          runs: 3
           configPath: './.lighthouserc.json'
-
-      - name: Serve and test
-        run: |
-          cd apps/web
-          pnpm preview &
-          npx wait-on http://localhost:4173
