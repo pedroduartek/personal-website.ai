@@ -113,7 +113,7 @@ export default function EducationPage() {
         </h2>
         <div className="space-y-6">
           {conferences.map((item) => (
-            <Link key={item.id} to="/conferences">
+            <Link key={item.id} to="/conferences" className="block">
               <article className="rounded-lg border border-gray-700 bg-card p-6 transition-all duration-200 hover:scale-[1.02] hover:bg-gray-800 hover:shadow-lg cursor-pointer">
               <div className="mb-4 flex items-start gap-4">
                 {conferenceLogos[item.name] && (
