@@ -2,6 +2,7 @@ import { Suspense, useState } from 'react'
 import { Link, Outlet } from 'react-router-dom'
 import { CommandPalette } from '../../components/CommandPalette'
 import { useCommandPalette } from '../../hooks/useCommandPalette'
+import logo from '../../images/pld_logo.png'
 
 export default function AppLayout() {
   const { isOpen, close, open } = useCommandPalette()
@@ -34,7 +35,11 @@ function Header({
     <header className="border-b border-gray-800 bg-header">
       <nav className="container mx-auto px-4 py-4">
         <div className="flex items-center justify-between">
-          <Link to="/" className="text-xl font-bold text-white">
+          <Link
+            to="/"
+            className="flex items-center gap-3 text-xl font-bold text-white"
+          >
+            <img src={logo} alt="PLD Logo" className="h-8 w-8" />
             PEDRODUARTEK
           </Link>
 
