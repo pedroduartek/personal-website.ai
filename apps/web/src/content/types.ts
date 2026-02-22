@@ -73,7 +73,7 @@ export interface SkillGroup {
 
 export interface Skill {
   name: string
-  years?: string
+  startDate: string
 }
 
 export interface BlogPost {
