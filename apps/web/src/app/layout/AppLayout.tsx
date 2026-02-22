@@ -46,78 +46,80 @@ function Header({
             PEDRODUARTEK
           </Link>
 
-          {/* Command Palette Button */}
-          <button
-            type="button"
-            onClick={onOpenCommandPalette}
-            className="hidden md:flex items-center gap-2 rounded-lg border border-gray-700 bg-gray-800/50 px-4 py-2 text-sm text-gray-400 transition-colors hover:border-gray-600 hover:bg-gray-800 hover:text-gray-300 min-w-[200px] justify-between"
-            aria-label="Open command palette"
-          >
-            <svg
-              className="h-4 w-4"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-              role="img"
-              aria-label="Search icon"
+          <div className="flex items-center gap-3">
+            {/* Command Palette Button - Desktop only */}
+            <button
+              type="button"
+              onClick={onOpenCommandPalette}
+              className="hidden md:flex items-center gap-2 rounded-lg border border-gray-700 bg-gray-800/50 px-4 py-2 text-sm text-gray-400 transition-colors hover:border-gray-600 hover:bg-gray-800 hover:text-gray-300 min-w-[200px] justify-between"
+              aria-label="Open command palette"
             >
-              <title>Search</title>
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-              />
-            </svg>
-            <span>Search</span>
-            <kbd className="ml-1 rounded bg-gray-700 px-1.5 py-0.5 text-xs text-gray-400">
-              {isMac ? '⌘K' : 'Ctrl+K'}
-            </kbd>
-          </button>
-
-          {/* Mobile menu button */}
-          <button
-            type="button"
-            onClick={() => setIsMenuOpen(!isMenuOpen)}
-            className="md:hidden rounded-lg border border-gray-700 p-2 text-gray-300 hover:bg-gray-800 hover:text-white"
-            aria-label="Toggle menu"
-          >
-            <svg
-              role="img"
-              aria-label="Menu icon"
-              className="h-6 w-6"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              {isMenuOpen ? (
+              <svg
+                className="h-4 w-4"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                role="img"
+                aria-label="Search icon"
+              >
+                <title>Search</title>
                 <path
                   strokeLinecap="round"
                   strokeLinejoin="round"
                   strokeWidth={2}
-                  d="M6 18L18 6M6 6l12 12"
+                  d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
                 />
-              ) : (
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M4 6h16M4 12h16M4 18h16"
-                />
-              )}
-            </svg>
-          </button>
+              </svg>
+              <span>Search</span>
+              <kbd className="ml-1 rounded bg-gray-700 px-1.5 py-0.5 text-xs text-gray-400">
+                {isMac ? '⌘K' : 'Ctrl+K'}
+              </kbd>
+            </button>
 
-          {/* Desktop navigation */}
-          <div className="hidden md:flex gap-3">
-            <NavLink to="/about">About</NavLink>
-            <NavLink to="/experience">Professional Experience</NavLink>
-            <NavLink to="/education">Education</NavLink>{' '}
-            <NavLink to="/conferences">Conferences</NavLink>{' '}
-            <NavLink to="/skills">Skills</NavLink>
-            <NavLink to="/projects">Personal Projects</NavLink>
-            <NavLink to="/cv">Download CV</NavLink>
-            <NavLink to="/contact">Contact</NavLink>
+            {/* Mobile menu button */}
+            <button
+              type="button"
+              onClick={() => setIsMenuOpen(!isMenuOpen)}
+              className="md:hidden rounded-lg border border-gray-700 p-2 text-gray-300 hover:bg-gray-800 hover:text-white"
+              aria-label="Toggle menu"
+            >
+              <svg
+                role="img"
+                aria-label="Menu icon"
+                className="h-6 w-6"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                {isMenuOpen ? (
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M6 18L18 6M6 6l12 12"
+                  />
+                ) : (
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M4 6h16M4 12h16M4 18h16"
+                  />
+                )}
+              </svg>
+            </button>
+
+            {/* Desktop navigation */}
+            <div className="hidden md:flex gap-3">
+              <NavLink to="/about">About</NavLink>
+              <NavLink to="/experience">Professional Experience</NavLink>
+              <NavLink to="/education">Education</NavLink>
+              <NavLink to="/conferences">Conferences</NavLink>
+              <NavLink to="/skills">Skills</NavLink>
+              <NavLink to="/projects">Personal Projects</NavLink>
+              <NavLink to="/cv">Download CV</NavLink>
+              <NavLink to="/contact">Contact</NavLink>
+            </div>
           </div>
         </div>
 
