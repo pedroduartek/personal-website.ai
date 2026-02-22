@@ -24,15 +24,7 @@ export default function PersonalWebsiteProjectPage() {
           A Backend Engineer's Frontend Learning Journey • February 2026
         </p>
 
-        <div className="mb-8 flex flex-col gap-3 sm:flex-row sm:items-center">
-          <a
-            href="https://www.pedroduartek.com"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 rounded-lg bg-blue-600 px-4 py-2 text-center text-white transition-all duration-200 hover:scale-105 hover:bg-blue-700 hover:shadow-lg hover:shadow-blue-600/50"
-          >
-            View Live Site
-          </a>
+        <div className="mb-8">
           <a
             href="https://github.com/pedroduartek/personal-website.ai"
             target="_blank"
