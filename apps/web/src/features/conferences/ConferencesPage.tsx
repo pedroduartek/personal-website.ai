@@ -2,10 +2,19 @@ import PageSEO from '../../components/seo/PageSEO'
 import { conferences } from '../../content/conferences'
 import azureDevSummitLogo from '../../images/azure_dev_summit.png'
 import webSummitLogo from '../../images/web_summit.png'
+import azureStage1 from '../../images/stage_azuresummit.jpeg'
+import azureStage2 from '../../images/stage_azuresummit_2.jpeg'
+import azureNickChapsas from '../../images/photo_nickchapsas_azuresummit.jpeg'
+import webSummitGroup from '../../images/websummit_groupphoto.jpeg'
 
 const conferenceLogos: Record<string, string> = {
   'Azure Dev Summit': azureDevSummitLogo,
   'Web Summit': webSummitLogo,
+}
+
+const conferencePhotos: Record<string, string[]> = {
+  'Azure Dev Summit': [azureStage1, azureStage2, azureNickChapsas],
+  'Web Summit': [webSummitGroup],
 }
 
 export default function ConferencesPage() {
@@ -104,6 +113,18 @@ export default function ConferencesPage() {
                   )}
                 </div>
               </div>
+              {conferencePhotos[item.name] && (
+                <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2 md:grid-cols-3">
+                  {conferencePhotos[item.name].map((photo, index) => (
+                    <img
+                      key={index}
+                      src={photo}
+                      alt={`${item.name} photo ${index + 1}`}
+                      className="rounded-lg object-cover w-full h-48"
+                    />
+                  ))}
+                </div>
+              )}
             </article>
           ))}
         </div>
