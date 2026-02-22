@@ -1,7 +1,10 @@
 import { Link } from 'react-router-dom'
 import PageSEO from '../../components/seo/PageSEO'
+import { getExperience } from '../../utils/experience'
 
 export default function PersonalWebsiteProjectPage() {
+  const experience = getExperience()
+
   return (
     <>
       <PageSEO
@@ -58,7 +61,7 @@ export default function PersonalWebsiteProjectPage() {
             <h2 className="mb-4 text-2xl font-semibold text-white">Overview</h2>
             <p className="mb-4">
               This website is an experiment in using AI-assisted development to
-              learn frontend technologies. As a backend engineer with 6 years of
+              learn frontend technologies. As a backend engineer with {experience.text} of
               C#/.NET experience but minimal frontend knowledge, I wanted to
               build a professional portfolio while learning React, TypeScript,
               and modern frontend development without spending months in

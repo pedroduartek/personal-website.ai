@@ -1,13 +1,17 @@
 import type { Project } from './types'
+import { getExperience } from '../utils/experience'
 
-export const projects: Project[] = [
-  {
-    slug: 'personal-website',
-    title: 'AI-Assisted Personal Website',
-    description:
-      'Modern portfolio website built using AI-assisted development as a backend engineer learning frontend technologies',
-    problem:
-      'As a backend engineer with 6 years of C#/.NET experience but minimal frontend knowledge, I wanted to build a professional portfolio website while learning modern frontend development. Traditional learning approaches would take months, and I wanted to experiment with AI as a productivity multiplier.',
+function getProjects(): Project[] {
+  const experience = getExperience()
+
+  return [
+    {
+      slug: 'personal-website',
+      title: 'AI-Assisted Personal Website',
+      description:
+        'Modern portfolio website built using AI-assisted development as a backend engineer learning frontend technologies',
+      problem:
+        `As a backend engineer with ${experience.text} of C#/.NET experience but minimal frontend knowledge, I wanted to build a professional portfolio website while learning modern frontend development. Traditional learning approaches would take months, and I wanted to experiment with AI as a productivity multiplier.`,
     approach:
       'Used AI-assisted development tools to build a production-ready React + TypeScript website from scratch. Leveraged AI for code generation, best practices, and real-time problem-solving while maintaining full ownership of architectural decisions. Focused on learning by doing: implementing features, understanding the patterns, and iterating based on AI guidance.',
     technologies: [
@@ -43,4 +47,7 @@ export const projects: Project[] = [
     featured: true,
     startDate: '2023-09',
   },
-]
+  ]
+}
+
+export const projects = getProjects()
