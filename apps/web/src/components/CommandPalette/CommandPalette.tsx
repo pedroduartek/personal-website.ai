@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 interface Command {
@@ -174,10 +174,12 @@ export function CommandPalette({ isOpen, onClose }: CommandPaletteProps) {
     }
   }, [isOpen])
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: Need to reset selection when search changes
   useEffect(() => {
     setSelectedIndex(0)
   }, [search])
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: Need to scroll when selection changes
   useEffect(() => {
     if (selectedItemRef.current) {
       selectedItemRef.current.scrollIntoView({
@@ -197,7 +199,7 @@ export function CommandPalette({ isOpen, onClose }: CommandPaletteProps) {
       } else if (e.key === 'ArrowDown') {
         e.preventDefault()
         setSelectedIndex((prev) =>
-          prev < filteredCommands.length - 1 ? prev + 1 : prev
+          prev < filteredCommands.length - 1 ? prev + 1 : prev,
         )
       } else if (e.key === 'ArrowUp') {
         e.preventDefault()
@@ -220,11 +222,18 @@ export function CommandPalette({ isOpen, onClose }: CommandPaletteProps) {
     <div
       className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm"
       onClick={onClose}
+      onKeyDown={(e) => e.key === 'Escape' && onClose()}
+      aria-label="Close command palette"
+      tabIndex={-1}
     >
       <div className="flex min-h-screen items-start justify-center p-4 pt-[20vh]">
         <div
           className="w-full max-w-2xl rounded-lg border border-gray-700 bg-gray-900 shadow-2xl"
           onClick={(e) => e.stopPropagation()}
+          onKeyDown={(e) => e.stopPropagation()}
+          aria-modal="true"
+          aria-label="Command palette"
+          tabIndex={-1}
         >
           {/* Search Input */}
           <div className="border-b border-gray-700 p-4">
@@ -249,6 +258,7 @@ export function CommandPalette({ isOpen, onClose }: CommandPaletteProps) {
                 {filteredCommands.map((command, index) => (
                   <button
                     key={command.id}
+                    type="button"
                     ref={index === selectedIndex ? selectedItemRef : null}
                     onClick={command.action}
                     onMouseEnter={() => setSelectedIndex(index)}
