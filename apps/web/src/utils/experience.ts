@@ -19,3 +19,23 @@ export function getExperience(): { years: number; months: number; text: string }
 
   return { years, months, text }
 }
+
+/**
+ * Calculate years from a given start date to current date
+ * @param startDate - ISO date string (e.g., '2020-03-01')
+ * @returns Number of full years
+ */
+export function calculateYearsFromDate(startDate: string): number {
+  const start = new Date(startDate)
+  const current = new Date()
+  
+  let years = current.getFullYear() - start.getFullYear()
+  const monthDiff = current.getMonth() - start.getMonth()
+  
+  // If we haven't reached the anniversary month yet this year, subtract one year
+  if (monthDiff < 0 || (monthDiff === 0 && current.getDate() < start.getDate())) {
+    years--
+  }
+  
+  return Math.max(0, years)
+}
