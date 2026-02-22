@@ -30,9 +30,9 @@ export default function ExperienceDetailPage() {
         </h1>
         <Link
           to="/experience"
-          className="mt-4 inline-block text-blue-600 transition-all duration-200 hover:translate-x-[-4px] hover:underline"
+          className="mt-4 inline-flex items-center gap-2 rounded-lg border border-gray-700 px-4 py-2 text-sm font-medium text-gray-300 transition-all duration-200 hover:border-blue-500 hover:bg-gray-800 hover:text-white hover:shadow-md"
         >
-          ← Back to experience
+          <span>←</span> Back to experience
         </Link>
       </div>
     )
@@ -96,9 +96,9 @@ export default function ExperienceDetailPage() {
       <div className="container mx-auto px-4 py-8 animate-slide-down md:py-16">
         <Link
           to="/experience"
-          className="mb-6 inline-block text-blue-600 transition-all duration-200 hover:translate-x-[-4px] hover:underline dark:text-blue-400"
+          className="mb-6 inline-flex items-center gap-2 rounded-lg border border-gray-700 px-4 py-2 text-sm font-medium text-gray-300 transition-all duration-200 hover:border-blue-500 hover:bg-gray-800 hover:text-white hover:shadow-md"
         >
-          ← Back to experience
+          <span>←</span> Back to experience
         </Link>
 
         <div className="mb-8 flex items-center gap-4">
