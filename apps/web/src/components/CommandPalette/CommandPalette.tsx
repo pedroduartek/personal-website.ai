@@ -197,7 +197,7 @@ export function CommandPalette({ isOpen, onClose }: CommandPaletteProps) {
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               placeholder="Type a command or search..."
-              className="w-full bg-transparent text-lg text-white outline-none placeholder:text-gray-500"
+              className="w-full bg-transparent px-2 py-1 text-lg text-white outline-none placeholder:text-gray-500"
             />
           </div>
 

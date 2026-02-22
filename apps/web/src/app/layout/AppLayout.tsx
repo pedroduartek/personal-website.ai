@@ -30,6 +30,7 @@ function Header({
   onOpenCommandPalette,
 }: { onOpenCommandPalette: () => void }) {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
+  const isMac = typeof navigator !== 'undefined' && /(Mac|iPhone|iPod|iPad)/i.test(navigator.platform)
 
   return (
     <header className="border-b border-gray-800 bg-header">
@@ -47,7 +48,7 @@ function Header({
           <button
             type="button"
             onClick={onOpenCommandPalette}
-            className="hidden md:flex items-center gap-2 rounded-lg border border-gray-700 bg-gray-800/50 px-3 py-1.5 text-sm text-gray-400 transition-colors hover:border-gray-600 hover:bg-gray-800 hover:text-gray-300"
+            className="hidden md:flex items-center gap-2 rounded-lg border border-gray-700 bg-gray-800/50 px-4 py-2 text-sm text-gray-400 transition-colors hover:border-gray-600 hover:bg-gray-800 hover:text-gray-300 min-w-[200px] justify-between"
             aria-label="Open command palette"
           >
             <svg
@@ -68,7 +69,7 @@ function Header({
             </svg>
             <span>Search</span>
             <kbd className="ml-1 rounded bg-gray-700 px-1.5 py-0.5 text-xs text-gray-400">
-              ⌘K
+              {isMac ? '⌘K' : 'Ctrl+K'}
             </kbd>
           </button>
 
