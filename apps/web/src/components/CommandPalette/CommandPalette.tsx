@@ -90,28 +90,6 @@ export function CommandPalette({ isOpen, onClose }: CommandPaletteProps) {
       category: 'navigation',
     },
     {
-      id: 'blog',
-      label: 'Blog',
-      description: 'Read my blog posts',
-      icon: '📝',
-      action: () => {
-        navigate('/blog')
-        onClose()
-      },
-      category: 'navigation',
-    },
-    {
-      id: 'conferences',
-      label: 'Conferences',
-      description: 'Conference talks and presentations',
-      icon: '🎤',
-      action: () => {
-        navigate('/conferences')
-        onClose()
-      },
-      category: 'navigation',
-    },
-    {
       id: 'contact',
       label: 'Contact',
       description: 'Get in touch',
@@ -132,28 +110,6 @@ export function CommandPalette({ isOpen, onClose }: CommandPaletteProps) {
         onClose()
       },
       category: 'navigation',
-    },
-    {
-      id: 'github',
-      label: 'Open GitHub Profile',
-      description: 'View my GitHub profile',
-      icon: '💻',
-      action: () => {
-        window.open('https://github.com/pedroduartek', '_blank')
-        onClose()
-      },
-      category: 'action',
-    },
-    {
-      id: 'linkedin',
-      label: 'Open LinkedIn Profile',
-      description: 'View my LinkedIn profile',
-      icon: '👔',
-      action: () => {
-        window.open('https://www.linkedin.com/in/pedroduartek/', '_blank')
-        onClose()
-      },
-      category: 'action',
     },
   ]
 

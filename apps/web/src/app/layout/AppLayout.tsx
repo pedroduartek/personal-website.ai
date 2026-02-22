@@ -33,13 +33,13 @@ function Header({
 
   return (
     <header className="border-b border-gray-800 bg-header">
-      <nav className="container mx-auto px-4 py-4">
+      <nav className="container mx-auto px-4 py-2">
         <div className="flex items-center justify-between">
           <Link
             to="/"
             className="flex items-center gap-3 text-xl font-bold text-white"
           >
-            <img src={logo} alt="PLD Logo" className="h-14 w-auto" />
+            <img src={logo} alt="PLD Logo" className="h-[70px] w-auto" />
             PEDRODUARTEK
           </Link>
 
