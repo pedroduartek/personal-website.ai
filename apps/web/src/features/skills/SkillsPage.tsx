@@ -34,14 +34,16 @@ export default function SkillsPage() {
                 {group.skills.map((skill) => {
                   const years = calculateYearsFromDate(skill.startDate)
                   const yearsText = years === 1 ? '1 year' : `${years} years`
-                  
+
                   return (
                     <div
                       key={skill.name}
                       className="flex items-center justify-between"
                     >
                       <span className="text-white">{skill.name}</span>
-                      <span className={`rounded px-2 py-1 text-xs font-medium ${getYearsBadgeColor(years)}`}>
+                      <span
+                        className={`rounded px-2 py-1 text-xs font-medium ${getYearsBadgeColor(years)}`}
+                      >
                         {yearsText}
                       </span>
                     </div>

@@ -1,4 +1,4 @@
-import { useRouteError, isRouteErrorResponse, Link } from 'react-router-dom'
+import { Link, isRouteErrorResponse, useRouteError } from 'react-router-dom'
 
 export default function ErrorBoundary() {
   const error = useRouteError()
@@ -32,6 +32,7 @@ export default function ErrorBoundary() {
 
         <div className="flex flex-col gap-3 sm:flex-row sm:justify-center">
           <button
+            type="button"
             onClick={() => window.history.back()}
             className="rounded-lg bg-gray-700 px-6 py-3 text-white hover:bg-gray-600 transition-colors"
           >

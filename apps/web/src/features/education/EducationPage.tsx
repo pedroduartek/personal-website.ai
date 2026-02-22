@@ -115,52 +115,52 @@ export default function EducationPage() {
           {conferences.map((item) => (
             <Link key={item.id} to="/conferences" className="block">
               <article className="rounded-lg border border-gray-700 bg-card p-6 transition-all duration-200 hover:scale-[1.02] hover:bg-gray-800 hover:shadow-lg cursor-pointer">
-              <div className="mb-4 flex items-start gap-4">
-                {conferenceLogos[item.name] && (
-                  <img
-                    src={conferenceLogos[item.name]}
-                    alt={`${item.name} logo`}
-                    className="h-16 w-16 rounded object-contain"
-                  />
-                )}
-                <div className="flex-1">
-                  <div className="mb-2 flex items-center gap-2">
-                    <h3 className="text-xl font-bold text-white md:text-2xl">
-                      {item.name}
-                    </h3>
-                    <span
-                      className={`rounded px-2 py-1 text-xs font-semibold ${
-                        item.type === 'presented'
-                          ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200'
-                          : item.type === 'organized'
-                            ? 'bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200'
-                            : 'bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-200'
-                      }`}
-                    >
-                      {item.type}
-                    </span>
-                  </div>
-                  {item.title && (
-                    <p className="mb-2 text-base font-semibold text-gray-300 md:text-lg">
-                      {item.title}
-                    </p>
+                <div className="mb-4 flex items-start gap-4">
+                  {conferenceLogos[item.name] && (
+                    <img
+                      src={conferenceLogos[item.name]}
+                      alt={`${item.name} logo`}
+                      className="h-16 w-16 rounded object-contain"
+                    />
                   )}
-                  {item.description && (
-                    <p className="mb-3 text-gray-400">{item.description}</p>
-                  )}
-                  <div className="flex flex-col gap-1 text-sm text-gray-400 sm:flex-row sm:items-center sm:gap-4">
-                    <time>
-                      {new Date(item.date).toLocaleDateString('en-US', {
-                        year: 'numeric',
-                        month: 'long',
-                      })}
-                    </time>
-                    <span>•</span>
-                    <span>{item.location}</span>
+                  <div className="flex-1">
+                    <div className="mb-2 flex items-center gap-2">
+                      <h3 className="text-xl font-bold text-white md:text-2xl">
+                        {item.name}
+                      </h3>
+                      <span
+                        className={`rounded px-2 py-1 text-xs font-semibold ${
+                          item.type === 'presented'
+                            ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200'
+                            : item.type === 'organized'
+                              ? 'bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200'
+                              : 'bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-200'
+                        }`}
+                      >
+                        {item.type}
+                      </span>
+                    </div>
+                    {item.title && (
+                      <p className="mb-2 text-base font-semibold text-gray-300 md:text-lg">
+                        {item.title}
+                      </p>
+                    )}
+                    {item.description && (
+                      <p className="mb-3 text-gray-400">{item.description}</p>
+                    )}
+                    <div className="flex flex-col gap-1 text-sm text-gray-400 sm:flex-row sm:items-center sm:gap-4">
+                      <time>
+                        {new Date(item.date).toLocaleDateString('en-US', {
+                          year: 'numeric',
+                          month: 'long',
+                        })}
+                      </time>
+                      <span>•</span>
+                      <span>{item.location}</span>
+                    </div>
                   </div>
                 </div>
-              </div>
-            </article>
+              </article>
             </Link>
           ))}
         </div>

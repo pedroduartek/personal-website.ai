@@ -1,5 +1,5 @@
-import type { Profile } from './types'
 import { getExperience } from '../utils/experience'
+import type { Profile } from './types'
 
 function getProfile(): Profile {
   const experience = getExperience()
