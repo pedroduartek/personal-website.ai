@@ -1,80 +1,88 @@
-# GitHub Actions & Automation
 
-This project uses GitHub Actions for continuous integration, quality assurance, and automation.
+# Personal Website
 
-## Active Workflows
+This is the source code for Pedro Duarte's personal website—a modern, fast, and accessible portfolio and blog built with React, TypeScript, and Tailwind CSS. The site showcases professional experience, projects, blog posts, skills, and a downloadable CV.
 
-### 1. CI Pipeline (`.github/workflows/ci.yml`)
-**Triggers:** On every push and pull request to `main`
+## 🌟 Features
 
-**What it does:**
-- ✅ Runs Biome linting and formatting checks
-- ✅ Executes all Vitest unit tests
-- ✅ Generates test coverage reports (uploads to Codecov)
-- ✅ Builds the production bundle
-- ✅ Ensures code quality before merging
+- **Home:** Quick intro and highlights
+- **Blog:** Technical articles written in Markdown
+- **Projects:** Portfolio with detailed project pages and screenshots
+- **Experience:** Professional timeline with roles, companies, and technologies
+- **Education:** Academic background
+- **Conferences:** Speaking engagements and event attendance
+- **Skills:** Categorized technical skills
+- **CV:** Downloadable PDF resume and in-browser preview
+- **SEO:** Optimized for search engines and social sharing
+- **Performance:** Fast, code-split, and optimized
+- **Accessibility:** Keyboard navigation, semantic HTML, dark mode
 
----
+## 🛠️ Tech Stack
 
-### 2. Lighthouse CI (`.github/workflows/lighthouse.yml`)
-**Triggers:** On every push and pull request to `main`
+- React 18 + TypeScript
+- Vite
+- Tailwind CSS
+- React Router
+- Markdown (react-markdown, gray-matter)
+- PDF (react-pdf/renderer)
+- Vitest + React Testing Library
+- Biome (lint/format)
+- pnpm (monorepo)
+- Vercel (deployment & analytics)
 
-**What it does:**
-- 🚀 Tests performance on 7 key pages (Home, About, Experience, Projects, Education, Skills, Contact)
-- 📊 Measures Core Web Vitals (LCP, FID, CLS)
-- ♿ Validates accessibility (WCAG compliance)
-- 🔍 Checks SEO best practices
-- 📈 Requires minimum 90% score on all categories
+## 🚀 Getting Started
 
-**View reports:** Results are published to temporary public storage and commented on PRs.
+### Prerequisites
+- Node.js 20+
+- pnpm 9+
 
----
-
-### 3. Bundle Size Tracking (`.github/workflows/bundle-size.yml`)
-**Triggers:** On pull requests to `main`
-
-**What it does:**
-- 📦 Analyzes JavaScript bundle size after build
-- 📊 Uploads bundle stats as artifacts for review
-- ⚠️ Runs size-limit checks based on configuration:
-  - JavaScript: 250 KB limit
-  - CSS: 50 KB limit
-
-**Configuration:** See `size-limit` section in `apps/web/package.json`
-
----
-
-## Local Commands
-
-Run these locally before pushing to catch issues early:
-
+### Installation
+Clone the repo and install dependencies:
 ```bash
-# Run all checks (linting, formatting)
-pnpm check
+pnpm install
+```
 
-# Run tests
-pnpm test
+### Development
+Start the local dev server:
+```bash
+pnpm dev
+```
 
-# Run tests with coverage
-pnpm test -- --coverage
-
-# Check bundle size
-pnpm size
-
-# Build production bundle
+### Build
+Create a production build:
+```bash
 pnpm build
 ```
 
-## Viewing Results
+### Test
+Run all tests:
+```bash
+pnpm test
+```
 
-- **CI Status:** Check the Actions tab on GitHub
-- **Lighthouse Reports:** View linked reports in PR comments
-- **Bundle Size:** Download artifacts from workflow runs to review bundle stats
+### Lint & Format
+```bash
+pnpm check
+pnpm lint
+pnpm format
+```
 
-## Future Enhancements
+## 📁 Project Structure
 
-Consider adding:
-- Visual regression testing (screenshot comparison)
-- E2E tests with Playwright
-- Automated deployment previews on PRs
-- Performance budgets per page
+```
+personal-website/
+├── apps/
+│   ├── web/          # React frontend
+│   └── api/          # (Optional) backend
+├── infra/            # Infrastructure (docker, etc)
+├── docs/             # Planning & documentation
+└── .github/          # GitHub Actions CI/CD
+```
+
+## 🤝 Contributing
+
+Pull requests are welcome! Please open an issue first to discuss major changes.
+
+## 📄 License
+
+Private
