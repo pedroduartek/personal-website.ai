@@ -5,8 +5,8 @@ export function useCommandPalette() {
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      // Only enable on desktop (md breakpoint is 768px)
-      const isDesktop = window.innerWidth >= 768
+      // Only enable on desktop (2xl breakpoint is 1536px)
+      const isDesktop = window.innerWidth >= 1536
       if (!isDesktop) return
 
       // Cmd+K on Mac, Ctrl+K on Windows/Linux

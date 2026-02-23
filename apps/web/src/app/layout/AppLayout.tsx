@@ -36,7 +36,7 @@ function Header({
 
   return (
     <header className="border-b border-gray-800 bg-header">
-      <nav className="px-3 py-2 md:px-6">
+      <nav className="px-3 py-2 2xl:px-6">
         <div className="flex items-center justify-between gap-4">
           <Link
             to="/"
@@ -50,7 +50,7 @@ function Header({
           <button
             type="button"
             onClick={onOpenCommandPalette}
-            className="hidden md:flex items-center gap-2 rounded-lg border border-gray-700 bg-gray-800/50 px-4 py-2 text-sm text-gray-400 transition-colors hover:border-gray-600 hover:bg-gray-800 hover:text-gray-300 min-w-[200px] justify-between"
+            className="hidden 2xl:flex items-center gap-2 rounded-lg border border-gray-700 bg-gray-800/50 px-4 py-2 text-sm text-gray-400 transition-colors hover:border-gray-600 hover:bg-gray-800 hover:text-gray-300 min-w-[200px] justify-between"
             aria-label="Open command palette"
           >
             <svg
@@ -80,7 +80,7 @@ function Header({
             <button
               type="button"
               onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="md:hidden rounded-lg border border-gray-700 p-2 text-gray-300 hover:bg-gray-800 hover:text-white"
+              className="2xl:hidden rounded-lg border border-gray-700 p-2 text-gray-300 hover:bg-gray-800 hover:text-white"
               aria-label="Toggle menu"
             >
               <svg
@@ -110,7 +110,7 @@ function Header({
             </button>
 
             {/* Desktop navigation */}
-            <div className="hidden md:flex gap-3">
+            <div className="hidden 2xl:flex gap-3">
               <NavLink to="/about">About</NavLink>
               <NavLink to="/experience">Professional Experience</NavLink>
               <NavLink to="/education">Education</NavLink>
@@ -125,7 +125,7 @@ function Header({
 
         {/* Mobile navigation */}
         {isMenuOpen && (
-          <div className="md:hidden mt-4 flex flex-col gap-2">
+          <div className="2xl:hidden mt-4 flex flex-col gap-2">
             <NavLink to="/about" onClick={() => setIsMenuOpen(false)}>
               About
             </NavLink>
