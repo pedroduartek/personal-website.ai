@@ -12,6 +12,7 @@ export const experience: ExperienceItem[] = [
       'Resolved a major performance bottleneck in Identity Service (/connect/token): reduced average latency from ~1.5s to <100ms (~93% improvement) by redesigning flow, adding distributed cache (Redis) with TTL aligned to token expiration, and adding a circuit breaker to improve resilience and scalability',
       'Designed and delivered an Integrations Service enabling configuration-driven integrations without code changes; reduced integration setup time from weeks to hours/days',
       'Led a cross-service initiative reducing production vulnerabilities to zero',
+      'Led a company-wide platform domain migration initiative across all tech teams, coordinating synchronized changes addressing CORS, CSP, network configurations, WAF rules, and SSO integrations; managed cross-team dependencies and timing requirements',
       'Migrated CI/CD pipelines from GoCD to Azure DevOps Pipelines to standardize and automate deployments',
       'Used Structurizr to document and visualize the architecture of all services owned by the team, creating comprehensive diagrams that facilitate understanding of system design and service dependencies',
       'Collaborated with international teams across multiple time zones, working in English as the primary communication language',

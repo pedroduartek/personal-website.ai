@@ -204,6 +204,7 @@ Senior Product Engineer with 6 years of experience building scalable backend pla
 - Reduced `/connect/token` latency from ~1.5s to <100ms (~93% improvement) via Redis distributed cache (TTL aligned to token expiry) + circuit breaker; reduced DB load and improved resilience.
 - Designed and delivered an Integrations Service enabling configuration-driven integrations without code changes; reduced setup time from weeks to hours/days.
 - Led cross-service initiative reducing production vulnerabilities to zero.
+- Led a company-wide platform domain migration initiative across all tech teams, coordinating synchronized changes addressing CORS, CSP, network configurations, WAF rules, and SSO integrations; managed cross-team dependencies and timing requirements.
 - Migrated CI/CD from GoCD to Azure DevOps Pipelines to standardize and automate deployments.
 - Used Structurizr to document and visualize the architecture of all services owned by the team, creating comprehensive diagrams that facilitate understanding of system design and service dependencies.
 
