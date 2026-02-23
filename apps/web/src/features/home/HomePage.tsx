@@ -55,12 +55,6 @@ export default function HomePage() {
           </div>
           <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
             <Link
-              to="/about"
-              className="rounded-lg border border-gray-700 px-6 py-3 text-center font-semibold text-white transition-all duration-200 hover:scale-105 hover:bg-gray-800 hover:shadow-lg"
-            >
-              About Me
-            </Link>
-            <Link
               to="/experience"
               className="rounded-lg bg-blue-600 px-6 py-3 text-center font-semibold text-white transition-all duration-200 hover:scale-105 hover:bg-blue-700 hover:shadow-lg hover:shadow-blue-600/50"
             >
