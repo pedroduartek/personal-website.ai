@@ -14,16 +14,16 @@ export default function HomePage() {
         title="Home"
         description={`${profile.name} - ${profile.role}. ${profile.bio}`}
       />
-      <div className="container mx-auto px-4 py-8 md:py-16 animate-slide-down">
-        <section className="mb-12 md:mb-16">
-          <h1 className="mb-4 text-3xl md:text-5xl font-bold text-white">
+      <div className="container mx-auto px-4 py-8 lg:py-16 animate-slide-down">
+        <section className="mb-12 lg:mb-16">
+          <h1 className="mb-4 text-3xl lg:text-5xl font-bold text-white">
             {profile.name}
           </h1>
-          <p className="mb-4 text-xl md:text-2xl text-gray-300">
+          <p className="mb-4 text-xl lg:text-2xl text-gray-300">
             {profile.role}
           </p>
-          <div className="mb-8 max-w-3xl">
-            <p className="mb-4 text-base md:text-lg text-gray-300">
+          <div className="mb-8 max-w-4xl">
+            <p className="mb-4 text-base lg:text-lg text-gray-300">
               Welcome! I'm a backend software engineer with {experience.text} of
               experience in C#/.NET, microservices, and event-driven systems.{' '}
               <Link
@@ -34,7 +34,7 @@ export default function HomePage() {
               </Link>
               .
             </p>
-            <p className="mb-4 text-base md:text-lg text-gray-300">
+            <p className="mb-4 text-base lg:text-lg text-gray-300">
               This website itself is a learning project. As someone who knows
               close to nothing about frontend development, I'm using AI-assisted
               tools to build this site and learn React, TypeScript, and modern
@@ -47,7 +47,7 @@ export default function HomePage() {
               </Link>
               .
             </p>
-            <p className="mb-4 text-base md:text-lg text-gray-300">
+            <p className="mb-4 text-base lg:text-lg text-gray-300">
               It's an experiment in leveraging AI for developer productivity,
               using the same curiosity and automation mindset I apply to backend
               systems and my Home Assistant lab.
@@ -82,10 +82,10 @@ export default function HomePage() {
         </section>
 
         <section>
-          <h2 className="mb-6 text-2xl font-bold text-white md:text-3xl">
+          <h2 className="mb-6 text-2xl font-bold text-white lg:text-3xl">
             Featured Personal Projects
           </h2>
-          <div className="grid gap-6 md:grid-cols-3">
+          <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
             {featuredProjects.map((project) => (
               <Link
                 key={project.slug}
