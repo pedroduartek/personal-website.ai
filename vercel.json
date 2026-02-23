@@ -9,5 +9,6 @@
     "deploymentEnabled": {
       "main": true
     }
-  }
+  },
+  "fallback": "index.html"
 }
