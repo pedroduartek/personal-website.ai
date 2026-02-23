@@ -7,6 +7,8 @@ import logo from '../../images/pld_logo_header.png'
 export default function AppLayout() {
   const { isOpen, close, open } = useCommandPalette()
 
+  // Use build time as last updated date
+  const lastUpdated = import.meta.env.VITE_LAST_UPDATED || new Date().toISOString().slice(0, 10)
   return (
     <div className="flex min-h-screen flex-col bg-background">
       <Header onOpenCommandPalette={open} />
@@ -21,6 +23,9 @@ export default function AppLayout() {
           <Outlet />
         </Suspense>
       </main>
+      <footer className="border-t border-gray-800 bg-header py-4 text-center text-xs text-gray-400">
+        Last updated: {lastUpdated}
+      </footer>
       <CommandPalette isOpen={isOpen} onClose={close} />
     </div>
   )
