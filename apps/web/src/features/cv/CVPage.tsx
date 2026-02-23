@@ -26,7 +26,7 @@ export default function CVPage() {
           </a>
 
           {/* PDF Preview */}
-          <div className="mt-8 md:w-2/5">
+          <div className="mt-8 md:w-4/5">
             <div className="rounded-lg border border-gray-700 bg-card p-4">
               <h2 className="mb-3 text-lg font-semibold text-white">Preview</h2>
               <div className="overflow-hidden rounded border border-gray-800">
