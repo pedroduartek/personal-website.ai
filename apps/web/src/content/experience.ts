@@ -13,6 +13,7 @@ export const experience: ExperienceItem[] = [
       'Designed and delivered an Integrations Service enabling configuration-driven integrations without code changes; reduced integration setup time from weeks to hours/days',
       'Led a cross-service initiative reducing production vulnerabilities to zero',
       'Migrated CI/CD pipelines from GoCD to Azure DevOps Pipelines to standardize and automate deployments',
+      'Used Structurizr to document and visualize the architecture of all services owned by the team, creating comprehensive diagrams that facilitate understanding of system design and service dependencies',
       'Collaborated with international teams across multiple time zones, working in English as the primary communication language',
     ],
     technologies: [
@@ -23,6 +24,7 @@ export const experience: ExperienceItem[] = [
       'Entity Framework',
       'Kubernetes',
       'Redis',
+      'Structurizr',
     ],
   },
   {

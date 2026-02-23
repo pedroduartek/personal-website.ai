@@ -29,6 +29,7 @@ export const skills: SkillGroup[] = [
       { name: 'Docker', startDate: '2021-03-01' },
       { name: 'Kubernetes', startDate: '2023-03-01' },
       { name: 'Azure DevOps Pipelines', startDate: '2023-03-01' },
+      { name: 'Structurizr', startDate: '2026-01-01' },
     ],
   },
   {
