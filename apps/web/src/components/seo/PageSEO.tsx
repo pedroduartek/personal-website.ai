@@ -7,7 +7,7 @@ interface PageSEOProps {
 
 export default function PageSEO({ title, description }: PageSEOProps) {
   useEffect(() => {
-    document.title = `${title} | Personal Website`
+    document.title = `${title} | PEDRODUARTEK`
 
     const metaDescription = document.querySelector('meta[name="description"]')
     if (metaDescription) {
