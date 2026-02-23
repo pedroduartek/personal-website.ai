@@ -182,7 +182,7 @@ export default function ExperiencePage() {
             })}
           </div>
 
-          <div className="flex-1 flex flex-col">
+          <div className="flex-1 flex flex-col pl-2.5">
             {Object.entries(groupedExperiences).map(([company, roles]) => {
               const companyTechnologies = getCompanyTechnologies(roles)
               return (
