@@ -238,7 +238,7 @@ Key courses: Application Development, Database Management, Information Systems (
 - Formabase — Web Creation (Credential ID: 3215, Issued Feb 2017) — PHP, HTML, CSS
 
 ## Conferences & Events
-- Azure Dev Summit — Attendee (Oct 2025, 4 days) — Workshop building an app with Aspire.
+- Azure Dev Summit — Participant (Oct 2025, 4 days) — Workshop building an app with Aspire.
 - Web Summit — Volunteer (Nov 2019)
 
 ## Links
