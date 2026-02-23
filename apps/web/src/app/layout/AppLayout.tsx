@@ -8,8 +8,10 @@ export default function AppLayout() {
   const { isOpen, close, open } = useCommandPalette()
 
   // Use build time as last updated date
+  // Show date and time (hour:minute)
   const lastUpdated =
-    import.meta.env.VITE_LAST_UPDATED || new Date().toISOString().slice(0, 10)
+    import.meta.env.VITE_LAST_UPDATED ||
+    new Date().toISOString().slice(0, 16).replace('T', ' ')
   return (
     <div className="flex min-h-screen flex-col bg-background">
       <Header onOpenCommandPalette={open} />
