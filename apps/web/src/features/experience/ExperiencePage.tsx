@@ -1,10 +1,10 @@
+import { useLayoutEffect, useMemo, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import PageSEO from '../../components/seo/PageSEO'
 import { experience } from '../../content/experience'
 import closerLogo from '../../images/closer_consulting.png'
 import enhesaLogo from '../../images/enhesa.png'
 import vortalLogo from '../../images/vortal.png'
-import { useRef, useLayoutEffect, useState, useMemo } from 'react'
 
 const companyLogos: Record<string, string> = {
   Enhesa: enhesaLogo,
@@ -131,7 +131,10 @@ export default function ExperiencePage() {
           Experience
         </h1>
         <div ref={wrapperRef} className="relative flex w-full">
-          <div ref={leftRef} className="relative w-12 md:w-16 flex flex-col items-center">
+          <div
+            ref={leftRef}
+            className="relative w-12 md:w-16 flex flex-col items-center"
+          >
             <div className="h-full w-full" />
           </div>
 
@@ -204,7 +207,9 @@ export default function ExperiencePage() {
                         return (
                           <div
                             key={item.id}
-                            ref={(el) => (roleRefs.current[key] = el)}
+                            ref={(el) => {
+                              roleRefs.current[key] = el
+                            }}
                             className="rounded-lg border border-gray-600 bg-gray-800/50 p-4"
                           >
                             <h3 className="text-lg font-bold text-white md:text-xl">
