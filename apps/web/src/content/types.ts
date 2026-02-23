@@ -54,7 +54,7 @@ export interface EducationItem {
 export interface ConferenceItem {
   id: string
   name: string
-  type: 'attended' | 'presented' | 'organized'
+  type: 'Participant' | 'Presented' | 'Volunteer'
   date: string
   location: string
   title?: string

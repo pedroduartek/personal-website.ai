@@ -4,7 +4,7 @@ export const conferences: ConferenceItem[] = [
   {
     id: '1',
     name: 'Azure Dev Summit',
-    type: 'attended',
+    type: 'Participant',
     date: '2025-10',
     location: 'Lisbon, Portugal',
     description:
@@ -13,10 +13,9 @@ export const conferences: ConferenceItem[] = [
   {
     id: '2',
     name: 'Web Summit',
-    type: 'organized',
+    type: 'Volunteer',
     date: '2019-11',
     location: 'Lisbon, Portugal',
-    title: 'Volunteer',
     description: 'Helped organizing in the days prior to the event.',
   },
 ]
