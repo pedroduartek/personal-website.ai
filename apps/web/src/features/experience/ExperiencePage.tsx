@@ -153,6 +153,18 @@ export default function ExperiencePage() {
               }}
               className="bg-gradient-to-b from-blue-500/80 to-blue-900/40 rounded-full"
             />
+            <span
+              aria-hidden
+              style={{
+                position: 'absolute',
+                left: Math.max(0, Math.round(leftWidth / 2)),
+                top: -12,
+                transform: 'translateX(-50%)',
+              }}
+              className="inline-flex items-center justify-center px-3 py-0.5 rounded-full text-xs font-semibold bg-gradient-to-r from-blue-600 to-blue-500 text-white shadow-sm ring-1 ring-blue-900/40 z-20"
+            >
+              Now
+            </span>
             {flattenedRoles.map((fr) => {
               const top = dotPositions[fr.key]
               if (typeof top !== 'number') return null
