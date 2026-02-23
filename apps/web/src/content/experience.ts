@@ -34,7 +34,7 @@ export const experience: ExperienceItem[] = [
     company: 'Enhesa',
     title: 'Software Engineer',
     startDate: '2022-05',
-    endDate: '2023-05',
+    endDate: '2023-03',
     location: 'Lisbon, Portugal',
     description: [
       'Developed and maintained backend services for the Enhesa platform',
