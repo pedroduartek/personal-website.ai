@@ -149,7 +149,7 @@ conferences_and_events:
     role: "Volunteer"
     start: "2019-11"
     notes:
-      - "Helped organizing in the days prior to the event."
+      - "Web Summit is a leading global technology conference, known for connecting professionals, startups, and industry leaders to discuss innovation and emerging trends. Helped organizing in the days prior to the event."
 
 # Placeholders (to fill manually)
 projects: []
