@@ -198,13 +198,14 @@ Senior Product Engineer with 6 years of experience building scalable backend pla
 ### Enhesa — Senior Software Engineer (Tech Lead)
 **Mar 2023 – Present**
 
-**Tech stack:** C# .NET 10, Kafka, Elasticsearch, Postgres, Entity Framework, Kubernetes, Redis
+**Tech stack:** C# .NET 10, Kafka, Elasticsearch, Postgres, Entity Framework, Kubernetes, Redis, Structurizr
 
 - Maintenance, design, and development of core microservices: Identity Service, User Management, Export Service, Document Service, Home Page.
 - Reduced `/connect/token` latency from ~1.5s to <100ms (~93% improvement) via Redis distributed cache (TTL aligned to token expiry) + circuit breaker; reduced DB load and improved resilience.
 - Designed and delivered an Integrations Service enabling configuration-driven integrations without code changes; reduced setup time from weeks to hours/days.
 - Led cross-service initiative reducing production vulnerabilities to zero.
 - Migrated CI/CD from GoCD to Azure DevOps Pipelines to standardize and automate deployments.
+- Used Structurizr to document and visualize the architecture of all services owned by the team, creating comprehensive diagrams that facilitate understanding of system design and service dependencies.
 
 ### Enhesa — Software Engineer
 **May 2022 – May 2023**
