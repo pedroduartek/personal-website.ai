@@ -210,7 +210,7 @@ Senior Product Engineer with 6 years of experience building scalable backend pla
 - Used Structurizr to document and visualize the architecture of all services owned by the team, creating comprehensive diagrams that facilitate understanding of system design and service dependencies.
 
 ### Enhesa — Software Engineer
-**May 2022 – May 2023**
+**May 2022 – Mar 2023**
 
 ### VORTAL — Software Engineer
 **Aug 2021 – Apr 2022**
