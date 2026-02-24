@@ -59,6 +59,7 @@ function Header({
           <div className="relative">
             <button
               type="button"
+              id="command-palette-button"
               onClick={() => {
                 try {
                   if (typeof window !== 'undefined') sessionStorage.setItem('commandPaletteTipDismissed', '1')
