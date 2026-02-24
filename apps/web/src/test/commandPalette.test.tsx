@@ -1,5 +1,4 @@
-import { act, fireEvent, render, screen } from '@testing-library/react'
-import React from 'react'
+import { act, render } from '@testing-library/react'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import CommandPaletteTip from '../components/CommandPalette/CommandPaletteTip'
 import { useCommandPalette } from '../hooks/useCommandPalette'
