@@ -2,6 +2,7 @@ import { Suspense, useState } from 'react'
 import { Link, Outlet } from 'react-router-dom'
 import { CommandPalette } from '../../components/CommandPalette'
 import { useCommandPalette } from '../../hooks/useCommandPalette'
+import CommandPaletteTip from '../../components/CommandPalette/CommandPaletteTip'
 import logo from '../../images/pld_logo_header.png'
 
 export default function AppLayout() {
@@ -44,7 +45,7 @@ function Header({
 
   return (
     <header className="border-b border-gray-800 bg-header">
-      <nav className="px-3 py-2 2xl:px-6">
+      <nav className="relative px-3 py-2 2xl:px-6">
         <div className="flex items-center justify-between gap-4">
           <Link
             to="/"
@@ -55,12 +56,20 @@ function Header({
           </Link>
 
           {/* Command Palette Button - Desktop only, centered */}
-          <button
-            type="button"
-            onClick={onOpenCommandPalette}
-            className="hidden 2xl:flex items-center gap-2 rounded-lg border border-gray-700 bg-gray-800/50 px-4 py-2 text-sm text-gray-400 transition-colors hover:border-gray-600 hover:bg-gray-800 hover:text-gray-300 min-w-[200px] justify-between"
-            aria-label="Open command palette"
-          >
+          <div className="relative">
+            <button
+              type="button"
+              onClick={() => {
+                try {
+                  if (typeof window !== 'undefined') sessionStorage.setItem('commandPaletteTipDismissed', '1')
+                } catch (e) {
+                  // ignore
+                }
+                onOpenCommandPalette()
+              }}
+              className="hidden 2xl:flex items-center gap-2 rounded-lg border border-gray-700 bg-gray-800/50 px-4 py-2 text-sm text-gray-400 transition-colors hover:border-gray-600 hover:bg-gray-800 hover:text-gray-300 min-w-[200px] justify-between"
+              aria-label="Open command palette"
+            >
             <svg
               className="h-4 w-4"
               fill="none"
@@ -81,7 +90,10 @@ function Header({
             <kbd className="ml-1 rounded bg-gray-700 px-1.5 py-0.5 text-xs text-gray-400">
               {isMac ? '⌘K' : 'Ctrl+K'}
             </kbd>
-          </button>
+            </button>
+
+            <CommandPaletteTip />
+          </div>
 
           <div className="flex items-center gap-3">
             {/* Mobile menu button */}
