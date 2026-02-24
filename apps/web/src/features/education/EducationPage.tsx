@@ -52,9 +52,9 @@ export default function EducationPage() {
                   <div className="mt-2 flex flex-col gap-1 text-sm text-gray-400 sm:flex-row sm:items-center sm:gap-4">
                     <time>
                       {new Date(item.startDate).toLocaleDateString('en-US', {
-                          year: 'numeric',
-                          month: 'short',
-                        })}{' '}
+                        year: 'numeric',
+                        month: 'short',
+                      })}{' '}
                       -{' '}
                       {item.endDate
                         ? new Date(item.endDate).toLocaleDateString('en-US', {
