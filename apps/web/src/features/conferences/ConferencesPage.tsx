@@ -89,7 +89,7 @@ export default function ConferencesPage() {
                     <time>
                       {new Date(item.date).toLocaleDateString('en-US', {
                         year: 'numeric',
-                        month: 'long',
+                        month: 'short',
                       })}
                     </time>
                     <span>•</span>

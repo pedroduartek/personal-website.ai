@@ -97,7 +97,7 @@ export default function ProjectDetailPage() {
           <time>
             {new Date(project.startDate).toLocaleDateString('en-US', {
               year: 'numeric',
-              month: 'long',
+              month: 'short',
             })}
           </time>
           {project.endDate && (
@@ -107,7 +107,7 @@ export default function ProjectDetailPage() {
               <time>
                 {new Date(project.endDate).toLocaleDateString('en-US', {
                   year: 'numeric',
-                  month: 'long',
+                  month: 'short',
                 })}
               </time>
             </>

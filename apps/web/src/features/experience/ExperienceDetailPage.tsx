@@ -147,13 +147,13 @@ export default function ExperienceDetailPage() {
                   <time>
                     {new Date(role.startDate).toLocaleDateString('en-US', {
                       year: 'numeric',
-                      month: 'long',
+                      month: 'short',
                     })}{' '}
                     -{' '}
                     {role.endDate
                       ? new Date(role.endDate).toLocaleDateString('en-US', {
                           year: 'numeric',
-                          month: 'long',
+                          month: 'short',
                         })
                       : 'Present'}
                   </time>
