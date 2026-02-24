@@ -12,17 +12,12 @@
     "check": "pnpm -r check"
   },
   "devDependencies": {
-    "@biomejs/biome": "^2.4.4"
+    "@biomejs/biome": "^1.9.4"
   },
   "pnpm": {
     "overrides": {
-      "react": "19.2.4",
-      "react-dom": "19.2.4"
-        ,
-        "html-encoding-sniffer": "5.0.0",
-        "jsdom": "27.4.0"
-        ,
-        "@exodus/bytes": "1.11.0"
+      "react": "18.3.1",
+      "react-dom": "18.3.1"
     }
   }
 }
