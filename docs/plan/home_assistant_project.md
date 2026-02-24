@@ -95,7 +95,7 @@ For each automation, I want to document:
 
 ## 8) Dashboards & UX
 - **Dashboards:** one main dashboard built by me + multiple sub-views.
-- **Quality gate:** my wife uses it daily and is the ultimate tester—if the UX is confusing, it doesn’t ship.
+- **Quality gate:** my wife uses it daily and is the ultimate tester - if the UX is confusing, it doesn’t ship.
 
 ## 9) Backups, updates, and operational practices
 - **Backups:** handled by Nabu Casa.

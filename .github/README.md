@@ -1,7 +1,7 @@
 
 # Personal Website
 
-This is the source code for Pedro Duarte's personal website—a modern, fast, and accessible portfolio and blog built with React, TypeScript, and Tailwind CSS. The site showcases professional experience, projects, blog posts, skills, and a downloadable CV.
+This is the source code for my personal website, a modern, fast, and accessible portfolio and blog built with React, TypeScript, and Tailwind CSS. The site showcases professional experience, projects, blog posts, skills, and a downloadable CV.
 
 ## 🌟 Features
 

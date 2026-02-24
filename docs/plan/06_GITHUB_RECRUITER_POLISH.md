@@ -1,4 +1,4 @@
-# 06 — GitHub polish for recruiters
+# 06 - GitHub polish for recruiters
 
 ## 1) README structure
 Include:
