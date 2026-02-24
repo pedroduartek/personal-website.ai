@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 export default function CommandPaletteTip() {
   const [mounted, setMounted] = useState(false)
@@ -10,14 +10,19 @@ export default function CommandPaletteTip() {
 
   useEffect(() => {
     setIsMac(
-      typeof navigator !== 'undefined' && /(Mac|iPhone|iPod|iPad)/i.test(navigator.platform),
+      typeof navigator !== 'undefined' &&
+        /(Mac|iPhone|iPod|iPad)/i.test(navigator.platform),
     )
 
     let dismissed = false
     let used = false
     try {
-      dismissed = typeof window !== 'undefined' && sessionStorage.getItem('commandPaletteTipDismissed') !== null
-      used = typeof window !== 'undefined' && sessionStorage.getItem('commandPaletteUsed') !== null
+      dismissed =
+        typeof window !== 'undefined' &&
+        sessionStorage.getItem('commandPaletteTipDismissed') !== null
+      used =
+        typeof window !== 'undefined' &&
+        sessionStorage.getItem('commandPaletteUsed') !== null
     } catch (e) {
       dismissed = false
       used = false
@@ -28,8 +33,6 @@ export default function CommandPaletteTip() {
     if (dismissed || used || !isDesktop) return
 
     // keep a ref of mounted so focus handler can check current state
-    mountedRef.current = mounted
-    const unwatchMounted = () => {}
 
     let showTimer: number | undefined
 
@@ -50,7 +53,8 @@ export default function CommandPaletteTip() {
       try {
         if (
           typeof window !== 'undefined' &&
-          (sessionStorage.getItem('commandPaletteTipDismissed') !== null || sessionStorage.getItem('commandPaletteUsed') !== null)
+          (sessionStorage.getItem('commandPaletteTipDismissed') !== null ||
+            sessionStorage.getItem('commandPaletteUsed') !== null)
         ) {
           clearShowTimer()
           return
@@ -88,7 +92,12 @@ export default function CommandPaletteTip() {
       // Instead, require either an explicit window 'focus' event or a user
       // interaction (pointerdown / keydown). This avoids false positives when
       // the browser URL bar is focused.
-      if (typeof document !== 'undefined' && document.hasFocus() && document.visibilityState === 'visible' && userInteracted) {
+      if (
+        typeof document !== 'undefined' &&
+        document.hasFocus() &&
+        document.visibilityState === 'visible' &&
+        userInteracted
+      ) {
         startCounter()
       }
       // otherwise wait for focus or user interaction listeners below
@@ -119,7 +128,6 @@ export default function CommandPaletteTip() {
         window.removeEventListener('pointerdown', markInteracted)
         window.removeEventListener('keydown', markInteracted)
       }
-      unwatchMounted()
     }
   }, [])
 
@@ -142,7 +150,9 @@ export default function CommandPaletteTip() {
   useEffect(() => {
     let raf = 0
     function update() {
-      const btn = typeof document !== 'undefined' && document.getElementById('command-palette-button')
+      const btn =
+        typeof document !== 'undefined' &&
+        document.getElementById('command-palette-button')
       if (!btn) return
       const rect = btn.getBoundingClientRect()
       const center = rect.left + rect.width / 2
@@ -169,7 +179,8 @@ export default function CommandPaletteTip() {
 
   function dismiss() {
     try {
-      if (typeof window !== 'undefined') sessionStorage.setItem('commandPaletteTipDismissed', '1')
+      if (typeof window !== 'undefined')
+        sessionStorage.setItem('commandPaletteTipDismissed', '1')
     } catch (e) {
       // ignore
     }
@@ -179,26 +190,26 @@ export default function CommandPaletteTip() {
 
   if (!mounted) return null
 
-  const baseClasses = 'max-w-xs rounded-lg border border-gray-700 bg-gray-900/95 px-3 py-2 text-sm text-gray-200 transition-opacity duration-500 ease-in-out cursor-pointer select-none'
+  const baseClasses =
+    'max-w-xs rounded-lg border border-gray-700 bg-gray-900/95 px-3 py-2 text-sm text-gray-200 transition-opacity duration-500 ease-in-out cursor-pointer select-none'
   const visibleClass = visible ? 'opacity-100 shadow-2xl' : 'opacity-0'
 
   // fixed style when button scrolls away
   if (isFixed && centerX !== null) {
-    const transformVisible = visible ? 'translateX(-50%) translateY(0px)' : 'translateX(-50%) translateY(-24px)'
+    const transformVisible = visible
+      ? 'translateX(-50%) translateY(0px)'
+      : 'translateX(-50%) translateY(-24px)'
     return (
-      <div
-        style={{ left: `${centerX}px`, top: '8px', transform: transformVisible }}
+      <button
+        type="button"
+        style={{
+          left: `${centerX}px`,
+          top: '8px',
+          transform: transformVisible,
+        }}
         className={`fixed z-50 hidden 2xl:block ${baseClasses} ${visibleClass}`}
-        role="button"
-        tabIndex={0}
         aria-label="Dismiss command palette tip"
         onClick={dismiss}
-        onKeyDown={(e) => {
-          if (e.key === 'Enter' || e.key === ' ') {
-            e.preventDefault()
-            dismiss()
-          }
-        }}
       >
         <div className="flex items-start gap-3">
           <div>
@@ -212,7 +223,7 @@ export default function CommandPaletteTip() {
             </div>
           </div>
         </div>
-      </div>
+      </button>
     )
   }
 
@@ -220,17 +231,10 @@ export default function CommandPaletteTip() {
   const transformVisible = visible ? 'translateY(0px)' : 'translateY(-24px)'
   return (
     <div className="absolute left-0 top-full mt-2 z-50 hidden 2xl:block">
-      <div
-        role="button"
-        tabIndex={0}
+      <button
+        type="button"
         aria-label="Dismiss command palette tip"
         onClick={dismiss}
-        onKeyDown={(e) => {
-          if (e.key === 'Enter' || e.key === ' ') {
-            e.preventDefault()
-            dismiss()
-          }
-        }}
         className={`${baseClasses} ${visibleClass}`}
         style={{ transform: transformVisible }}
       >
@@ -246,7 +250,7 @@ export default function CommandPaletteTip() {
             </div>
           </div>
         </div>
-      </div>
+      </button>
     </div>
   )
 }
