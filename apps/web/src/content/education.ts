@@ -21,7 +21,7 @@ export const education: EducationItem[] = [
     institution: 'Formabase',
     degree: 'Certificate',
     field: 'Web Creation',
-    startDate: '2017-02',
+    startDate: '2016-10',
     endDate: '2017-02',
     location: 'Lisbon, Portugal',
     achievements: ['PHP, HTML, CSS'],
