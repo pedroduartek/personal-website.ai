@@ -12,7 +12,18 @@ export function useCommandPalette() {
       // Cmd+K on Mac, Ctrl+K on Windows/Linux
       if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
         e.preventDefault()
-        setIsOpen((prev) => !prev)
+        setIsOpen((prev) => {
+          const next = !prev
+          // if opening via keyboard, record that the user used the shortcut
+          if (!prev) {
+            try {
+              sessionStorage.setItem('commandPaletteUsed', '1')
+            } catch (e) {
+              // ignore
+            }
+          }
+          return next
+        })
       }
     }
 
