@@ -1,8 +1,8 @@
 import { Suspense, useState } from 'react'
 import { Link, Outlet } from 'react-router-dom'
 import { CommandPalette } from '../../components/CommandPalette'
-import { useCommandPalette } from '../../hooks/useCommandPalette'
 import CommandPaletteTip from '../../components/CommandPalette/CommandPaletteTip'
+import { useCommandPalette } from '../../hooks/useCommandPalette'
 import logo from '../../images/pld_logo_header.png'
 
 export default function AppLayout() {
@@ -62,7 +62,8 @@ function Header({
               id="command-palette-button"
               onClick={() => {
                 try {
-                  if (typeof window !== 'undefined') sessionStorage.setItem('commandPaletteTipDismissed', '1')
+                  if (typeof window !== 'undefined')
+                    sessionStorage.setItem('commandPaletteTipDismissed', '1')
                 } catch (e) {
                   // ignore
                 }
@@ -71,26 +72,26 @@ function Header({
               className="hidden 2xl:flex items-center gap-2 rounded-lg border border-gray-700 bg-gray-800/50 px-4 py-2 text-sm text-gray-400 transition-colors hover:border-gray-600 hover:bg-gray-800 hover:text-gray-300 min-w-[200px] justify-between"
               aria-label="Open command palette"
             >
-            <svg
-              className="h-4 w-4"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-              role="img"
-              aria-label="Search icon"
-            >
-              <title>Search</title>
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-              />
-            </svg>
-            <span>Search</span>
-            <kbd className="ml-1 rounded bg-gray-700 px-1.5 py-0.5 text-xs text-gray-400">
-              {isMac ? '⌘K' : 'Ctrl+K'}
-            </kbd>
+              <svg
+                className="h-4 w-4"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                role="img"
+                aria-label="Search icon"
+              >
+                <title>Search</title>
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                />
+              </svg>
+              <span>Search</span>
+              <kbd className="ml-1 rounded bg-gray-700 px-1.5 py-0.5 text-xs text-gray-400">
+                {isMac ? '⌘K' : 'Ctrl+K'}
+              </kbd>
             </button>
 
             <CommandPaletteTip />

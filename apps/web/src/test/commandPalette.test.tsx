@@ -1,16 +1,20 @@
+import { act, fireEvent, render, screen } from '@testing-library/react'
 import React from 'react'
-import { render, fireEvent, screen, act } from '@testing-library/react'
-import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
-import { useCommandPalette } from '../hooks/useCommandPalette'
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import CommandPaletteTip from '../components/CommandPalette/CommandPaletteTip'
+import { useCommandPalette } from '../hooks/useCommandPalette'
 
 function TestUseCommandPalette() {
   const { isOpen, open, close } = useCommandPalette()
   return (
     <div>
       <div data-testid="open">{isOpen ? 'open' : 'closed'}</div>
-      <button onClick={open}>open</button>
-      <button onClick={close}>close</button>
+      <button type="button" onClick={open}>
+        open
+      </button>
+      <button type="button" onClick={close}>
+        close
+      </button>
     </div>
   )
 }
@@ -53,14 +57,22 @@ describe('CommandPaletteTip', () => {
 
   it('does not show if user already used command palette', () => {
     sessionStorage.setItem('commandPaletteUsed', '1')
-    const { queryByText } = render(<div style={{ width: '2000px' }}><CommandPaletteTip /></div>)
+    const { queryByText } = render(
+      <div style={{ width: '2000px' }}>
+        <CommandPaletteTip />
+      </div>,
+    )
     // advance timers beyond initial schedule
     act(() => vi.advanceTimersByTime(6000))
     expect(queryByText(/Try the command palette/i)).toBeNull()
   })
 
   it('does not show when address bar is focused until user interacts', () => {
-    const { queryByText } = render(<div><CommandPaletteTip /></div>)
+    const { queryByText } = render(
+      <div>
+        <CommandPaletteTip />
+      </div>,
+    )
     // Simulate page has focus but no interaction
     // Ensure no immediate show
     act(() => {
