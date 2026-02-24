@@ -161,7 +161,7 @@ export default function ExperiencePage() {
                 top: -12,
                 transform: 'translateX(-50%)',
               }}
-              className="inline-flex items-center justify-center px-3 py-0.5 rounded-full text-xs font-semibold bg-gradient-to-r from-blue-600 to-blue-500 text-white shadow-sm ring-1 ring-blue-900/40 z-20"
+              className="inline-flex items-center justify-center px-3 py-0.5 rounded-full text-xs font-semibold bg-gradient-to-r from-blue-600 to-blue-500 text-white shadow-sm ring-1 ring-blue-900/40 z-20 recording"
             >
               Now
             </span>
