@@ -11,6 +11,10 @@ export default {
         background: '#212830',
         card: '#262C36',
         header: '#151B23',
+        brand: {
+          DEFAULT: '#347D39',
+          700: '#2e6e31',
+        },
       },
       typography: {
         DEFAULT: {
