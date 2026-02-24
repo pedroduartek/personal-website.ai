@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
 
 export default function CommandPaletteTip() {
   const [mounted, setMounted] = useState(false)
@@ -6,6 +6,7 @@ export default function CommandPaletteTip() {
   const [isMac, setIsMac] = useState(false)
   const [isFixed, setIsFixed] = useState(false)
   const [centerX, setCenterX] = useState<number | null>(null)
+  const mountedRef = useRef(mounted)
 
   useEffect(() => {
     setIsMac(
@@ -13,39 +14,118 @@ export default function CommandPaletteTip() {
     )
 
     let dismissed = false
+    let used = false
     try {
       dismissed = typeof window !== 'undefined' && sessionStorage.getItem('commandPaletteTipDismissed') !== null
+      used = typeof window !== 'undefined' && sessionStorage.getItem('commandPaletteUsed') !== null
     } catch (e) {
       dismissed = false
+      used = false
     }
     const isDesktop = typeof window !== 'undefined' && window.innerWidth >= 1536
 
-    if (dismissed || !isDesktop) return
+    // Don't show if user dismissed tip earlier or already used the keyboard shortcut
+    if (dismissed || used || !isDesktop) return
+
+    // keep a ref of mounted so focus handler can check current state
+    mountedRef.current = mounted
+    const unwatchMounted = () => {}
 
     let showTimer: number | undefined
-    const schedule = () => {
-      // show 5s after full page load
+
+    const clearShowTimer = () => {
+      if (showTimer) {
+        clearTimeout(showTimer)
+        showTimer = undefined
+      }
+    }
+
+    const showNow = () => {
+      setMounted(true)
+      requestAnimationFrame(() => setVisible(true))
+    }
+
+    const startCounter = () => {
+      // if user already dismissed in another tab/window, don't start
+      try {
+        if (
+          typeof window !== 'undefined' &&
+          (sessionStorage.getItem('commandPaletteTipDismissed') !== null || sessionStorage.getItem('commandPaletteUsed') !== null)
+        ) {
+          clearShowTimer()
+          return
+        }
+      } catch (e) {
+        // ignore
+      }
+      // don't start another timer if one exists
+      if (showTimer) return
+      // don't start if already mounted
+      if (mountedRef.current) return
       showTimer = window.setTimeout(() => {
-        setMounted(true)
-        // allow a frame for the element to mount before starting the transition
-        requestAnimationFrame(() => setVisible(true))
+        showNow()
+        showTimer = undefined
       }, 5000)
+    }
+
+    const onFocus = () => {
+      if (userInteracted) startCounter()
+    }
+    const onBlur = () => clearShowTimer()
+    const onVisibility = () => {
+      if (document.visibilityState === 'visible') startCounter()
+      else clearShowTimer()
+    }
+
+    let userInteracted = false
+    const markInteracted = () => {
+      userInteracted = true
+      startCounter()
+    }
+
+    const scheduleOnLoad = () => {
+      // Do NOT start the counter immediately even if the document reports focus.
+      // Instead, require either an explicit window 'focus' event or a user
+      // interaction (pointerdown / keydown). This avoids false positives when
+      // the browser URL bar is focused.
+      if (typeof document !== 'undefined' && document.hasFocus() && document.visibilityState === 'visible' && userInteracted) {
+        startCounter()
+      }
+      // otherwise wait for focus or user interaction listeners below
     }
 
     if (typeof window !== 'undefined') {
       if (document.readyState === 'complete') {
-        schedule()
+        scheduleOnLoad()
       } else {
-        const onLoad = () => schedule()
+        const onLoad = () => scheduleOnLoad()
         window.addEventListener('load', onLoad)
-        return () => window.removeEventListener('load', onLoad)
+        // ensure we remove this listener in cleanup below
       }
+
+      window.addEventListener('focus', onFocus)
+      window.addEventListener('blur', onBlur)
+      document.addEventListener('visibilitychange', onVisibility)
+      window.addEventListener('pointerdown', markInteracted, { passive: true })
+      window.addEventListener('keydown', markInteracted)
     }
 
     return () => {
-      if (showTimer) clearTimeout(showTimer)
+      clearShowTimer()
+      if (typeof window !== 'undefined') {
+        window.removeEventListener('focus', onFocus)
+        window.removeEventListener('blur', onBlur)
+        document.removeEventListener('visibilitychange', onVisibility)
+        window.removeEventListener('pointerdown', markInteracted)
+        window.removeEventListener('keydown', markInteracted)
+      }
+      unwatchMounted()
     }
   }, [])
+
+  useEffect(() => {
+    mountedRef.current = mounted
+  }, [mounted])
 
   useEffect(() => {
     if (!visible) return
