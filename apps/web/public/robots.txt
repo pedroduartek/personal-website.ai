@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+
+# Sitemap for the live site
+Sitemap: https://www.pedroduartek.com/sitemap.xml
+
