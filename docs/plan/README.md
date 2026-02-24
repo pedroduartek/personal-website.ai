@@ -22,12 +22,12 @@ This folder contains a **Claude Code–friendly** implementation plan for buildi
 3. Follow the “Claude Code prompt” blocks section by section.
 
 ## File order
-- `00_DECISIONS.md` — locked decisions (no assumptions)
-- `01_FOUNDATION.md` — repo scaffolding, tooling, standards
-- `02_FRONTEND_REACT.md` — React app plan (includes blog + PDF CV)
-- `03_BACKEND_DOTNET10_OPTIONAL.md` — post-beta optional backend
-- `04_BETA_CHECKLIST.md` — beta definition + quality gates
-- `05_DEPLOYMENT_AFTER_BETA.md` — deployment plan (only after beta)
-- `06_GITHUB_RECRUITER_POLISH.md` — GitHub polish for recruiters
+- `00_DECISIONS.md` - locked decisions (no assumptions)
+- `01_FOUNDATION.md` - repo scaffolding, tooling, standards
+- `02_FRONTEND_REACT.md` - React app plan (includes blog + PDF CV)
+- `03_BACKEND_DOTNET10_OPTIONAL.md` - post-beta optional backend
+- `04_BETA_CHECKLIST.md` - beta definition + quality gates
+- `05_DEPLOYMENT_AFTER_BETA.md` - deployment plan (only after beta)
+- `06_GITHUB_RECRUITER_POLISH.md` - GitHub polish for recruiters
 
 > Deployment is intentionally placed **after** beta.

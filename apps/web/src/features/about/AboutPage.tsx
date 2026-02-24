@@ -50,7 +50,7 @@ export default function AboutPage() {
               <strong className="text-white">user experience</strong>. I make it
               a point to participate in UX discussions whenever possible,
               believing that great software isn't just about what happens on the
-              backend—it's about how users interact with and experience the
+              backend - it's about how users interact with and experience the
               system as a whole.
             </p>
             <p className="mb-6 text-base text-gray-300 md:text-lg">
