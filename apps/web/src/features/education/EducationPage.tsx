@@ -53,13 +53,13 @@ export default function EducationPage() {
                     <time>
                       {new Date(item.startDate).toLocaleDateString('en-US', {
                           year: 'numeric',
-                          month: 'long',
+                          month: 'short',
                         })}{' '}
                       -{' '}
                       {item.endDate
                         ? new Date(item.endDate).toLocaleDateString('en-US', {
                             year: 'numeric',
-                            month: 'long',
+                            month: 'short',
                           })
                         : 'Present'}
                     </time>
@@ -154,7 +154,7 @@ export default function EducationPage() {
                       <time>
                         {new Date(item.date).toLocaleDateString('en-US', {
                           year: 'numeric',
-                          month: 'long',
+                          month: 'short',
                         })}
                       </time>
                       <span>•</span>

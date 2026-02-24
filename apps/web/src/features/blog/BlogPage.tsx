@@ -47,7 +47,7 @@ export default function BlogPage() {
                 <time className="mb-3 block text-sm text-gray-400">
                   {new Date(post.date).toLocaleDateString('en-US', {
                     year: 'numeric',
-                    month: 'long',
+                    month: 'short',
                     day: 'numeric',
                   })}
                 </time>
