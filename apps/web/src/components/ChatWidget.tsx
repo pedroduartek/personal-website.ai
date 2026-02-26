@@ -35,9 +35,13 @@ export default function ChatWidget() {
             <path strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
           </svg>
         ) : (
-          // Chat icon
-          <svg className="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-            <path strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" d="M8 10h.01M12 10h.01M16 10h.01M21 12c0 4.418-4.03 8-9 8a9.86 9.86 0 01-4-.87L3 20l1.12-4.14A7.97 7.97 0 013 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+          // Robot face icon
+          <svg className="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" xmlns="http://www.w3.org/2000/svg">
+            <rect x="3" y="7" width="18" height="11" rx="2" strokeWidth={2} />
+            <rect x="8" y="3" width="8" height="4" rx="1" strokeWidth={2} />
+            <circle cx="9" cy="12" r="1.25" fill="currentColor" />
+            <circle cx="15" cy="12" r="1.25" fill="currentColor" />
+            <path d="M8 16c1 1 3 1 4 1s3 0 4-1" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" />
           </svg>
         )}
       </button>
