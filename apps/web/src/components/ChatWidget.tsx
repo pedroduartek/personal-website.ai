@@ -175,7 +175,7 @@ export default function ChatWidget() {
             This chat AI is a primitive proof-of-concept (POC). It is limited and may be incorrect — do not trust it for important or sensitive decisions. It was told to only reply using the content of this website.
           </div>
           <div className="relative flex h-72 flex-col gap-2 overflow-hidden p-3">
-            <div ref={containerRef} className="flex-1 overflow-auto overflow-x-hidden custom-scrollbar">
+            <div ref={containerRef} className="flex-1 overflow-auto overflow-x-hidden custom-scrollbar pr-[5px]">
               <div className="flex flex-col gap-2">
                 {messages.length === 0 && (
                   <div className="text-sm text-gray-400">

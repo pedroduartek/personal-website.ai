@@ -140,28 +140,20 @@ export default function ExperiencePage() {
 
           <div
             aria-hidden
-            className="absolute top-0 left-0 pointer-events-none"
-            style={{ width: leftWidth, height: '100%' }}
+            className="absolute top-0 left-0 pointer-events-none h-full"
+            style={{ width: leftWidth }}
           >
             <div
+              className="absolute top-0 bottom-0 bg-gradient-to-b from-blue-500/80 to-blue-900/40 rounded-full"
               style={{
-                position: 'absolute',
                 left: Math.max(0, Math.round(leftWidth / 2) - 1),
-                top: 0,
-                bottom: 0,
                 width: 2,
               }}
-              className="bg-gradient-to-b from-blue-500/80 to-blue-900/40 rounded-full"
             />
             <span
               aria-hidden
-              style={{
-                position: 'absolute',
-                left: Math.max(0, Math.round(leftWidth / 2)),
-                top: -12,
-                transform: 'translateX(-50%)',
-              }}
-              className="inline-flex items-center justify-center px-3 py-0.5 rounded-full text-xs font-semibold bg-gradient-to-r from-blue-600 to-blue-500 text-white shadow-sm ring-1 ring-blue-900/40 z-20 recording"
+              style={{ left: Math.max(0, Math.round(leftWidth / 2)) }}
+              className="absolute inline-flex items-center justify-center px-3 py-0.5 rounded-full text-xs font-semibold bg-gradient-to-r from-blue-600 to-blue-500 text-white shadow-sm ring-1 ring-blue-900/40 z-20 recording -top-3 -translate-x-1/2"
             >
               Now
             </span>

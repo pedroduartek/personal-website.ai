@@ -185,6 +185,17 @@ export default function PersonalWebsiteProjectPage() {
               </div>
               <div className="rounded-lg border border-gray-700 bg-card p-4">
                 <p>
+                  <strong className="text-white">AI chat integration:</strong>{' '}
+                  This site includes an "ai-chat" feature that calls a backend API
+                  for conversational responses — see the{' '}
+                  <Link to="/projects/ai-chat-api" className="text-blue-300 underline">
+                    AI Chat API
+                  </Link>{' '}
+                  project for details.
+                </p>
+              </div>
+              <div className="rounded-lg border border-gray-700 bg-card p-4">
+                <p>
                   <strong className="text-white">
                     Consistent design system:
                   </strong>{' '}
