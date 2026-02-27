@@ -46,6 +46,28 @@ function getProjects(): Project[] {
       featured: true,
       startDate: '2023-09',
     },
+    {
+      slug: 'ai-chat-api',
+      title: 'AI Chat API',
+      description:
+        'A lightweight C#/.NET 10 API for conversational AI integrations',
+      problem:
+        'Needed a minimal, production-ready backend to power chat-style AI integrations with clear patterns for testing, containerization, and extensibility across model providers.',
+      approach:
+        'Implemented a small, well-structured ASP.NET Core API with typed request/response models, service abstractions for model providers, health checks, and CI-friendly patterns. Focused on testability, container-based local development, and clear HTTP semantics for clients.',
+      technologies: [
+        'C#',
+        '.NET 10',
+        'Llama 3',
+        'Docker',
+        'REST API',
+      ],
+      links: {
+        github: 'https://github.com/pedroduartek/ai-chat-api',
+      },
+      featured: true,
+      startDate: '2026-02',
+    },
   ]
 }
 

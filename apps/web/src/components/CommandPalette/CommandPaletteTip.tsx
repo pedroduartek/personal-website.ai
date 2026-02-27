@@ -202,7 +202,7 @@ export default function CommandPaletteTip() {
   const visibleClass = visible ? 'opacity-100 shadow-2xl' : 'opacity-0'
 
   // fixed style when button scrolls away
-  if (isFixed && centerX !== null) {
+    if (isFixed && centerX !== null) {
     const transformVisible = visible
       ? 'translateX(-50%) translateY(0px)'
       : 'translateX(-50%) translateY(-24px)'
@@ -211,10 +211,9 @@ export default function CommandPaletteTip() {
         type="button"
         style={{
           left: `${centerX}px`,
-          top: '8px',
           transform: transformVisible,
         }}
-        className={`fixed z-50 hidden 2xl:block ${baseClasses} ${visibleClass}`}
+        className={`fixed top-2 z-50 hidden 2xl:block ${baseClasses} ${visibleClass}`}
         aria-label="Dismiss command palette tip"
         onClick={dismiss}
       >

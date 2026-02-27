@@ -19,6 +19,9 @@ const HomeAssistantProject = lazy(
 const PersonalWebsiteProject = lazy(
   () => import('../features/projects/PersonalWebsiteProjectPage'),
 )
+const AiChatApiProject = lazy(
+  () => import('../features/projects/AiChatApiProjectPage'),
+)
 const Education = lazy(() => import('../features/education/EducationPage'))
 const Conferences = lazy(
   () => import('../features/conferences/ConferencesPage'),
@@ -45,6 +48,7 @@ export const router = createBrowserRouter([
         element: <PersonalWebsiteProject />,
       },
       { path: 'projects/home-assistant', element: <HomeAssistantProject /> },
+      { path: 'projects/ai-chat-api', element: <AiChatApiProject /> },
       { path: 'projects/:slug', element: <ProjectDetail /> },
       { path: 'education', element: <Education /> },
       { path: 'conferences', element: <Conferences /> },
