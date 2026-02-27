@@ -134,11 +134,11 @@ function Header({
             {/* Desktop navigation */}
             <div className="hidden 2xl:flex gap-3">
               <NavLink to="/about">About</NavLink>
-              <NavLink to="/experience">Professional Experience</NavLink>
+              <NavLink to="/experience">Experience</NavLink>
               <NavLink to="/education">Education</NavLink>
               <NavLink to="/conferences">Conferences</NavLink>
               <NavLink to="/skills">Skills</NavLink>
-              <NavLink to="/projects">Personal Projects</NavLink>
+              <NavLink to="/projects">Projects</NavLink>
               <NavLink to="/cv">Download CV</NavLink>
               <NavLink to="/contact">Contact</NavLink>
             </div>
