@@ -8,6 +8,12 @@ export default function AiChatApiProjectPage() {
       <PageSEO
         title="AI Chat API (this repo) — POC (site-internal)"
         description="AI Chat API — proof-of-concept C#/.NET backend powering a local LLaMA-based model for the website UI only"
+        image="/src/images/pld_logo_header.png"
+        url={
+          typeof window !== 'undefined'
+            ? window.location.href
+            : 'https://www.pedroduartek.com/projects/ai-chat-api'
+        }
       />
 
       <div className="container mx-auto px-4 py-8 animate-slide-down md:py-16">
@@ -31,11 +37,12 @@ export default function AiChatApiProjectPage() {
           <StyledLink
             href="https://github.com/pedroduartek/ai-chat-api"
             target="_blank"
+            bigger
             className="inline-flex items-center gap-2 rounded-lg border border-brand-700 bg-brand px-4 py-2 text-center text-white font-semibold transition-all duration-200 hover:scale-105 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-brand/50"
             ariaLabel="View repository on GitHub"
           >
             <span className="font-mono mr-2">&lt;&gt;</span>
-            View repository
+            View on GitHub
           </StyledLink>
         </div>
 

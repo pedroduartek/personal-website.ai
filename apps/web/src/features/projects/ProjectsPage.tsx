@@ -9,6 +9,12 @@ export default function ProjectsPage() {
       <PageSEO
         title="Projects"
         description="Portfolio of software projects and side projects"
+        image="/src/images/pld_logo_header.png"
+        url={
+          typeof window !== 'undefined'
+            ? window.location.href
+            : 'https://www.pedroduartek.com/projects'
+        }
       />
       <div className="container mx-auto px-4 py-8 animate-slide-down md:py-16">
         <h1 className="mb-8 text-3xl font-bold text-white md:text-4xl">

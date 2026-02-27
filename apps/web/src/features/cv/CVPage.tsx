@@ -5,7 +5,16 @@ import { profile } from '../../content/profile'
 export default function CVPage() {
   return (
     <>
-      <PageSEO title="Download CV" description="Download my CV as PDF" />
+      <PageSEO
+        title="Download CV"
+        description="Download my CV as PDF"
+        image="/src/images/pld_logo_header.png"
+        url={
+          typeof window !== 'undefined'
+            ? window.location.href
+            : 'https://www.pedroduartek.com/cv'
+        }
+      />
       <div className="container mx-auto px-4 py-8 animate-slide-down md:py-16">
         <h1 className="mb-8 text-3xl font-bold text-white md:text-4xl">
           Curriculum Vitae
