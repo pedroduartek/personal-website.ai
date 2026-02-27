@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom'
 import PageSEO from '../../components/seo/PageSEO'
 import { projects } from '../../content/projects'
+import TechIcon from '../../components/TechIcon'
 
 export default function ProjectsPage() {
   return (
@@ -18,24 +19,22 @@ export default function ProjectsPage() {
             <Link
               key={project.slug}
               to={`/projects/${project.slug}`}
-              className="group rounded-lg border border-gray-700 bg-card p-6 transition-all duration-300 hover:scale-[1.02] hover:bg-gray-800 hover:shadow-lg"
+              className="group rounded-lg border border-gray-700 bg-card p-6 transition-all duration-300 hover:scale-[1.02] hover:bg-gray-800 hover:shadow-lg flex flex-col"
             >
-              {project.featured && (
-                <span className="mb-2 inline-block rounded bg-blue-600 px-2 py-1 text-xs font-semibold text-white">
-                  Featured
-                </span>
-              )}
               <h2 className="mb-2 text-xl font-semibold text-white">
                 {project.title}
               </h2>
               <p className="mb-4 text-gray-400">{project.description}</p>
-              <div className="flex flex-wrap gap-2">
+              <div className="flex flex-wrap gap-2 mt-auto">
                 {project.technologies.slice(0, 4).map((tech) => (
                   <span
                     key={tech}
-                    className="rounded bg-gray-800 px-2 py-1 text-xs text-gray-300"
+                    className="inline-flex items-center gap-2 rounded bg-gray-800 px-2 py-1 text-xs text-gray-300"
                   >
-                    {tech}
+                    <span className="flex-shrink-0">
+                      <TechIcon tech={tech} className="w-6 h-6" />
+                    </span>
+                    <span className="leading-none">{tech}</span>
                   </span>
                 ))}
               </div>
