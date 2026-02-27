@@ -2,6 +2,7 @@ import { useState } from 'react'
 import Lightbox from 'yet-another-react-lightbox'
 import Zoom from 'yet-another-react-lightbox/plugins/zoom'
 import 'yet-another-react-lightbox/styles.css'
+import StyledLink from '../../components/StyledLink'
 import PageSEO from '../../components/seo/PageSEO'
 import { conferences } from '../../content/conferences'
 import azureDevSummitLogo from '../../images/azure_dev_summit.png'
@@ -98,34 +99,37 @@ export default function ConferencesPage() {
                   {item.links && (
                     <div className="flex gap-3">
                       {item.links.slides && (
-                        <a
+                        <StyledLink
                           href={item.links.slides}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="text-sm text-blue-600 hover:underline dark:text-blue-400"
+                          className="text-sm transition-all duration-200 hover:translate-x-1"
+                          ariaLabel="View slides"
                         >
                           View Slides
-                        </a>
+                        </StyledLink>
                       )}
                       {item.links.video && (
-                        <a
+                        <StyledLink
                           href={item.links.video}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="text-sm text-blue-600 hover:underline dark:text-blue-400"
+                          className="text-sm transition-all duration-200 hover:translate-x-1"
+                          ariaLabel="Watch video"
                         >
                           Watch Video
-                        </a>
+                        </StyledLink>
                       )}
                       {item.links.website && (
-                        <a
+                        <StyledLink
                           href={item.links.website}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="text-sm text-blue-600 hover:underline dark:text-blue-400"
+                          className="text-sm transition-all duration-200 hover:translate-x-1"
+                          ariaLabel="Event website"
                         >
                           Event Website
-                        </a>
+                        </StyledLink>
                       )}
                     </div>
                   )}

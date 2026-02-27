@@ -9,6 +9,9 @@ export const conferences: ConferenceItem[] = [
     location: 'Lisbon, Portugal',
     description:
       'Microsoft technology focused conference spanning 4 days. Included a full-day workshop building an app with Aspire.',
+    links: {
+      website: 'https://azuredevsummit.com/',
+    },
   },
   {
     id: '2',
@@ -18,5 +21,8 @@ export const conferences: ConferenceItem[] = [
     location: 'Lisbon, Portugal',
     description:
       'Web Summit is a leading global technology conference, known for connecting professionals, startups, and industry leaders to discuss innovation and emerging trends. Helped organizing in the days prior to the event.',
+    links: {
+      website: 'https://websummit.com/',
+    },
   },
 ]

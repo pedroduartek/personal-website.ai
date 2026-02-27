@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import ReactMarkdown from 'react-markdown'
 import { useParams } from 'react-router-dom'
+import StyledLink from '../../components/StyledLink'
 import PageSEO from '../../components/seo/PageSEO'
 import { getBlogPostBySlug } from '../../content/blog'
 import type { BlogPost } from '../../content/types'
@@ -60,7 +61,23 @@ export default function BlogPostPage() {
           </div>
         </header>
         <div className="prose prose-lg dark:prose-invert max-w-none">
-          <ReactMarkdown>{post.content}</ReactMarkdown>
+          <ReactMarkdown
+            components={{
+              a: ({ href, children }) => (
+                <StyledLink
+                  href={href ?? ''}
+                  className="inline"
+                  ariaLabel={
+                    typeof children === 'string' ? children : undefined
+                  }
+                >
+                  {children}
+                </StyledLink>
+              ),
+            }}
+          >
+            {post.content}
+          </ReactMarkdown>
         </div>
       </article>
     </>

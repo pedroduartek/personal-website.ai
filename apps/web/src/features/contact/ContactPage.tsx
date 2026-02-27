@@ -1,3 +1,4 @@
+import StyledLink from '../../components/StyledLink'
 import PageSEO from '../../components/seo/PageSEO'
 import { profile } from '../../content/profile'
 
@@ -39,12 +40,13 @@ export default function ContactPage() {
                   <h2 className="mb-1 text-xl font-semibold text-white">
                     Email
                   </h2>
-                  <a
+                  <StyledLink
                     href={`mailto:${profile.email}`}
-                    className="text-blue-600 transition-all duration-200 hover:translate-x-1 hover:underline dark:text-blue-400"
+                    className="transition-all duration-200 hover:translate-x-1"
+                    ariaLabel="Send email"
                   >
                     {profile.email}
-                  </a>
+                  </StyledLink>
                 </div>
               </div>
             </div>
@@ -65,14 +67,15 @@ export default function ContactPage() {
                   <h2 className="mb-1 text-xl font-semibold text-white">
                     LinkedIn
                   </h2>
-                  <a
+                  <StyledLink
                     href={profile.linkedin}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-blue-600 transition-all duration-200 hover:translate-x-1 hover:underline dark:text-blue-400"
+                    className="transition-all duration-200 hover:translate-x-1"
+                    ariaLabel="Open LinkedIn profile"
                   >
                     pedroduartek
-                  </a>
+                  </StyledLink>
                 </div>
               </div>
             </div>
@@ -94,14 +97,15 @@ export default function ContactPage() {
                     <h2 className="mb-1 text-xl font-semibold text-white">
                       GitHub
                     </h2>
-                    <a
+                    <StyledLink
                       href={profile.github}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-blue-600 transition-all duration-200 hover:translate-x-1 hover:underline dark:text-blue-400"
+                      className="transition-all duration-200 hover:translate-x-1"
+                      ariaLabel="Open GitHub profile"
                     >
                       pedroduartek
-                    </a>
+                    </StyledLink>
                   </div>
                 </div>
               </div>
@@ -112,14 +116,15 @@ export default function ContactPage() {
                 <h2 className="mb-2 text-xl font-semibold text-white">
                   Twitter
                 </h2>
-                <a
+                <StyledLink
                   href={profile.twitter}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-blue-600 transition-all duration-200 hover:translate-x-1 hover:underline dark:text-blue-400"
+                  className="transition-all duration-200 hover:translate-x-1"
+                  ariaLabel="Open Twitter profile"
                 >
                   Follow on Twitter
-                </a>
+                </StyledLink>
               </div>
             )}
           </div>

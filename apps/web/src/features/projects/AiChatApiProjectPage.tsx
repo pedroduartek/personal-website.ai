@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom'
+import StyledLink from '../../components/StyledLink'
 import PageSEO from '../../components/seo/PageSEO'
 
 export default function AiChatApiProjectPage() {
@@ -27,15 +28,15 @@ export default function AiChatApiProjectPage() {
         </p>
 
         <div className="mb-8">
-          <a
+          <StyledLink
             href="https://github.com/pedroduartek/ai-chat-api"
             target="_blank"
-            rel="noopener noreferrer"
             className="inline-flex items-center gap-2 rounded-lg border border-brand-700 bg-brand px-4 py-2 text-center text-white font-semibold transition-all duration-200 hover:scale-105 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-brand/50"
+            ariaLabel="View repository on GitHub"
           >
             <span className="font-mono mr-2">&lt;&gt;</span>
             View repository
-          </a>
+          </StyledLink>
         </div>
 
         <div className="mb-8 flex flex-wrap gap-2">

@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom'
+import StyledLink from '../../components/StyledLink'
 import TechIcon from '../../components/TechIcon'
 import PageSEO from '../../components/seo/PageSEO'
 import { profile } from '../../content/profile'
@@ -27,26 +28,24 @@ export default function HomePage() {
             <p className="mb-4 text-base lg:text-lg text-gray-300">
               Welcome! I'm a backend software engineer with {experience.text} of
               experience in C#/.NET, microservices, and event-driven systems.{' '}
-              <Link
-                to="/about"
-                className="text-blue-400 hover:text-blue-300 underline"
+              <StyledLink
+                href="/about"
+                className="inline-block font-mono text-sm bg-gray-800 text-gray-100 px-2 py-0.5 rounded border border-gray-700"
               >
                 Learn more about me
-              </Link>
-              .
+              </StyledLink>
             </p>
             <p className="mb-4 text-base lg:text-lg text-gray-300">
               This website itself is a learning project. As someone who knows
               close to nothing about frontend development, I'm using AI-assisted
               tools to build this site and learn React, TypeScript, and modern
               frontend practices along the way.{' '}
-              <Link
-                to="/projects"
-                className="text-blue-400 hover:text-blue-300 underline"
+              <StyledLink
+                href="/projects"
+                className="inline-block font-mono text-sm bg-gray-800 text-gray-100 px-2 py-0.5 rounded border border-gray-700"
               >
                 See the full project details
-              </Link>
-              .
+              </StyledLink>
             </p>
             <p className="mb-4 text-base lg:text-lg text-gray-300">
               It's an experiment in leveraging AI for developer productivity,

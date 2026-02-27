@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom'
+import StyledLink from '../../components/StyledLink'
 import PageSEO from '../../components/seo/PageSEO'
 import { getExperience } from '../../utils/experience'
 
@@ -28,15 +29,15 @@ export default function PersonalWebsiteProjectPage() {
         </p>
 
         <div className="mb-8">
-          <a
+          <StyledLink
             href="https://github.com/pedroduartek/personal-website.ai"
             target="_blank"
-            rel="noopener noreferrer"
             className="inline-flex items-center gap-2 rounded-lg border border-brand-700 bg-brand px-4 py-2 text-center text-white font-semibold transition-all duration-200 hover:scale-105 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-brand/50"
+            ariaLabel="View repository on GitHub"
           >
             <span className="font-mono mr-2">&lt;&gt;</span>
             View on GitHub
-          </a>
+          </StyledLink>
         </div>
 
         <div className="mb-8 flex flex-wrap gap-2">
@@ -188,12 +189,9 @@ export default function PersonalWebsiteProjectPage() {
                   <strong className="text-white">AI chat integration:</strong>{' '}
                   This site includes an "ai-chat" feature that calls a backend
                   API for conversational responses — see the{' '}
-                  <Link
-                    to="/projects/ai-chat-api"
-                    className="text-blue-300 underline"
-                  >
+                  <StyledLink href="/projects/ai-chat-api">
                     AI Chat API
-                  </Link>{' '}
+                  </StyledLink>{' '}
                   project for details.
                 </p>
               </div>
