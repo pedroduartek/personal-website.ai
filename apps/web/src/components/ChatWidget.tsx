@@ -178,7 +178,9 @@ export default function ChatWidget() {
             <div ref={containerRef} className="flex-1 overflow-auto overflow-x-hidden custom-scrollbar">
               <div className="flex flex-col gap-2">
                 {messages.length === 0 && (
-                  <div className="text-sm text-gray-400">Say hello 👋</div>
+                  <div className="text-sm text-gray-400">
+                    Hey!👋<br /><br />
+                  Ask me any questions about Pedro Duarte, if I can find that information in this website I'll tell you.</div>
                 )}
                 {messages.map((m) => (
                   <div
