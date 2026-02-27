@@ -7,18 +7,43 @@ export default function ChatWidget() {
   const [input, setInput] = useState('')
   const [messages, setMessages] = useState<Message[]>([])
 
-  function send() {
+  async function send() {
     if (!input.trim()) return
-    const msg: Message = { id: Date.now(), text: input.trim(), from: 'user' }
+    const text = input.trim()
+    const msg: Message = { id: Date.now(), text, from: 'user' }
     setMessages((s) => [...s, msg])
     setInput('')
-    // placeholder bot response
-    setTimeout(() => {
+    const apiUrl = import.meta.env.DEV ? '/api/chat' : 'https://api.pedroduartek.com/chat'
+
+    try {
+      const res = await fetch(apiUrl, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message: text }),
+      })
+
+      if (!res.ok) {
+        const body = await res.text()
+        setMessages((s) => [
+          ...s,
+          { id: Date.now() + 1, text: `Error: ${res.status} ${body}`, from: 'bot' },
+        ])
+        return
+      }
+
+      const data = await res.json()
+      const reply = typeof data === 'string'
+        ? data
+        : (data && typeof data === 'object'
+          ? (data.answer ?? data.reply ?? data.message ?? JSON.stringify(data))
+          : String(data))
+      setMessages((s) => [...s, { id: Date.now() + 1, text: String(reply), from: 'bot' }])
+    } catch (err: any) {
       setMessages((s) => [
         ...s,
-        { id: Date.now() + 1, text: "I'm a demo chat — no backend configured.", from: 'bot' },
+        { id: Date.now() + 1, text: `Network error: ${err?.message ?? String(err)}`, from: 'bot' },
       ])
-    }, 600)
+    }
   }
 
   return (
