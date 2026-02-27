@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom'
+import TechIcon from '../../components/TechIcon'
 import PageSEO from '../../components/seo/PageSEO'
 import { projects } from '../../content/projects'
-import TechIcon from '../../components/TechIcon'
 
 export default function ProjectsPage() {
   return (
@@ -25,22 +25,23 @@ export default function ProjectsPage() {
                 {project.title}
               </h2>
               <p className="mb-4 text-gray-400">{project.description}</p>
-                <div className="flex flex-wrap gap-2 mt-auto">
-                  {project.technologies.slice(0, 3).map((tech) => {
-                    const displayTech = tech === 'SkyConnect Coordinator' ? 'IoT Automation' : tech
-                    return (
-                      <span
-                        key={tech}
-                        className="inline-flex items-center gap-2 rounded bg-gray-800 px-2 py-1 text-xs text-gray-300"
-                      >
-                        <span className="flex-shrink-0">
-                          <TechIcon tech={displayTech} className="w-6 h-6" />
-                        </span>
-                        <span className="leading-none">{displayTech}</span>
+              <div className="flex flex-wrap gap-2 mt-auto">
+                {project.technologies.slice(0, 3).map((tech) => {
+                  const displayTech =
+                    tech === 'SkyConnect Coordinator' ? 'IoT Automation' : tech
+                  return (
+                    <span
+                      key={tech}
+                      className="inline-flex items-center gap-2 rounded bg-gray-800 px-2 py-1 text-xs text-gray-300"
+                    >
+                      <span className="flex-shrink-0">
+                        <TechIcon tech={displayTech} className="w-6 h-6" />
                       </span>
-                    )
-                  })}
-                </div>
+                      <span className="leading-none">{displayTech}</span>
+                    </span>
+                  )
+                })}
+              </div>
             </Link>
           ))}
         </div>

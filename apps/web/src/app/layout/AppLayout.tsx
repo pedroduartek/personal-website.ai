@@ -1,9 +1,9 @@
 import { Suspense, useState } from 'react'
 import { Link, Outlet } from 'react-router-dom'
+import ChatWidget from '../../components/ChatWidget'
 import { CommandPalette } from '../../components/CommandPalette'
 import CommandPaletteTip from '../../components/CommandPalette/CommandPaletteTip'
 import { useCommandPalette } from '../../hooks/useCommandPalette'
-import ChatWidget from '../../components/ChatWidget'
 import logo from '../../images/pld_logo_header.png'
 
 export default function AppLayout() {
