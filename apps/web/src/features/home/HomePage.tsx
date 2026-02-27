@@ -1,8 +1,8 @@
 import { Link } from 'react-router-dom'
+import TechIcon from '../../components/TechIcon'
 import PageSEO from '../../components/seo/PageSEO'
 import { profile } from '../../content/profile'
 import { projects } from '../../content/projects'
-import TechIcon from '../../components/TechIcon'
 import { getExperience } from '../../utils/experience'
 
 export default function HomePage() {
@@ -51,7 +51,7 @@ export default function HomePage() {
             <p className="mb-4 text-base lg:text-lg text-gray-300">
               It's an experiment in leveraging AI for developer productivity,
               using the same curiosity and automation mindset I apply to backend
-              systems and my Home Assistant lab.
+              systems and my Home Assistant.
             </p>
           </div>
           <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
@@ -93,7 +93,10 @@ export default function HomePage() {
                 <p className="mb-4 text-gray-400">{project.description}</p>
                 <div className="flex flex-wrap gap-2 mt-auto">
                   {project.technologies.slice(0, 3).map((tech) => {
-                    const displayTech = tech === 'SkyConnect Coordinator' ? 'IoT Automation' : tech
+                    const displayTech =
+                      tech === 'SkyConnect Coordinator'
+                        ? 'IoT Automation'
+                        : tech
                     return (
                       <span
                         key={tech}

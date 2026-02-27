@@ -202,7 +202,7 @@ export default function CommandPaletteTip() {
   const visibleClass = visible ? 'opacity-100 shadow-2xl' : 'opacity-0'
 
   // fixed style when button scrolls away
-    if (isFixed && centerX !== null) {
+  if (isFixed && centerX !== null) {
     const transformVisible = visible
       ? 'translateX(-50%) translateY(0px)'
       : 'translateX(-50%) translateY(-24px)'

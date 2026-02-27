@@ -1,7 +1,9 @@
-import React, { useState, useRef, useEffect, useCallback } from 'react'
+import type React from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 
 // small keyframes for typing dots animation (inlined style fallback)
-const typingKeyframes = `@keyframes typing { 0% { transform: translateY(0); opacity: 0.3 } 50% { transform: translateY(-4px); opacity: 1 } 100% { transform: translateY(0); opacity: 0.3 } }`
+const typingKeyframes =
+  '@keyframes typing { 0% { transform: translateY(0); opacity: 0.3 } 50% { transform: translateY(-4px); opacity: 1 } 100% { transform: translateY(0); opacity: 0.3 } }'
 
 // custom scrollbar styles to match the UI (dark background, indigo accent)
 const scrollbarStyles = `
@@ -33,7 +35,9 @@ export default function ChatWidget() {
     setMessages((s) => [...s, msg])
     setInput('')
     setAwaitingReply(true)
-    const apiUrl = import.meta.env.DEV ? '/api/chat' : 'https://api.pedroduartek.com/chat'
+    const apiUrl = import.meta.env.DEV
+      ? '/api/chat'
+      : 'https://api.pedroduartek.com/chat'
 
     try {
       const res = await fetch(apiUrl, {
@@ -46,24 +50,43 @@ export default function ChatWidget() {
         const body = await res.text()
         setMessages((s) => [
           ...s,
-          { id: Date.now() + 1, text: `Error: ${res.status} ${body}`, from: 'bot' },
+          {
+            id: Date.now() + 1,
+            text: `Error: ${res.status} ${body}`,
+            from: 'bot',
+          },
         ])
         setAwaitingReply(false)
         return
       }
 
       const data = await res.json()
-      const reply = typeof data === 'string'
-        ? data
-        : (data && typeof data === 'object'
-          ? (data.answer ?? data.reply ?? data.message ?? JSON.stringify(data))
-          : String(data))
-      setMessages((s) => [...s, { id: Date.now() + 1, text: String(reply), from: 'bot' }])
-      setAwaitingReply(false)
-    } catch (err: any) {
+      const reply =
+        typeof data === 'string'
+          ? data
+          : data && typeof data === 'object'
+            ? (data.answer ??
+              data.reply ??
+              data.message ??
+              JSON.stringify(data))
+            : String(data)
       setMessages((s) => [
         ...s,
-        { id: Date.now() + 1, text: `Network error: ${err?.message ?? String(err)}`, from: 'bot' },
+        { id: Date.now() + 1, text: String(reply), from: 'bot' },
+      ])
+      setAwaitingReply(false)
+    } catch (err: unknown) {
+      const errMsg =
+        err && typeof err === 'object' && 'message' in err
+          ? String((err as { message?: unknown }).message)
+          : String(err)
+      setMessages((s) => [
+        ...s,
+        {
+          id: Date.now() + 1,
+          text: `Network error: ${errMsg}`,
+          from: 'bot',
+        },
       ])
       setAwaitingReply(false)
     }
@@ -87,7 +110,7 @@ export default function ChatWidget() {
     // when awaitingReply is true we let the placeholder effect control scrolling
     if (awaitingReply) return
     scrollToBottom('smooth')
-  }, [messages, awaitingReply, scrollToBottom])
+  }, [awaitingReply, scrollToBottom])
 
   // Simulate streaming words while awaiting a reply
   useEffect(() => {
@@ -129,30 +152,56 @@ export default function ChatWidget() {
       const top = Math.max(0, desiredTop)
       el.scrollTo({ top, behavior: 'smooth' })
     }
-  }, [placeholderWords, awaitingReply, placeholderWidths])
+  }, [placeholderWords, awaitingReply])
 
   return (
     <>
       <style>{typingKeyframes + scrollbarStyles}</style>
       {/* Floating Button */}
       <button
+        type="button"
         aria-label={open ? 'Close chat' : 'Open chat'}
         onClick={() => setOpen((v) => !v)}
         className="fixed right-6 bottom-6 z-50 flex h-14 w-14 items-center justify-center rounded-full bg-indigo-600 p-2 text-white shadow-lg hover:bg-indigo-500 focus:outline-none"
       >
         {open ? (
           // X icon
-          <svg className="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-            <path strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+          <svg
+            className="h-6 w-6"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            role="img"
+          >
+            <title>Close chat</title>
+            <path
+              strokeWidth={2}
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M6 18L18 6M6 6l12 12"
+            />
           </svg>
         ) : (
           // Robot face icon
-          <svg className="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" xmlns="http://www.w3.org/2000/svg">
+          <svg
+            className="h-6 w-6"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            xmlns="http://www.w3.org/2000/svg"
+            role="img"
+          >
+            <title>Chat bot</title>
             <rect x="3" y="7" width="18" height="11" rx="2" strokeWidth={2} />
             <rect x="8" y="3" width="8" height="4" rx="1" strokeWidth={2} />
             <circle cx="9" cy="12" r="1.25" fill="currentColor" />
             <circle cx="15" cy="12" r="1.25" fill="currentColor" />
-            <path d="M8 16c1 1 3 1 4 1s3 0 4-1" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" />
+            <path
+              d="M8 16c1 1 3 1 4 1s3 0 4-1"
+              strokeWidth={2}
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
           </svg>
         )}
       </button>
@@ -163,6 +212,7 @@ export default function ChatWidget() {
           <div className="flex items-center justify-between border-b border-gray-800 px-3 py-2">
             <div className="text-sm font-medium text-white">Chat</div>
             <button
+              type="button"
               onClick={() => setOpen(false)}
               className="rounded p-1 text-gray-300 hover:text-white"
               aria-label="Close chat"
@@ -171,36 +221,49 @@ export default function ChatWidget() {
             </button>
           </div>
           <div className="px-3 py-2 text-xs text-yellow-100 bg-yellow-700/10 border-t border-yellow-700/20">
-            <strong className="font-medium">Note: </strong> 
-            This chat AI is a primitive proof-of-concept (POC). It is limited and may be incorrect — do not trust it for important or sensitive decisions. It was told to only reply using the content of this website.
+            <strong className="font-medium">Note: </strong>
+            This chat AI is a primitive proof-of-concept (POC). It is limited
+            and may be incorrect — do not trust it for important or sensitive
+            decisions. It was told to only reply using the content of this
+            website.
           </div>
           <div className="relative flex h-72 flex-col gap-2 overflow-hidden p-3">
-            <div ref={containerRef} className="flex-1 overflow-auto overflow-x-hidden custom-scrollbar pr-[5px]">
+            <div
+              ref={containerRef}
+              className="flex-1 overflow-auto overflow-x-hidden custom-scrollbar pr-[5px]"
+            >
               <div className="flex flex-col gap-2">
                 {messages.length === 0 && (
                   <div className="text-sm text-gray-400">
-                    Hey!👋<br /><br />
-                  Ask me any questions about Pedro Duarte, if I can find that information in this website I'll tell you.</div>
+                    Hey!👋
+                    <br />
+                    <br />
+                    Ask me any questions about Pedro Duarte, if I can find that
+                    information in this website I'll tell you.
+                  </div>
                 )}
                 {messages.map((m) => (
                   <div
                     key={m.id}
                     className={`max-w-[85%] rounded-lg p-2 text-sm break-words whitespace-pre-wrap ${
-                      m.from === 'user' ? 'ml-auto bg-indigo-700 text-white' : 'bg-gray-800 text-gray-200'
+                      m.from === 'user'
+                        ? 'ml-auto bg-indigo-700 text-white'
+                        : 'bg-gray-800 text-gray-200'
                     }`}
                   >
                     {m.text}
                   </div>
                 ))}
                 {awaitingReply && (
-                  <div
-                    role="status"
+                  <output
                     aria-live="polite"
                     className="max-w-[80%] rounded-lg p-2 text-sm bg-gray-800 text-gray-400"
                   >
                     <div className="flex flex-wrap items-center gap-2">
                       {(() => {
-                        const lastIndex = Math.min(placeholderWords, placeholderWidths.length) - 1
+                        const lastIndex =
+                          Math.min(placeholderWords, placeholderWidths.length) -
+                          1
                         return placeholderWidths.map((w, i) => {
                           const key = `ph-${i}`
                           const style: React.CSSProperties = { width: `${w}%` }
@@ -209,7 +272,9 @@ export default function ChatWidget() {
                             return (
                               <span
                                 key={key}
-                                data-placeholder-last={i === lastIndex ? String(i) : undefined}
+                                data-placeholder-last={
+                                  i === lastIndex ? String(i) : undefined
+                                }
                                 className="inline-block h-3 rounded bg-gray-600 animate-pulse"
                                 style={style}
                               />
@@ -219,12 +284,10 @@ export default function ChatWidget() {
                         })
                       })()}
                     </div>
-                  </div>
+                  </output>
                 )}
               </div>
             </div>
-
-            
 
             <div className="mt-2 flex gap-2">
               <input
@@ -237,18 +300,36 @@ export default function ChatWidget() {
                     if (!awaitingReply) send()
                   }
                 }}
-                placeholder={awaitingReply ? 'Waiting for reply...' : 'Type a message...'}
+                placeholder={
+                  awaitingReply ? 'Waiting for reply...' : 'Type a message...'
+                }
                 disabled={awaitingReply}
                 className={`w-full rounded border border-gray-700 bg-gray-800 px-3 py-2 text-sm text-gray-200 placeholder-gray-500 focus:outline-none ${awaitingReply ? 'opacity-70' : ''}`}
               />
               <button
-                onClick={() => { if (!awaitingReply) send() }}
+                type="button"
+                onClick={() => {
+                  if (!awaitingReply) send()
+                }}
                 disabled={awaitingReply}
                 className={`rounded px-3 py-2 text-sm font-medium text-white ${awaitingReply ? 'bg-indigo-500 opacity-70 cursor-not-allowed' : 'bg-indigo-600 hover:bg-indigo-500'}`}
               >
                 {awaitingReply ? (
-                  <svg className="h-4 w-4 animate-spin" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                    <circle cx="12" cy="12" r="10" strokeWidth={3} strokeLinecap="round" />
+                  <svg
+                    className="h-4 w-4 animate-spin"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    role="img"
+                  >
+                    <title>Loading</title>
+                    <circle
+                      cx="12"
+                      cy="12"
+                      r="10"
+                      strokeWidth={3}
+                      strokeLinecap="round"
+                    />
                   </svg>
                 ) : (
                   'Send'
