@@ -110,13 +110,15 @@ export default function PageSEO({
       sameAs: [profile.github, profile.linkedin].filter(Boolean),
     }
 
-    let script = document.querySelector('script[type="application/ld+json"]')
+    let script = document.querySelector(
+      'script[type="application/ld+json"]',
+    ) as HTMLScriptElement | null
     if (script) script.textContent = JSON.stringify(ld)
     else {
-      script = document.createElement('script')
-      script.type = 'application/ld+json'
-      script.textContent = JSON.stringify(ld)
-      document.head.appendChild(script)
+      const s = document.createElement('script')
+      s.type = 'application/ld+json'
+      s.textContent = JSON.stringify(ld)
+      document.head.appendChild(s)
     }
   }, [title, description, image, url])
 
