@@ -1,4 +1,3 @@
-import React from 'react'
 import csharpIcon from '../images/csharp_icon.png'
 import dockerIcon from '../images/docker_icon.png'
 import dotnetIcon from '../images/dotnet_icon.png'
