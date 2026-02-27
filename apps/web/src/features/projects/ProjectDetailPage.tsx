@@ -1,4 +1,5 @@
 import { Link, useParams } from 'react-router-dom'
+import StyledLink from '../../components/StyledLink'
 import PageSEO from '../../components/seo/PageSEO'
 import { projects } from '../../content/projects'
 
@@ -24,7 +25,16 @@ export default function ProjectDetailPage() {
 
   return (
     <>
-      <PageSEO title={project.title} description={project.description} />
+      <PageSEO
+        title={project.title}
+        description={project.description}
+        image="/src/images/pld_logo_header.png"
+        url={
+          typeof window !== 'undefined'
+            ? window.location.href
+            : `https://www.pedroduartek.com/projects/${project.slug}`
+        }
+      />
       <div className="container mx-auto px-4 py-8 animate-slide-down md:py-16">
         <Link
           to="/projects"
@@ -81,14 +91,16 @@ export default function ProjectDetailPage() {
               </a>
             )}
             {project.links.github && (
-              <a
+              <StyledLink
                 href={project.links.github}
                 target="_blank"
-                rel="noopener noreferrer"
-                className="rounded-lg border border-gray-700 px-4 py-2 text-white hover:bg-gray-800"
+                bigger
+                className="inline-flex items-center gap-2 rounded-lg border border-brand-700 bg-brand px-4 py-2 text-center text-white font-semibold transition-all duration-200 hover:scale-105 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-brand/50"
+                ariaLabel="View repository on GitHub"
               >
-                View Code
-              </a>
+                <span className="font-mono mr-2">&lt;&gt;</span>
+                View on GitHub
+              </StyledLink>
             )}
           </div>
         )}

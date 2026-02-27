@@ -27,8 +27,7 @@ const Conferences = lazy(
   () => import('../features/conferences/ConferencesPage'),
 )
 const Skills = lazy(() => import('../features/skills/SkillsPage'))
-const Blog = lazy(() => import('../features/blog/BlogPage'))
-const BlogPost = lazy(() => import('../features/blog/BlogPostPage'))
+// Blog routes removed (no blog posts)
 const Contact = lazy(() => import('../features/contact/ContactPage'))
 const CV = lazy(() => import('../features/cv/CVPage'))
 
@@ -53,8 +52,6 @@ export const router = createBrowserRouter([
       { path: 'education', element: <Education /> },
       { path: 'conferences', element: <Conferences /> },
       { path: 'skills', element: <Skills /> },
-      { path: 'blog', element: <Blog /> },
-      { path: 'blog/:slug', element: <BlogPost /> },
       { path: 'contact', element: <Contact /> },
       { path: 'cv', element: <CV /> },
     ],

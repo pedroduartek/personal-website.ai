@@ -13,6 +13,12 @@ export default function HomeAssistantProjectPage() {
       <PageSEO
         title="Home Assistant: Local-First Smart Home"
         description="Self-hosted Home Assistant OS setup with 50+ Zigbee devices for automation, energy awareness, and comfort optimization"
+        image="/src/images/ha.png"
+        url={
+          typeof window !== 'undefined'
+            ? window.location.href
+            : 'https://www.pedroduartek.com/projects/home-assistant'
+        }
       />
       <div className="container mx-auto px-4 py-16 animate-slide-down">
         <Link

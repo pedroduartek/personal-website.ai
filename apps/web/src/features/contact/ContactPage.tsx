@@ -5,7 +5,16 @@ import { profile } from '../../content/profile'
 export default function ContactPage() {
   return (
     <>
-      <PageSEO title="Contact" description="Get in touch with me" />
+      <PageSEO
+        title="Contact"
+        description="Get in touch with me"
+        image="/src/images/pld_logo_header.png"
+        url={
+          typeof window !== 'undefined'
+            ? window.location.href
+            : 'https://www.pedroduartek.com/contact'
+        }
+      />
       <div className="container mx-auto px-4 py-8 animate-slide-down md:py-16">
         <h1 className="mb-8 text-3xl font-bold text-white md:text-4xl">
           Contact

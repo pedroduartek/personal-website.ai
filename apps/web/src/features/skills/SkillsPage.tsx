@@ -16,6 +16,12 @@ export default function SkillsPage() {
       <PageSEO
         title="Skills"
         description="Technical skills and expertise across various technologies"
+        image="/src/images/pld_logo_header.png"
+        url={
+          typeof window !== 'undefined'
+            ? window.location.href
+            : 'https://www.pedroduartek.com/skills'
+        }
       />
       <div className="container mx-auto px-4 py-8 animate-slide-down md:py-16">
         <h1 className="mb-8 text-3xl font-bold text-white md:text-4xl">

@@ -11,6 +11,12 @@ export default function PersonalWebsiteProjectPage() {
       <PageSEO
         title="AI-Assisted Personal Website"
         description="Modern portfolio website built using AI-assisted development as a backend engineer learning frontend technologies"
+        image="/src/images/pld_logo_header.png"
+        url={
+          typeof window !== 'undefined'
+            ? window.location.href
+            : 'https://www.pedroduartek.com/projects/personal-website'
+        }
       />
       <div className="container mx-auto px-4 py-8 animate-slide-down md:py-16">
         <Link
@@ -32,6 +38,7 @@ export default function PersonalWebsiteProjectPage() {
           <StyledLink
             href="https://github.com/pedroduartek/personal-website.ai"
             target="_blank"
+            bigger
             className="inline-flex items-center gap-2 rounded-lg border border-brand-700 bg-brand px-4 py-2 text-center text-white font-semibold transition-all duration-200 hover:scale-105 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-brand/50"
             ariaLabel="View repository on GitHub"
           >

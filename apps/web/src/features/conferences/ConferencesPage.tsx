@@ -42,6 +42,12 @@ export default function ConferencesPage() {
       <PageSEO
         title="Conferences & Talks"
         description="Conference presentations, talks, and events"
+        image="/src/images/azure_dev_summit.png"
+        url={
+          typeof window !== 'undefined'
+            ? window.location.href
+            : 'https://www.pedroduartek.com/conferences'
+        }
       />
       <div className="container mx-auto px-4 py-16 animate-slide-down">
         <h1 className="mb-8 text-4xl font-bold text-white">

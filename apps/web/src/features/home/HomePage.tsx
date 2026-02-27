@@ -15,6 +15,12 @@ export default function HomePage() {
       <PageSEO
         title="Home"
         description={`${profile.name} - ${profile.role}. ${profile.bio}`}
+        image="/src/images/pld_logo_header.png"
+        url={
+          typeof window !== 'undefined'
+            ? window.location.href
+            : 'https://www.pedroduartek.com'
+        }
       />
       <div className="container mx-auto px-4 py-8 lg:py-16 animate-slide-down">
         <section className="mb-12 lg:mb-16">

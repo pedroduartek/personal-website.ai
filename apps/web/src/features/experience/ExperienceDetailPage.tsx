@@ -92,6 +92,12 @@ export default function ExperienceDetailPage() {
       <PageSEO
         title={`Experience at ${company}`}
         description={companyRoles[0].description[0]}
+        image="/src/images/pld_logo_header.png"
+        url={
+          typeof window !== 'undefined'
+            ? window.location.href
+            : `https://www.pedroduartek.com/experience/${id}`
+        }
       />
       <div className="container mx-auto px-4 py-8 animate-slide-down md:py-16">
         <Link
