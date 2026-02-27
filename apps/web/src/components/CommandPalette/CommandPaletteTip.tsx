@@ -138,6 +138,13 @@ export default function CommandPaletteTip() {
   useEffect(() => {
     if (!visible) return
     const auto = window.setTimeout(() => {
+      // mark as seen for this session so it won't show again
+      try {
+        if (typeof window !== 'undefined')
+          sessionStorage.setItem('commandPaletteTipDismissed', '1')
+      } catch (e) {
+        // ignore
+      }
       // start hide animation
       setVisible(false)
       // unmount after animation
