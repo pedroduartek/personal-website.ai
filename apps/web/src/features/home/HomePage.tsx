@@ -36,7 +36,7 @@ export default function HomePage() {
               experience in C#/.NET, microservices, and event-driven systems.{' '}
               <StyledLink
                 href="/about"
-                className="inline-block font-mono text-sm bg-gray-800 text-gray-100 px-2 py-0.5 rounded border border-gray-700"
+                className="inline-block font-mono text-sm bg-gray-800 text-gray-100 px-2 py-0.5 rounded border border-gray-700 hover:translate-x-1 hover:bg-gray-700 hover:shadow-lg"
               >
                 Learn more about me
               </StyledLink>
@@ -48,7 +48,7 @@ export default function HomePage() {
               frontend practices along the way.{' '}
               <StyledLink
                 href="/projects"
-                className="inline-block font-mono text-sm bg-gray-800 text-gray-100 px-2 py-0.5 rounded border border-gray-700"
+                className="inline-block font-mono text-sm bg-gray-800 text-gray-100 px-2 py-0.5 rounded border border-gray-700 hover:translate-x-1 hover:bg-gray-700 hover:shadow-lg"
               >
                 See the full project details
               </StyledLink>
