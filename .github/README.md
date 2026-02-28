@@ -1,12 +1,11 @@
 
 # Personal Website
 
-This is the source code for my personal website, a modern, fast, and accessible portfolio and blog built with React, TypeScript, and Tailwind CSS. The site showcases professional experience, projects, blog posts, skills, and a downloadable CV.
+This is the source code for my personal website, a modern, fast, and accessible portfolio built with React, TypeScript, and Tailwind CSS. The site showcases professional experience, projects, skills, and a downloadable CV.
 
 ## 🌟 Features
 
 - **Home:** Quick intro and highlights
-- **Blog:** Technical articles written in Markdown
 - **Projects:** Portfolio with detailed project pages and screenshots
 - **Experience:** Professional timeline with roles, companies, and technologies
 - **Education:** Academic background
@@ -33,7 +32,7 @@ This is the source code for my personal website, a modern, fast, and accessible 
 ## 🚀 Getting Started
 
 ### Prerequisites
-- Node.js 20+
+- Node.js 18+
 - pnpm 9+
 
 ### Installation

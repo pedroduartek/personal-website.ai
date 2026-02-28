@@ -75,12 +75,3 @@ export interface Skill {
   name: string
   startDate: string
 }
-
-export interface BlogPost {
-  slug: string
-  title: string
-  date: string
-  tags: string[]
-  excerpt: string
-  content: string
-}
