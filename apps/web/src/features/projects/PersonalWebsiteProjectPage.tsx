@@ -196,7 +196,10 @@ export default function PersonalWebsiteProjectPage() {
                   <strong className="text-white">AI chat integration:</strong>{' '}
                   This site includes an "ai-chat" feature that calls a backend
                   API for conversational responses — see the{' '}
-                  <StyledLink href="/projects/ai-chat-api">
+                  <StyledLink
+                    href="/projects/ai-chat-api"
+                    className="inline-block font-mono text-sm bg-gray-800 text-gray-100 px-2 py-0.5 rounded border border-gray-700 hover:translate-x-1 hover:bg-gray-700 hover:shadow-lg"
+                  >
                     AI Chat API
                   </StyledLink>{' '}
                   project for details.

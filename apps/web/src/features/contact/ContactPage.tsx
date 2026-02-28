@@ -51,7 +51,7 @@ export default function ContactPage() {
                   </h2>
                   <StyledLink
                     href={`mailto:${profile.email}`}
-                    className="transition-all duration-200 hover:translate-x-1"
+                    className="inline-block font-mono text-sm bg-gray-800 text-gray-100 px-2 py-0.5 rounded border border-gray-700 hover:translate-x-1 hover:bg-gray-700 hover:shadow-lg"
                     ariaLabel="Send email"
                   >
                     {profile.email}
@@ -80,7 +80,7 @@ export default function ContactPage() {
                     href={profile.linkedin}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="transition-all duration-200 hover:translate-x-1"
+                    className="inline-block font-mono text-sm bg-gray-800 text-gray-100 px-2 py-0.5 rounded border border-gray-700 hover:translate-x-1 hover:bg-gray-700 hover:shadow-lg"
                     ariaLabel="Open LinkedIn profile"
                   >
                     pedroduartek
@@ -110,7 +110,7 @@ export default function ContactPage() {
                       href={profile.github}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="transition-all duration-200 hover:translate-x-1"
+                      className="inline-block font-mono text-sm bg-gray-800 text-gray-100 px-2 py-0.5 rounded border border-gray-700 hover:translate-x-1 hover:bg-gray-700 hover:shadow-lg"
                       ariaLabel="Open GitHub profile"
                     >
                       pedroduartek
@@ -129,7 +129,7 @@ export default function ContactPage() {
                   href={profile.twitter}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="transition-all duration-200 hover:translate-x-1"
+                  className="inline-block font-mono text-sm bg-gray-800 text-gray-100 px-2 py-0.5 rounded border border-gray-700 hover:translate-x-1 hover:bg-gray-700 hover:shadow-lg"
                   ariaLabel="Open Twitter profile"
                 >
                   Follow on Twitter
