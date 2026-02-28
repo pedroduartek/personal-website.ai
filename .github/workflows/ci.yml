@@ -26,6 +26,11 @@ jobs:
       - name: Install dependencies
         run: pnpm install
 
+      - name: Audit dependencies
+        run: |
+          pnpm -w audit --json > audit.json || true
+          node -e "const a=require('./audit.json'); const h=a.metadata?.vulnerabilities?.high||0; const c=a.metadata?.vulnerabilities?.critical||0; console.log('Audit summary: high=',h,'critical=',c); if(h>0||c>0){console.error('High/critical vulnerabilities found'); process.exit(1)}"
+
       - name: Run checks
         run: pnpm -r check
 

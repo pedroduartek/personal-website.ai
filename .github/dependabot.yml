@@ -1,0 +1,18 @@
+version: 2
+updates:
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    # Prevent Dependabot from opening PRs by setting the open limit to 0
+    open-pull-requests-limit: 0
+
+  - package-ecosystem: "npm"
+    directory: "/apps/web"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 0
+
+# Note: open-pull-requests-limit: 0 is used intentionally so Dependabot will
+# evaluate updates but will not create pull requests. You can later change
+# this to a positive number to enable PRs for selected ecosystems/directories.
