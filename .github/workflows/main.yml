@@ -38,6 +38,8 @@ jobs:
   lighthouse:
     name: Lighthouse CI
     needs: ci
+    # only run Lighthouse when CI job succeeded
+    if: ${{ needs.ci.result == 'success' }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -68,8 +70,9 @@ jobs:
   vercel_deploy:
     name: Vercel Deploy
     needs: lighthouse
+    # only run deploy when Lighthouse succeeded and VERCEL_TOKEN is set
+    if: ${{ needs.lighthouse.result == 'success' && secrets.VERCEL_TOKEN != '' }}
     runs-on: ubuntu-latest
-    if: ${{ secrets.VERCEL_TOKEN }}
     steps:
       - uses: actions/checkout@v4
 
