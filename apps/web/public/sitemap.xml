@@ -26,10 +26,7 @@
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://www.pedroduartek.com/blog</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.6</priority>
-  </url>
+  <!-- Blog removed - omitted from sitemap -->
   <url>
     <loc>https://www.pedroduartek.com/contact</loc>
     <changefreq>yearly</changefreq>
