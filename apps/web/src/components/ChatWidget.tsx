@@ -46,13 +46,12 @@ export default function ChatWidget() {
         body: JSON.stringify({ message: text }),
       })
 
-      if (!res.ok) {
-        const body = await res.text()
+      if (res.status !== 200) {
         setMessages((s) => [
           ...s,
           {
             id: Date.now() + 1,
-            text: `Error: ${res.status} ${body}`,
+            text: 'Sorry — the chat service is unavailable right now. Please try again later.',
             from: 'bot',
           },
         ])
@@ -76,15 +75,17 @@ export default function ChatWidget() {
       ])
       setAwaitingReply(false)
     } catch (err: unknown) {
-      const errMsg =
-        err && typeof err === 'object' && 'message' in err
-          ? String((err as { message?: unknown }).message)
-          : String(err)
+      // Log the actual error for debugging, but don't expose internals to users
+      try {
+        console.error('ChatWidget error:', err)
+      } catch {
+        // ignore logging failures
+      }
       setMessages((s) => [
         ...s,
         {
           id: Date.now() + 1,
-          text: `Network error: ${errMsg}`,
+          text: 'Sorry — the chat service is unavailable right now. Please try again later.',
           from: 'bot',
         },
       ])
