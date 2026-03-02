@@ -1,6 +1,14 @@
 {
   "rewrites": [
     {
+      "source": "/favicon",
+      "destination": "/favicon.png"
+    },
+    {
+      "source": "/sitemap",
+      "destination": "/sitemap.xml"
+    },
+    {
       "source": "/(.*)",
       "destination": "/index.html"
     }
