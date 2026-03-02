@@ -4,7 +4,7 @@ import ChatWidget from '../../components/ChatWidget'
 import { CommandPalette } from '../../components/CommandPalette'
 import CommandPaletteTip from '../../components/CommandPalette/CommandPaletteTip'
 import { useCommandPalette } from '../../hooks/useCommandPalette'
-import logo from '../../images/pld_logo_header.png'
+const logo = '/pld_logo_header.png'
 
 export default function AppLayout() {
   const { isOpen, close, open } = useCommandPalette()
@@ -51,7 +51,7 @@ function Header({
             to="/"
             className="flex items-center gap-3 text-xl font-bold text-white"
           >
-            <img src={logo} alt="PLD Logo" className="h-[70px] w-auto" />
+            <img src={logo} alt="PLD Logo" className="h-[70px] w-auto" fetchPriority="high" decoding="sync" />
             PEDRODUARTEK
           </Link>
 
