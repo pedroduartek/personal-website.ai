@@ -16,7 +16,7 @@
   "rewrites": [
     {
       "source": "/favicon",
-      "destination": "/favicon.png"
+      "destination": "/favicon_v2.png"
     },
     {
       "source": "/sitemap",
