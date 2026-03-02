@@ -51,7 +51,13 @@ function Header({
             to="/"
             className="flex items-center gap-3 text-xl font-bold text-white"
           >
-            <img src={logo} alt="PLD Logo" className="h-[70px] w-auto" fetchPriority="high" decoding="sync" />
+            <img
+              src={logo}
+              alt="PLD Logo"
+              className="h-[70px] w-auto"
+              fetchPriority="high"
+              decoding="sync"
+            />
             PEDRODUARTEK
           </Link>
 
