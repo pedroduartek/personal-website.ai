@@ -6,7 +6,7 @@ export function getExperience(): {
   months: number
   text: string
 } {
-  const startDate = new Date(2020, 2, 1) // March 2020 (month is 0-indexed)
+  const startDate = new Date(2020, 5, 1) // June 2020 (month is 0-indexed)
   const currentDate = new Date()
 
   let years = currentDate.getFullYear() - startDate.getFullYear()
