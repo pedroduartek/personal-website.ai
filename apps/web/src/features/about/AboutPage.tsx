@@ -4,7 +4,7 @@ import Zoom from 'yet-another-react-lightbox/plugins/zoom'
 import 'yet-another-react-lightbox/styles.css'
 import PageSEO from '../../components/seo/PageSEO'
 import { profile } from '../../content/profile'
-import systemDesign from '../../images/system_design_enhesa.jpg'
+import systemDesign from '../../images/system_design_enhesa.webp'
 import { getExperience } from '../../utils/experience'
 
 export default function AboutPage() {
@@ -88,6 +88,8 @@ export default function AboutPage() {
                 <img
                   src={systemDesign}
                   alt="System design work at Enhesa"
+                  loading="lazy"
+                  decoding="async"
                   className="rounded-lg w-full object-cover hover:opacity-90 transition-opacity cursor-pointer"
                 />
               </button>

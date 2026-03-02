@@ -4,7 +4,7 @@ import ChatWidget from '../../components/ChatWidget'
 import { CommandPalette } from '../../components/CommandPalette'
 import CommandPaletteTip from '../../components/CommandPalette/CommandPaletteTip'
 import { useCommandPalette } from '../../hooks/useCommandPalette'
-const logo = '/pld_logo_header.png'
+const logo = '/pld_logo_header.webp'
 
 export default function AppLayout() {
   const { isOpen, close, open } = useCommandPalette()
