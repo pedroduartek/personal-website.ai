@@ -1,5 +1,6 @@
 import type React from 'react'
 import { useCallback, useEffect, useRef, useState } from 'react'
+import { Link } from 'react-router-dom'
 
 // small keyframes for typing dots animation (inlined style fallback)
 const typingKeyframes =
@@ -27,6 +28,29 @@ export default function ChatWidget() {
   const placeholderIntervalRef = useRef<number | null>(null)
   const placeholderWidths = [40, 65, 35, 50, 60, 30, 45, 55, 38, 48, 62, 34]
   const [showNote, setShowNote] = useState(true)
+
+  const internalStaticRoutes = new Set([
+    '/',
+    '/about',
+    '/experience',
+    '/projects',
+    '/projects/personal-website',
+    '/projects/home-assistant',
+    '/projects/ai-chat-api',
+    '/education',
+    '/conferences',
+    '/skills',
+    '/contact',
+    '/cv',
+  ])
+
+  function isInternalRoute(pathname: string) {
+    if (!pathname.startsWith('/')) return false
+    if (internalStaticRoutes.has(pathname)) return true
+    if (pathname.startsWith('/experience/')) return pathname.length > '/experience/'.length
+    if (pathname.startsWith('/projects/')) return pathname.length > '/projects/'.length
+    return false
+  }
 
   async function send() {
     if (awaitingReply) return
@@ -70,6 +94,46 @@ export default function ChatWidget() {
               data.message ??
               JSON.stringify(data))
             : String(data)
+
+      try {
+        const textReply = String(reply)
+        const urlRegex = /(https?:\/\/[^\s]+)|\/[^\s]+/g
+        const matches = Array.from(textReply.matchAll(urlRegex)).map((m) => m[0])
+        if (matches.length > 0) {
+          let hasInternal = false
+          for (const matched of matches) {
+            let pathname = ''
+            if (matched.startsWith('/')) {
+              pathname = matched.split(/[?#]/)[0]
+            } else {
+              try {
+                pathname = new URL(matched).pathname
+              } catch {
+                pathname = ''
+              }
+            }
+            if (pathname && isInternalRoute(pathname)) {
+              hasInternal = true
+              break
+            }
+          }
+          if (!hasInternal) {
+            setMessages((s) => [
+              ...s,
+              {
+                id: Date.now() + 1,
+                text: 'Unable to find a response to your question',
+                from: 'bot',
+              },
+            ])
+            setAwaitingReply(false)
+            return
+          }
+        }
+      } catch (e) {
+        // if URL parsing fails, fall back to showing the reply
+      }
+
       setMessages((s) => [
         ...s,
         { id: Date.now() + 1, text: String(reply), from: 'bot' },
@@ -263,7 +327,74 @@ export default function ChatWidget() {
                         : 'bg-gray-800 text-gray-200'
                     }`}
                   >
-                    {m.text}
+                    {m.from === 'bot' ? (
+                      (() => {
+                        const text: string = m.text
+                        const urlRegex = /(https?:\/\/[^\s]+)|\/[^\s]+/g
+                        const parts: React.ReactNode[] = []
+                        let lastIndex = 0
+                        while (true) {
+                          const match = urlRegex.exec(text)
+                          if (!match) break
+                          const idx = match.index
+                          if (idx > lastIndex) {
+                            parts.push(
+                              <span key={`${m.id}-part-${parts.length}`}>
+                                {text.slice(lastIndex, idx)}
+                              </span>,
+                            )
+                          }
+                          const matched = match[0]
+                          // determine pathname for internal check
+                          let pathname = ''
+                          if (matched.startsWith('/')) {
+                            pathname = matched.split(/[?#]/)[0]
+                          } else {
+                            try {
+                              const u = new URL(matched)
+                              pathname = u.pathname
+                            } catch {
+                              pathname = ''
+                            }
+                          }
+                          if (pathname && isInternalRoute(pathname)) {
+                            parts.push(
+                              <Link
+                                key={`${m.id}-part-${parts.length}`}
+                                to={pathname}
+                                className="text-indigo-300 underline"
+                                onClick={() => setOpen(false)}
+                              >
+                                {matched}
+                              </Link>,
+                            )
+                          } else {
+                            parts.push(
+                              <a
+                                key={`${m.id}-part-${parts.length}`}
+                                href={matched}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="text-indigo-300 underline"
+                              >
+                                {matched}
+                              </a>,
+                            )
+                          }
+                          lastIndex = idx + matched.length
+                        }
+                        if (lastIndex < text.length) {
+                          parts.push(
+                            <span key={`${m.id}-part-${parts.length}`}>
+                              {text.slice(lastIndex)}
+                            </span>,
+                          )
+                        }
+                        return parts
+                      })()
+                    ) : (
+                      m.text
+                    )}
                   </div>
                 ))}
                 {awaitingReply && (
