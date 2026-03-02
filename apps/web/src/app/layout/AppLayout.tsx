@@ -55,6 +55,8 @@ function Header({
               src={logo}
               alt="PLD Logo"
               className="h-[70px] w-auto"
+              width={70}
+              height={70}
               fetchPriority="high"
               decoding="sync"
             />
