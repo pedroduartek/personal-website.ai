@@ -17,7 +17,7 @@ export function useCommandPalette() {
           // if opening via keyboard, record that the user used the shortcut
           if (!prev) {
             try {
-              sessionStorage.setItem('commandPaletteUsed', '1')
+              localStorage.setItem('commandPaletteUsed', '1')
             } catch (e) {
               // ignore
             }

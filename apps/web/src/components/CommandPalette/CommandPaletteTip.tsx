@@ -19,10 +19,10 @@ export default function CommandPaletteTip() {
     try {
       dismissed =
         typeof window !== 'undefined' &&
-        sessionStorage.getItem('commandPaletteTipDismissed') !== null
+        localStorage.getItem('commandPaletteTipDismissed') !== null
       used =
         typeof window !== 'undefined' &&
-        sessionStorage.getItem('commandPaletteUsed') !== null
+        localStorage.getItem('commandPaletteUsed') !== null
     } catch (e) {
       dismissed = false
       used = false
@@ -53,8 +53,8 @@ export default function CommandPaletteTip() {
       try {
         if (
           typeof window !== 'undefined' &&
-          (sessionStorage.getItem('commandPaletteTipDismissed') !== null ||
-            sessionStorage.getItem('commandPaletteUsed') !== null)
+          (localStorage.getItem('commandPaletteTipDismissed') !== null ||
+            localStorage.getItem('commandPaletteUsed') !== null)
         ) {
           clearShowTimer()
           return
@@ -141,7 +141,7 @@ export default function CommandPaletteTip() {
       // mark as seen for this session so it won't show again
       try {
         if (typeof window !== 'undefined')
-          sessionStorage.setItem('commandPaletteTipDismissed', '1')
+          localStorage.setItem('commandPaletteTipDismissed', '1')
       } catch (e) {
         // ignore
       }
@@ -187,7 +187,7 @@ export default function CommandPaletteTip() {
   function dismiss() {
     try {
       if (typeof window !== 'undefined')
-        sessionStorage.setItem('commandPaletteTipDismissed', '1')
+        localStorage.setItem('commandPaletteTipDismissed', '1')
     } catch (e) {
       // ignore
     }
