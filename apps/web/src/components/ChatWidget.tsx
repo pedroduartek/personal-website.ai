@@ -26,6 +26,7 @@ export default function ChatWidget() {
   const [placeholderWords, setPlaceholderWords] = useState(0)
   const placeholderIntervalRef = useRef<number | null>(null)
   const placeholderWidths = [40, 65, 35, 50, 60, 30, 45, 55, 38, 48, 62, 34]
+  const [showNote, setShowNote] = useState(true)
 
   async function send() {
     if (awaitingReply) return
@@ -221,13 +222,23 @@ export default function ChatWidget() {
               ✕
             </button>
           </div>
-          <div className="px-3 py-2 text-xs text-yellow-100 bg-yellow-700/10 border-t border-yellow-700/20">
-            <strong className="font-medium">Note: </strong>
-            This chat AI is a primitive proof-of-concept (POC). It is limited
-            and may be incorrect — do not trust it for important or sensitive
-            decisions. It was told to only reply using the content of this
-            website.
-          </div>
+          {showNote && (
+            <div className="relative px-3 pr-10 py-2 text-xs text-yellow-100 bg-yellow-700/10 border-t border-yellow-700/20">
+              <strong className="font-medium">Note: </strong>
+              This chat AI is a primitive proof-of-concept (POC). It is limited
+              and may be incorrect — do not trust it for important or sensitive
+              decisions. It was told to only reply using the content of this
+              website.
+              <button
+                type="button"
+                aria-label="Dismiss note"
+                onClick={() => setShowNote(false)}
+                className="absolute right-2 top-2 rounded p-1 text-yellow-200 hover:text-white"
+              >
+                ✕
+              </button>
+            </div>
+          )}
           <div className="relative flex h-72 flex-col gap-2 overflow-hidden p-3">
             <div
               ref={containerRef}
