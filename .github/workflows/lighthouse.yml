@@ -34,6 +34,7 @@ jobs:
         uses: treosh/lighthouse-ci-action@v11
         with:
           uploadArtifacts: true
+          artifactName: lighthouse-results-desktop
           temporaryPublicStorage: true
           configPath: './.lighthouserc.desktop.json'
 
@@ -64,5 +65,6 @@ jobs:
         uses: treosh/lighthouse-ci-action@v11
         with:
           uploadArtifacts: true
+          artifactName: lighthouse-results-mobile
           temporaryPublicStorage: true
           configPath: './.lighthouserc.mobile.json'
