@@ -2,9 +2,9 @@ import { useLayoutEffect, useMemo, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import PageSEO from '../../components/seo/PageSEO'
 import { experience } from '../../content/experience'
-import closerLogo from '../../images/closer_consulting.png'
-import enhesaLogo from '../../images/enhesa.png'
-import vortalLogo from '../../images/vortal.png'
+import closerLogo from '../../images/closer_consulting.webp'
+import enhesaLogo from '../../images/enhesa.webp'
+import vortalLogo from '../../images/vortal.webp'
 
 const companyLogos: Record<string, string> = {
   Enhesa: enhesaLogo,
@@ -194,6 +194,8 @@ export default function ExperiencePage() {
                         <img
                           src={companyLogos[company]}
                           alt={`${company} logo`}
+                          loading="lazy"
+                          decoding="async"
                           className="h-12 w-12 rounded object-contain"
                         />
                       )}

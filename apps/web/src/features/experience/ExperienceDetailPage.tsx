@@ -1,9 +1,9 @@
 import { Link, useParams } from 'react-router-dom'
 import PageSEO from '../../components/seo/PageSEO'
 import { experience } from '../../content/experience'
-import closerLogo from '../../images/closer_consulting.png'
-import enhesaLogo from '../../images/enhesa.png'
-import vortalLogo from '../../images/vortal.png'
+import closerLogo from '../../images/closer_consulting.webp'
+import enhesaLogo from '../../images/enhesa.webp'
+import vortalLogo from '../../images/vortal.webp'
 
 const companyLogos: Record<string, string> = {
   Enhesa: enhesaLogo,

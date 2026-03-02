@@ -4,7 +4,7 @@ import Lightbox from 'yet-another-react-lightbox'
 import Zoom from 'yet-another-react-lightbox/plugins/zoom'
 import 'yet-another-react-lightbox/styles.css'
 import PageSEO from '../../components/seo/PageSEO'
-import haScreenshot from '../../images/ha.png'
+import haScreenshot from '../../images/ha.webp'
 
 export default function HomeAssistantProjectPage() {
   const [lightboxOpen, setLightboxOpen] = useState(false)

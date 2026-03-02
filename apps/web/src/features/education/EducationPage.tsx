@@ -2,10 +2,10 @@ import { Link } from 'react-router-dom'
 import PageSEO from '../../components/seo/PageSEO'
 import { conferences } from '../../content/conferences'
 import { education } from '../../content/education'
-import azureDevSummitLogo from '../../images/azure_dev_summit.png'
-import formabaseLogo from '../../images/formabase.png'
-import polytechnicLogo from '../../images/polytechnic_setubal.png'
-import webSummitLogo from '../../images/web_summit.png'
+import azureDevSummitLogo from '../../images/azure_dev_summit.webp'
+import formabaseLogo from '../../images/formabase.webp'
+import polytechnicLogo from '../../images/polytechnic_setubal.webp'
+import webSummitLogo from '../../images/web_summit.webp'
 
 export default function EducationPage() {
   const institutionLogos: Record<string, string> = {

@@ -5,12 +5,12 @@ import 'yet-another-react-lightbox/styles.css'
 import StyledLink from '../../components/StyledLink'
 import PageSEO from '../../components/seo/PageSEO'
 import { conferences } from '../../content/conferences'
-import azureDevSummitLogo from '../../images/azure_dev_summit.png'
-import azureNickChapsas from '../../images/photo_nickchapsas_azuresummit.jpeg'
-import azureStage1 from '../../images/stage_azuresummit.jpeg'
-import azureStage2 from '../../images/stage_azuresummit_2.jpeg'
-import webSummitLogo from '../../images/web_summit.png'
-import webSummitGroup from '../../images/websummit_groupphoto.jpeg'
+import azureDevSummitLogo from '../../images/azure_dev_summit.webp'
+import azureNickChapsas from '../../images/photo_nickchapsas_azuresummit.webp'
+import azureStage1 from '../../images/stage_azuresummit.webp'
+import azureStage2 from '../../images/stage_azuresummit_2.webp'
+import webSummitLogo from '../../images/web_summit.webp'
+import webSummitGroup from '../../images/websummit_groupphoto.webp'
 
 const conferenceLogos: Record<string, string> = {
   'Azure Dev Summit': azureDevSummitLogo,
