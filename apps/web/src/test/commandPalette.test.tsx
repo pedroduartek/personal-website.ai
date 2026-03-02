@@ -20,10 +20,10 @@ function TestUseCommandPalette() {
 
 describe('useCommandPalette', () => {
   beforeEach(() => {
-    sessionStorage.clear()
+    localStorage.clear()
   })
 
-  it('records sessionStorage flag when opened via keyboard shortcut', () => {
+  it('records localStorage flag when opened via keyboard shortcut', () => {
     // ensure desktop breakpoint in test env
     // (the hook only activates for innerWidth >= 1536)
     // set before rendering so listener uses the right branch
@@ -32,7 +32,7 @@ describe('useCommandPalette', () => {
     // @ts-ignore
     window.innerWidth = 1600
     render(<TestUseCommandPalette />)
-    expect(sessionStorage.getItem('commandPaletteUsed')).toBeNull()
+    expect(localStorage.getItem('commandPaletteUsed')).toBeNull()
 
     // simulate Ctrl+K
     act(() => {
@@ -40,13 +40,13 @@ describe('useCommandPalette', () => {
       window.dispatchEvent(e)
     })
 
-    expect(sessionStorage.getItem('commandPaletteUsed')).toBe('1')
+    expect(localStorage.getItem('commandPaletteUsed')).toBe('1')
   })
 })
 
 describe('CommandPaletteTip', () => {
   beforeEach(() => {
-    sessionStorage.clear()
+    localStorage.clear()
     vi.useFakeTimers()
   })
 
@@ -55,7 +55,7 @@ describe('CommandPaletteTip', () => {
   })
 
   it('does not show if user already used command palette', () => {
-    sessionStorage.setItem('commandPaletteUsed', '1')
+    localStorage.setItem('commandPaletteUsed', '1')
     const { queryByText } = render(
       <div style={{ width: '2000px' }}>
         <CommandPaletteTip />

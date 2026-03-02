@@ -71,7 +71,7 @@ function Header({
               onClick={() => {
                 try {
                   if (typeof window !== 'undefined')
-                    sessionStorage.setItem('commandPaletteTipDismissed', '1')
+                    localStorage.setItem('commandPaletteTipDismissed', '1')
                 } catch (e) {
                   // ignore
                 }
