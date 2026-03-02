@@ -7,7 +7,8 @@ on:
     branches: [main]
 
 jobs:
-  lighthouse:
+  lighthouse-desktop:
+    name: Lighthouse (Desktop)
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -29,9 +30,39 @@ jobs:
       - name: Build project
         run: pnpm -r build
 
-      - name: Run Lighthouse CI
+      - name: Run Lighthouse CI (Desktop)
         uses: treosh/lighthouse-ci-action@v11
         with:
           uploadArtifacts: true
           temporaryPublicStorage: true
-          configPath: './.lighthouserc.json'
+          configPath: './.lighthouserc.desktop.json'
+
+  lighthouse-mobile:
+    name: Lighthouse (Mobile)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Build project
+        run: pnpm -r build
+
+      - name: Run Lighthouse CI (Mobile)
+        uses: treosh/lighthouse-ci-action@v11
+        with:
+          uploadArtifacts: true
+          temporaryPublicStorage: true
+          configPath: './.lighthouserc.mobile.json'
