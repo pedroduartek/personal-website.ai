@@ -299,11 +299,12 @@ export default function ChatWidget() {
               <div className="flex flex-col gap-2">
                 {messages.length === 0 && (
                   <div className="text-sm text-gray-400">
-                    Hey!👋
+                    Hey! 👋
                     <br />
                     <br />
-                    Ask me any questions about Pedro Duarte, if I can find that
-                    information in this website I'll tell you.
+                    I'm Pedro's AI assistant. Ask me anything about his
+                    experience, skills, projects, or background — I'll find the
+                    answer from this website for you.
                   </div>
                 )}
                 {messages.map((m) => (
