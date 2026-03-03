@@ -50,7 +50,6 @@ export default function AiChatApiProjectPage() {
           {[
             'C#',
             '.NET 10',
-            'ASP.NET Core',
             'Llama 3.2',
             'Ollama',
             'Docker',
