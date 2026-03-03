@@ -233,7 +233,8 @@ export default function ChatWidget() {
         type="button"
         aria-label={open ? 'Close chat' : 'Open chat'}
         onClick={() => setOpen((v) => !v)}
-        className="fixed right-6 bottom-6 z-50 flex h-14 w-14 items-center justify-center rounded-full bg-indigo-600 text-white shadow-lg hover:bg-indigo-500 focus:outline-none overflow-hidden"
+        className="fixed right-6 bottom-6 z-50 flex h-14 w-14 items-center justify-center rounded-full text-white shadow-lg focus:outline-none overflow-hidden"
+        style={{ backgroundColor: '#1D4ED8' }}
       >
         {open ? (
           // X icon
