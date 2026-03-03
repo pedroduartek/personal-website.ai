@@ -16,6 +16,23 @@ const scrollbarStyles = `
 .custom-scrollbar::-webkit-scrollbar-thumb:hover { background-color: rgba(99,102,241,0.52); }
 `
 
+// Drop-bounce entrance animation for the chat icon.
+// The button is position:fixed bottom:24px, so translateY(-Y) moves it UP.
+// We animate from far above the viewport down to 0 with bounces.
+const dropBounceKeyframes = `
+@keyframes dropBounce {
+  0%   { transform: translateY(calc(-100vh - 60px)); opacity: 0; }
+  8%   { opacity: 1; }
+  30%  { transform: translateY(0); }
+  45%  { transform: translateY(-40px); }
+  60%  { transform: translateY(0); }
+  72%  { transform: translateY(-14px); }
+  84%  { transform: translateY(0); }
+  92%  { transform: translateY(-4px); }
+  100% { transform: translateY(0); }
+}
+`
+
 type Message = { id: number; text: string; from: 'user' | 'bot' }
 
 // Resize constraints
@@ -29,6 +46,8 @@ const DEFAULT_HEIGHT = 340
 export default function ChatWidget() {
   const [open, setOpen] = useState(false)
   const [input, setInput] = useState('')
+  const [hasEntered, setHasEntered] = useState(false)
+  const [animationDone, setAnimationDone] = useState(false)
   const [messages, setMessages] = useState<Message[]>([])
   const containerRef = useRef<HTMLDivElement | null>(null)
   const inputRef = useRef<HTMLInputElement | null>(null)
@@ -280,16 +299,30 @@ export default function ChatWidget() {
     }
   }, [placeholderWords, awaitingReply])
 
+  // Trigger the entrance animation after a short delay on first mount
+  useEffect(() => {
+    const timer = setTimeout(() => setHasEntered(true), 500)
+    return () => clearTimeout(timer)
+  }, [])
+
   return (
     <>
-      <style>{typingKeyframes + scrollbarStyles}</style>
+      <style>{typingKeyframes + scrollbarStyles + dropBounceKeyframes}</style>
       {/* Floating Button */}
       <button
         type="button"
         aria-label={open ? 'Close chat' : 'Open chat'}
         onClick={() => setOpen((v) => !v)}
-        className="fixed right-6 bottom-6 z-50 flex h-14 w-14 items-center justify-center rounded-full text-white shadow-lg focus:outline-none overflow-hidden"
-        style={{ backgroundColor: '#1D4ED8' }}
+        onAnimationEnd={() => setAnimationDone(true)}
+        className={`fixed right-6 bottom-6 z-50 flex h-14 w-14 items-center justify-center rounded-full text-white shadow-lg focus:outline-none overflow-hidden ${
+          animationDone ? 'transition-all duration-200 hover:scale-110 hover:shadow-xl hover:shadow-indigo-500/30' : ''
+        }`}
+        style={{
+          backgroundColor: '#1D4ED8',
+          ...(hasEntered
+            ? { animation: 'dropBounce 2s cubic-bezier(0.22, 1, 0.36, 1) forwards' }
+            : { transform: 'translateY(calc(-100vh - 60px))', opacity: 0 }),
+        }}
       >
         {open ? (
           // X icon
