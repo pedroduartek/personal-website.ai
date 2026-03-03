@@ -10,9 +10,7 @@ const ExperienceDetail = lazy(
   () => import('../features/experience/ExperienceDetailPage'),
 )
 const Projects = lazy(() => import('../features/projects/ProjectsPage'))
-const ProjectDetail = lazy(
-  () => import('../features/projects/ProjectDetailPage'),
-)
+// ProjectDetail removed — dedicated pages are used instead
 const HomeAssistantProject = lazy(
   () => import('../features/projects/HomeAssistantProjectPage'),
 )
@@ -48,7 +46,6 @@ export const router = createBrowserRouter([
       },
       { path: 'projects/home-assistant', element: <HomeAssistantProject /> },
       { path: 'projects/ai-chat-api', element: <AiChatApiProject /> },
-      { path: 'projects/:slug', element: <ProjectDetail /> },
       { path: 'education', element: <Education /> },
       { path: 'conferences', element: <Conferences /> },
       { path: 'skills', element: <Skills /> },

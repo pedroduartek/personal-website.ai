@@ -22,6 +22,9 @@ function getProjects(): Project[] {
         'Vitest',
         'AI-Assisted',
       ],
+      links: {
+        github: 'https://github.com/pedroduartek/personal-website.ai',
+      },
       featured: true,
       startDate: '2026-02',
     },
@@ -59,6 +62,7 @@ function getProjects(): Project[] {
         '.NET 10',
         'Llama 3.2',
         'Ollama',
+        'Grafana',
         'Docker',
         'Caddy',
         'Polly',
