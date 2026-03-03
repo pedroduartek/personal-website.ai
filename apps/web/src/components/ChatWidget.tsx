@@ -253,7 +253,11 @@ export default function ChatWidget() {
             />
           </svg>
         ) : (
-          <img src={ollamaIcon} alt="Chat bot" className="h-8 w-8 rounded-full" />
+          <img
+            src={ollamaIcon}
+            alt="Chat bot"
+            className="h-8 w-8 rounded-full"
+          />
         )}
       </button>
 
@@ -317,7 +321,10 @@ export default function ChatWidget() {
                           const rawText: string = m.text
 
                           // Helper: parse inline URLs in a text segment
-                          const parseUrls = (segment: string, keyPrefix: string): React.ReactNode[] => {
+                          const parseUrls = (
+                            segment: string,
+                            keyPrefix: string,
+                          ): React.ReactNode[] => {
                             const urlRegex = /(https?:\/\/[^\s]+)|\/[^\s]+/g
                             const nodes: React.ReactNode[] = []
                             let last = 0
@@ -397,7 +404,10 @@ export default function ChatWidget() {
                           const classified: LineInfo[] = lines.map((line) => {
                             const numberedMatch = line.match(/^\s*(\d+\.\s+.*)/)
                             if (numberedMatch) {
-                              return { type: 'numbered', label: numberedMatch[1].trim() }
+                              return {
+                                type: 'numbered',
+                                label: numberedMatch[1].trim(),
+                              }
                             }
                             const bulletMatch = line.match(/^\s*[-*]\s+(.*)/)
                             if (bulletMatch) {
@@ -410,12 +420,20 @@ export default function ChatWidget() {
                           type Group =
                             | { type: 'text'; lines: string[] }
                             | { type: 'bullets'; lines: string[] }
-                            | { type: 'section'; label: string; items: string[] }
+                            | {
+                                type: 'section'
+                                label: string
+                                items: string[]
+                              }
                           const groups: Group[] = []
 
                           for (const cl of classified) {
                             if (cl.type === 'numbered') {
-                              groups.push({ type: 'section', label: cl.label, items: [] })
+                              groups.push({
+                                type: 'section',
+                                label: cl.label,
+                                items: [],
+                              })
                             } else if (cl.type === 'bullet') {
                               // attach to preceding section if exists, otherwise standalone bullet group
                               const last = groups[groups.length - 1]
@@ -424,7 +442,10 @@ export default function ChatWidget() {
                               } else if (last && last.type === 'bullets') {
                                 last.lines.push(cl.content)
                               } else {
-                                groups.push({ type: 'bullets', lines: [cl.content] })
+                                groups.push({
+                                  type: 'bullets',
+                                  lines: [cl.content],
+                                })
                               }
                             } else {
                               // plain text
@@ -432,7 +453,10 @@ export default function ChatWidget() {
                               if (last && last.type === 'text') {
                                 last.lines.push(cl.content)
                               } else {
-                                groups.push({ type: 'text', lines: [cl.content] })
+                                groups.push({
+                                  type: 'text',
+                                  lines: [cl.content],
+                                })
                               }
                             }
                           }
@@ -441,12 +465,17 @@ export default function ChatWidget() {
                             if (group.type === 'section') {
                               return (
                                 <div key={`${m.id}-g${gi}`} className="my-1">
-                                  <strong className="text-gray-100">{parseUrls(group.label, `${m.id}-g${gi}-h`)}</strong>
+                                  <strong className="text-gray-100">
+                                    {parseUrls(group.label, `${m.id}-g${gi}-h`)}
+                                  </strong>
                                   {group.items.length > 0 && (
                                     <ul className="list-disc list-inside space-y-0.5 mt-0.5 ml-2">
                                       {group.items.map((item, li) => (
                                         <li key={`${m.id}-g${gi}-li${li}`}>
-                                          {parseUrls(item, `${m.id}-g${gi}-li${li}`)}
+                                          {parseUrls(
+                                            item,
+                                            `${m.id}-g${gi}-li${li}`,
+                                          )}
                                         </li>
                                       ))}
                                     </ul>
@@ -456,10 +485,16 @@ export default function ChatWidget() {
                             }
                             if (group.type === 'bullets') {
                               return (
-                                <ul key={`${m.id}-g${gi}`} className="list-disc list-inside space-y-0.5 my-1">
+                                <ul
+                                  key={`${m.id}-g${gi}`}
+                                  className="list-disc list-inside space-y-0.5 my-1"
+                                >
                                   {group.lines.map((line, li) => (
                                     <li key={`${m.id}-g${gi}-li${li}`}>
-                                      {parseUrls(line, `${m.id}-g${gi}-li${li}`)}
+                                      {parseUrls(
+                                        line,
+                                        `${m.id}-g${gi}-li${li}`,
+                                      )}
                                     </li>
                                   ))}
                                 </ul>
@@ -532,7 +567,9 @@ export default function ChatWidget() {
                   className={`w-full rounded border border-gray-700 bg-gray-800 px-3 py-2 text-sm text-gray-200 placeholder-gray-500 focus:outline-none ${awaitingReply ? 'opacity-70' : ''}`}
                 />
                 {input.length > 400 && (
-                  <span className={`absolute right-2 -top-5 text-xs ${input.length >= 500 ? 'text-red-400' : 'text-gray-500'}`}>
+                  <span
+                    className={`absolute right-2 -top-5 text-xs ${input.length >= 500 ? 'text-red-400' : 'text-gray-500'}`}
+                  >
                     {input.length}/500
                   </span>
                 )}
