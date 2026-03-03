@@ -79,7 +79,7 @@ export default function ChatWidget() {
           ...s,
           {
             id: Date.now() + 1,
-            text: 'Sorry — the chat service is unavailable right now. Please try again later.',
+            text: 'Sorry, the chat service is unavailable right now. Please try again later.',
             from: 'bot',
           },
         ])
@@ -155,7 +155,7 @@ export default function ChatWidget() {
         ...s,
         {
           id: Date.now() + 1,
-          text: 'Sorry — the chat service is unavailable right now. Please try again later.',
+          text: 'Sorry, the chat service is unavailable right now. Please try again later.',
           from: 'bot',
         },
       ])
@@ -279,7 +279,7 @@ export default function ChatWidget() {
           {showNote && (
             <div className="relative px-3 pr-10 py-2 text-xs text-yellow-100 bg-yellow-700/10 border-t border-yellow-700/20">
               <strong className="font-medium">Note: </strong>
-              This is a basic POC — responses may be inaccurate. It only uses
+              This is a basic POC. Responses may be inaccurate. It only uses
               content from this website to reply to your questions.
               <button
                 type="button"
@@ -303,7 +303,7 @@ export default function ChatWidget() {
                     <br />
                     <br />
                     I'm Pedro's AI assistant. Ask me anything about his
-                    experience, skills, projects, or background — I'll find the
+                    experience, skills, projects, or background. I'll find the
                     answer from this website for you.
                   </div>
                 )}
