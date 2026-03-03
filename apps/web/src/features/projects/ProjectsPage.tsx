@@ -20,33 +20,54 @@ export default function ProjectsPage() {
         <h1 className="mb-8 text-3xl font-bold text-white md:text-4xl">
           Projects
         </h1>
-        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+        <div className="space-y-6">
           {projects.map((project) => (
             <Link
               key={project.slug}
               to={`/projects/${project.slug}`}
-              className="group rounded-lg border border-gray-700 bg-card p-6 transition-all duration-300 hover:scale-[1.02] hover:bg-gray-800 hover:shadow-lg flex flex-col"
+              className="group block rounded-lg border border-gray-700 bg-card p-6 transition-all duration-300 hover:scale-[1.02] hover:bg-gray-800 hover:shadow-lg"
             >
-              <h2 className="mb-2 text-xl font-semibold text-white">
-                {project.title}
-              </h2>
-              <p className="mb-4 text-gray-400">{project.description}</p>
-              <div className="flex flex-wrap gap-2 mt-auto">
-                {project.technologies.slice(0, 3).map((tech) => {
-                  const displayTech =
-                    tech === 'SkyConnect Coordinator' ? 'IoT Automation' : tech
-                  return (
-                    <span
-                      key={tech}
-                      className="inline-flex items-center gap-2 rounded bg-gray-800 px-2 py-1 text-xs text-gray-300"
-                    >
-                      <span className="flex-shrink-0">
-                        <TechIcon tech={displayTech} className="w-6 h-6" />
+              <div className="flex-1">
+                <h2 className="mb-2 text-xl font-bold text-white md:text-2xl">
+                  {project.title}
+                </h2>
+                <p className="mb-3 text-gray-400">{project.description}</p>
+                <div className="mb-4 flex items-center gap-4 text-sm text-gray-400">
+                  <time>
+                    {new Date(project.startDate).toLocaleDateString('en-US', {
+                      year: 'numeric',
+                      month: 'short',
+                    })}
+                    {project.endDate
+                      ? ` - ${new Date(project.endDate).toLocaleDateString('en-US', { year: 'numeric', month: 'short' })}`
+                      : ' - Present'}
+                  </time>
+                  {project.links?.github && (
+                    <>
+                      <span>•</span>
+                      <span>Open Source</span>
+                    </>
+                  )}
+                </div>
+                <div className="flex flex-wrap gap-2">
+                  {project.technologies.slice(0, 3).map((tech) => {
+                    const displayTech =
+                      tech === 'SkyConnect Coordinator'
+                        ? 'IoT Automation'
+                        : tech
+                    return (
+                      <span
+                        key={tech}
+                        className="inline-flex items-center gap-2 rounded bg-gray-800 px-2 py-1 text-xs text-gray-300"
+                      >
+                        <span className="flex-shrink-0">
+                          <TechIcon tech={displayTech} className="w-5 h-5" />
+                        </span>
+                        <span className="leading-none">{displayTech}</span>
                       </span>
-                      <span className="leading-none">{displayTech}</span>
-                    </span>
-                  )
-                })}
+                    )
+                  })}
+                </div>
               </div>
             </Link>
           ))}

@@ -6,8 +6,8 @@ export default function AiChatApiProjectPage() {
   return (
     <>
       <PageSEO
-        title="AI Chat API (this repo) — POC (site-internal)"
-        description="AI Chat API — proof-of-concept C#/.NET backend powering a local LLaMA-based model for the website UI only"
+        title="AI Chat API - Self-hosted Conversational AI"
+        description="A self-hosted conversational AI API built with C#/.NET 10 and ASP.NET Core that powers the chat assistant on pedroduartek.com using Llama 3 via Ollama."
         image="/src/images/pld_logo_header.png"
         url={
           typeof window !== 'undefined'
@@ -29,8 +29,8 @@ export default function AiChatApiProjectPage() {
         </h1>
 
         <p className="mb-4 text-lg text-gray-400 md:text-xl">
-          A lightweight C#/.NET 10 API for conversational AI integrations •
-          February 2026
+          A self-hosted conversational AI API built with C#/.NET 10 and ASP.NET
+          Core that powers the chat assistant on pedroduartek.com. February 2026
         </p>
 
         <div className="mb-8">
@@ -47,7 +47,19 @@ export default function AiChatApiProjectPage() {
         </div>
 
         <div className="mb-8 flex flex-wrap gap-2">
-          {['C#', '.NET 10', 'Llama 3', 'Docker', 'REST API'].map((tech) => (
+          {[
+            'C#',
+            '.NET 10',
+            'ASP.NET Core',
+            'Llama 3.2',
+            'Ollama',
+            'Docker',
+            'Caddy',
+            'Polly',
+            'Serilog',
+            'xUnit',
+            'Swagger',
+          ].map((tech) => (
             <span
               key={tech}
               className="rounded-full bg-blue-100 px-3 py-1 text-sm text-blue-800 dark:bg-blue-900 dark:text-blue-200"
@@ -58,215 +70,140 @@ export default function AiChatApiProjectPage() {
         </div>
 
         <div className="prose prose-lg max-w-none text-gray-300">
+          {/* Motivation */}
           <section className="mb-12">
-            <h2 className="mb-4 text-2xl font-semibold text-white">Overview</h2>
+            <h2 className="mb-4 text-2xl font-semibold text-white">
+              Motivation
+            </h2>
             <p className="mb-4">
-              This repository provides a focused C#/.NET proof-of-concept
-              backend that powers conversational features by running a
-              LLaMA-family model locally. It keeps the HTTP surface small and
-              the internals testable so the website UI can call a single{' '}
-              <span className="inline-block rounded bg-gray-800 px-1.5 py-0.5 text-sm font-mono text-gray-200 border border-gray-700">
-                POST /api/chat
-              </span>{' '}
-              endpoint and receive model replies.
+              Rather than relying on third-party AI services (and their costs,
+              rate limits, and data-privacy trade-offs), I wanted full ownership
+              of the inference pipeline. The goal was to ship a production-grade
+              API that runs entirely on a single VPS, model included, while
+              following the same engineering standards I apply to professional
+              backend systems.
+            </p>
+          </section>
+
+          {/* What It Does */}
+          <section className="mb-12">
+            <h2 className="mb-4 text-2xl font-semibold text-white">
+              What It Does
+            </h2>
+            <p className="mb-4">
+              Every response is grounded in a local knowledge base that contains
+              structured facts about my career, skills, projects, and contact
+              info. If the model can't answer from the knowledge base, it says
+              so explicitly instead of guessing.
             </p>
 
-            <div className="mb-6 grid gap-6 md:grid-cols-2">
-              <div className="rounded-lg border border-gray-700 bg-card p-6">
-                <h3 className="mb-3 text-xl font-semibold text-white">
-                  What you'll find
-                </h3>
-                <ul className="space-y-2 text-gray-300">
-                  <li>
-                    ASP.NET Core controllers for chat and health endpoints
-                  </li>
-                  <li>
-                    Service abstraction for model providers:{' '}
-                    <span className="inline-block rounded bg-gray-800 px-1.5 py-0.5 text-sm font-mono text-gray-200 border border-gray-700">
-                      IChatService
-                    </span>
-                  </li>
-                  <li>Unit tests covering controller and service behaviors</li>
-                  <li>Dockerfile and compose files for local development</li>
-                </ul>
-              </div>
-
-              <div className="rounded-lg border border-gray-700 bg-card p-6">
-                <h3 className="mb-3 text-xl font-semibold text-white">
-                  Design goals
-                </h3>
-                <ul className="space-y-2 text-gray-300">
-                  <li>Keep the HTTP API small and well-documented</li>
-                  <li>
-                    Make the chat service pluggable (swap model providers)
-                  </li>
-                  <li>
-                    Fast local iteration with Docker and sensible defaults
-                  </li>
-                  <li>Deliver reliable behavior with unit tests</li>
-                </ul>
-              </div>
-            </div>
-          </section>
-
-          <section className="mb-12">
-            <h2 className="mb-4 text-2xl font-semibold text-white">
-              LLaMA Integration
-            </h2>
-            <div className="rounded-lg border border-gray-700 bg-card p-6">
-              <p className="mb-4 text-gray-300">
-                This API is designed to run a LLaMA-family model locally (eg.
-                via llama.cpp / ggml or a local model server). The service calls
-                the local model process over a loopback/internal endpoint,
-                keeping public exposure limited to the API layer.
-              </p>
-            </div>
-          </section>
-
-          <section className="mb-12">
-            <h2 className="mb-4 text-2xl font-semibold text-white">
-              Technical Overview
-            </h2>
-            <div className="rounded-lg border border-gray-700 bg-card p-6">
-              <p className="mb-3 text-gray-300">
-                The API acts as a thin, HTTP-based façade in front of a local
-                model runtime. It accepts client messages, performs lightweight
-                request validation and authorization, and forwards prompts to a
-                colocated LLM process or model-serving endpoint. Responses are
-                normalized and returned to clients over a single, consistent
-                chat endpoint.
-              </p>
-
-              <h3 className="mb-2 text-lg font-semibold text-white">
-                Runtime & communication
-              </h3>
-              <ul className="mb-3 space-y-2 text-gray-300">
-                <li>
-                  Run a local model process (eg. an optimized LLaMA runtime) on
-                  the same host or private network for low latency.
-                </li>
-                <li>
-                  Communicate via an internal HTTP/gRPC endpoint or an IPC
-                  mechanism; keep model ports bound to localhost or private
-                  interfaces only.
-                </li>
-                <li>
-                  Keep the public API surface minimal—primarily the website UI
-                  should call the chat endpoint.
-                </li>
-              </ul>
-
-              <h3 className="mb-2 text-lg font-semibold text-white">
-                Performance & resource planning
-              </h3>
-              <ul className="mb-3 space-y-2 text-gray-300">
-                <li>
-                  Model memory and CPU requirements dominate capacity planning;
-                  size hosts by the largest model you intend to load.
-                </li>
-                <li>
-                  Use lightweight batching at the API layer to aggregate short
-                  requests into fewer model calls when latency/throughput
-                  trade-offs allow.
-                </li>
-                <li>
-                  Consider response streaming for perceived latency improvements
-                  and backpressure control for heavy clients.
-                </li>
-              </ul>
-
-              <h3 className="mb-2 text-lg font-semibold text-white">
-                Reliability & scaling
-              </h3>
-              <ul className="space-y-2 text-gray-300">
-                <li>
-                  Isolate model-serving and API processes so the API can return
-                  graceful failures when the model is unavailable.
-                </li>
-                <li>
-                  For scale, separate inference nodes from the API and add a
-                  queuing/batching tier and rate limiting at the API edge.
-                </li>
-                <li>
-                  Use restart policies and health checks to ensure the model
-                  process is restarted or drained safely on failure.
-                </li>
-              </ul>
-            </div>
-          </section>
-
-          <section className="mb-12">
-            <h2 className="mb-4 text-2xl font-semibold text-white">
-              Key Endpoints
-            </h2>
             <div className="space-y-3">
               <div className="rounded-lg border border-gray-700 bg-card p-4">
                 <p>
-                  <strong className="text-white">POST /api/chat:</strong> Send a
-                  chat request with messages and receive a model-generated
-                  reply.
+                  <span className="inline-block rounded bg-gray-800 px-1.5 py-0.5 text-sm font-mono text-gray-200 border border-gray-700">
+                    POST /chat
+                  </span>{' '}
+                  Accepts a user message, injects knowledge-base context into
+                  the prompt, calls Llama 3 via Ollama, and returns a JSON
+                  answer.
                 </p>
               </div>
 
               <div className="rounded-lg border border-gray-700 bg-card p-4">
                 <p>
-                  <strong className="text-white">GET /health:</strong> Basic
-                  health check used for readiness and liveness probes.
+                  <span className="inline-block rounded bg-gray-800 px-1.5 py-0.5 text-sm font-mono text-gray-200 border border-gray-700">
+                    POST /chat/stream
+                  </span>{' '}
+                  Same flow but streams tokens back over Server-Sent Events for
+                  a real-time typing experience.
+                </p>
+              </div>
+
+              <div className="rounded-lg border border-gray-700 bg-card p-4">
+                <p>
+                  <span className="inline-block rounded bg-gray-800 px-1.5 py-0.5 text-sm font-mono text-gray-200 border border-gray-700">
+                    GET /health
+                  </span>{' '}
+                  Readiness probe for the container orchestration layer.
                 </p>
               </div>
             </div>
           </section>
 
+          {/* Architecture Highlights */}
           <section className="mb-12">
             <h2 className="mb-4 text-2xl font-semibold text-white">
-              Development & Integration Notes
+              Architecture Highlights
             </h2>
-            <div className="rounded-lg border border-gray-700 bg-card p-6">
-              <ul className="space-y-2 text-gray-300">
-                <li>
-                  Keep business logic small and testable; unit tests should
-                  cover request/response behavior and model integration
-                  boundaries.
-                </li>
-                <li>
-                  Use containerization for reproducible local environments and
-                  to mirror production runtime characteristics when possible.
-                </li>
-                <li>
-                  Abstract the model provider behind a service interface so
-                  different runtimes (local, remote, GPU-backed) are
-                  interchangeable at runtime.
-                </li>
-                <li>
-                  Integrate health checks, readiness probes, and lightweight
-                  metrics (latency, request counts, model load) for
-                  observability and autoscaling decisions.
-                </li>
-                <li>
-                  The website integrates with the API via the chat endpoint; the
-                  frontend should treat the API as an untrusted intermediary and
-                  respect rate limits and retries.
-                </li>
-              </ul>
+            <div className="grid gap-4 md:grid-cols-2">
+              <div className="rounded-lg border border-gray-700 bg-card p-5">
+                <h3 className="mb-2 text-lg font-semibold text-white">
+                  Clean layered design
+                </h3>
+                <p className="text-gray-300 text-sm">
+                  Controllers, Services, and Infrastructure layers with
+                  dependency injection and interface-defined boundaries for easy
+                  testing and extensibility.
+                </p>
+              </div>
+
+              <div className="rounded-lg border border-gray-700 bg-card p-5">
+                <h3 className="mb-2 text-lg font-semibold text-white">
+                  Knowledge-base augmentation
+                </h3>
+                <p className="text-gray-300 text-sm">
+                  The system prompt is dynamically composed at request time by
+                  appending KB content, so the model always has up-to-date
+                  context without fine-tuning.
+                </p>
+              </div>
+
+              <div className="rounded-lg border border-gray-700 bg-card p-5">
+                <h3 className="mb-2 text-lg font-semibold text-white">
+                  Streaming support
+                </h3>
+                <p className="text-gray-300 text-sm">
+                  The streaming endpoint re-emits Ollama tokens as SSE events,
+                  keeping memory usage low and time-to-first-token fast.
+                </p>
+              </div>
+
+              <div className="rounded-lg border border-gray-700 bg-card p-5">
+                <h3 className="mb-2 text-lg font-semibold text-white">
+                  Resilience
+                </h3>
+                <p className="text-gray-300 text-sm">
+                  IP-based rate limiting, exponential-backoff retries via Polly,
+                  and structured logging with Serilog for observability.
+                </p>
+              </div>
             </div>
           </section>
 
+          {/* Infrastructure */}
           <section className="mb-12">
             <h2 className="mb-4 text-2xl font-semibold text-white">
-              Next Steps
+              Infrastructure
             </h2>
+            <p className="mb-4">
+              Ships with Docker Compose manifests for both development (hot
+              reload) and production (three-service stack: API, Ollama, Caddy on
+              a single VPS with automatic TLS). Ollama runs on an internal
+              network with no public port, and model weights are persisted via a
+              Docker volume.
+            </p>
+          </section>
+
+          {/* Testing */}
+          <section className="mb-12">
+            <h2 className="mb-4 text-2xl font-semibold text-white">Testing</h2>
             <div className="rounded-lg border border-gray-700 bg-card p-6">
-              <ul className="space-y-2">
-                <li>Add OpenAPI/Swagger documentation for the endpoints</li>
-                <li>
-                  Integrate authentication and request quotas if exposing
-                  publicly
-                </li>
-                <li>
-                  Add optional streaming responses for lower-latency clients
-                </li>
-                <li>Improve CI to run tests and build Docker images on push</li>
-              </ul>
+              <p className="text-gray-300">
+                Unit tests cover the service layer, response parser, and
+                controller using in-memory fakes. No running model or HTTP
+                server is required, keeping the test suite fast and
+                deterministic.
+              </p>
             </div>
           </section>
         </div>
