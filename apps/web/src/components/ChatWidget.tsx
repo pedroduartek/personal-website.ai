@@ -233,7 +233,7 @@ export default function ChatWidget() {
         type="button"
         aria-label={open ? 'Close chat' : 'Open chat'}
         onClick={() => setOpen((v) => !v)}
-        className="fixed right-6 bottom-6 z-50 flex h-14 w-14 items-center justify-center rounded-full bg-indigo-600 p-2 text-white shadow-lg hover:bg-indigo-500 focus:outline-none"
+        className="fixed right-6 bottom-6 z-50 flex h-14 w-14 items-center justify-center rounded-full bg-indigo-600 text-white shadow-lg hover:bg-indigo-500 focus:outline-none overflow-hidden"
       >
         {open ? (
           // X icon
@@ -256,7 +256,7 @@ export default function ChatWidget() {
           <img
             src={ollamaIcon}
             alt="Chat bot"
-            className="h-8 w-8 rounded-full"
+            className="h-full w-full object-cover rounded-full"
           />
         )}
       </button>
