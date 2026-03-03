@@ -581,7 +581,8 @@ export default function ChatWidget() {
                   if (!awaitingReply) send()
                 }}
                 disabled={awaitingReply}
-                className={`rounded px-3 py-2 text-sm font-medium text-white ${awaitingReply ? 'bg-indigo-500 opacity-70 cursor-not-allowed' : 'bg-indigo-600 hover:bg-indigo-500'}`}
+                className={`rounded px-3 py-2 text-sm font-medium text-white ${awaitingReply ? 'opacity-70 cursor-not-allowed' : 'hover:brightness-110'}`}
+                style={{ backgroundColor: '#1D4ED8' }}
               >
                 {awaitingReply ? (
                   <svg
