@@ -141,14 +141,14 @@ function Header({
 
             {/* Desktop navigation */}
             <div className="hidden 2xl:flex gap-3">
-              <NavLink to="/about">About</NavLink>
+              <NavLink to="/about">About Me</NavLink>
               <NavLink to="/experience">Experience</NavLink>
+              <NavLink to="/projects">Projects</NavLink>
               <NavLink to="/education">Education</NavLink>
               <NavLink to="/conferences">Conferences</NavLink>
               <NavLink to="/skills">Skills</NavLink>
-              <NavLink to="/projects">Projects</NavLink>
               <NavLink to="/cv">Download CV</NavLink>
-              <NavLink to="/contact">Contact</NavLink>
+              <NavLink to="/contact">Contacts</NavLink>
             </div>
           </div>
         </div>
@@ -157,25 +157,28 @@ function Header({
         {isMenuOpen && (
           <div className="2xl:hidden mt-4 flex flex-col gap-2">
             <NavLink to="/about" onClick={() => setIsMenuOpen(false)}>
-              About
+              About Me
             </NavLink>
             <NavLink to="/experience" onClick={() => setIsMenuOpen(false)}>
               Professional Experience
             </NavLink>
+            <NavLink to="/projects" onClick={() => setIsMenuOpen(false)}>
+              Personal Projects
+            </NavLink>
             <NavLink to="/education" onClick={() => setIsMenuOpen(false)}>
               Education
             </NavLink>
+            <NavLink to="/conferences" onClick={() => setIsMenuOpen(false)}>
+              Conferences
+            </NavLink>
             <NavLink to="/skills" onClick={() => setIsMenuOpen(false)}>
               Skills
-            </NavLink>
-            <NavLink to="/projects" onClick={() => setIsMenuOpen(false)}>
-              Personal Projects
             </NavLink>
             <NavLink to="/cv" onClick={() => setIsMenuOpen(false)}>
               Download CV
             </NavLink>
             <NavLink to="/contact" onClick={() => setIsMenuOpen(false)}>
-              Contact
+              Contacts
             </NavLink>
           </div>
         )}
