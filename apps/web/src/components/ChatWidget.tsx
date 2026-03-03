@@ -334,67 +334,119 @@ export default function ChatWidget() {
                     {m.from === 'bot'
                       ? (() => {
                           const text: string = m.text
-                          const urlRegex = /(https?:\/\/[^\s]+)|\/[^\s]+/g
-                          const parts: React.ReactNode[] = []
-                          let lastIndex = 0
-                          while (true) {
-                            const match = urlRegex.exec(text)
-                            if (!match) break
-                            const idx = match.index
-                            if (idx > lastIndex) {
-                              parts.push(
-                                <span key={`${m.id}-part-${parts.length}`}>
-                                  {text.slice(lastIndex, idx)}
+
+                          // Helper: parse inline URLs in a text segment
+                          const parseUrls = (segment: string, keyPrefix: string): React.ReactNode[] => {
+                            const urlRegex = /(https?:\/\/[^\s]+)|\/[^\s]+/g
+                            const nodes: React.ReactNode[] = []
+                            let last = 0
+                            while (true) {
+                              const match = urlRegex.exec(segment)
+                              if (!match) break
+                              const idx = match.index
+                              if (idx > last) {
+                                nodes.push(
+                                  <span key={`${keyPrefix}-${nodes.length}`}>
+                                    {segment.slice(last, idx)}
+                                  </span>,
+                                )
+                              }
+                              const matched = match[0]
+                              let pathname = ''
+                              if (matched.startsWith('/')) {
+                                pathname = matched.split(/[?#]/)[0]
+                              } else {
+                                try {
+                                  const u = new URL(matched)
+                                  pathname = u.pathname
+                                } catch {
+                                  pathname = ''
+                                }
+                              }
+                              if (pathname && isInternalRoute(pathname)) {
+                                nodes.push(
+                                  <Link
+                                    key={`${keyPrefix}-${nodes.length}`}
+                                    to={pathname}
+                                    className="text-indigo-300 underline"
+                                    onClick={() => setOpen(false)}
+                                  >
+                                    {matched}
+                                  </Link>,
+                                )
+                              } else {
+                                nodes.push(
+                                  <a
+                                    key={`${keyPrefix}-${nodes.length}`}
+                                    href={matched}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="text-indigo-300 underline"
+                                  >
+                                    {matched}
+                                  </a>,
+                                )
+                              }
+                              last = idx + matched.length
+                            }
+                            if (last < segment.length) {
+                              nodes.push(
+                                <span key={`${keyPrefix}-${nodes.length}`}>
+                                  {segment.slice(last)}
                                 </span>,
                               )
                             }
-                            const matched = match[0]
-                            // determine pathname for internal check
-                            let pathname = ''
-                            if (matched.startsWith('/')) {
-                              pathname = matched.split(/[?#]/)[0]
+                            return nodes
+                          }
+
+                          // Split into lines and detect bullet items
+                          const lines = text.split('\n')
+                          const bulletLines: { isBullet: boolean; content: string }[] = lines.map((line) => {
+                            const bulletMatch = line.match(/^\s*\*\s+(.*)/)
+                            if (bulletMatch) {
+                              return { isBullet: true, content: bulletMatch[1] }
+                            }
+                            return { isBullet: false, content: line }
+                          })
+
+                          // Group consecutive bullet lines together
+                          const groups: { type: 'text' | 'bullets'; lines: string[] }[] = []
+                          for (const bl of bulletLines) {
+                            if (bl.isBullet) {
+                              if (groups.length > 0 && groups[groups.length - 1].type === 'bullets') {
+                                groups[groups.length - 1].lines.push(bl.content)
+                              } else {
+                                groups.push({ type: 'bullets', lines: [bl.content] })
+                              }
                             } else {
-                              try {
-                                const u = new URL(matched)
-                                pathname = u.pathname
-                              } catch {
-                                pathname = ''
+                              if (groups.length > 0 && groups[groups.length - 1].type === 'text') {
+                                groups[groups.length - 1].lines.push(bl.content)
+                              } else {
+                                groups.push({ type: 'text', lines: [bl.content] })
                               }
                             }
-                            if (pathname && isInternalRoute(pathname)) {
-                              parts.push(
-                                <Link
-                                  key={`${m.id}-part-${parts.length}`}
-                                  to={pathname}
-                                  className="text-indigo-300 underline"
-                                  onClick={() => setOpen(false)}
-                                >
-                                  {matched}
-                                </Link>,
-                              )
-                            } else {
-                              parts.push(
-                                <a
-                                  key={`${m.id}-part-${parts.length}`}
-                                  href={matched}
-                                  target="_blank"
-                                  rel="noopener noreferrer"
-                                  className="text-indigo-300 underline"
-                                >
-                                  {matched}
-                                </a>,
+                          }
+
+                          return groups.map((group, gi) => {
+                            if (group.type === 'bullets') {
+                              return (
+                                <ul key={`${m.id}-g${gi}`} className="list-disc list-inside space-y-1 my-1">
+                                  {group.lines.map((line, li) => (
+                                    <li key={`${m.id}-g${gi}-li${li}`}>
+                                      {parseUrls(line, `${m.id}-g${gi}-li${li}`)}
+                                    </li>
+                                  ))}
+                                </ul>
                               )
                             }
-                            lastIndex = idx + matched.length
-                          }
-                          if (lastIndex < text.length) {
-                            parts.push(
-                              <span key={`${m.id}-part-${parts.length}`}>
-                                {text.slice(lastIndex)}
-                              </span>,
+                            // Regular text block
+                            const joined = group.lines.join('\n')
+                            return (
+                              <span key={`${m.id}-g${gi}`}>
+                                {parseUrls(joined, `${m.id}-g${gi}`)}
+                              </span>
                             )
-                          }
-                          return parts
+                          })
                         })()
                       : m.text}
                   </div>
