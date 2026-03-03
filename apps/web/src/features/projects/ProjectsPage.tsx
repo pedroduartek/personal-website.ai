@@ -63,7 +63,7 @@ export default function ProjectsPage() {
                         <span className="flex-shrink-0">
                           <TechIcon tech={displayTech} className="w-5 h-5" />
                         </span>
-                        <span className="leading-none">{displayTech}</span>
+                        <span className="leading-normal">{displayTech}</span>
                       </span>
                     )
                   })}
