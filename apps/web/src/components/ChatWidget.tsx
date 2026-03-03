@@ -24,9 +24,11 @@ export default function ChatWidget() {
   const containerRef = useRef<HTMLDivElement | null>(null)
   const inputRef = useRef<HTMLInputElement | null>(null)
   const [awaitingReply, setAwaitingReply] = useState(false)
+  const [streamingText, setStreamingText] = useState('')
   const [placeholderWords, setPlaceholderWords] = useState(0)
   const placeholderIntervalRef = useRef<number | null>(null)
   const placeholderWidths = [40, 65, 35, 50, 60, 30, 45, 55, 38, 48, 62, 34]
+  const abortControllerRef = useRef<AbortController | null>(null)
   const [showNote, setShowNote] = useState(true)
 
   const internalStaticRoutes = new Set([
@@ -54,6 +56,26 @@ export default function ChatWidget() {
     return false
   }
 
+  function validateReply(text: string): boolean {
+    const urlRegex = /(https?:\/\/[^\s]+)|\/[^\s]+/g
+    const matches = Array.from(text.matchAll(urlRegex)).map((m) => m[0])
+    if (matches.length === 0) return true
+    for (const matched of matches) {
+      let pathname = ''
+      if (matched.startsWith('/')) {
+        pathname = matched.split(/[?#]/)[0]
+      } else {
+        try {
+          pathname = new URL(matched).pathname
+        } catch {
+          pathname = ''
+        }
+      }
+      if (pathname && isInternalRoute(pathname)) return true
+    }
+    return false
+  }
+
   async function send() {
     if (awaitingReply) return
     if (!input.trim()) return
@@ -62,18 +84,24 @@ export default function ChatWidget() {
     setMessages((s) => [...s, msg])
     setInput('')
     setAwaitingReply(true)
+    setStreamingText('')
+
+    const controller = new AbortController()
+    abortControllerRef.current = controller
+
     const apiUrl = import.meta.env.DEV
-      ? '/api/chat'
-      : 'https://api.pedroduartek.com/chat'
+      ? '/api/chat/stream'
+      : 'https://api.pedroduartek.com/chat/stream'
 
     try {
       const res = await fetch(apiUrl, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ message: text }),
+        signal: controller.signal,
       })
 
-      if (res.status !== 200) {
+      if (res.status !== 200 || !res.body) {
         setMessages((s) => [
           ...s,
           {
@@ -83,68 +111,67 @@ export default function ChatWidget() {
           },
         ])
         setAwaitingReply(false)
+        setStreamingText('')
         return
       }
 
-      const data = await res.json()
-      const reply =
-        typeof data === 'string'
-          ? data
-          : data && typeof data === 'object'
-            ? (data.answer ??
-              data.reply ??
-              data.message ??
-              JSON.stringify(data))
-            : String(data)
+      const reader = res.body.getReader()
+      const decoder = new TextDecoder()
+      let accumulated = ''
+      let buffer = ''
 
-      try {
-        const textReply = String(reply)
-        const urlRegex = /(https?:\/\/[^\s]+)|\/[^\s]+/g
-        const matches = Array.from(textReply.matchAll(urlRegex)).map(
-          (m) => m[0],
-        )
-        if (matches.length > 0) {
-          let hasInternal = false
-          for (const matched of matches) {
-            let pathname = ''
-            if (matched.startsWith('/')) {
-              pathname = matched.split(/[?#]/)[0]
-            } else {
-              try {
-                pathname = new URL(matched).pathname
-              } catch {
-                pathname = ''
-              }
-            }
-            if (pathname && isInternalRoute(pathname)) {
-              hasInternal = true
-              break
-            }
-          }
-          if (!hasInternal) {
-            setMessages((s) => [
-              ...s,
-              {
-                id: Date.now() + 1,
-                text: 'Unable to find a response to your question',
-                from: 'bot',
-              },
-            ])
-            setAwaitingReply(false)
-            return
+      while (true) {
+        const { done, value } = await reader.read()
+        if (done) break
+
+        buffer += decoder.decode(value, { stream: true })
+        const lines = buffer.split('\n')
+        // keep the last (possibly incomplete) line in the buffer
+        buffer = lines.pop() ?? ''
+
+        for (const line of lines) {
+          if (line.startsWith('data: ')) {
+            const payload = line.slice(6)
+            if (payload === '[DONE]') continue
+            accumulated += payload
+            setStreamingText(accumulated)
           }
         }
-      } catch (e) {
-        // if URL parsing fails, fall back to showing the reply
       }
 
-      setMessages((s) => [
-        ...s,
-        { id: Date.now() + 1, text: String(reply), from: 'bot' },
-      ])
+      // process any remaining buffer
+      if (buffer.startsWith('data: ')) {
+        const payload = buffer.slice(6)
+        if (payload !== '[DONE]') {
+          accumulated += payload
+        }
+      }
+
+      const finalText = accumulated || 'Sorry — I couldn\'t generate a response.'
+
+      if (!validateReply(finalText)) {
+        setMessages((s) => [
+          ...s,
+          {
+            id: Date.now() + 1,
+            text: 'Unable to find a response to your question',
+            from: 'bot',
+          },
+        ])
+      } else {
+        setMessages((s) => [
+          ...s,
+          { id: Date.now() + 1, text: finalText, from: 'bot' },
+        ])
+      }
       setAwaitingReply(false)
+      setStreamingText('')
     } catch (err: unknown) {
-      // Log the actual error for debugging, but don't expose internals to users
+      if (controller.signal.aborted) {
+        setAwaitingReply(false)
+        setStreamingText('')
+        return
+      }
       try {
         console.error('ChatWidget error:', err)
       } catch {
@@ -159,6 +186,7 @@ export default function ChatWidget() {
         },
       ])
       setAwaitingReply(false)
+      setStreamingText('')
     }
   }
 
@@ -175,19 +203,19 @@ export default function ChatWidget() {
     }
   }, [open])
 
-  // Always follow latest message (including when a placeholder is shown)
+  // Always follow latest message (including when streaming or placeholder is shown)
   useEffect(() => {
-    // when awaitingReply is true we let the placeholder effect control scrolling
-    if (awaitingReply) return
+    // when awaitingReply is true and no streaming text yet, let the placeholder effect control scrolling
+    if (awaitingReply && !streamingText) return
     scrollToBottom('smooth')
-  }, [awaitingReply, scrollToBottom])
+  }, [awaitingReply, streamingText, scrollToBottom])
 
-  // Simulate streaming words while awaiting a reply
+  // Show skeleton placeholder while awaiting first token
   useEffect(() => {
     const maxWords = 12
-    if (awaitingReply) {
+    const showSkeleton = awaitingReply && !streamingText
+    if (showSkeleton) {
       setPlaceholderWords(0)
-      // use window.setInterval so TS infers number
       placeholderIntervalRef.current = window.setInterval(() => {
         setPlaceholderWords((n) => Math.min(maxWords, n + 1))
       }, 300)
@@ -204,11 +232,11 @@ export default function ChatWidget() {
         placeholderIntervalRef.current = null
       }
     }
-  }, [awaitingReply])
+  }, [awaitingReply, streamingText])
 
   // Scroll the last placeholder word into view so the bottom aligns with the container
   useEffect(() => {
-    if (!awaitingReply) return
+    if (!awaitingReply || streamingText) return
     const el = containerRef.current
     if (!el) return
     const lastIndex = Math.min(placeholderWords, placeholderWidths.length) - 1
@@ -216,13 +244,12 @@ export default function ChatWidget() {
     const selector = `[data-placeholder-last="${lastIndex}"]`
     const node = el.querySelector(selector) as HTMLElement | null
     if (node) {
-      // compute scrollTop so the container is scrolled ~10px below the last placeholder
       const nodeBottom = node.offsetTop + node.offsetHeight
       const desiredTop = nodeBottom - el.clientHeight + 10
       const top = Math.max(0, desiredTop)
       el.scrollTo({ top, behavior: 'smooth' })
     }
-  }, [placeholderWords, awaitingReply])
+  }, [placeholderWords, awaitingReply, streamingText])
 
   return (
     <>
@@ -451,7 +478,7 @@ export default function ChatWidget() {
                       : m.text}
                   </div>
                 ))}
-                {awaitingReply && (
+                {awaitingReply && !streamingText && (
                   <output
                     aria-live="polite"
                     className="max-w-[80%] rounded-lg p-2 text-sm bg-gray-800 text-gray-400"
@@ -464,7 +491,6 @@ export default function ChatWidget() {
                         return placeholderWidths.map((w, i) => {
                           const key = `ph-${i}`
                           const style: React.CSSProperties = { width: `${w}%` }
-                          // keep skeleton blinking for all generated/visible words
                           if (i <= placeholderWords) {
                             return (
                               <span
@@ -482,6 +508,12 @@ export default function ChatWidget() {
                       })()}
                     </div>
                   </output>
+                )}
+                {awaitingReply && streamingText && (
+                  <div className="max-w-[85%] rounded-lg p-2 text-sm break-words whitespace-pre-wrap bg-gray-800 text-gray-200">
+                    {streamingText}
+                    <span className="inline-block w-1.5 h-4 ml-0.5 bg-indigo-400 animate-pulse align-text-bottom rounded-sm" />
+                  </div>
                 )}
               </div>
             </div>
