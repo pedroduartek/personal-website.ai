@@ -53,7 +53,7 @@ function getProjects(): Project[] {
       problem:
         'Relying on third-party AI services introduces costs, rate limits, and data-privacy trade-offs. I wanted full ownership of the inference pipeline, shipping a production-grade API that runs entirely on a single VPS with the model included.',
       approach:
-        'Built a clean, layered ASP.NET Core API that connects to Llama 3 via Ollama, augments every prompt with a curated knowledge base about my background, and returns grounded answers. Implemented streaming via SSE, retry policies with Polly, IP-based rate limiting, and a full Docker Compose production stack with Caddy for automatic HTTPS.',
+        'Built a clean, layered ASP.NET Core API that connects to Llama 3 via Ollama, augments every prompt with a curated knowledge base about my background, and returns grounded answers. Implemented streaming via SSE, retry policies with Polly, IP-based rate limiting, and a full Docker Compose production stack with Caddy for automatic HTTPS. Added observability with structured logging and cloud monitoring to provide clear insights into API usage and performance.',
       technologies: [
         'C#',
         '.NET 10',
