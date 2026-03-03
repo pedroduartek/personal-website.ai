@@ -279,10 +279,8 @@ export default function ChatWidget() {
           {showNote && (
             <div className="relative px-3 pr-10 py-2 text-xs text-yellow-100 bg-yellow-700/10 border-t border-yellow-700/20">
               <strong className="font-medium">Note: </strong>
-              This chat AI is a primitive proof-of-concept (POC). It is limited
-              and may be incorrect — do not trust it for important or sensitive
-              decisions. It was told to only reply using the content of this
-              website.
+              This is a basic POC — responses may be inaccurate. It only uses
+              content from this website to reply to your questions.
               <button
                 type="button"
                 aria-label="Dismiss note"
