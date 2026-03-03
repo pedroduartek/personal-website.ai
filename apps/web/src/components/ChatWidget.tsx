@@ -18,6 +18,14 @@ const scrollbarStyles = `
 
 type Message = { id: number; text: string; from: 'user' | 'bot' }
 
+// Resize constraints
+const MIN_WIDTH = 320
+const MIN_HEIGHT = 300
+const MAX_WIDTH = 800
+const MAX_HEIGHT = 800
+const DEFAULT_WIDTH = 320
+const DEFAULT_HEIGHT = 340
+
 export default function ChatWidget() {
   const [open, setOpen] = useState(false)
   const [input, setInput] = useState('')
@@ -29,6 +37,53 @@ export default function ChatWidget() {
   const placeholderIntervalRef = useRef<number | null>(null)
   const placeholderWidths = [40, 65, 35, 50, 60, 30, 45, 55, 38, 48, 62, 34]
   const [showNote, setShowNote] = useState(true)
+
+  // --- Resize state (desktop only) ---
+  const [chatSize, setChatSize] = useState({ w: DEFAULT_WIDTH, h: DEFAULT_HEIGHT })
+  const resizing = useRef<{ edge: string; startX: number; startY: number; startW: number; startH: number } | null>(null)
+
+  const isDesktop = () => window.innerWidth >= 768
+
+  const onResizeStart = useCallback(
+    (edge: string) => (e: React.MouseEvent) => {
+      if (!isDesktop()) return
+      e.preventDefault()
+      resizing.current = {
+        edge,
+        startX: e.clientX,
+        startY: e.clientY,
+        startW: chatSize.w,
+        startH: chatSize.h,
+      }
+
+      const onMouseMove = (ev: MouseEvent) => {
+        if (!resizing.current) return
+        const { edge, startX, startY, startW, startH } = resizing.current
+        let newW = startW
+        let newH = startH
+        if (edge.includes('left')) {
+          newW = Math.min(MAX_WIDTH, Math.max(MIN_WIDTH, startW - (ev.clientX - startX)))
+        }
+        if (edge.includes('top')) {
+          newH = Math.min(MAX_HEIGHT, Math.max(MIN_HEIGHT, startH - (ev.clientY - startY)))
+        }
+        setChatSize({ w: newW, h: newH })
+      }
+
+      const onMouseUp = () => {
+        resizing.current = null
+        document.removeEventListener('mousemove', onMouseMove)
+        document.removeEventListener('mouseup', onMouseUp)
+        document.body.style.cursor = ''
+        document.body.style.userSelect = ''
+      }
+
+      document.addEventListener('mousemove', onMouseMove)
+      document.addEventListener('mouseup', onMouseUp)
+      document.body.style.userSelect = 'none'
+    },
+    [chatSize],
+  )
 
   const internalStaticRoutes = new Set([
     '/',
@@ -264,7 +319,30 @@ export default function ChatWidget() {
 
       {/* Chat Drawer */}
       {open && (
-        <div className="fixed right-6 bottom-20 z-50 w-80 max-w-full transform-gpu rounded-lg bg-gray-900 shadow-xl">
+        <div
+          className="fixed right-6 bottom-20 z-50 max-w-full transform-gpu rounded-lg bg-gray-900 shadow-xl flex flex-col overflow-hidden"
+          style={isDesktop() ? { width: chatSize.w, height: chatSize.h } : { width: 320, height: DEFAULT_HEIGHT }}
+        >
+          {/* Resize handles — desktop only */}
+          {isDesktop() && (
+            <>
+              {/* Top-left corner */}
+              <div
+                onMouseDown={onResizeStart('top-left')}
+                className="absolute -top-1 -left-1 z-10 h-4 w-4 cursor-nwse-resize"
+              />
+              {/* Top edge */}
+              <div
+                onMouseDown={onResizeStart('top')}
+                className="absolute -top-1 left-3 right-0 z-10 h-2 cursor-ns-resize"
+              />
+              {/* Left edge */}
+              <div
+                onMouseDown={onResizeStart('left')}
+                className="absolute top-3 -left-1 bottom-0 z-10 w-2 cursor-ew-resize"
+              />
+            </>
+          )}
           <div className="flex items-center justify-between border-b border-gray-800 px-3 py-2">
             <div className="text-sm font-medium text-white">Chat</div>
             <button
@@ -291,7 +369,7 @@ export default function ChatWidget() {
               </button>
             </div>
           )}
-          <div className="relative flex h-72 flex-col gap-2 overflow-hidden p-3">
+          <div className="relative flex flex-col gap-2 overflow-hidden p-3" style={{ flex: '1 1 0%', minHeight: 0 }}>
             <div
               ref={containerRef}
               className="flex-1 overflow-auto overflow-x-hidden custom-scrollbar pr-[5px]"
