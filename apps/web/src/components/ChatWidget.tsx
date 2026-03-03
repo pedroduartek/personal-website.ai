@@ -435,22 +435,30 @@ export default function ChatWidget() {
             </div>
 
             <div className="mt-2 flex gap-2">
-              <input
-                ref={inputRef}
-                value={input}
-                onChange={(e) => setInput(e.target.value)}
-                onKeyDown={(e) => {
-                  if (e.key === 'Enter') {
-                    e.preventDefault()
-                    if (!awaitingReply) send()
+              <div className="relative w-full">
+                <input
+                  ref={inputRef}
+                  value={input}
+                  onChange={(e) => setInput(e.target.value.slice(0, 500))}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter') {
+                      e.preventDefault()
+                      if (!awaitingReply) send()
+                    }
+                  }}
+                  maxLength={500}
+                  placeholder={
+                    awaitingReply ? 'Waiting for reply...' : 'Type a message...'
                   }
-                }}
-                placeholder={
-                  awaitingReply ? 'Waiting for reply...' : 'Type a message...'
-                }
-                disabled={awaitingReply}
-                className={`w-full rounded border border-gray-700 bg-gray-800 px-3 py-2 text-sm text-gray-200 placeholder-gray-500 focus:outline-none ${awaitingReply ? 'opacity-70' : ''}`}
-              />
+                  disabled={awaitingReply}
+                  className={`w-full rounded border border-gray-700 bg-gray-800 px-3 py-2 text-sm text-gray-200 placeholder-gray-500 focus:outline-none ${awaitingReply ? 'opacity-70' : ''}`}
+                />
+                {input.length > 400 && (
+                  <span className={`absolute right-2 -top-5 text-xs ${input.length >= 500 ? 'text-red-400' : 'text-gray-500'}`}>
+                    {input.length}/500
+                  </span>
+                )}
+              </div>
               <button
                 type="button"
                 onClick={() => {
