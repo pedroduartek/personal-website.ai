@@ -8,7 +8,10 @@ describe('HomeAssistantProjectPage', () => {
     render(
       <MemoryRouter initialEntries={['/projects/home-assistant']}>
         <Routes>
-          <Route path="/projects/home-assistant" element={<HomeAssistantProjectPage />} />
+          <Route
+            path="/projects/home-assistant"
+            element={<HomeAssistantProjectPage />}
+          />
         </Routes>
       </MemoryRouter>,
     )

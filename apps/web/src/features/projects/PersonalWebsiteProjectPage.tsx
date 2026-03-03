@@ -38,7 +38,8 @@ export default function PersonalWebsiteProjectPage() {
                 year: 'numeric',
                 month: 'long',
               })}
-            {project.endDate && ` — ${new Date(project.endDate).toLocaleDateString('en-US', { year: 'numeric', month: 'long' })}`}
+            {project.endDate &&
+              ` — ${new Date(project.endDate).toLocaleDateString('en-US', { year: 'numeric', month: 'long' })}`}
           </time>
         </div>
 
@@ -86,8 +87,8 @@ export default function PersonalWebsiteProjectPage() {
             </p>
             <p className="mb-4">
               The result: a production-ready portfolio site built in days
-              instead of months, where AI acted as a productivity multiplier
-              and I learned by building real features.
+              instead of months, where AI acted as a productivity multiplier and
+              I learned by building real features.
             </p>
           </section>
 
@@ -120,9 +121,9 @@ export default function PersonalWebsiteProjectPage() {
                   Command Palette
                 </h3>
                 <p className="text-gray-300 text-sm">
-                  Fuzzy search navigation (⌘K / Ctrl+K) inspired by modern
-                  IDEs, with keyboard shortcuts and smooth animations for quick
-                  site exploration.
+                  Fuzzy search navigation (⌘K / Ctrl+K) inspired by modern IDEs,
+                  with keyboard shortcuts and smooth animations for quick site
+                  exploration.
                 </p>
               </div>
 
@@ -141,9 +142,9 @@ export default function PersonalWebsiteProjectPage() {
                   Production-ready
                 </h3>
                 <p className="text-gray-300 text-sm">
-                  Live at pedroduartek.com via Vercel with automatic
-                  deployments from GitHub, client-side routing with lazy
-                  loading, and full source code available.
+                  Live at pedroduartek.com via Vercel with automatic deployments
+                  from GitHub, client-side routing with lazy loading, and full
+                  source code available.
                 </p>
               </div>
             </div>
