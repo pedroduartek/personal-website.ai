@@ -4,8 +4,8 @@ import Lightbox from 'yet-another-react-lightbox'
 import Zoom from 'yet-another-react-lightbox/plugins/zoom'
 import 'yet-another-react-lightbox/styles.css'
 import PageSEO from '../../components/seo/PageSEO'
-import haScreenshot from '../../images/ha.webp'
 import { projects } from '../../content/projects'
+import haScreenshot from '../../images/ha.webp'
 
 export default function HomeAssistantProjectPage() {
   const [lightboxOpen, setLightboxOpen] = useState(false)
@@ -43,13 +43,12 @@ export default function HomeAssistantProjectPage() {
                 year: 'numeric',
                 month: 'long',
               })}
-            {project.endDate && ` — ${new Date(project.endDate).toLocaleDateString('en-US', { year: 'numeric', month: 'long' })}`}
+            {project.endDate &&
+              ` — ${new Date(project.endDate).toLocaleDateString('en-US', { year: 'numeric', month: 'long' })}`}
           </time>
         </div>
 
-        <p className="mb-8 text-xl text-gray-400">
-          {project.description}
-        </p>
+        <p className="mb-8 text-xl text-gray-400">{project.description}</p>
 
         <div className="mb-8 flex flex-wrap gap-2">
           {project.technologies.map((tech) => (

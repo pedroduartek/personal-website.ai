@@ -59,10 +59,19 @@ export default function ChatWidget() {
   const [showNote, setShowNote] = useState(true)
 
   // --- Resize state (desktop only) ---
-  const [chatSize, setChatSize] = useState({ w: DEFAULT_WIDTH, h: DEFAULT_HEIGHT })
-  const resizing = useRef<{ edge: string; startX: number; startY: number; startW: number; startH: number } | null>(null)
+  const [chatSize, setChatSize] = useState({
+    w: DEFAULT_WIDTH,
+    h: DEFAULT_HEIGHT,
+  })
+  const resizing = useRef<{
+    edge: string
+    startX: number
+    startY: number
+    startW: number
+    startH: number
+  } | null>(null)
 
-  const isDesktop = () => window.innerWidth >= 768
+  const isDesktop = useCallback(() => window.innerWidth >= 768, [])
 
   const onResizeStart = useCallback(
     (edge: string) => (e: React.MouseEvent) => {
@@ -82,10 +91,16 @@ export default function ChatWidget() {
         let newW = startW
         let newH = startH
         if (edge.includes('left')) {
-          newW = Math.min(MAX_WIDTH, Math.max(MIN_WIDTH, startW - (ev.clientX - startX)))
+          newW = Math.min(
+            MAX_WIDTH,
+            Math.max(MIN_WIDTH, startW - (ev.clientX - startX)),
+          )
         }
         if (edge.includes('top')) {
-          newH = Math.min(MAX_HEIGHT, Math.max(MIN_HEIGHT, startH - (ev.clientY - startY)))
+          newH = Math.min(
+            MAX_HEIGHT,
+            Math.max(MIN_HEIGHT, startH - (ev.clientY - startY)),
+          )
         }
         setChatSize({ w: newW, h: newH })
       }
@@ -102,7 +117,7 @@ export default function ChatWidget() {
       document.addEventListener('mouseup', onMouseUp)
       document.body.style.userSelect = 'none'
     },
-    [chatSize],
+    [chatSize, isDesktop],
   )
 
   const internalStaticRoutes = new Set([
@@ -326,7 +341,9 @@ export default function ChatWidget() {
         if (!cancelled) setApiHealthy(false)
       })
 
-    return () => { cancelled = true }
+    return () => {
+      cancelled = true
+    }
   }, [])
 
   // Trigger the entrance animation after a short delay once API is healthy
@@ -349,12 +366,17 @@ export default function ChatWidget() {
         onClick={() => setOpen((v) => !v)}
         onAnimationEnd={() => setAnimationDone(true)}
         className={`fixed right-6 bottom-6 z-50 flex h-14 w-14 items-center justify-center rounded-full text-white shadow-lg focus:outline-none overflow-hidden ${
-          animationDone ? 'transition-all duration-200 hover:scale-110 hover:shadow-xl hover:shadow-indigo-500/30' : ''
+          animationDone
+            ? 'transition-all duration-200 hover:scale-110 hover:shadow-xl hover:shadow-indigo-500/30'
+            : ''
         }`}
         style={{
           backgroundColor: '#1D4ED8',
           ...(hasEntered
-            ? { animation: 'dropBounce 2s cubic-bezier(0.22, 1, 0.36, 1) forwards' }
+            ? {
+                animation:
+                  'dropBounce 2s cubic-bezier(0.22, 1, 0.36, 1) forwards',
+              }
             : { transform: 'translateY(calc(-100vh - 60px))', opacity: 0 }),
         }}
       >
@@ -388,7 +410,11 @@ export default function ChatWidget() {
       {open && (
         <div
           className="fixed right-6 bottom-20 z-50 max-w-full transform-gpu rounded-lg bg-gray-900 shadow-xl flex flex-col overflow-hidden"
-          style={isDesktop() ? { width: chatSize.w, height: chatSize.h } : { width: 320, height: DEFAULT_HEIGHT }}
+          style={
+            isDesktop()
+              ? { width: chatSize.w, height: chatSize.h }
+              : { width: 320, height: DEFAULT_HEIGHT }
+          }
         >
           {/* Resize handles — desktop only */}
           {isDesktop() && (
@@ -436,7 +462,10 @@ export default function ChatWidget() {
               </button>
             </div>
           )}
-          <div className="relative flex flex-col gap-2 overflow-hidden p-3" style={{ flex: '1 1 0%', minHeight: 0 }}>
+          <div
+            className="relative flex flex-col gap-2 overflow-hidden p-3"
+            style={{ flex: '1 1 0%', minHeight: 0 }}
+          >
             <div
               ref={containerRef}
               className="flex-1 overflow-auto overflow-x-hidden custom-scrollbar pr-[5px]"

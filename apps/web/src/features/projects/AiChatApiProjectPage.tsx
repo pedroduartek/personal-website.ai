@@ -39,7 +39,8 @@ export default function AiChatApiProjectPage() {
                 year: 'numeric',
                 month: 'long',
               })}
-            {project.endDate && ` — ${new Date(project.endDate).toLocaleDateString('en-US', { year: 'numeric', month: 'long' })}`}
+            {project.endDate &&
+              ` — ${new Date(project.endDate).toLocaleDateString('en-US', { year: 'numeric', month: 'long' })}`}
           </time>
         </div>
 
@@ -175,7 +176,9 @@ export default function AiChatApiProjectPage() {
                   Resilience
                 </h3>
                 <p className="text-gray-300 text-sm">
-                  IP-based rate limiting, exponential-backoff retries via Polly, and observability through structured logging (Serilog) with monitoring in Grafana.
+                  IP-based rate limiting, exponential-backoff retries via Polly,
+                  and observability through structured logging (Serilog) with
+                  monitoring in Grafana.
                 </p>
               </div>
             </div>
