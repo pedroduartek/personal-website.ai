@@ -333,7 +333,7 @@ export default function ChatWidget() {
                   >
                     {m.from === 'bot'
                       ? (() => {
-                          const text: string = m.text
+                          const rawText: string = m.text
 
                           // Helper: parse inline URLs in a text segment
                           const parseUrls = (segment: string, keyPrefix: string): React.ReactNode[] => {
@@ -399,38 +399,83 @@ export default function ChatWidget() {
                             return nodes
                           }
 
-                          // Split into lines and detect bullet items
+                          // Normalize: insert newlines before numbered items and dash/star bullets
+                          // that appear inline (preceded by non-newline chars)
+                          let text = rawText
+                          // newline before numbered items like "1. " or "2. "
+                          text = text.replace(/(?<!\n)(\d+\.\s)/g, '\n$1')
+                          // newline before indented dash bullets like "   - item"
+                          text = text.replace(/(?<!\n)(\s{2,}-\s)/g, '\n$1')
+
+                          // Split into lines and classify each
                           const lines = text.split('\n')
-                          const bulletLines: { isBullet: boolean; content: string }[] = lines.map((line) => {
-                            const bulletMatch = line.match(/^\s*\*\s+(.*)/)
-                            if (bulletMatch) {
-                              return { isBullet: true, content: bulletMatch[1] }
+                          type LineInfo =
+                            | { type: 'numbered'; label: string }
+                            | { type: 'bullet'; content: string }
+                            | { type: 'text'; content: string }
+                          const classified: LineInfo[] = lines.map((line) => {
+                            const numberedMatch = line.match(/^\s*(\d+\.\s+.*)/)
+                            if (numberedMatch) {
+                              return { type: 'numbered', label: numberedMatch[1].trim() }
                             }
-                            return { isBullet: false, content: line }
+                            const bulletMatch = line.match(/^\s*[-*]\s+(.*)/)
+                            if (bulletMatch) {
+                              return { type: 'bullet', content: bulletMatch[1] }
+                            }
+                            return { type: 'text', content: line }
                           })
 
-                          // Group consecutive bullet lines together
-                          const groups: { type: 'text' | 'bullets'; lines: string[] }[] = []
-                          for (const bl of bulletLines) {
-                            if (bl.isBullet) {
-                              if (groups.length > 0 && groups[groups.length - 1].type === 'bullets') {
-                                groups[groups.length - 1].lines.push(bl.content)
+                          // Group consecutive same-type lines, but numbered + following bullets stay together
+                          type Group =
+                            | { type: 'text'; lines: string[] }
+                            | { type: 'bullets'; lines: string[] }
+                            | { type: 'section'; label: string; items: string[] }
+                          const groups: Group[] = []
+
+                          for (const cl of classified) {
+                            if (cl.type === 'numbered') {
+                              groups.push({ type: 'section', label: cl.label, items: [] })
+                            } else if (cl.type === 'bullet') {
+                              // attach to preceding section if exists, otherwise standalone bullet group
+                              const last = groups[groups.length - 1]
+                              if (last && last.type === 'section') {
+                                last.items.push(cl.content)
+                              } else if (last && last.type === 'bullets') {
+                                last.lines.push(cl.content)
                               } else {
-                                groups.push({ type: 'bullets', lines: [bl.content] })
+                                groups.push({ type: 'bullets', lines: [cl.content] })
                               }
                             } else {
-                              if (groups.length > 0 && groups[groups.length - 1].type === 'text') {
-                                groups[groups.length - 1].lines.push(bl.content)
+                              // plain text
+                              const last = groups[groups.length - 1]
+                              if (last && last.type === 'text') {
+                                last.lines.push(cl.content)
                               } else {
-                                groups.push({ type: 'text', lines: [bl.content] })
+                                groups.push({ type: 'text', lines: [cl.content] })
                               }
                             }
                           }
 
                           return groups.map((group, gi) => {
+                            if (group.type === 'section') {
+                              return (
+                                <div key={`${m.id}-g${gi}`} className="my-1">
+                                  <strong className="text-gray-100">{parseUrls(group.label, `${m.id}-g${gi}-h`)}</strong>
+                                  {group.items.length > 0 && (
+                                    <ul className="list-disc list-inside space-y-0.5 mt-0.5 ml-2">
+                                      {group.items.map((item, li) => (
+                                        <li key={`${m.id}-g${gi}-li${li}`}>
+                                          {parseUrls(item, `${m.id}-g${gi}-li${li}`)}
+                                        </li>
+                                      ))}
+                                    </ul>
+                                  )}
+                                </div>
+                              )
+                            }
                             if (group.type === 'bullets') {
                               return (
-                                <ul key={`${m.id}-g${gi}`} className="list-disc list-inside space-y-1 my-1">
+                                <ul key={`${m.id}-g${gi}`} className="list-disc list-inside space-y-0.5 my-1">
                                   {group.lines.map((line, li) => (
                                     <li key={`${m.id}-g${gi}-li${li}`}>
                                       {parseUrls(line, `${m.id}-g${gi}-li${li}`)}
