@@ -120,14 +120,6 @@ export default function AiChatApiProjectPage() {
                 the local model process over a loopback/internal endpoint,
                 keeping public exposure limited to the API layer.
               </p>
-
-              <p className="text-gray-300">
-                Example internal call:{' '}
-                <span className="inline-block rounded bg-gray-800 px-1.5 py-0.5 text-sm font-mono text-gray-200 border border-gray-700">
-                  POST /v1/generate
-                </span>{' '}
-                (internal-only).
-              </p>
             </div>
           </section>
 
