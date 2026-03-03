@@ -1,6 +1,7 @@
 import type React from 'react'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
+import ollamaIcon from '../images/ollama.png'
 
 // small keyframes for typing dots animation (inlined style fallback)
 const typingKeyframes =
@@ -252,27 +253,7 @@ export default function ChatWidget() {
             />
           </svg>
         ) : (
-          // Robot face icon
-          <svg
-            className="h-6 w-6"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            xmlns="http://www.w3.org/2000/svg"
-            role="img"
-          >
-            <title>Chat bot</title>
-            <rect x="3" y="7" width="18" height="11" rx="2" strokeWidth={2} />
-            <rect x="8" y="3" width="8" height="4" rx="1" strokeWidth={2} />
-            <circle cx="9" cy="12" r="1.25" fill="currentColor" />
-            <circle cx="15" cy="12" r="1.25" fill="currentColor" />
-            <path
-              d="M8 16c1 1 3 1 4 1s3 0 4-1"
-              strokeWidth={2}
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-          </svg>
+          <img src={ollamaIcon} alt="Chat bot" className="h-8 w-8 rounded-full" />
         )}
       </button>
 
