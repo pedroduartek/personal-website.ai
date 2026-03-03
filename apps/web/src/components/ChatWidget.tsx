@@ -48,6 +48,7 @@ export default function ChatWidget() {
   const [input, setInput] = useState('')
   const [hasEntered, setHasEntered] = useState(false)
   const [animationDone, setAnimationDone] = useState(false)
+  const [apiHealthy, setApiHealthy] = useState<boolean | null>(null)
   const [messages, setMessages] = useState<Message[]>([])
   const containerRef = useRef<HTMLDivElement | null>(null)
   const inputRef = useRef<HTMLInputElement | null>(null)
@@ -132,6 +133,17 @@ export default function ChatWidget() {
   async function send() {
     if (awaitingReply) return
     if (!input.trim()) return
+    if (!apiHealthy) {
+      setMessages((s) => [
+        ...s,
+        {
+          id: Date.now() + 1,
+          text: 'Sorry, the chat service is unavailable right now. Please try again later.',
+          from: 'bot',
+        },
+      ])
+      return
+    }
     const text = input.trim()
     const msg: Message = { id: Date.now(), text, from: 'user' }
     setMessages((s) => [...s, msg])
@@ -299,11 +311,33 @@ export default function ChatWidget() {
     }
   }, [placeholderWords, awaitingReply])
 
-  // Trigger the entrance animation after a short delay on first mount
+  // Check API health on mount; only show widget if healthy
   useEffect(() => {
+    let cancelled = false
+    const healthUrl = import.meta.env.DEV
+      ? '/api/health'
+      : 'https://api.pedroduartek.com/health'
+
+    fetch(healthUrl, { method: 'GET' })
+      .then((res) => {
+        if (!cancelled) setApiHealthy(res.ok)
+      })
+      .catch(() => {
+        if (!cancelled) setApiHealthy(false)
+      })
+
+    return () => { cancelled = true }
+  }, [])
+
+  // Trigger the entrance animation after a short delay once API is healthy
+  useEffect(() => {
+    if (apiHealthy !== true) return
     const timer = setTimeout(() => setHasEntered(true), 500)
     return () => clearTimeout(timer)
-  }, [])
+  }, [apiHealthy])
+
+  // Don't render anything until health check passes
+  if (apiHealthy !== true) return null
 
   return (
     <>
