@@ -1,18 +1,21 @@
 import { Link } from 'react-router-dom'
 import StyledLink from '../../components/StyledLink'
 import PageSEO from '../../components/seo/PageSEO'
+import { projects } from '../../content/projects'
 
 export default function AiChatApiProjectPage() {
+  const project = projects.find((p) => p.slug === 'ai-chat-api')
+  if (!project) return null
   return (
     <>
       <PageSEO
-        title="AI Chat API - Self-hosted Conversational AI"
-        description="A self-hosted conversational AI API built with C#/.NET 10 and ASP.NET Core that powers the chat assistant on pedroduartek.com using Llama 3 via Ollama."
+        title={`${project.title} - Self-hosted Conversational AI`}
+        description={project.description}
         image="/src/images/pld_logo_header.png"
         url={
           typeof window !== 'undefined'
             ? window.location.href
-            : 'https://www.pedroduartek.com/projects/ai-chat-api'
+            : `https://www.pedroduartek.com/projects/${project.slug}`
         }
       />
 
@@ -24,18 +27,29 @@ export default function AiChatApiProjectPage() {
           <span>←</span> Back to projects
         </Link>
 
-        <h1 className="mb-4 text-3xl font-bold text-white md:text-4xl">
-          AI Chat API
+        <h1 className="mb-2 text-3xl font-bold text-white md:text-4xl">
+          {project.title}
         </h1>
 
+        {/* Date */}
+        <div className="mb-4 flex items-center gap-3 text-sm text-gray-400">
+          <time>
+            {project.startDate &&
+              new Date(project.startDate).toLocaleDateString('en-US', {
+                year: 'numeric',
+                month: 'long',
+              })}
+            {project.endDate && ` — ${new Date(project.endDate).toLocaleDateString('en-US', { year: 'numeric', month: 'long' })}`}
+          </time>
+        </div>
+
         <p className="mb-4 text-lg text-gray-400 md:text-xl">
-          A self-hosted conversational AI API built with C#/.NET 10 and ASP.NET
-          Core that powers the chat assistant on pedroduartek.com. February 2026
+          {project.description}
         </p>
 
         <div className="mb-8">
           <StyledLink
-            href="https://github.com/pedroduartek/ai-chat-api"
+            href={project.links?.github ?? 'https://github.com/pedroduartek/ai-chat-api'}
             target="_blank"
             bigger
             className="inline-flex items-center gap-2 rounded-lg border border-brand-700 bg-brand px-4 py-2 text-center text-white font-semibold transition-all duration-200 hover:scale-105 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-brand/50"
@@ -47,18 +61,7 @@ export default function AiChatApiProjectPage() {
         </div>
 
         <div className="mb-8 flex flex-wrap gap-2">
-          {[
-            'C#',
-            '.NET 10',
-            'Llama 3.2',
-            'Ollama',
-            'Docker',
-            'Caddy',
-            'Polly',
-            'Serilog',
-            'xUnit',
-            'Swagger',
-          ].map((tech) => (
+          {project.technologies.map((tech) => (
             <span
               key={tech}
               className="rounded-full bg-blue-100 px-3 py-1 text-sm text-blue-800 dark:bg-blue-900 dark:text-blue-200"

@@ -5,19 +5,22 @@ import Zoom from 'yet-another-react-lightbox/plugins/zoom'
 import 'yet-another-react-lightbox/styles.css'
 import PageSEO from '../../components/seo/PageSEO'
 import haScreenshot from '../../images/ha.webp'
+import { projects } from '../../content/projects'
 
 export default function HomeAssistantProjectPage() {
   const [lightboxOpen, setLightboxOpen] = useState(false)
+  const project = projects.find((p) => p.slug === 'home-assistant')
+  if (!project) return null
   return (
     <>
       <PageSEO
-        title="Home Assistant: Local-First Smart Home"
-        description="Self-hosted Home Assistant OS setup with 50+ Zigbee devices for automation, energy awareness, and comfort optimization"
+        title={project.title}
+        description={project.description}
         image="/src/images/ha.png"
         url={
           typeof window !== 'undefined'
             ? window.location.href
-            : 'https://www.pedroduartek.com/projects/home-assistant'
+            : `https://www.pedroduartek.com/projects/${project.slug}`
         }
       />
       <div className="container mx-auto px-4 py-16 animate-slide-down">
@@ -28,24 +31,28 @@ export default function HomeAssistantProjectPage() {
           <span>←</span> Back to projects
         </Link>
 
-        <h1 className="mb-4 text-4xl font-bold text-white">
-          Home Assistant: Local-First Smart Home (HAOS + ZHA, 50+ Zigbee
-          Devices)
+        <h1 className="mb-2 text-4xl font-bold text-white">
+          {project.title} (HAOS + ZHA, 50+ Zigbee Devices)
         </h1>
 
+        {/* Date */}
+        <div className="mb-6 flex items-center gap-3 text-sm text-gray-400">
+          <time>
+            {project.startDate &&
+              new Date(project.startDate).toLocaleDateString('en-US', {
+                year: 'numeric',
+                month: 'long',
+              })}
+            {project.endDate && ` — ${new Date(project.endDate).toLocaleDateString('en-US', { year: 'numeric', month: 'long' })}`}
+          </time>
+        </div>
+
         <p className="mb-8 text-xl text-gray-400">
-          Personal smart home project • Started September 2023
+          {project.description}
         </p>
 
         <div className="mb-8 flex flex-wrap gap-2">
-          {[
-            'Home Assistant OS',
-            'Zigbee (ZHA)',
-            'SkyConnect Coordinator',
-            'Nabu Casa',
-            'Grafana',
-            'IoT Automation',
-          ].map((tech) => (
+          {project.technologies.map((tech) => (
             <span
               key={tech}
               className="rounded-full bg-blue-100 px-3 py-1 text-sm text-blue-800 dark:bg-blue-900 dark:text-blue-200"
