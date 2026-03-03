@@ -256,7 +256,7 @@ export default function ChatWidget() {
           <img
             src={ollamaIcon}
             alt="Chat bot"
-            className="h-full w-full object-cover rounded-full"
+            className="h-10 w-10 object-contain rounded-full"
           />
         )}
       </button>
