@@ -34,22 +34,14 @@ export default function HomePage() {
             <p className="mb-4 text-base lg:text-lg text-gray-300">
               Welcome! I'm a backend software engineer with {experience.text} of
               experience in C#/.NET, microservices, and event-driven systems.{' '}
-              <StyledLink
-                href="/about"
-                className="inline-block font-mono text-sm bg-gray-800 text-gray-100 px-2 py-0.5 rounded border border-gray-700 hover:translate-x-1 hover:bg-gray-700 hover:shadow-lg"
-              >
-                Learn more about me
-              </StyledLink>
+              <StyledLink href="/about">Learn more about me</StyledLink>
             </p>
             <p className="mb-4 text-base lg:text-lg text-gray-300">
               This website itself is a learning project. As someone who knows
               close to nothing about frontend development, I'm using AI-assisted
               tools to build this site and learn React, TypeScript, and modern
               frontend practices along the way.{' '}
-              <StyledLink
-                href="/projects"
-                className="inline-block font-mono text-sm bg-gray-800 text-gray-100 px-2 py-0.5 rounded border border-gray-700 hover:translate-x-1 hover:bg-gray-700 hover:shadow-lg"
-              >
+              <StyledLink href="/projects">
                 See the full project details
               </StyledLink>
             </p>

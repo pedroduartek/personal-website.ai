@@ -109,7 +109,6 @@ export default function ConferencesPage() {
                           href={item.links.slides}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="text-sm transition-all duration-200 hover:translate-x-1"
                           ariaLabel="View slides"
                         >
                           View Slides
@@ -120,7 +119,6 @@ export default function ConferencesPage() {
                           href={item.links.video}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="text-sm transition-all duration-200 hover:translate-x-1"
                           ariaLabel="Watch video"
                         >
                           Watch Video
@@ -132,7 +130,6 @@ export default function ConferencesPage() {
                           target="_blank"
                           rel="noopener noreferrer"
                           ariaLabel="Event website"
-                          className="inline-block font-mono text-sm bg-gray-800 text-gray-100 px-2 py-0.5 rounded border border-gray-700 hover:translate-x-1 hover:bg-gray-700 hover:shadow-lg"
                         >
                           Event Website
                         </StyledLink>
