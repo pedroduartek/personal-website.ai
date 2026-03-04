@@ -71,16 +71,12 @@ pnpm format
 ```
 personal-website/
 ├── apps/
-│   ├── web/          # React frontend
-│   └── api/          # (Optional) backend
+│   └── web/          # React frontend
 ├── infra/            # Infrastructure (docker, etc)
 ├── docs/             # Planning & documentation
 └── .github/          # GitHub Actions CI/CD
 ```
 
-## 🤝 Contributing
-
-Pull requests are welcome! Please open an issue first to discuss major changes.
 
 ## 📄 License
 
