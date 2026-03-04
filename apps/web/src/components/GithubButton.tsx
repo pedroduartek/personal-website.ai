@@ -1,7 +1,7 @@
 import type React from 'react'
 
 type Props = {
-  href: string
+  href?: string
   children?: React.ReactNode
   ariaLabel?: string
   className?: string
@@ -15,6 +15,7 @@ export default function GithubButton({
   className,
   target = '_blank',
 }: Props) {
+  if (!href) return null
   const base =
     'inline-flex items-center gap-2 rounded-lg border border-brand-700 bg-brand px-4 py-2 text-center text-white font-semibold transition-all duration-200 hover:scale-105 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-brand/50 transform origin-left scale-110'
 
