@@ -151,8 +151,8 @@ export default function AiChatApiProjectPage() {
                   Knowledge-base augmentation
                 </h3>
                 <p className="text-gray-300 text-sm">
-                  The system prompt is dynamically composed at request time by
-                  appending KB content, so the model always has up-to-date
+                  The system prompt is dynamically composed at request time from a
+                  small, file-backed knowledge base so the model receives targeted
                   context without fine-tuning.
                 </p>
               </div>
@@ -172,9 +172,9 @@ export default function AiChatApiProjectPage() {
                   Resilience
                 </h3>
                 <p className="text-gray-300 text-sm">
-                  IP-based rate limiting, exponential-backoff retries via Polly,
-                  and observability through structured logging (Serilog) with
-                  monitoring in Grafana.
+                  IP-based rate limiting (partitioned by `x-api-key` when present),
+                  exponential-backoff retries via Polly, and structured logging
+                  (Serilog) with optional Grafana/Loki integration.
                 </p>
               </div>
             </div>
@@ -186,11 +186,12 @@ export default function AiChatApiProjectPage() {
               Infrastructure
             </h2>
             <p className="mb-4">
-              Ships with Docker Compose manifests for both development (hot
-              reload) and production (three-service stack: API, Ollama, Caddy on
-              a single VPS with automatic TLS). Ollama runs on an internal
-              network with no public port, and model weights are persisted via a
-              Docker volume.
+              Ships with Docker Compose manifests for both development and
+              production. The development compose is intended for local testing
+              (and may expose Ollama for debugging), while the production compose
+              runs a three-service stack (API, Ollama, Caddy) with Ollama kept on
+              an internal network and automatic TLS via Caddy. Model weights are
+              persisted via a Docker volume.
             </p>
           </section>
 
