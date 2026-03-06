@@ -3,6 +3,7 @@ import { Link, Outlet } from 'react-router-dom'
 import ChatWidget from '../../components/ChatWidget'
 import { CommandPalette } from '../../components/CommandPalette'
 import CommandPaletteTip from '../../components/CommandPalette/CommandPaletteTip'
+import SiteContainer from '../../components/SiteContainer'
 import { useCommandPalette } from '../../hooks/useCommandPalette'
 const logo = '/pld_logo_header.webp'
 
@@ -16,15 +17,17 @@ export default function AppLayout() {
     <div className="flex min-h-screen flex-col bg-background">
       <Header onOpenCommandPalette={open} />
       <main className="flex-1">
-        <Suspense
-          fallback={
-            <div className="flex items-center justify-center py-16">
-              <div className="text-gray-300">Loading...</div>
-            </div>
-          }
-        >
-          <Outlet />
-        </Suspense>
+        <SiteContainer>
+          <Suspense
+            fallback={
+              <div className="flex items-center justify-center py-16">
+                <div className="text-gray-300">Loading...</div>
+              </div>
+            }
+          >
+            <Outlet />
+          </Suspense>
+        </SiteContainer>
       </main>
       <footer className="border-t border-gray-800 bg-header py-4 text-center text-xs text-gray-400">
         {lastUpdated ? `Last updated: ${lastUpdated}` : null}
