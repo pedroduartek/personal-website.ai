@@ -294,7 +294,7 @@ export default function ChatWidget() {
     if (open && isDesktop()) {
       setTimeout(() => inputRef.current?.focus(), 50)
     }
-  }, [open])
+  }, [open, isDesktop])
 
   // Keep drawer mounted briefly when closing to allow exit animation
   useEffect(() => {
@@ -388,7 +388,12 @@ export default function ChatWidget() {
 
   return (
     <>
-      <style>{typingKeyframes + scrollbarStyles + dropBounceKeyframes + drawerKeyframes}</style>
+      <style>
+        {typingKeyframes +
+          scrollbarStyles +
+          dropBounceKeyframes +
+          drawerKeyframes}
+      </style>
       {/* Floating Button (only when closed) */}
       {!open && (
         <button
@@ -412,11 +417,11 @@ export default function ChatWidget() {
             ...(!hasEntered
               ? { transform: 'translateY(calc(-100vh - 60px))', opacity: 0 }
               : !bouncePlayedRef.current
-              ? {
-                  animation:
-                    'dropBounce 2s cubic-bezier(0.22, 1, 0.36, 1) forwards',
-                }
-              : { transform: 'translateY(0)', opacity: 1 }),
+                ? {
+                    animation:
+                      'dropBounce 2s cubic-bezier(0.22, 1, 0.36, 1) forwards',
+                  }
+                : { transform: 'translateY(0)', opacity: 1 }),
           }}
         >
           <img
@@ -529,7 +534,8 @@ export default function ChatWidget() {
                             keyPrefix: string,
                           ): React.ReactNode[] => {
                             // Only consider slash-starting paths that are not just numeric
-                            const urlRegex = /(https?:\/\/[^\s]+)|\/(?!\d)[^\s]+/g
+                            const urlRegex =
+                              /(https?:\/\/[^\s]+)|\/(?!\d)[^\s]+/g
                             const nodes: React.ReactNode[] = []
                             let last = 0
                             while (true) {
