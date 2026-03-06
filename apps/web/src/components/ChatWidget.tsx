@@ -201,7 +201,9 @@ export default function ChatWidget() {
 
       try {
         const textReply = String(reply)
-        const urlRegex = /(https?:\/\/[^\s]+)|\/[^\s]+/g
+        // Match full URLs or path-like strings that start with a slash
+        // but avoid matching numeric fractions like "15/20" (slash followed by digits).
+        const urlRegex = /(https?:\/\/[^\s]+)|\/(?!\d)[^\s]+/g
         const matches = Array.from(textReply.matchAll(urlRegex)).map(
           (m) => m[0],
         )
@@ -483,7 +485,8 @@ export default function ChatWidget() {
                             segment: string,
                             keyPrefix: string,
                           ): React.ReactNode[] => {
-                            const urlRegex = /(https?:\/\/[^\s]+)|\/[^\s]+/g
+                            // Only consider slash-starting paths that are not just numeric
+                            const urlRegex = /(https?:\/\/[^\s]+)|\/(?!\d)[^\s]+/g
                             const nodes: React.ReactNode[] = []
                             let last = 0
                             while (true) {
