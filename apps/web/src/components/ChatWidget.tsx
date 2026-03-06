@@ -28,7 +28,6 @@ const dropBounceKeyframes = `
   60%  { transform: translateY(0); }
   72%  { transform: translateY(-14px); }
   84%  { transform: translateY(0); }
-  92%  { transform: translateY(-4px); }
   100% { transform: translateY(0); }
 }
 `
