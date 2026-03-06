@@ -33,6 +33,18 @@ const dropBounceKeyframes = `
 }
 `
 
+// subtle drawer enter/exit animations
+const drawerKeyframes = `
+@keyframes drawerIn {
+  0% { transform: translateY(12px) scale(.985); opacity: 0 }
+  100% { transform: translateY(0) scale(1); opacity: 1 }
+}
+@keyframes drawerOut {
+  0% { transform: translateY(0) scale(1); opacity: 1 }
+  100% { transform: translateY(12px) scale(.985); opacity: 0 }
+}
+`
+
 type Message = { id: number; text: string; from: 'user' | 'bot' }
 
 // Resize constraints
@@ -48,6 +60,10 @@ export default function ChatWidget() {
   const [input, setInput] = useState('')
   const [hasEntered, setHasEntered] = useState(false)
   const [animationDone, setAnimationDone] = useState(false)
+  // track whether the initial bounce has already played (persist during component lifecycle)
+  const bouncePlayedRef = useRef(false)
+  // keep drawer mounted during exit animation
+  const [renderDrawer, setRenderDrawer] = useState(open)
   const [apiHealthy, setApiHealthy] = useState<boolean | null>(null)
   const [messages, setMessages] = useState<Message[]>([])
   const containerRef = useRef<HTMLDivElement | null>(null)
@@ -274,9 +290,21 @@ export default function ChatWidget() {
 
   // Focus input when opening
   useEffect(() => {
-    if (open) {
+    // Only autofocus on desktop; on mobile let the user tap the input explicitly
+    if (open && isDesktop()) {
       setTimeout(() => inputRef.current?.focus(), 50)
     }
+  }, [open])
+
+  // Keep drawer mounted briefly when closing to allow exit animation
+  useEffect(() => {
+    if (open) {
+      setRenderDrawer(true)
+      return
+    }
+    // when closing, wait for the exit transition to finish
+    const t = setTimeout(() => setRenderDrawer(false), 260)
+    return () => clearTimeout(t)
   }, [open])
 
   // Always follow latest message (including when a placeholder is shown)
@@ -360,14 +388,18 @@ export default function ChatWidget() {
 
   return (
     <>
-      <style>{typingKeyframes + scrollbarStyles + dropBounceKeyframes}</style>
+      <style>{typingKeyframes + scrollbarStyles + dropBounceKeyframes + drawerKeyframes}</style>
       {/* Floating Button (only when closed) */}
       {!open && (
         <button
           type="button"
           aria-label="Open chat"
           onClick={() => setOpen(true)}
-          onAnimationEnd={() => setAnimationDone(true)}
+          onAnimationEnd={() => {
+            setAnimationDone(true)
+            // mark bounce as played so it won't run again during this session
+            bouncePlayedRef.current = true
+          }}
           className={`fixed right-6 bottom-6 z-50 flex h-14 w-14 items-center justify-center rounded-full text-white shadow-lg focus:outline-none overflow-hidden ${
             animationDone
               ? 'transition-all duration-200 hover:scale-110 hover:shadow-xl hover:shadow-indigo-500/30'
@@ -375,12 +407,16 @@ export default function ChatWidget() {
           }`}
           style={{
             backgroundColor: '#1D4ED8',
-            ...(hasEntered
+            // before entrance keep it off-screen; play bounce once after entrance;
+            // afterwards keep it visible in place
+            ...(!hasEntered
+              ? { transform: 'translateY(calc(-100vh - 60px))', opacity: 0 }
+              : !bouncePlayedRef.current
               ? {
                   animation:
                     'dropBounce 2s cubic-bezier(0.22, 1, 0.36, 1) forwards',
                 }
-              : { transform: 'translateY(calc(-100vh - 60px))', opacity: 0 }),
+              : { transform: 'translateY(0)', opacity: 1 }),
           }}
         >
           <img
@@ -392,10 +428,17 @@ export default function ChatWidget() {
       )}
 
       {/* Chat Drawer */}
-      {open && (
+      {renderDrawer && (
         <div
           className="fixed right-6 bottom-6 z-50 max-w-full transform-gpu rounded-lg bg-gray-900 shadow-xl flex flex-col overflow-hidden"
           style={{
+            transition: 'pointer-events 1ms linear',
+            // animate using keyframes so the easing feels consistent
+            animation: open
+              ? 'drawerIn 220ms cubic-bezier(.2,.9,.2,1) forwards'
+              : 'drawerOut 220ms cubic-bezier(.2,.9,.2,1) forwards',
+            transformOrigin: 'right bottom',
+            pointerEvents: open ? 'auto' : 'none',
             ...(isDesktop()
               ? { width: chatSize.w, height: chatSize.h }
               : { width: 320, height: DEFAULT_HEIGHT }),
