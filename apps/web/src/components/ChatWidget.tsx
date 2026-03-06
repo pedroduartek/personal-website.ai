@@ -359,62 +359,46 @@ export default function ChatWidget() {
   return (
     <>
       <style>{typingKeyframes + scrollbarStyles + dropBounceKeyframes}</style>
-      {/* Floating Button */}
-      <button
-        type="button"
-        aria-label={open ? 'Close chat' : 'Open chat'}
-        onClick={() => setOpen((v) => !v)}
-        onAnimationEnd={() => setAnimationDone(true)}
-        className={`fixed right-6 bottom-6 z-50 flex h-14 w-14 items-center justify-center rounded-full text-white shadow-lg focus:outline-none overflow-hidden ${
-          animationDone
-            ? 'transition-all duration-200 hover:scale-110 hover:shadow-xl hover:shadow-indigo-500/30'
-            : ''
-        }`}
-        style={{
-          backgroundColor: '#1D4ED8',
-          ...(hasEntered
-            ? {
-                animation:
-                  'dropBounce 2s cubic-bezier(0.22, 1, 0.36, 1) forwards',
-              }
-            : { transform: 'translateY(calc(-100vh - 60px))', opacity: 0 }),
-        }}
-      >
-        {open ? (
-          // X icon
-          <svg
-            className="h-6 w-6"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            role="img"
-          >
-            <title>Close chat</title>
-            <path
-              strokeWidth={2}
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M6 18L18 6M6 6l12 12"
-            />
-          </svg>
-        ) : (
+      {/* Floating Button (only when closed) */}
+      {!open && (
+        <button
+          type="button"
+          aria-label="Open chat"
+          onClick={() => setOpen(true)}
+          onAnimationEnd={() => setAnimationDone(true)}
+          className={`fixed right-6 bottom-6 z-50 flex h-14 w-14 items-center justify-center rounded-full text-white shadow-lg focus:outline-none overflow-hidden ${
+            animationDone
+              ? 'transition-all duration-200 hover:scale-110 hover:shadow-xl hover:shadow-indigo-500/30'
+              : ''
+          }`}
+          style={{
+            backgroundColor: '#1D4ED8',
+            ...(hasEntered
+              ? {
+                  animation:
+                    'dropBounce 2s cubic-bezier(0.22, 1, 0.36, 1) forwards',
+                }
+              : { transform: 'translateY(calc(-100vh - 60px))', opacity: 0 }),
+          }}
+        >
           <img
             src={ollamaIcon}
             alt="Chat bot"
             className="h-10 w-10 object-contain rounded-full"
           />
-        )}
-      </button>
+        </button>
+      )}
 
       {/* Chat Drawer */}
       {open && (
         <div
           className="fixed right-6 bottom-20 z-50 max-w-full transform-gpu rounded-lg bg-gray-900 shadow-xl flex flex-col overflow-hidden"
-          style={
-            isDesktop()
+          style={{
+            ...(isDesktop()
               ? { width: chatSize.w, height: chatSize.h }
-              : { width: 320, height: DEFAULT_HEIGHT }
-          }
+              : { width: 320, height: DEFAULT_HEIGHT }),
+            border: '3px solid #1D4ED7',
+          }}
         >
           {/* Resize handles — desktop only */}
           {isDesktop() && (
