@@ -392,7 +392,7 @@ export default function ChatWidget() {
       {/* Chat Drawer */}
       {open && (
         <div
-          className="fixed right-6 bottom-20 z-50 max-w-full transform-gpu rounded-lg bg-gray-900 shadow-xl flex flex-col overflow-hidden"
+          className="fixed right-6 bottom-6 z-50 max-w-full transform-gpu rounded-lg bg-gray-900 shadow-xl flex flex-col overflow-hidden"
           style={{
             ...(isDesktop()
               ? { width: chatSize.w, height: chatSize.h }
