@@ -223,13 +223,18 @@ export default function ChatWidget() {
         typeof data === 'string'
           ? data
           : data && typeof data === 'object'
-            ? (data.answer ?? data.reply ?? data.message ?? JSON.stringify(data))
+            ? (data.answer ??
+              data.reply ??
+              data.message ??
+              JSON.stringify(data))
             : String(data)
 
       try {
         const textReply = String(reply)
         const urlRegex = /(https?:\/\/[^\s]+)|\/(?!\d)[^\s]+/g
-        const matches = Array.from(textReply.matchAll(urlRegex)).map((m) => m[0])
+        const matches = Array.from(textReply.matchAll(urlRegex)).map(
+          (m) => m[0],
+        )
         if (matches.length > 0) {
           let hasInternal = false
           for (const matched of matches) {
