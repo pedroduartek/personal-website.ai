@@ -41,6 +41,10 @@
       "destination": "/sitemap.xml"
     },
     {
+      "source": "/api/(.*)",
+      "destination": "https://api.pedroduartek.com/$1"
+    },
+    {
       "source": "/((?!api).*)",
       "destination": "/index.html"
     }
