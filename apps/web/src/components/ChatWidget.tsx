@@ -184,28 +184,13 @@ export default function ChatWidget() {
       : 'https://api.pedroduartek.com/chat'
 
     try {
-      const maxAttempts = 2
-      let res: Response | null = null
-      let lastErr: unknown = null
+      const res = await fetch(apiUrl, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message: text }),
+      })
 
-      for (let attempt = 1; attempt <= maxAttempts; attempt++) {
-        try {
-          res = await fetch(apiUrl, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ message: text }),
-          })
-          if (res.ok) break
-          lastErr = new Error(`HTTP ${res.status}`)
-        } catch (e) {
-          lastErr = e
-        }
-      }
-
-      if (!res || !res.ok) {
-        try {
-          console.error('ChatWidget fetch failed after retries:', lastErr)
-        } catch {}
+      if (res.status !== 200) {
         setMessages((s) => [
           ...s,
           {
@@ -223,13 +208,20 @@ export default function ChatWidget() {
         typeof data === 'string'
           ? data
           : data && typeof data === 'object'
-            ? (data.answer ?? data.reply ?? data.message ?? JSON.stringify(data))
+            ? (data.answer ??
+              data.reply ??
+              data.message ??
+              JSON.stringify(data))
             : String(data)
 
       try {
         const textReply = String(reply)
+        // Match full URLs or path-like strings that start with a slash
+        // but avoid matching numeric fractions like "15/20" (slash followed by digits).
         const urlRegex = /(https?:\/\/[^\s]+)|\/(?!\d)[^\s]+/g
-        const matches = Array.from(textReply.matchAll(urlRegex)).map((m) => m[0])
+        const matches = Array.from(textReply.matchAll(urlRegex)).map(
+          (m) => m[0],
+        )
         if (matches.length > 0) {
           let hasInternal = false
           for (const matched of matches) {
@@ -271,9 +263,12 @@ export default function ChatWidget() {
       ])
       setAwaitingReply(false)
     } catch (err: unknown) {
+      // Log the actual error for debugging, but don't expose internals to users
       try {
         console.error('ChatWidget error:', err)
-      } catch {}
+      } catch {
+        // ignore logging failures
+      }
       setMessages((s) => [
         ...s,
         {
