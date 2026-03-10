@@ -23,6 +23,8 @@ export default function TerminalShell({ isOpen, onClose }: TerminalShellProps) {
   const [, setHistIdx] = useState<number | null>(null)
   const inputRef = useRef<HTMLInputElement | null>(null)
   const containerRef = useRef<HTMLDivElement | null>(null)
+  const [chatMode, setChatMode] = useState(false)
+  const [chatAwaiting, setChatAwaiting] = useState(false)
 
   function renderLineText(text: string, id: number | string) {
     const urlRegex = /(https?:\/\/[^\s]+)/
@@ -95,6 +97,7 @@ export default function TerminalShell({ isOpen, onClose }: TerminalShellProps) {
   async function handleSubmit(cmdRaw: string) {
     const cmd = cmdRaw.trim()
     if (!cmd) return
+    const parts = cmd.split(/\s+/).filter(Boolean)
     // If prompting for Y/N confirmation, treat single-letter responses specially
     if (pendingConfirm) {
       const key = cmd.toLowerCase()
@@ -145,6 +148,50 @@ export default function TerminalShell({ isOpen, onClose }: TerminalShellProps) {
 
     if (cmd === 'clear') {
       setLines([])
+      return
+    }
+
+    // Enter interactive chat mode
+    if (cmd === 'chat' && parts.length === 1) {
+      setChatMode(true)
+      setLines((l) => [
+        ...l,
+        {
+          id: Date.now() + 1,
+          text: 'Chat mode — type your message. Type `exit` to leave.',
+          type: 'out',
+        },
+      ])
+      setInput('')
+      return
+    }
+
+    // If in chatMode, treat input as chat messages until exit
+    if (chatMode) {
+      if (cmd === 'exit') {
+        setChatMode(false)
+        setLines((l) => [
+          ...l,
+          { id: Date.now() + 1, text: 'Exited chat mode.', type: 'out' },
+        ])
+        setInput('')
+        return
+      }
+
+      setChatAwaiting(true)
+      // send to chat endpoint via runCommand
+      const chatOut = await runCommand(`chat ${cmd}`, { profile })
+      for (const ln of chatOut) {
+        setLines((l) => [
+          ...l,
+          { id: Date.now() + Math.random(), text: ln, type: 'out' },
+        ])
+        // small delay to simulate streaming
+        // eslint-disable-next-line no-await-in-loop
+        await new Promise((r) => setTimeout(r, 120))
+      }
+      setChatAwaiting(false)
+      setInput('')
       return
     }
 
@@ -284,6 +331,12 @@ export default function TerminalShell({ isOpen, onClose }: TerminalShellProps) {
                 {renderLineText(ln.text, ln.id)}
               </div>
             ))
+          )}
+          {chatAwaiting && (
+            <div className="text-yellow-300 whitespace-pre-wrap py-0.5 font-mono">
+              AI is thinking
+              <span className="inline-block ml-1 animate-pulse">...</span>
+            </div>
           )}
         </div>
 
