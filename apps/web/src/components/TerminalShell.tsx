@@ -45,6 +45,16 @@ export default function TerminalShell({ isOpen, onClose }: TerminalShellProps) {
     }
   }, [lines])
 
+  useEffect(() => {
+    function onKey(e: KeyboardEvent) {
+      if (e.key === 'Escape') onClose()
+    }
+    if (isOpen) {
+      document.addEventListener('keydown', onKey)
+    }
+    return () => document.removeEventListener('keydown', onKey)
+  }, [isOpen, onClose])
+
   async function handleSubmit(cmdRaw: string) {
     const cmd = cmdRaw.trim()
     if (!cmd) return
@@ -188,16 +198,6 @@ export default function TerminalShell({ isOpen, onClose }: TerminalShellProps) {
   }
 
   if (!isOpen) return null
-
-  useEffect(() => {
-    function onKey(e: KeyboardEvent) {
-      if (e.key === 'Escape') onClose()
-    }
-    if (isOpen) {
-      document.addEventListener('keydown', onKey)
-    }
-    return () => document.removeEventListener('keydown', onKey)
-  }, [isOpen, onClose])
 
   return (
     <div className="fixed inset-0 z-60">
