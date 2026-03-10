@@ -48,3 +48,25 @@
   animation: recording-heart 1.2s ease-in-out infinite;
   will-change: box-shadow, filter;
 }
+
+@keyframes caret-blink {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.terminal-caret::after {
+  content: "";
+  display: inline-block;
+  width: 8px;
+  height: 1em;
+  margin-left: 6px;
+  background: currentColor;
+  animation: caret-blink 1s steps(1) infinite;
+}
