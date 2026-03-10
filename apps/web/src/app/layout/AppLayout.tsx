@@ -1,17 +1,24 @@
-import { Suspense, useState } from 'react'
+import { Suspense, useEffect, useState } from 'react'
 import { Link, Outlet } from 'react-router-dom'
 import ChatWidget from '../../components/ChatWidget'
 import { CommandPalette } from '../../components/CommandPalette'
 import CommandPaletteTip from '../../components/CommandPalette/CommandPaletteTip'
 import SiteContainer from '../../components/SiteContainer'
+import TerminalShell from '../../components/TerminalShell'
 import { useCommandPalette } from '../../hooks/useCommandPalette'
 const logo = '/pld_logo_header.webp'
 
 export default function AppLayout() {
   const { isOpen, close, open } = useCommandPalette()
+  const [terminalOpen, setTerminalOpen] = useState(false)
 
-  // Use build-time `VITE_LAST_UPDATED` only; do not fall back to runtime
-  // (runtime fallback showed the current time, which is incorrect).
+  useEffect(() => {
+    const handle = () => setTerminalOpen(true)
+    window.addEventListener('open-terminal', handle as EventListener)
+    return () =>
+      window.removeEventListener('open-terminal', handle as EventListener)
+  }, [])
+
   const lastUpdated = import.meta.env.VITE_LAST_UPDATED ?? null
   return (
     <div className="flex min-h-screen flex-col bg-background">
@@ -33,6 +40,10 @@ export default function AppLayout() {
         {lastUpdated ? `Last updated: ${lastUpdated}` : null}
       </footer>
       <CommandPalette isOpen={isOpen} onClose={close} />
+      <TerminalShell
+        isOpen={terminalOpen}
+        onClose={() => setTerminalOpen(false)}
+      />
       <ChatWidget />
     </div>
   )

@@ -111,6 +111,19 @@ export function CommandPalette({ isOpen, onClose }: CommandPaletteProps) {
       },
       category: 'navigation',
     },
+    {
+      id: 'terminal',
+      label: 'Terminal',
+      description: 'Open terminal-style shell',
+      icon: '🖥️',
+      action: () => {
+        try {
+          window.dispatchEvent(new CustomEvent('open-terminal'))
+        } catch {}
+        onClose()
+      },
+      category: 'action',
+    },
   ]
 
   const filteredCommands = commands.filter((command) => {
