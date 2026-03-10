@@ -1,5 +1,5 @@
 import type React from 'react'
-import { useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import cvPdf from '../CV/Pedro_Duarte_CV.pdf'
 import { profile } from '../content/profile'
 import { runCommand } from '../utils/terminalCommands'
@@ -25,6 +25,17 @@ export default function TerminalShell({ isOpen, onClose }: TerminalShellProps) {
   const containerRef = useRef<HTMLDivElement | null>(null)
   const [chatMode, setChatMode] = useState(false)
   const [chatAwaiting, setChatAwaiting] = useState(false)
+
+  const handleClose = useCallback(() => {
+    if (chatMode) {
+      setChatMode(false)
+      setLines((l) => [
+        ...l,
+        { id: Date.now() + 1, text: 'Exited chat mode.', type: 'out' },
+      ])
+    }
+    onClose()
+  }, [chatMode, onClose])
 
   function renderLineText(text: string, id: number | string) {
     const urlRegex = /(https?:\/\/[^\s]+)/
@@ -86,13 +97,13 @@ export default function TerminalShell({ isOpen, onClose }: TerminalShellProps) {
 
   useEffect(() => {
     function onKey(e: KeyboardEvent) {
-      if (e.key === 'Escape') onClose()
+      if (e.key === 'Escape') handleClose()
     }
     if (isOpen) {
       document.addEventListener('keydown', onKey)
     }
     return () => document.removeEventListener('keydown', onKey)
-  }, [isOpen, onClose])
+  }, [isOpen, handleClose])
 
   async function handleSubmit(cmdRaw: string) {
     const cmd = cmdRaw.trim()
@@ -288,7 +299,7 @@ export default function TerminalShell({ isOpen, onClose }: TerminalShellProps) {
       <button
         type="button"
         className="absolute inset-0 bg-black/60 backdrop-blur-sm"
-        onClick={onClose}
+        onClick={handleClose}
         aria-label="Close terminal overlay"
       />
       <div className="mx-auto my-12 w-[min(1000px,95%)] max-h-[80vh] overflow-hidden rounded-md border border-gray-700 bg-[#071021] shadow-2xl relative z-10">
@@ -306,7 +317,7 @@ export default function TerminalShell({ isOpen, onClose }: TerminalShellProps) {
             </button>
             <button
               type="button"
-              onClick={onClose}
+              onClick={handleClose}
               className="text-xs text-gray-400 hover:text-white"
             >
               close
