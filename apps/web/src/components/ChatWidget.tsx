@@ -412,6 +412,9 @@ export default function ChatWidget() {
           onAnimationEnd={() => {
             setAnimationDone(true)
             // mark bounce as played so it won't run again during this session
+            try {
+              sessionStorage.setItem('pld_chat_bounce_played', 'true')
+            } catch {}
             bouncePlayedRef.current = true
           }}
           className={`fixed right-6 bottom-6 z-50 flex h-14 w-14 items-center justify-center rounded-full text-white shadow-lg focus:outline-none overflow-hidden ${
@@ -425,12 +428,21 @@ export default function ChatWidget() {
             // afterwards keep it visible in place
             ...(!hasEntered
               ? { transform: 'translateY(calc(-100vh - 60px))', opacity: 0 }
-              : !bouncePlayedRef.current
-                ? {
-                    animation:
-                      'dropBounce 2s cubic-bezier(0.22, 1, 0.36, 1) forwards',
+              : (() => {
+                  let played = false
+                  try {
+                    played =
+                      sessionStorage.getItem('pld_chat_bounce_played') ===
+                      'true'
+                  } catch {}
+                  if (!played && !bouncePlayedRef.current) {
+                    return {
+                      animation:
+                        'dropBounce 2s cubic-bezier(0.22, 1, 0.36, 1) forwards',
+                    }
                   }
-                : { transform: 'translateY(0)', opacity: 1 }),
+                  return { transform: 'translateY(0)', opacity: 1 }
+                })()),
           }}
         >
           <img
