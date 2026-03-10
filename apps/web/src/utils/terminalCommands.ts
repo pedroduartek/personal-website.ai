@@ -38,26 +38,21 @@ export async function runCommand(
   if (name === 'help' || name === '?') {
     return [
       'Available commands:',
-      '  whois|whoami       Show a short profile summary',
-      '  email               Show email address',
-      '  socials|contact     Show social links and contact info',
+      '  whoami       Show a short profile summary',
+      '  socials|contacts     Show social links and contact info',
       '  skills              List skill groups and skills',
       '  experience          Summary of top 3 roles',
       '  projects            List notable projects with links',
       '  banner              Show a small ASCII header',
-      '  time                Show current local time',
-      '  date                Show current local date/time',
-      '  echo <text>         Echo input text',
       '  sysinfo             Show basic system / navigator info',
       '  download-cv         Navigate to /cv to download the CV',
       '  open <path>         Navigate to a site path (e.g. /projects)',
       '  clear               Clear the terminal (client-side)',
-      '  history             Show command history (client-side)',
       '  help                Show this help message',
     ]
   }
 
-  if (name === 'whois' || name === 'whoami') {
+  if (name === 'whoami') {
     const out: string[] = []
     out.push(`${p.name} — ${p.role}`)
     out.push('')
@@ -70,11 +65,7 @@ export async function runCommand(
     return out
   }
 
-  if (name === 'email') {
-    return [p.email ?? 'Email not available']
-  }
-
-  if (name === 'socials' || name === 'contact') {
+  if (name === 'socials' || name === 'contacts') {
     const out: string[] = []
     if (p.github) out.push(`GitHub: ${p.github}`)
     if (p.linkedin) out.push(`LinkedIn: ${p.linkedin}`)
@@ -134,18 +125,6 @@ export async function runCommand(
     return lines
   }
 
-  if (name === 'time') {
-    return [`${new Date().toLocaleTimeString()}`]
-  }
-
-  if (name === 'date') {
-    return [formatDate(new Date())]
-  }
-
-  if (name === 'echo') {
-    return [args.join(' ')]
-  }
-
   if (name === 'sysinfo') {
     const out: string[] = []
     if (typeof navigator !== 'undefined') {
@@ -155,8 +134,12 @@ export async function runCommand(
     } else {
       out.push('Navigator info not available (server-side).')
     }
-    const maybeProcess = (globalThis as any).process
-    if (maybeProcess && maybeProcess.versions) {
+    const maybeProcess = (
+      globalThis as unknown as {
+        process?: { versions?: Record<string, unknown>; version?: string }
+      }
+    ).process
+    if (maybeProcess?.versions) {
       out.push(`Node: ${maybeProcess.version}`)
     }
     return out
@@ -178,10 +161,6 @@ export async function runCommand(
       : [`Navigation not available. Visit ${path}`]
   }
 
-  if (name === 'history') {
-    return ['History is available via the up/down keys.']
-  }
-
   // fallback
-  return [`Command not found: ${cmd}`, 'Type `help` to see available commands.']
+  return [`Command not found: ${cmd}`, 'Type "help" to see available commands.']
 }

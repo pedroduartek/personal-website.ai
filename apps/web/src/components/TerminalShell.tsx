@@ -24,6 +24,43 @@ export default function TerminalShell({ isOpen, onClose }: TerminalShellProps) {
   const inputRef = useRef<HTMLInputElement | null>(null)
   const containerRef = useRef<HTMLDivElement | null>(null)
 
+  function renderLineText(text: string, id: number | string) {
+    const urlRegex = /(https?:\/\/[^\s]+)/
+    const emailRegex = /([a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})/
+    const combined = new RegExp(`${urlRegex.source}|${emailRegex.source}`)
+    const parts = text.split(combined)
+    return parts.map((part, i) => {
+      const key = `${id}-${i}`
+      if (urlRegex.test(part)) {
+        return (
+          <a
+            key={key}
+            href={part}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-blue-300 underline hover:text-blue-100"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {part}
+          </a>
+        )
+      }
+      if (emailRegex.test(part)) {
+        return (
+          <a
+            key={key}
+            href={`mailto:${part}`}
+            className="text-blue-300 underline hover:text-blue-100"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {part}
+          </a>
+        )
+      }
+      return <span key={key}>{part}</span>
+    })
+  }
+
   useEffect(() => {
     if (isOpen) {
       setTimeout(() => inputRef.current?.focus(), 50)
@@ -168,7 +205,7 @@ export default function TerminalShell({ isOpen, onClose }: TerminalShellProps) {
         ...l,
         { id: Date.now() + Math.random(), text: ln, type: 'out' },
       ])
-      await new Promise((r) => setTimeout(r, 40))
+      await new Promise((r) => setTimeout(r, 80))
     }
   }
 
@@ -244,7 +281,7 @@ export default function TerminalShell({ isOpen, onClose }: TerminalShellProps) {
                 key={ln.id}
                 className={`${ln.type === 'in' ? 'text-white' : 'text-green-200'} whitespace-pre-wrap py-0.5`}
               >
-                {ln.text}
+                {renderLineText(ln.text, ln.id)}
               </div>
             ))
           )}
