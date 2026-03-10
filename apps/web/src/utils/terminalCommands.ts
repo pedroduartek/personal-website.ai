@@ -18,10 +18,6 @@ function safeWindowOpen(path: string) {
   return false
 }
 
-function formatDate(d = new Date()) {
-  return d.toLocaleString(undefined, { hour12: false })
-}
-
 export async function runCommand(
   cmd: string,
   _opts: RunOptions = {},
