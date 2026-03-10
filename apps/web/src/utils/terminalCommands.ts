@@ -44,6 +44,7 @@ export async function runCommand(
       '  download-cv         Navigate to /cv to download the CV',
       '  open <path>         Navigate to a site path (e.g. /projects)',
       '  clear               Clear the terminal (client-side)',
+      '  chat <message>      Ask the chat API and return a response',
       '  help                Show this help message',
     ]
   }
@@ -155,6 +156,60 @@ export async function runCommand(
     return ok
       ? [`Navigating to ${path}...`]
       : [`Navigation not available. Visit ${path}`]
+  }
+
+  if (name === 'chat') {
+    const message = args.join(' ').trim()
+    if (!message) return ['Usage: chat <message>']
+
+    const apiUrl = import.meta.env.DEV
+      ? '/api/chat'
+      : 'https://api.pedroduartek.com/chat'
+
+    try {
+      const maxAttempts = 2
+      let res: Response | null = null
+      let lastErr: unknown = null
+
+      for (let attempt = 1; attempt <= maxAttempts; attempt++) {
+        try {
+          res = await fetch(apiUrl, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ message }),
+          })
+          if (res.ok) break
+          lastErr = new Error(`HTTP ${res.status}`)
+        } catch (e) {
+          lastErr = e
+        }
+      }
+
+      if (!res || !res.ok) {
+        try {
+          console.error('chat command fetch failed:', lastErr)
+        } catch {}
+        return ['Chat service unavailable.']
+      }
+
+      const data = await res.json()
+      const reply =
+        typeof data === 'string'
+          ? data
+          : data && typeof data === 'object'
+            ? (data.answer ??
+              data.reply ??
+              data.message ??
+              JSON.stringify(data))
+            : String(data)
+
+      return String(reply).split('\n')
+    } catch (err) {
+      try {
+        console.error('chat command error:', err)
+      } catch {}
+      return ['Chat service unavailable.']
+    }
   }
 
   // fallback
