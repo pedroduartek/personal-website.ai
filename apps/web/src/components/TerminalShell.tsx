@@ -28,43 +28,43 @@ function isValidEmail(value: string) {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)
 }
 
-function AsciiArt({ art, id, containerRef }: { art: string; id: number | string; containerRef: React.RefObject<HTMLDivElement | null> }) {
+function AsciiArt({
+  art,
+  id,
+  containerRef,
+}: {
+  art: string
+  id: number | string
+  containerRef: React.RefObject<HTMLDivElement | null>
+}) {
   const artLines = art.split('\n')
   const [visible, setVisible] = useState(0)
 
   useEffect(() => {
-    let cancelled = false
-    setVisible(0)
+    if (visible >= artLines.length) return
+    const t = setTimeout(() => setVisible((v) => v + 1), 28)
+    return () => clearTimeout(t)
+  }, [visible, artLines.length])
 
-    async function run() {
-      for (let i = 0; i < artLines.length; i++) {
-        if (cancelled) return
-        // delay between lines (ms)
-        // tuned to be noticeable but not too slow
-        // eslint-disable-next-line no-await-in-loop
-        await new Promise((r) => setTimeout(r, 28))
-        if (cancelled) return
-        setVisible((v) => v + 1)
-        try {
-          if (containerRef.current) {
-            containerRef.current.scrollTop = containerRef.current.scrollHeight
-          }
-        } catch {}
+  // biome-ignore lint/correctness/useExhaustiveDependencies: ref is stable and we only care about visible changes
+  useEffect(() => {
+    try {
+      if (containerRef.current) {
+        containerRef.current.scrollTop = containerRef.current.scrollHeight
       }
-    }
-
-    void run()
-    return () => {
-      cancelled = true
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [art])
+    } catch {}
+  }, [visible])
 
   return (
     <div key={id} className="py-1">
       <pre
         className="font-mono text-green-200"
-        style={{ whiteSpace: 'pre', margin: 0, fontSize: '6.75px', lineHeight: '0.525' }}
+        style={{
+          whiteSpace: 'pre',
+          margin: 0,
+          fontSize: '6.75px',
+          lineHeight: '0.525',
+        }}
       >
         {artLines.slice(0, visible).join('\n')}
       </pre>
@@ -200,8 +200,6 @@ export default function TerminalShell({ onClose }: TerminalShellProps) {
     document.addEventListener('keydown', onKey)
     return () => document.removeEventListener('keydown', onKey)
   }, [handleClose])
-
-  
 
   async function handleSubmit(cmdRaw: string) {
     const cmd = cmdRaw.trim()
@@ -572,9 +570,14 @@ export default function TerminalShell({ onClose }: TerminalShellProps) {
           lines.map((ln) => {
             // special rendering for ASCII art blocks emitted by runCommand
             const asciiPrefix = '::ASCII_ART::\n'
-            if (typeof ln.text === 'string' && ln.text.startsWith(asciiPrefix)) {
+            if (
+              typeof ln.text === 'string' &&
+              ln.text.startsWith(asciiPrefix)
+            ) {
               const art = ln.text.slice(asciiPrefix.length)
-              return <AsciiArt art={art} id={ln.id} containerRef={containerRef} />
+              return (
+                <AsciiArt art={art} id={ln.id} containerRef={containerRef} />
+              )
             }
 
             return (
