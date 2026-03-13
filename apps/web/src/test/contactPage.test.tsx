@@ -60,7 +60,9 @@ describe('ContactPage', () => {
       subject: 'Hello',
       isHtml: true,
     })
-    expect(payload.body).toContain('New message from pedroduartek.com contact form')
+    expect(payload.body).toContain(
+      'New message from pedroduartek.com contact form',
+    )
     expect(payload.body).toContain('Name: Ada Lovelace')
     expect(payload.body).toContain('Email: ada@example.com')
     expect(payload.body).toContain('I would like to talk about a backend role.')
