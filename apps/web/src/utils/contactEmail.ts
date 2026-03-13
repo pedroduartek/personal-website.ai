@@ -1,5 +1,3 @@
-import { profile } from '../content/profile'
-
 export const CONTACT_EMAIL_ENDPOINT = 'https://api.pedroduartek.com/email'
 
 export type ContactEmailValues = {
