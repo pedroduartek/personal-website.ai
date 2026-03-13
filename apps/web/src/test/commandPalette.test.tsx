@@ -1,5 +1,7 @@
-import { act, render } from '@testing-library/react'
+import { act, render, screen } from '@testing-library/react'
+import { MemoryRouter } from 'react-router-dom'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
+import { CommandPalette } from '../components/CommandPalette'
 import CommandPaletteTip from '../components/CommandPalette/CommandPaletteTip'
 import { useCommandPalette } from '../hooks/useCommandPalette'
 
@@ -44,10 +46,59 @@ describe('useCommandPalette', () => {
   })
 })
 
+describe('CommandPalette', () => {
+  beforeEach(() => {
+    Object.defineProperty(window, 'innerWidth', {
+      configurable: true,
+      writable: true,
+      value: 1600,
+    })
+    Object.defineProperty(window.HTMLElement.prototype, 'scrollIntoView', {
+      configurable: true,
+      value: vi.fn(),
+    })
+  })
+
+  it('shows the terminal command on desktop', () => {
+    render(
+      <MemoryRouter>
+        <CommandPalette isOpen={true} onClose={() => {}} />
+      </MemoryRouter>,
+    )
+
+    expect(
+      screen.getByRole('button', { name: /terminal/i }),
+    ).toBeInTheDocument()
+  })
+
+  it('hides the terminal command below the desktop breakpoint', () => {
+    Object.defineProperty(window, 'innerWidth', {
+      configurable: true,
+      writable: true,
+      value: 1280,
+    })
+
+    render(
+      <MemoryRouter>
+        <CommandPalette isOpen={true} onClose={() => {}} />
+      </MemoryRouter>,
+    )
+
+    expect(
+      screen.queryByRole('button', { name: /terminal/i }),
+    ).not.toBeInTheDocument()
+  })
+})
+
 describe('CommandPaletteTip', () => {
   beforeEach(() => {
     localStorage.clear()
     vi.useFakeTimers()
+    Object.defineProperty(window, 'innerWidth', {
+      configurable: true,
+      writable: true,
+      value: 1600,
+    })
   })
 
   afterEach(() => {

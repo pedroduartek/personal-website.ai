@@ -2,14 +2,33 @@ import type React from 'react'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import cvPdf from '../CV/Pedro_Duarte_CV.pdf'
 import { profile } from '../content/profile'
+import {
+  type ContactEmailValues,
+  sendContactEmail,
+} from '../utils/contactEmail'
 import { runCommand } from '../utils/terminalCommands'
 
 interface TerminalShellProps {
-  isOpen: boolean
   onClose: () => void
 }
 
-export default function TerminalShell({ isOpen, onClose }: TerminalShellProps) {
+type EmailComposerStep = 'name' | 'email' | 'subject' | 'message' | 'confirm'
+
+type EmailComposerState = {
+  step: EmailComposerStep
+  draft: {
+    name: string
+    email: string
+    subject: string
+    messageLines: string[]
+  }
+}
+
+function isValidEmail(value: string) {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)
+}
+
+export default function TerminalShell({ onClose }: TerminalShellProps) {
   const [lines, setLines] = useState<
     Array<{ id: number; text: string; type: 'out' | 'in' }>
   >([])
@@ -25,6 +44,29 @@ export default function TerminalShell({ isOpen, onClose }: TerminalShellProps) {
   const containerRef = useRef<HTMLDivElement | null>(null)
   const [chatMode, setChatMode] = useState(false)
   const [chatAwaiting, setChatAwaiting] = useState(false)
+  const [emailComposer, setEmailComposer] = useState<EmailComposerState | null>(
+    null,
+  )
+  const [emailSending, setEmailSending] = useState(false)
+
+  function appendOutput(text: string) {
+    setLines((current) => [
+      ...current,
+      { id: Date.now() + Math.random(), text, type: 'out' },
+    ])
+  }
+
+  function appendOutputs(texts: string[]) {
+    if (texts.length === 0) return
+    setLines((current) => [
+      ...current,
+      ...texts.map((text, index) => ({
+        id: Date.now() + index + Math.random(),
+        text,
+        type: 'out' as const,
+      })),
+    ])
+  }
 
   const handleClose = useCallback(() => {
     if (chatMode) {
@@ -74,19 +116,31 @@ export default function TerminalShell({ isOpen, onClose }: TerminalShellProps) {
     })
   }
 
-  useEffect(() => {
-    if (isOpen) {
-      setTimeout(() => inputRef.current?.focus(), 50)
-      setLines((l) => [
-        ...l,
-        {
-          id: Date.now(),
-          text: `Welcome. Type \"help\" for available commands.`,
-          type: 'out',
-        },
-      ])
+  function getEmailDraft(state: EmailComposerState): ContactEmailValues {
+    return {
+      name: state.draft.name,
+      email: state.draft.email,
+      subject: state.draft.subject,
+      message: state.draft.messageLines.join('\n'),
     }
-  }, [isOpen])
+  }
+
+  useEffect(() => {
+    const timeoutId = window.setTimeout(() => inputRef.current?.focus(), 50)
+    setLines((l) =>
+      l.length > 0
+        ? l
+        : [
+            {
+              id: Date.now(),
+              text: 'Welcome. Type "help" for available commands.',
+              type: 'out',
+            },
+          ],
+    )
+
+    return () => window.clearTimeout(timeoutId)
+  }, [])
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: intentionally only run when lines change
   useEffect(() => {
@@ -99,18 +153,15 @@ export default function TerminalShell({ isOpen, onClose }: TerminalShellProps) {
     function onKey(e: KeyboardEvent) {
       if (e.key === 'Escape') handleClose()
     }
-    if (isOpen) {
-      document.addEventListener('keydown', onKey)
-    }
+    document.addEventListener('keydown', onKey)
     return () => document.removeEventListener('keydown', onKey)
-  }, [isOpen, handleClose])
+  }, [handleClose])
 
   async function handleSubmit(cmdRaw: string) {
     const cmd = cmdRaw.trim()
-    if (!cmd) return
-    const parts = cmd.split(/\s+/).filter(Boolean)
     // If prompting for Y/N confirmation, treat single-letter responses specially
     if (pendingConfirm) {
+      if (!cmd) return
       const key = cmd.toLowerCase()
       if (key === 'y' || key === 'yes') {
         setLines((l) => [
@@ -120,38 +171,162 @@ export default function TerminalShell({ isOpen, onClose }: TerminalShellProps) {
         setPendingConfirm(null)
         try {
           pendingConfirm.action()
-          setLines((l) => [
-            ...l,
-            {
-              id: Date.now() + 1,
-              text: 'Download started in your browser.',
-              type: 'out',
-            },
-          ])
+          appendOutput('Download started in your browser.')
         } catch (e) {
-          setLines((l) => [
-            ...l,
-            {
-              id: Date.now() + 1,
-              text: 'Failed to start download.',
-              type: 'out',
-            },
-          ])
+          appendOutput('Failed to start download.')
         }
       } else {
         setLines((l) => [
           ...l,
           { id: Date.now(), text: `> ${cmd}`, type: 'in' },
         ])
-        setLines((l) => [
-          ...l,
-          { id: Date.now() + 1, text: 'Download cancelled.', type: 'out' },
-        ])
+        appendOutput('Download cancelled.')
         setPendingConfirm(null)
       }
       setInput('')
       return
     }
+
+    if (emailComposer) {
+      const lower = cmd.toLowerCase()
+      setLines((current) => [
+        ...current,
+        { id: Date.now(), text: `> ${cmd}`, type: 'in' },
+      ])
+      setInput('')
+
+      if (lower === 'cancel') {
+        setEmailComposer(null)
+        appendOutput('Email composition cancelled.')
+        return
+      }
+
+      if (emailComposer.step === 'name') {
+        if (!cmd) {
+          appendOutputs(['Name cannot be empty.', 'Your name:'])
+          return
+        }
+
+        setEmailComposer({
+          step: 'email',
+          draft: {
+            ...emailComposer.draft,
+            name: cmd,
+          },
+        })
+        appendOutput('Your email:')
+        return
+      }
+
+      if (emailComposer.step === 'email') {
+        if (!isValidEmail(cmd)) {
+          appendOutputs(['Please enter a valid email address.', 'Your email:'])
+          return
+        }
+
+        setEmailComposer({
+          step: 'subject',
+          draft: {
+            ...emailComposer.draft,
+            email: cmd,
+          },
+        })
+        appendOutput('Subject:')
+        return
+      }
+
+      if (emailComposer.step === 'subject') {
+        if (!cmd) {
+          appendOutputs(['Subject cannot be empty.', 'Subject:'])
+          return
+        }
+
+        setEmailComposer({
+          step: 'message',
+          draft: {
+            ...emailComposer.draft,
+            subject: cmd,
+          },
+        })
+        appendOutput(
+          'Message: type your message. Press Enter on an empty line when finished.',
+        )
+        return
+      }
+
+      if (emailComposer.step === 'message') {
+        if (!cmd) {
+          if (emailComposer.draft.messageLines.length === 0) {
+            appendOutput('Message cannot be empty.')
+            return
+          }
+
+          const nextState: EmailComposerState = {
+            step: 'confirm',
+            draft: emailComposer.draft,
+          }
+          const draft = getEmailDraft(nextState)
+          setEmailComposer(nextState)
+          appendOutputs([
+            `Ready to send to ${profile.email}:`,
+            `From: ${draft.name} <${draft.email}>`,
+            `Subject: ${draft.subject}`,
+            '',
+            draft.message,
+            '',
+            'Send now? (y/n)',
+          ])
+          return
+        }
+
+        setEmailComposer({
+          step: 'message',
+          draft: {
+            ...emailComposer.draft,
+            messageLines: [...emailComposer.draft.messageLines, cmdRaw],
+          },
+        })
+        return
+      }
+
+      if (emailComposer.step === 'confirm') {
+        if (
+          lower !== 'y' &&
+          lower !== 'yes' &&
+          lower !== 'n' &&
+          lower !== 'no'
+        ) {
+          appendOutput('Please answer y or n.')
+          return
+        }
+
+        if (lower === 'n' || lower === 'no') {
+          setEmailComposer(null)
+          appendOutput('Email sending cancelled.')
+          return
+        }
+
+        setEmailSending(true)
+        try {
+          await sendContactEmail(getEmailDraft(emailComposer), 'terminal')
+          setEmailComposer(null)
+          appendOutput('Email sent successfully.')
+        } catch (error) {
+          appendOutputs([
+            error instanceof Error && error.message
+              ? error.message
+              : 'Unable to send your message right now.',
+            'Type y to try again or n to cancel.',
+          ])
+        } finally {
+          setEmailSending(false)
+        }
+        return
+      }
+    }
+
+    if (!cmd) return
+    const parts = cmd.split(/\s+/).filter(Boolean)
     setLines((l) => [...l, { id: Date.now(), text: `> ${cmd}`, type: 'in' }])
     setHistory((h) => [...h, cmd])
     setHistIdx(null)
@@ -159,6 +334,24 @@ export default function TerminalShell({ isOpen, onClose }: TerminalShellProps) {
 
     if (cmd === 'clear') {
       setLines([])
+      return
+    }
+
+    if (cmd === 'email' && parts.length === 1) {
+      setEmailComposer({
+        step: 'name',
+        draft: {
+          name: '',
+          email: '',
+          subject: '',
+          messageLines: [],
+        },
+      })
+      appendOutputs([
+        'Email mode — type `cancel` at any prompt to stop.',
+        `This message will be sent to ${profile.email}.`,
+        'Your name:',
+      ])
       return
     }
 
@@ -268,6 +461,8 @@ export default function TerminalShell({ isOpen, onClose }: TerminalShellProps) {
   }
 
   function handleKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
+    if (emailSending) return
+
     if (e.key === 'Enter') {
       e.preventDefault()
       void handleSubmit(input)
@@ -292,79 +487,81 @@ export default function TerminalShell({ isOpen, onClose }: TerminalShellProps) {
     }
   }
 
-  if (!isOpen) return null
-
   return (
-    <div className="fixed inset-0 z-60">
-      <button
-        type="button"
-        className="absolute inset-0 bg-black/60 backdrop-blur-sm"
-        onClick={handleClose}
-        aria-label="Close terminal overlay"
-      />
-      <div className="mx-auto my-12 w-[min(1000px,95%)] max-h-[80vh] overflow-hidden rounded-md border border-gray-700 bg-[#071021] shadow-2xl relative z-10">
-        <div className="flex items-center justify-between border-b border-gray-800 px-4 py-2">
-          <div className="text-sm text-green-300 font-mono">
-            terminal — pedroduartek
-          </div>
-          <div className="flex items-center gap-2">
-            <button
-              type="button"
-              onClick={() => setLines([])}
-              className="text-xs text-gray-400 hover:text-white"
-            >
-              clear
-            </button>
-            <button
-              type="button"
-              onClick={handleClose}
-              className="text-xs text-gray-400 hover:text-white"
-            >
-              close
-            </button>
-          </div>
+    <section
+      aria-label="Terminal shell"
+      className="flex min-h-0 flex-1 w-full flex-col overflow-hidden bg-[#071021]"
+    >
+      <div className="flex items-center justify-between border-b border-gray-800 px-4 py-2">
+        <div className="text-sm text-green-300 font-mono">
+          terminal — pedroduartek
         </div>
-
-        <div
-          ref={containerRef}
-          className="h-[60vh] overflow-auto p-4 font-mono text-sm text-green-200"
-        >
-          {lines.length === 0 ? (
-            <div className="text-green-300">
-              {profile.name} — {profile.role}
-            </div>
-          ) : (
-            lines.map((ln) => (
-              <div
-                key={ln.id}
-                className={`${ln.type === 'in' ? 'text-white' : 'text-green-200'} whitespace-pre-wrap py-0.5`}
-              >
-                {renderLineText(ln.text, ln.id)}
-              </div>
-            ))
-          )}
-          {chatAwaiting && (
-            <div className="text-yellow-300 whitespace-pre-wrap py-0.5 font-mono">
-              AI is thinking
-              <span className="inline-block ml-1 animate-pulse">...</span>
-            </div>
-          )}
-        </div>
-
-        <div className="border-t border-gray-800 px-4 py-3">
-          <div className="flex items-center gap-3">
-            <div className="text-green-400 font-mono">$</div>
-            <input
-              ref={inputRef}
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
-              onKeyDown={handleKeyDown}
-              className="w-full bg-transparent text-sm text-white placeholder:text-gray-500 focus:outline-none font-mono"
-              placeholder="type a command (help)"
-            />
-          </div>
+        <div className="flex items-center gap-2">
+          <button
+            type="button"
+            onClick={() => setLines([])}
+            className="text-xs text-gray-400 hover:text-white"
+          >
+            clear
+          </button>
+          <button
+            type="button"
+            onClick={handleClose}
+            className="text-xs text-gray-400 hover:text-white"
+          >
+            close
+          </button>
         </div>
       </div>
-    </div>
+
+      <div
+        ref={containerRef}
+        className="custom-scrollbar min-h-0 flex-1 overflow-auto overflow-x-hidden overscroll-contain p-4 pr-[5px] font-mono text-sm text-green-200"
+      >
+        {lines.length === 0 ? (
+          <div className="text-green-300">
+            {profile.name} — {profile.role}
+          </div>
+        ) : (
+          lines.map((ln) => (
+            <div
+              key={ln.id}
+              className={`${ln.type === 'in' ? 'text-white' : 'text-green-200'} whitespace-pre-wrap py-0.5`}
+            >
+              {renderLineText(ln.text, ln.id)}
+            </div>
+          ))
+        )}
+        {chatAwaiting && (
+          <div className="text-yellow-300 whitespace-pre-wrap py-0.5 font-mono">
+            AI is thinking
+            <span className="inline-block ml-1 animate-pulse">...</span>
+          </div>
+        )}
+      </div>
+
+      <div className="border-t border-gray-800 px-4 py-3">
+        <div className="flex items-center gap-3">
+          <div className="text-green-400 font-mono">$</div>
+          <input
+            ref={inputRef}
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+            onKeyDown={handleKeyDown}
+            disabled={emailSending}
+            className="w-full bg-transparent text-sm text-white placeholder:text-gray-500 focus:outline-none font-mono"
+            placeholder={
+              emailComposer
+                ? emailComposer.step === 'message'
+                  ? 'type message lines; empty line finishes'
+                  : emailComposer.step === 'confirm'
+                    ? 'type y or n'
+                    : 'answer the prompt'
+                : 'type a command (help)'
+            }
+          />
+        </div>
+      </div>
+    </section>
   )
 }

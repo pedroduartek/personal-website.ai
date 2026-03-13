@@ -1,8 +1,95 @@
+import { type FormEvent, useState } from 'react'
 import StyledLink from '../../components/StyledLink'
 import PageSEO from '../../components/seo/PageSEO'
 import { profile } from '../../content/profile'
+import {
+  type ContactEmailValues,
+  sendContactEmail,
+} from '../../utils/contactEmail'
+
+const initialFormValues = {
+  name: '',
+  email: '',
+  subject: '',
+  message: '',
+}
+
+type ContactFormValues = ContactEmailValues
+type SubmitState = 'idle' | 'success' | 'error'
 
 export default function ContactPage() {
+  const [formValues, setFormValues] =
+    useState<ContactFormValues>(initialFormValues)
+  const [submitState, setSubmitState] = useState<SubmitState>('idle')
+  const [statusMessage, setStatusMessage] = useState('')
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [showMessageForm, setShowMessageForm] = useState(false)
+
+  function updateField<K extends keyof ContactFormValues>(
+    field: K,
+    value: ContactFormValues[K],
+  ) {
+    setFormValues((current) => ({
+      ...current,
+      [field]: value,
+    }))
+    if (submitState !== 'idle') {
+      setSubmitState('idle')
+      setStatusMessage('')
+    }
+  }
+
+  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault()
+    if (isSubmitting) return
+
+    const trimmedValues = {
+      name: formValues.name.trim(),
+      email: formValues.email.trim(),
+      subject: formValues.subject.trim(),
+      message: formValues.message.trim(),
+    }
+
+    if (
+      !trimmedValues.name ||
+      !trimmedValues.email ||
+      !trimmedValues.subject ||
+      !trimmedValues.message
+    ) {
+      setSubmitState('error')
+      setStatusMessage('Please fill in all fields before sending.')
+      return
+    }
+
+    setIsSubmitting(true)
+    setSubmitState('idle')
+    setStatusMessage('')
+
+    try {
+      await sendContactEmail(trimmedValues, 'contact form')
+
+      setFormValues(initialFormValues)
+      setSubmitState('success')
+      setStatusMessage(
+        'Your message has been sent. I will get back to you as soon as I can.',
+      )
+    } catch (error) {
+      setSubmitState('error')
+      setStatusMessage(
+        error instanceof Error && error.message
+          ? error.message
+          : 'Unable to send your message right now. Please use the email link below instead.',
+      )
+    } finally {
+      setIsSubmitting(false)
+    }
+  }
+
+  const statusClasses =
+    submitState === 'success'
+      ? 'border-emerald-500/40 bg-emerald-500/10 text-emerald-200'
+      : 'border-red-500/40 bg-red-500/10 text-red-200'
+
   return (
     <>
       <PageSEO
@@ -16,15 +103,145 @@ export default function ContactPage() {
         }
       />
       <div className="container mx-auto px-4 py-8 animate-slide-down md:py-16">
-        <h1 className="mb-8 text-3xl font-bold text-white md:text-4xl">
-          Contact
-        </h1>
-        <div className="max-w-2xl">
-          <p className="mb-8 text-base text-gray-300 md:text-lg">
-            I'm always interested in hearing about new opportunities,
-            collaborations, or just connecting with fellow developers. Feel free
-            to reach out!
+        <div className="max-w-3xl">
+          <h1 className="mb-8 text-3xl font-bold text-white md:text-4xl">
+            Contact
+          </h1>
+          <p className="text-base text-gray-300 md:text-lg">
+            I am always interested in hearing about new opportunities,
+            collaborations, or just connecting with fellow developers. If you
+            want to reach me directly, open the message form or use any of the
+            contact options alongside it.
           </p>
+        </div>
+
+        <div className="mt-10 grid items-start gap-6 lg:grid-cols-[minmax(0,1.25fr)_minmax(280px,0.9fr)]">
+          <section className="self-start rounded-lg border border-gray-700 bg-card p-6 md:p-8">
+            <button
+              type="button"
+              aria-expanded={showMessageForm}
+              aria-controls="contact-message-form"
+              onClick={() => setShowMessageForm((current) => !current)}
+              className="flex w-full items-start justify-between gap-4 text-left"
+            >
+              <div>
+                <h2 className="text-2xl font-semibold text-white">
+                  Send a message
+                </h2>
+                <p className="mt-2 text-sm text-gray-400">
+                  This sends a plain-text email directly to my inbox at{' '}
+                  {profile.email}.
+                </p>
+              </div>
+              <span className="rounded-lg border border-gray-700 px-4 py-2 text-sm font-medium text-gray-300 transition-colors hover:bg-gray-800 hover:text-white">
+                {showMessageForm ? 'Hide form' : 'Open form'}
+              </span>
+            </button>
+
+            {showMessageForm && (
+              <form
+                id="contact-message-form"
+                className="mt-6 space-y-5 border-t border-gray-700 pt-6"
+                onSubmit={handleSubmit}
+              >
+                <div className="grid gap-5 md:grid-cols-2">
+                  <label className="block">
+                    <span className="mb-2 block text-sm font-medium text-gray-200">
+                      Name
+                    </span>
+                    <input
+                      type="text"
+                      name="name"
+                      autoComplete="name"
+                      required
+                      maxLength={100}
+                      value={formValues.name}
+                      onChange={(event) =>
+                        updateField('name', event.target.value)
+                      }
+                      className="w-full rounded-lg border border-gray-700 bg-gray-900/70 px-4 py-3 text-sm text-white outline-none transition focus:border-gray-500 focus:ring-2 focus:ring-gray-700/50"
+                    />
+                  </label>
+
+                  <label className="block">
+                    <span className="mb-2 block text-sm font-medium text-gray-200">
+                      Email
+                    </span>
+                    <input
+                      type="email"
+                      name="email"
+                      autoComplete="email"
+                      required
+                      maxLength={254}
+                      value={formValues.email}
+                      onChange={(event) =>
+                        updateField('email', event.target.value)
+                      }
+                      className="w-full rounded-lg border border-gray-700 bg-gray-900/70 px-4 py-3 text-sm text-white outline-none transition focus:border-gray-500 focus:ring-2 focus:ring-gray-700/50"
+                    />
+                  </label>
+                </div>
+
+                <label className="block">
+                  <span className="mb-2 block text-sm font-medium text-gray-200">
+                    Subject
+                  </span>
+                  <input
+                    type="text"
+                    name="subject"
+                    required
+                    maxLength={160}
+                    value={formValues.subject}
+                    onChange={(event) =>
+                      updateField('subject', event.target.value)
+                    }
+                    className="w-full rounded-lg border border-gray-700 bg-gray-900/70 px-4 py-3 text-sm text-white outline-none transition focus:border-gray-500 focus:ring-2 focus:ring-gray-700/50"
+                  />
+                </label>
+
+                <label className="block">
+                  <span className="mb-2 block text-sm font-medium text-gray-200">
+                    Message
+                  </span>
+                  <textarea
+                    name="message"
+                    required
+                    rows={8}
+                    maxLength={4000}
+                    value={formValues.message}
+                    onChange={(event) =>
+                      updateField('message', event.target.value)
+                    }
+                    className="min-h-48 w-full rounded-lg border border-gray-700 bg-gray-900/70 px-4 py-3 text-sm text-white outline-none transition focus:border-gray-500 focus:ring-2 focus:ring-gray-700/50"
+                  />
+                </label>
+
+                {submitState !== 'idle' && statusMessage && (
+                  <div
+                    role={submitState === 'error' ? 'alert' : 'status'}
+                    aria-live="polite"
+                    className={`rounded-lg border px-4 py-3 text-sm ${statusClasses}`}
+                  >
+                    {statusMessage}
+                  </div>
+                )}
+
+                <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                  <p className="text-xs text-gray-500">
+                    Include enough detail for context. Your own email address is
+                    included in the message body so I can reply directly.
+                  </p>
+                  <button
+                    type="submit"
+                    disabled={isSubmitting}
+                    className="inline-flex items-center justify-center rounded-lg bg-brand px-5 py-3 text-sm font-semibold text-white transition-all duration-200 hover:scale-[1.02] hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-brand/50 disabled:cursor-not-allowed disabled:opacity-70"
+                  >
+                    {isSubmitting ? 'Sending...' : 'Send email'}
+                  </button>
+                </div>
+              </form>
+            )}
+          </section>
 
           <div className="space-y-6">
             <div className="group rounded-lg border border-gray-700 bg-card p-6 transition-colors hover:border-gray-600">

@@ -1,61 +1,98 @@
-import { Suspense, useEffect, useState } from 'react'
-import { Link, Outlet } from 'react-router-dom'
+import { Suspense, useState } from 'react'
+import { Link, Outlet, useLocation } from 'react-router-dom'
 import ChatWidget from '../../components/ChatWidget'
 import { CommandPalette } from '../../components/CommandPalette'
 import CommandPaletteTip from '../../components/CommandPalette/CommandPaletteTip'
 import SiteContainer from '../../components/SiteContainer'
-import TerminalShell from '../../components/TerminalShell'
 import { useCommandPalette } from '../../hooks/useCommandPalette'
 const logo = '/pld_logo_header.webp'
 
 export default function AppLayout() {
   const { isOpen, close, open } = useCommandPalette()
-  const [terminalOpen, setTerminalOpen] = useState(false)
-
-  useEffect(() => {
-    const handle = () => setTerminalOpen(true)
-    window.addEventListener('open-terminal', handle as EventListener)
-    return () =>
-      window.removeEventListener('open-terminal', handle as EventListener)
-  }, [])
+  const location = useLocation()
+  const isTerminalRoute = location.pathname === '/terminal'
 
   const lastUpdated = import.meta.env.VITE_LAST_UPDATED ?? null
   return (
-    <div className="flex min-h-screen flex-col bg-background">
-      <Header onOpenCommandPalette={open} />
-      <main className="flex-1">
-        <SiteContainer>
-          <Suspense
-            fallback={
-              <div className="flex items-center justify-center py-16">
-                <div className="text-gray-300">Loading...</div>
-              </div>
-            }
-          >
-            <Outlet />
-          </Suspense>
-        </SiteContainer>
+    <div
+      className={`flex flex-col bg-background ${
+        isTerminalRoute ? 'h-screen overflow-hidden' : 'min-h-screen'
+      }`}
+    >
+      <Header isTerminalRoute={isTerminalRoute} onOpenCommandPalette={open} />
+      <main
+        className={`flex flex-1 min-h-0 ${isTerminalRoute ? 'overflow-hidden' : ''}`}
+      >
+        {isTerminalRoute ? (
+          <div className="flex min-h-0 flex-1 flex-col overflow-hidden">
+            <Suspense
+              fallback={
+                <div className="flex flex-1 items-center justify-center py-16">
+                  <div className="text-gray-300">Loading...</div>
+                </div>
+              }
+            >
+              <Outlet />
+            </Suspense>
+          </div>
+        ) : (
+          <SiteContainer className="flex-1">
+            <Suspense
+              fallback={
+                <div className="flex items-center justify-center py-16">
+                  <div className="text-gray-300">Loading...</div>
+                </div>
+              }
+            >
+              <Outlet />
+            </Suspense>
+          </SiteContainer>
+        )}
       </main>
       <footer className="border-t border-gray-800 bg-header py-4 text-center text-xs text-gray-400">
         {lastUpdated ? `Last updated: ${lastUpdated}` : null}
       </footer>
       <CommandPalette isOpen={isOpen} onClose={close} />
-      <TerminalShell
-        isOpen={terminalOpen}
-        onClose={() => setTerminalOpen(false)}
-      />
-      <ChatWidget />
+      {!isTerminalRoute && <ChatWidget />}
     </div>
   )
 }
 
 function Header({
+  isTerminalRoute,
   onOpenCommandPalette,
-}: { onOpenCommandPalette: () => void }) {
+}: {
+  isTerminalRoute: boolean
+  onOpenCommandPalette: () => void
+}) {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const isMac =
     typeof navigator !== 'undefined' &&
     /(Mac|iPhone|iPod|iPad)/i.test(navigator.platform)
+
+  if (isTerminalRoute) {
+    return (
+      <header className="border-b border-gray-800 bg-header">
+        <nav className="px-3 py-2 2xl:px-6">
+          <Link
+            to="/"
+            className="flex items-center gap-3 text-xl font-bold text-white"
+          >
+            <img
+              src={logo}
+              alt="PLD Logo"
+              className="h-[70px] w-auto"
+              width={70}
+              height={70}
+              fetchPriority="high"
+              decoding="sync"
+            />
+            PEDRODUARTEK
+          </Link>
+        </nav>
+      </header>
+    )
+  }
 
   return (
     <header className="border-b border-gray-800 bg-header">

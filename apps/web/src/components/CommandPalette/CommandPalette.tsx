@@ -1,5 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
+
+const desktopBreakpoint = 1536
 
 interface Command {
   id: string
@@ -18,9 +20,24 @@ interface CommandPaletteProps {
 export function CommandPalette({ isOpen, onClose }: CommandPaletteProps) {
   const [search, setSearch] = useState('')
   const [selectedIndex, setSelectedIndex] = useState(0)
+  const [isDesktop, setIsDesktop] = useState(
+    () =>
+      typeof window === 'undefined' || window.innerWidth >= desktopBreakpoint,
+  )
   const inputRef = useRef<HTMLInputElement>(null)
   const selectedItemRef = useRef<HTMLButtonElement>(null)
   const navigate = useNavigate()
+  const location = useLocation()
+
+  useEffect(() => {
+    const updateIsDesktop = () => {
+      setIsDesktop(window.innerWidth >= desktopBreakpoint)
+    }
+
+    updateIsDesktop()
+    window.addEventListener('resize', updateIsDesktop)
+    return () => window.removeEventListener('resize', updateIsDesktop)
+  }, [])
 
   const commands: Command[] = [
     {
@@ -111,20 +128,24 @@ export function CommandPalette({ isOpen, onClose }: CommandPaletteProps) {
       },
       category: 'navigation',
     },
-    {
+  ]
+
+  if (isDesktop) {
+    commands.push({
       id: 'terminal',
       label: 'Terminal',
       description: 'Open terminal-style shell',
       icon: '🖥️',
       action: () => {
-        try {
-          window.dispatchEvent(new CustomEvent('open-terminal'))
-        } catch {}
+        const from = `${location.pathname}${location.search}${location.hash}`
+        navigate('/terminal', {
+          state: from !== '/terminal' ? { from } : undefined,
+        })
         onClose()
       },
-      category: 'action',
-    },
-  ]
+      category: 'navigation',
+    })
+  }
 
   const filteredCommands = commands.filter((command) => {
     const searchLower = search.toLowerCase()
@@ -147,6 +168,14 @@ export function CommandPalette({ isOpen, onClose }: CommandPaletteProps) {
   useEffect(() => {
     setSelectedIndex(0)
   }, [search])
+
+  useEffect(() => {
+    setSelectedIndex((prev) =>
+      filteredCommands.length === 0
+        ? 0
+        : Math.min(prev, filteredCommands.length - 1),
+    )
+  }, [filteredCommands.length])
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: Need to scroll when selection changes
   useEffect(() => {
@@ -215,7 +244,7 @@ export function CommandPalette({ isOpen, onClose }: CommandPaletteProps) {
           </div>
 
           {/* Commands List */}
-          <div className="max-h-96 overflow-y-auto p-2 border-t border-gray-800">
+          <div className="custom-scrollbar max-h-96 overflow-y-auto border-t border-gray-800 p-2">
             {filteredCommands.length === 0 ? (
               <div className="px-4 py-8 text-center text-gray-500">
                 No commands found
