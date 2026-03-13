@@ -30,7 +30,7 @@ export function buildContactEmailBody(
     `<p>New message from pedroduartek.com ${source}</p>`,
     `<p><strong>Name:</strong> ${normalizedValues.name}<br/><strong>Email:</strong> ${normalizedValues.email}</p>`,
     `<p><strong>Subject:</strong> ${normalizedValues.subject}</p>`,
-    `<p><strong>Message:</strong></p>`,
+    '<p><strong>Message:</strong></p>',
     `<p>${normalizedValues.message.replace(/\n/g, '<br/>')}</p>`,
   ].join('\n')
 }
