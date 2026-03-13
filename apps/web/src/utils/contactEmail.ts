@@ -27,14 +27,11 @@ export function buildContactEmailBody(
   const normalizedValues = normalizeValues(values)
 
   return [
-    `New message from pedroduartek.com ${source}`,
-    '',
-    `Name: ${normalizedValues.name}`,
-    `Email: ${normalizedValues.email}`,
-    `Subject: ${normalizedValues.subject}`,
-    '',
-    'Message:',
-    normalizedValues.message,
+    `<p>New message from pedroduartek.com ${source}</p>`,
+    `<p><strong>Name:</strong> ${normalizedValues.name}<br/><strong>Email:</strong> ${normalizedValues.email}</p>`,
+    `<p><strong>Subject:</strong> ${normalizedValues.subject}</p>`,
+    `<p><strong>Message:</strong></p>`,
+    `<p>${normalizedValues.message.replace(/\n/g, '<br/>')}</p>`,
   ].join('\n')
 }
 
@@ -50,10 +47,9 @@ export async function sendContactEmail(
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
-      to: [profile.email],
       subject: normalizedValues.subject,
       body: buildContactEmailBody(normalizedValues, source),
-      isHtml: false,
+      isHtml: true,
     }),
   })
 
