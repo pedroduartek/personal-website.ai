@@ -63,8 +63,8 @@ describe('ContactPage', () => {
     expect(payload.body).toContain(
       'New message from pedroduartek.com contact form',
     )
-    expect(payload.body).toContain('Name: Ada Lovelace')
-    expect(payload.body).toContain('Email: ada@example.com')
+    expect(payload.body).toContain('Ada Lovelace')
+    expect(payload.body).toContain('ada@example.com')
     expect(payload.body).toContain('I would like to talk about a backend role.')
     expect(
       screen.getByText(
