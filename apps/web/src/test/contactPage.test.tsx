@@ -2,7 +2,6 @@ import { render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { MemoryRouter } from 'react-router-dom'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
-import { profile } from '../content/profile'
 import ContactPage from '../features/contact/ContactPage'
 import { CONTACT_EMAIL_ENDPOINT } from '../utils/contactEmail'
 
