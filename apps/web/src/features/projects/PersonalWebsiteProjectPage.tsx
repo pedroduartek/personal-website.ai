@@ -69,105 +69,114 @@ export default function PersonalWebsiteProjectPage() {
         </div>
 
         <div className="prose prose-lg max-w-none text-gray-300">
-          {/* Overview */}
           <section className="mb-12">
             <h2 className="mb-4 text-2xl font-semibold text-white">
-              Motivation
+              Why This Project Exists
             </h2>
             <p className="mb-4">{project.problem}</p>
           </section>
 
           <section className="mb-12">
-            <h2 className="mb-4 text-2xl font-semibold text-white">Approach</h2>
+            <h2 className="mb-4 text-2xl font-semibold text-white">
+              How I Built It
+            </h2>
             <p className="mb-4">{project.approach}</p>
           </section>
 
-          {/* Key Features */}
           <section className="mb-12">
             <h2 className="mb-4 text-2xl font-semibold text-white">
-              Key Features
+              What It Includes
             </h2>
             <div className="grid gap-4 md:grid-cols-2">
               <div className="rounded-lg border border-gray-700 bg-card p-5">
                 <h3 className="mb-2 text-lg font-semibold text-white">
-                  AI Chat Assistant
+                  Structured portfolio content
                 </h3>
                 <p className="text-gray-300 text-sm">
-                  Integrated chatbot powered by the{' '}
+                  Core information about my background, projects, education, and
+                  conferences is managed in a structured way so the site stays
+                  consistent as it evolves. That makes it easier to keep the
+                  story accurate without turning every page into duplicated
+                  maintenance work.
+                </p>
+              </div>
+
+              <div className="rounded-lg border border-gray-700 bg-card p-5">
+                <h3 className="mb-2 text-lg font-semibold text-white">
+                  AI chat assistant
+                </h3>
+                <p className="text-gray-300 text-sm">
+                  Visitors can ask natural-language questions about my
+                  experience, skills, and projects through an integrated chat
+                  assistant powered by the{' '}
                   <StyledLink href="/projects/ai-chat-api">
                     AI Chat API
-                  </StyledLink>{' '}
-                  project. It connects to a self-hosted Llama 3 model via a
-                  C#/.NET backend, letting visitors ask questions about my
-                  background and get grounded answers in real time.
+                  </StyledLink>
+                  . It gives the site a more conversational way to explore the
+                  same information shown in the portfolio itself.
                 </p>
               </div>
 
               <div className="rounded-lg border border-gray-700 bg-card p-5">
                 <h3 className="mb-2 text-lg font-semibold text-white">
-                  Command Palette
+                  Fast, memorable navigation
                 </h3>
                 <p className="text-gray-300 text-sm">
-                  Fuzzy search navigation (⌘K / Ctrl+K) inspired by modern IDEs,
-                  with keyboard shortcuts and smooth animations for quick site
-                  exploration.
+                  The site works like a traditional portfolio, but it also
+                  offers a command palette and a terminal-style route for people
+                  who enjoy a more interactive experience. Those touches are
+                  optional, but they help the site feel more distinctive than a
+                  standard portfolio template.
                 </p>
               </div>
 
               <div className="rounded-lg border border-gray-700 bg-card p-5">
                 <h3 className="mb-2 text-lg font-semibold text-white">
-                  Responsive design
+                  Low-friction contact flow
                 </h3>
                 <p className="text-gray-300 text-sm">
-                  Custom dark theme with consistent hover effects, animations,
-                  and a mobile-first layout optimized for all screen sizes.
-                </p>
-              </div>
-
-              <div className="rounded-lg border border-gray-700 bg-card p-5">
-                <h3 className="mb-2 text-lg font-semibold text-white">
-                  Production-ready
-                </h3>
-                <p className="text-gray-300 text-sm">
-                  Live at pedroduartek.com via Vercel with automatic deployments
-                  from GitHub, client-side routing with lazy loading, and full
-                  source code available.
+                  Recruiters and hiring managers can reach out through standard
+                  contact links, a direct message form, or even from inside the
+                  terminal experience. The goal is simple: make it easy to go
+                  from reading about the work to starting a conversation.
                 </p>
               </div>
             </div>
           </section>
 
-          {/* AI-Assisted Workflow */}
           <section className="mb-12">
             <h2 className="mb-4 text-2xl font-semibold text-white">
-              AI-Assisted Workflow
+              What AI Changed
             </h2>
             <p className="mb-4">
-              AI tools were used throughout the project for scaffolding,
-              learning React patterns, real-time debugging, and rapid iteration.
-              This approach accelerated development from months to days while
-              ensuring I understood the underlying concepts rather than just
-              copying code.
+              The value of this project is not that it was "built by AI." The
+              value is that it shows how I use AI as an engineering tool:
+              rapidly exploring options, shortening feedback loops, and learning
+              unfamiliar frontend concepts while still taking responsibility for
+              the final product.
             </p>
             <div className="grid gap-4 md:grid-cols-2">
               <div className="rounded-lg border border-gray-700 bg-card p-5">
                 <h3 className="mb-2 text-lg font-semibold text-white">
-                  AI amplifies, not replaces
+                  Faster learning through a real product
                 </h3>
                 <p className="text-gray-300 text-sm">
-                  AI accelerated development dramatically, but I made all
-                  architectural decisions and owned the code.
+                  Instead of learning frontend development through isolated
+                  exercises, I used a public-facing product with real users and
+                  real constraints. That made the learning process more
+                  demanding, but also far more valuable.
                 </p>
               </div>
 
               <div className="rounded-lg border border-gray-700 bg-card p-5">
                 <h3 className="mb-2 text-lg font-semibold text-white">
-                  Backend principles transfer
+                  Human judgment stayed central
                 </h3>
                 <p className="text-gray-300 text-sm">
-                  Type safety, testing, and clean architecture apply equally to
-                  frontend. Building real features taught more than any
-                  tutorial.
+                  AI accelerated execution, but the decisions about user
+                  experience, tone, structure, trade-offs, and final quality
+                  were still mine. That balance is the part of AI-assisted
+                  development that interests me most.
                 </p>
               </div>
             </div>

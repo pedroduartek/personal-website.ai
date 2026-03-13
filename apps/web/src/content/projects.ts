@@ -9,10 +9,10 @@ function getProjects(): Project[] {
       slug: 'personal-website',
       title: 'AI-Assisted Personal Website',
       description:
-        'Modern portfolio website built using AI-assisted development, featuring an integrated chatbot powered by a self-hosted Llama 3 model',
-      problem: `As a backend engineer with ${experience.text} of C#/.NET experience but minimal frontend knowledge, I wanted to build a professional portfolio while learning modern frontend development. Traditional learning approaches would take months, and I wanted to experiment with AI as a productivity multiplier.`,
+        'The portfolio you are browsing right now: a content-driven personal website built through AI-assisted development, with an AI chat assistant, fast navigation, and interactive ways to explore my background.',
+      problem: `I wanted a portfolio that did more than list technologies. It needed to explain my experience clearly to recruiters, feel like a real product, and give me a practical way to learn modern frontend development. As a backend engineer with ${experience.text} of C#/.NET experience, I also wanted to test how far AI-assisted development could accelerate the learning curve without lowering quality.`,
       approach:
-        'Used AI-assisted development to build a production-ready React + TypeScript website from scratch. Integrated a self-hosted AI chatbot (via the AI Chat API project) that lets visitors ask questions about my background. Focused on learning by doing while maintaining full ownership of architectural decisions.',
+        'I built the site as an ongoing product rather than a one-off landing page. Recurring career information is centralized so the content stays consistent as it evolves, while each page keeps its own voice. On top of the core portfolio experience, I added an AI assistant, command palette, terminal experience, and direct contact flows to make the site both useful and memorable. AI helped me iterate quickly, but I kept ownership of the design choices, architecture, copy, and quality bar.',
       technologies: [
         'React 19',
         'TypeScript 5',
@@ -20,7 +20,7 @@ function getProjects(): Project[] {
         'Tailwind CSS',
         'React Router',
         'Vitest',
-        'AI-Assisted',
+        'Biome',
       ],
       links: {
         github: 'https://github.com/pedroduartek/personal-website.ai',
