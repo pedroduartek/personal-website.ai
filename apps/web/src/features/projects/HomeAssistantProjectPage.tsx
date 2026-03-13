@@ -64,11 +64,8 @@ export default function HomeAssistantProjectPage() {
         <div className="prose prose-lg max-w-none text-gray-300">
           <section className="mb-12">
             <h2 className="mb-4 text-2xl font-semibold text-white">Overview</h2>
-            <p className="mb-4">
-              I run a self-hosted Home Assistant setup to improve day-to-day
-              comfort, reduce friction at home, and experiment with automation
-              as an event-driven system in the real world.
-            </p>
+            <p className="mb-4">{project.problem}</p>
+            <p className="mb-4">{project.approach}</p>
 
             <div className="mb-6 grid gap-6 md:grid-cols-2">
               <div className="rounded-lg border border-gray-700 bg-card p-6">

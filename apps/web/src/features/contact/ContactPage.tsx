@@ -81,7 +81,7 @@ export default function ContactPage() {
                     rel="noopener noreferrer"
                     ariaLabel="Open LinkedIn profile"
                   >
-                    pedroduartek
+                    {profile.linkedinHandle}
                   </StyledLink>
                 </div>
               </div>
@@ -110,7 +110,7 @@ export default function ContactPage() {
                       rel="noopener noreferrer"
                       ariaLabel="Open GitHub profile"
                     >
-                      pedroduartek
+                      {profile.githubHandle ?? profile.github}
                     </StyledLink>
                   </div>
                 </div>

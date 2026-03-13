@@ -74,19 +74,12 @@ export default function PersonalWebsiteProjectPage() {
             <h2 className="mb-4 text-2xl font-semibold text-white">
               Motivation
             </h2>
-            <p className="mb-4">
-              As a backend engineer with extensive C#/.NET experience but
-              minimal frontend knowledge, I wanted to build a professional
-              portfolio while learning React, TypeScript, and modern frontend
-              development. Rather than spending months on tutorials, I used
-              AI-assisted development to accelerate the process while
-              maintaining full ownership of architectural decisions.
-            </p>
-            <p className="mb-4">
-              The result: a production-ready portfolio site built in days
-              instead of months, where AI acted as a productivity multiplier and
-              I learned by building real features.
-            </p>
+            <p className="mb-4">{project.problem}</p>
+          </section>
+
+          <section className="mb-12">
+            <h2 className="mb-4 text-2xl font-semibold text-white">Approach</h2>
+            <p className="mb-4">{project.approach}</p>
           </section>
 
           {/* Key Features */}

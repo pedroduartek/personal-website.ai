@@ -5,22 +5,6 @@ import 'yet-another-react-lightbox/styles.css'
 import StyledLink from '../../components/StyledLink'
 import PageSEO from '../../components/seo/PageSEO'
 import { conferences } from '../../content/conferences'
-import azureDevSummitLogo from '../../images/azure_dev_summit.webp'
-import azureNickChapsas from '../../images/photo_nickchapsas_azuresummit.webp'
-import azureStage1 from '../../images/stage_azuresummit.webp'
-import azureStage2 from '../../images/stage_azuresummit_2.webp'
-import webSummitLogo from '../../images/web_summit.webp'
-import webSummitGroup from '../../images/websummit_groupphoto.webp'
-
-const conferenceLogos: Record<string, string> = {
-  'Azure Dev Summit': azureDevSummitLogo,
-  'Web Summit': webSummitLogo,
-}
-
-const conferencePhotos: Record<string, string[]> = {
-  'Azure Dev Summit': [azureStage1, azureStage2, azureNickChapsas],
-  'Web Summit': [webSummitGroup],
-}
 
 export default function ConferencesPage() {
   const [lightboxOpen, setLightboxOpen] = useState(false)
@@ -33,9 +17,10 @@ export default function ConferencesPage() {
     setLightboxOpen(true)
   }
 
-  const currentPhotos = currentConference
-    ? conferencePhotos[currentConference]?.map((src) => ({ src })) || []
-    : []
+  const currentPhotos =
+    conferences
+      .find((conference) => conference.name === currentConference)
+      ?.photos?.map((photo) => ({ src: photo.src })) ?? []
 
   return (
     <>
@@ -60,9 +45,9 @@ export default function ConferencesPage() {
               className="rounded-lg border border-gray-700 bg-card p-6"
             >
               <div className="mb-4 flex items-start gap-4">
-                {conferenceLogos[item.name] && (
+                {item.logo && (
                   <img
-                    src={conferenceLogos[item.name]}
+                    src={item.logo}
                     alt={`${item.name} logo`}
                     className="h-16 w-16 rounded object-contain"
                   />
@@ -138,23 +123,24 @@ export default function ConferencesPage() {
                   )}
                 </div>
               </div>
-              {conferencePhotos[item.name] && (
+              {item.photos && item.photos.length > 0 && (
                 <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2 md:grid-cols-3">
-                  {conferencePhotos[item.name].map((photo, index) => (
+                  {item.photos.map((photo, index) => (
                     <button
-                      key={photo}
+                      key={photo.src}
                       type="button"
                       onClick={() => openLightbox(item.name, index)}
                       className="rounded-lg overflow-hidden focus:outline-none focus:ring-2 focus:ring-blue-500"
                     >
                       <img
-                        src={photo}
-                        alt={`${item.name} ${index + 1}`}
-                        className={`object-cover w-full h-48 hover:opacity-90 transition-opacity ${
-                          item.name === 'Azure Dev Summit' && index === 2
-                            ? 'object-[center_35%]'
-                            : ''
-                        }`}
+                        src={photo.src}
+                        alt={photo.alt}
+                        className="h-48 w-full object-cover transition-opacity hover:opacity-90"
+                        style={
+                          photo.objectPosition
+                            ? { objectPosition: photo.objectPosition }
+                            : undefined
+                        }
                       />
                     </button>
                   ))}

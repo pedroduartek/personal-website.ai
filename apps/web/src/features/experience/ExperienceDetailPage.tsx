@@ -1,15 +1,6 @@
 import { Link, useParams } from 'react-router-dom'
 import PageSEO from '../../components/seo/PageSEO'
 import { experience } from '../../content/experience'
-import closerLogo from '../../images/closer_consulting.webp'
-import enhesaLogo from '../../images/enhesa.webp'
-import vortalLogo from '../../images/vortal.webp'
-
-const companyLogos: Record<string, string> = {
-  Enhesa: enhesaLogo,
-  VORTAL: vortalLogo,
-  'Closer Consulting': closerLogo,
-}
 
 const createCompanySlug = (company: string) =>
   company.toLowerCase().replace(/\s+/g, '-')
@@ -40,6 +31,7 @@ export default function ExperienceDetailPage() {
 
   const company = companyRoles[0].company
   const location = companyRoles[0].location
+  const logo = companyRoles[0].logo
 
   // Get unique technologies for the company, keeping most specific versions
   const getUniqueTechnologies = () => {
@@ -108,9 +100,9 @@ export default function ExperienceDetailPage() {
         </Link>
 
         <div className="mb-8 flex items-center gap-4">
-          {companyLogos[company] && (
+          {logo && (
             <img
-              src={companyLogos[company]}
+              src={logo}
               alt={`${company} logo`}
               className="h-16 w-16 rounded object-contain"
             />

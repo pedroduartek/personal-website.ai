@@ -14,7 +14,7 @@ function getProjects(): Project[] {
       approach:
         'Used AI-assisted development to build a production-ready React + TypeScript website from scratch. Integrated a self-hosted AI chatbot (via the AI Chat API project) that lets visitors ask questions about my background. Focused on learning by doing while maintaining full ownership of architectural decisions.',
       technologies: [
-        'React 18',
+        'React 19',
         'TypeScript 5',
         'Vite',
         'Tailwind CSS',
