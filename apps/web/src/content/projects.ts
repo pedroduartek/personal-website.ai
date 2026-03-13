@@ -52,23 +52,23 @@ function getProjects(): Project[] {
       slug: 'ai-chat-api',
       title: 'AI Chat API',
       description:
-        'A self-hosted conversational AI API built with C#/.NET 10 that powers the chat assistant on pedroduartek.com using a locally-running Llama 3 model via Ollama',
+        'Self-hosted backend that powers the conversational assistant and email delivery for pedroduartek.com, using Ollama and a local knowledge base to keep responses grounded.',
       problem:
-        'Relying on third-party AI services introduces costs, rate limits, and data-privacy trade-offs. I wanted full ownership of the inference pipeline, shipping a production-grade API that runs entirely on a single VPS with the model included.',
+        'I wanted the website assistant to answer from my real background, not from generic model guesses, while keeping cost, privacy, and operational control in my own hands. That meant building a focused backend I could run myself, understand end to end, and extend as the website needed more backend capability.',
       approach:
-        'Built a clean, layered ASP.NET Core API that connects to Llama 3 via Ollama, augments every prompt with a curated knowledge base about my background, and returns grounded answers. Implemented streaming via SSE, retry policies with Polly, IP-based rate limiting, and a full Docker Compose production stack with Caddy for automatic HTTPS. Added observability with structured logging and cloud monitoring to provide clear insights into API usage and performance.',
+        'I built a compact ASP.NET Core API around a local Llama model via Ollama, a structured knowledge base, and guardrails that favor reliable answers over impressive but risky ones. On top of chat itself, I added streaming responses, email delivery, health checks, rate limiting, structured logging, containerized deployment, and keep-warm behavior so the service is practical for a real public website rather than just a prototype.',
       technologies: [
         'C#',
         '.NET 10',
-        'Llama 3.2',
         'Ollama',
-        'Grafana',
-        'Docker',
+        'Llama 3.2',
+        'ASP.NET Core',
+        'Docker Compose',
         'Caddy',
         'Polly',
         'Serilog',
+        'MailKit',
         'xUnit',
-        'Swagger',
       ],
       links: {
         github: 'https://github.com/pedroduartek/ai-chat-api',
