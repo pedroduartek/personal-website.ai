@@ -523,14 +523,32 @@ export default function TerminalShell({ onClose }: TerminalShellProps) {
             {profile.name} — {profile.role}
           </div>
         ) : (
-          lines.map((ln) => (
-            <div
-              key={ln.id}
-              className={`${ln.type === 'in' ? 'text-white' : 'text-green-200'} whitespace-pre-wrap py-0.5`}
-            >
-              {renderLineText(ln.text, ln.id)}
-            </div>
-          ))
+          lines.map((ln) => {
+            // special rendering for ASCII art blocks emitted by runCommand
+            const asciiPrefix = '::ASCII_ART::\n'
+            if (typeof ln.text === 'string' && ln.text.startsWith(asciiPrefix)) {
+              const art = ln.text.slice(asciiPrefix.length)
+              return (
+                <div key={ln.id} className="py-1">
+                  <pre
+                    className="font-mono text-green-200"
+                    style={{ whiteSpace: 'pre', margin: 0, fontSize: '6.75px', lineHeight: '0.525' }}
+                  >
+                    {art}
+                  </pre>
+                </div>
+              )
+            }
+
+            return (
+              <div
+                key={ln.id}
+                className={`${ln.type === 'in' ? 'text-white' : 'text-green-200'} whitespace-pre-wrap py-0.5`}
+              >
+                {renderLineText(ln.text, ln.id)}
+              </div>
+            )
+          })
         )}
         {chatAwaiting && (
           <div className="text-yellow-300 whitespace-pre-wrap py-0.5 font-mono">

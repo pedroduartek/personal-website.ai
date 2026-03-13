@@ -6,6 +6,120 @@ import { projects } from '../content/projects'
 import { skills } from '../content/skills'
 import type { Profile } from '../content/types'
 import { calculateYearsFromDate } from './experience'
+import myselfUrl from '../images/myself.webp'
+
+async function imageToAscii(url: string, charsWide?: number) {
+  if (typeof document === 'undefined' || typeof window === 'undefined') {
+    return ['(ascii art not available server-side)']
+  }
+
+  function loadImage(src: string) {
+    return new Promise<HTMLImageElement>((resolve, reject) => {
+      const img = new Image()
+      img.crossOrigin = 'anonymous'
+      img.onload = () => resolve(img)
+      img.onerror = reject
+      img.src = src
+    })
+  }
+
+  try {
+    const img = await loadImage(url)
+
+    // determine target character width responsively if not provided
+    const winW = typeof window !== 'undefined' ? window.innerWidth : 1600
+    const defaultChars = Math.max(100, Math.min(200, Math.floor(winW / 6)))
+    const targetW = Math.max(72, Math.min(200, charsWide ?? defaultChars))
+
+    // upscale canvas to improve sampling/detail, then average per-char blocks
+    const upscale = 6
+    const aspectCorrection = 0.6 // tuning: character height/width correction
+
+    const canvas = document.createElement('canvas')
+    const ctx = canvas.getContext('2d')
+    if (!ctx) return ['(ascii conversion not supported)']
+
+    const drawW = targetW * upscale
+    // scale the full image to the target width, preserving aspect ratio
+    const drawH = Math.max(6, Math.round((img.height * drawW) / img.width * aspectCorrection))
+    canvas.width = drawW
+    canvas.height = drawH
+    ctx.imageSmoothingEnabled = true
+    ctx.clearRect(0, 0, canvas.width, canvas.height)
+    // draw the entire source image scaled into the canvas (no cropping)
+    ctx.drawImage(img, 0, 0, img.width, img.height, 0, 0, canvas.width, canvas.height)
+
+    const data = ctx.getImageData(0, 0, canvas.width, canvas.height).data
+    // density from darkest to lightest; a compact set emphasizes facial features
+    const density = '@%#*+=-:. '
+
+    const out: string[] = []
+    const blockW = upscale
+    const blockH = upscale
+
+    // precompute luminance min/max for contrast stretching
+    let lumMin = Infinity
+    let lumMax = -Infinity
+    for (let i = 0; i < data.length; i += 4) {
+      const r = data[i]
+      const g = data[i + 1]
+      const b = data[i + 2]
+      const lum = 0.2126 * r + 0.7152 * g + 0.0722 * b
+      if (lum < lumMin) lumMin = lum
+      if (lum > lumMax) lumMax = lum
+    }
+    if (!isFinite(lumMin) || !isFinite(lumMax) || lumMax === lumMin) {
+      lumMin = 0
+      lumMax = 255
+    }
+
+    for (let cy = 0; cy < canvas.height; cy += blockH) {
+      let line = ''
+      for (let cx = 0; cx < canvas.width; cx += blockW) {
+        let rSum = 0
+        let gSum = 0
+        let bSum = 0
+        let count = 0
+        for (let yy = 0; yy < blockH; yy++) {
+          const y = cy + yy
+          if (y >= canvas.height) continue
+          for (let xx = 0; xx < blockW; xx++) {
+            const x = cx + xx
+            if (x >= canvas.width) continue
+            const idx = (y * canvas.width + x) * 4
+            rSum += data[idx]
+            gSum += data[idx + 1]
+            bSum += data[idx + 2]
+            count++
+          }
+        }
+        if (count === 0) {
+          line += ' '
+          continue
+        }
+        const r = rSum / count
+        const g = gSum / count
+        const b = bSum / count
+        let lum = 0.2126 * r + 0.7152 * g + 0.0722 * b
+        // contrast stretch
+        lum = Math.max(lumMin, Math.min(lumMax, lum))
+        const norm = (lum - lumMin) / (lumMax - lumMin)
+        const p = 1 - norm
+        const char = density[Math.floor(p * (density.length - 1))] || ' '
+        line += char
+      }
+      out.push(line)
+    }
+
+    // trim empty top/bottom rows for compactness
+    while (out.length && out[0].trim() === '') out.shift()
+    while (out.length && out[out.length - 1].trim() === '') out.pop()
+
+    return out.length ? out : ['(ascii conversion produced no output)']
+  } catch (err) {
+    return ['(failed to generate ascii art)']
+  }
+}
 
 type RunOptions = { profile?: Partial<Profile> }
 
@@ -279,6 +393,17 @@ export async function runCommand(
     if (p.email) out.push(`Email: ${p.email}`)
     if (p.github) out.push(`GitHub: ${p.github}`)
     if (p.linkedin) out.push(`LinkedIn: ${p.linkedin}`)
+    // append ASCII art of the author (if available)
+    try {
+      // request a slightly narrower rendering (20% smaller width)
+      const art = await imageToAscii(myselfUrl, 96)
+      out.push('')
+      // emit a single block with a sentinel so the terminal can render it specially
+      out.push('::ASCII_ART::\n' + art.join('\n'))
+    } catch (e) {
+      // ignore failures and return textual info
+    }
+
     return out
   }
 
