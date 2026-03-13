@@ -5,8 +5,8 @@ import { profile as siteProfile } from '../content/profile'
 import { projects } from '../content/projects'
 import { skills } from '../content/skills'
 import type { Profile } from '../content/types'
-import { calculateYearsFromDate } from './experience'
 import myselfUrl from '../images/myself.webp'
+import { calculateYearsFromDate } from './experience'
 
 async function imageToAscii(url: string, charsWide?: number) {
   if (typeof document === 'undefined' || typeof window === 'undefined') {
@@ -41,13 +41,26 @@ async function imageToAscii(url: string, charsWide?: number) {
 
     const drawW = targetW * upscale
     // scale the full image to the target width, preserving aspect ratio
-    const drawH = Math.max(6, Math.round((img.height * drawW) / img.width * aspectCorrection))
+    const drawH = Math.max(
+      6,
+      Math.round(((img.height * drawW) / img.width) * aspectCorrection),
+    )
     canvas.width = drawW
     canvas.height = drawH
     ctx.imageSmoothingEnabled = true
     ctx.clearRect(0, 0, canvas.width, canvas.height)
     // draw the entire source image scaled into the canvas (no cropping)
-    ctx.drawImage(img, 0, 0, img.width, img.height, 0, 0, canvas.width, canvas.height)
+    ctx.drawImage(
+      img,
+      0,
+      0,
+      img.width,
+      img.height,
+      0,
+      0,
+      canvas.width,
+      canvas.height,
+    )
 
     const data = ctx.getImageData(0, 0, canvas.width, canvas.height).data
     // density from darkest to lightest; a compact set emphasizes facial features
@@ -58,8 +71,8 @@ async function imageToAscii(url: string, charsWide?: number) {
     const blockH = upscale
 
     // precompute luminance min/max for contrast stretching
-    let lumMin = Infinity
-    let lumMax = -Infinity
+    let lumMin = Number.POSITIVE_INFINITY
+    let lumMax = Number.NEGATIVE_INFINITY
     for (let i = 0; i < data.length; i += 4) {
       const r = data[i]
       const g = data[i + 1]
@@ -68,7 +81,11 @@ async function imageToAscii(url: string, charsWide?: number) {
       if (lum < lumMin) lumMin = lum
       if (lum > lumMax) lumMax = lum
     }
-    if (!isFinite(lumMin) || !isFinite(lumMax) || lumMax === lumMin) {
+    if (
+      !Number.isFinite(lumMin) ||
+      !Number.isFinite(lumMax) ||
+      lumMax === lumMin
+    ) {
       lumMin = 0
       lumMax = 255
     }
@@ -362,12 +379,13 @@ export async function runCommand(
       '  socials|contacts    Show social links and contact info',
       '  skills [category]   List skill groups or inspect one category',
       '  experience [name]   List companies or inspect one in detail',
+      '  project <slug>      Show one project in detail',
       '  projects            List notable projects or inspect one with `project <slug>`',
       '  education           Show education and certifications',
       '  conferences         Show conferences and community events',
       '  banner              Show a small ASCII header',
       '  sysinfo             Show basic system / navigator info',
-        '  download-cv         Navigate to /cv to download the CV',
+      '  download-cv         Navigate to /cv to download the CV',
       '  clear               Clear the terminal (client-side)',
       '  email               Compose and send an email from the terminal',
       '  chat <message>      Ask the chat API and return a response',
@@ -399,7 +417,7 @@ export async function runCommand(
       const art = await imageToAscii(myselfUrl, 96)
       out.push('')
       // emit a single block with a sentinel so the terminal can render it specially
-      out.push('::ASCII_ART::\n' + art.join('\n'))
+      out.push(`::ASCII_ART::\n${art.join('\n')}`)
     } catch (e) {
       // ignore failures and return textual info
     }
