@@ -6,15 +6,15 @@ import type { EducationItem } from './types'
 export const education: EducationItem[] = [
   {
     id: '1',
-    institution: 'Polytechnic Institute Of Setúbal',
+    institution: 'Polytechnic Institute of Setúbal',
     degree: "Bachelor's Degree",
     field: 'Management Information Systems',
     startDate: '2017-09',
     endDate: '2020-06',
     location: 'Setúbal, Portugal',
     achievements: [
-      'Focused on management and technology across the full information system development lifecycle',
-      'Key courses: Application Development, Database Management, Information Systems (Analysis, Design, Architecture, Project Management, Quality, Security), Mathematics',
+      'Focused on the intersection of business and technology across the full information systems lifecycle',
+      'Key coursework included application development, database management, systems analysis and design, architecture, project management, quality, security, and mathematics',
     ],
     gpa: '15/20',
     logo: polytechnicLogo,
@@ -27,7 +27,7 @@ export const education: EducationItem[] = [
     startDate: '2016-10',
     endDate: '2017-02',
     location: 'Lisbon, Portugal',
-    achievements: ['PHP, HTML, CSS'],
+    achievements: ['Practical training in PHP, HTML, and CSS'],
     certificateUrl: formabaseCertificate,
     certificateLabel: 'View Certificate',
     logo: formabaseLogo,

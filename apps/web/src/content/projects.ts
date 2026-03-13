@@ -32,11 +32,11 @@ function getProjects(): Project[] {
       slug: 'home-assistant',
       title: 'Home Assistant: Local-First Smart Home',
       description:
-        'Self-hosted Home Assistant OS setup with 50+ Zigbee devices for automation, energy awareness, and comfort optimization',
+        'Self-hosted smart home platform built around Home Assistant and 50+ Zigbee devices, with a focus on reliability, local control, and everyday usability.',
       problem:
-        'Wanted to improve day-to-day comfort and reduce friction at home while maintaining a local-first approach that works without internet. Needed a system simple enough for non-technical users while being powerful enough for complex automations.',
+        'I wanted to make day-to-day life at home smoother without depending on the internet or building something only I could operate. The system needed to be reliable enough for everyday routines, simple enough for non-technical users, and flexible enough to keep evolving as I learned.',
       approach:
-        'Built a robust Zigbee mesh network using Home Assistant OS with ZHA coordinator and 50+ devices. Focused on reliability through strategic placement of routing devices and weekly updates. Designed automations as event-driven systems with location-based routines, energy monitoring, and security integrations.',
+        'I built the setup around Home Assistant OS, Zigbee, and a growing set of practical automations for comfort, energy awareness, and household routines. I treated the house like a production environment: strengthening the mesh, keeping backups and weekly updates in place, and testing changes against a simple rule - if they add complexity without improving everyday life, they do not stay.',
       technologies: [
         'Home Assistant OS',
         'Zigbee (ZHA)',

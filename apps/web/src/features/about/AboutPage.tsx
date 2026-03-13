@@ -37,18 +37,16 @@ export default function AboutPage() {
               code and treating production reliability as a first-class concern.
             </p>
             <p className="mb-4 text-base text-gray-300 md:text-lg">
-              While I've never worked in frontend development and don't consider
-              myself talented at building beautiful pages, I've always been
-              deeply interested in{' '}
-              <strong className="text-white">user experience</strong>. I make it
-              a point to participate in UX discussions whenever possible,
-              believing that great software isn't just about what happens on the
-              backend - it's about how users interact with and experience the
-              system as a whole.
+              Frontend development has not been the center of my career, but I
+              care deeply about{' '}
+              <strong className="text-white">user experience</strong>. I like
+              being involved in product and UX discussions because good software
+              is not only about solid backend architecture. It is also about
+              making systems understandable, efficient, and pleasant to use.
             </p>
             <p className="mb-6 text-base text-gray-300 md:text-lg">
-              Outside of work, you'll find me out fishing, riding my motorcycle,
-              or cooking. I also run a self-hosted{' '}
+              Outside work, you will usually find me fishing, riding my
+              motorcycle, or cooking. I also run a self-hosted{' '}
               <strong className="text-white">
                 Home Assistant setup with 50+ Zigbee devices
               </strong>{' '}

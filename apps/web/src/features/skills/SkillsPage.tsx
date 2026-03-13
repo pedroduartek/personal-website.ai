@@ -27,6 +27,12 @@ export default function SkillsPage() {
         <h1 className="mb-8 text-3xl font-bold text-white md:text-4xl">
           Skills
         </h1>
+        <div className="mb-10 max-w-3xl">
+          <p className="text-base text-gray-300 md:text-lg">
+            A practical view of the technologies I use most, along with the
+            areas where I have taken on broader ownership or leadership.
+          </p>
+        </div>
         <div className="grid gap-8 md:grid-cols-2">
           {skills.map((group) => (
             <section

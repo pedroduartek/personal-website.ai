@@ -20,6 +20,12 @@ export default function ProjectsPage() {
         <h1 className="mb-8 text-3xl font-bold text-white md:text-4xl">
           Projects
         </h1>
+        <div className="mb-10 max-w-3xl">
+          <p className="text-base text-gray-300 md:text-lg">
+            A selection of projects that reflect how I learn, what I enjoy
+            building, and the kinds of systems I like to own end to end.
+          </p>
+        </div>
         <div className="space-y-6">
           {projects.map((project) => (
             <Link
