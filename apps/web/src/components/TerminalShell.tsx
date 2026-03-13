@@ -28,6 +28,50 @@ function isValidEmail(value: string) {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)
 }
 
+function AsciiArt({ art, id, containerRef }: { art: string; id: number | string; containerRef: React.RefObject<HTMLDivElement | null> }) {
+  const artLines = art.split('\n')
+  const [visible, setVisible] = useState(0)
+
+  useEffect(() => {
+    let cancelled = false
+    setVisible(0)
+
+    async function run() {
+      for (let i = 0; i < artLines.length; i++) {
+        if (cancelled) return
+        // delay between lines (ms)
+        // tuned to be noticeable but not too slow
+        // eslint-disable-next-line no-await-in-loop
+        await new Promise((r) => setTimeout(r, 28))
+        if (cancelled) return
+        setVisible((v) => v + 1)
+        try {
+          if (containerRef.current) {
+            containerRef.current.scrollTop = containerRef.current.scrollHeight
+          }
+        } catch {}
+      }
+    }
+
+    void run()
+    return () => {
+      cancelled = true
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [art])
+
+  return (
+    <div key={id} className="py-1">
+      <pre
+        className="font-mono text-green-200"
+        style={{ whiteSpace: 'pre', margin: 0, fontSize: '6.75px', lineHeight: '0.525' }}
+      >
+        {artLines.slice(0, visible).join('\n')}
+      </pre>
+    </div>
+  )
+}
+
 export default function TerminalShell({ onClose }: TerminalShellProps) {
   const [lines, setLines] = useState<
     Array<{ id: number; text: string; type: 'out' | 'in' }>
@@ -157,50 +201,7 @@ export default function TerminalShell({ onClose }: TerminalShellProps) {
     return () => document.removeEventListener('keydown', onKey)
   }, [handleClose])
 
-  function AsciiArt({ art, id }: { art: string; id: number | string }) {
-    const artLines = art.split('\n')
-    const [visible, setVisible] = useState(0)
-
-    useEffect(() => {
-      let cancelled = false
-      setVisible(0)
-
-      async function run() {
-        for (let i = 0; i < artLines.length; i++) {
-          if (cancelled) return
-          // delay between lines (ms)
-          // tuned to be noticeable but not too slow
-          // smaller value for faster reveal
-          // eslint-disable-next-line no-await-in-loop
-          await new Promise((r) => setTimeout(r, 28))
-          if (cancelled) return
-          setVisible((v) => v + 1)
-          try {
-            if (containerRef.current) {
-              containerRef.current.scrollTop = containerRef.current.scrollHeight
-            }
-          } catch {}
-        }
-      }
-
-      void run()
-      return () => {
-        cancelled = true
-      }
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [art])
-
-    return (
-      <div key={id} className="py-1">
-        <pre
-          className="font-mono text-green-200"
-          style={{ whiteSpace: 'pre', margin: 0, fontSize: '6.75px', lineHeight: '0.525' }}
-        >
-          {artLines.slice(0, visible).join('\n')}
-        </pre>
-      </div>
-    )
-  }
+  
 
   async function handleSubmit(cmdRaw: string) {
     const cmd = cmdRaw.trim()
@@ -573,7 +574,7 @@ export default function TerminalShell({ onClose }: TerminalShellProps) {
             const asciiPrefix = '::ASCII_ART::\n'
             if (typeof ln.text === 'string' && ln.text.startsWith(asciiPrefix)) {
               const art = ln.text.slice(asciiPrefix.length)
-              return <AsciiArt art={art} id={ln.id} />
+              return <AsciiArt art={art} id={ln.id} containerRef={containerRef} />
             }
 
             return (
