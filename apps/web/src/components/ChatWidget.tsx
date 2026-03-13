@@ -7,15 +7,6 @@ import ollamaIcon from '../images/ollama.png'
 const typingKeyframes =
   '@keyframes typing { 0% { transform: translateY(0); opacity: 0.3 } 50% { transform: translateY(-4px); opacity: 1 } 100% { transform: translateY(0); opacity: 0.3 } }'
 
-// custom scrollbar styles to match the UI (dark background, indigo accent)
-const scrollbarStyles = `
-.custom-scrollbar { scrollbar-width: thin; scrollbar-color: rgba(99,102,241,0.38) transparent; }
-.custom-scrollbar::-webkit-scrollbar { width: 10px; height: 10px; }
-.custom-scrollbar::-webkit-scrollbar-track { background: transparent; border-radius: 9999px; margin: 6px 0; }
-.custom-scrollbar::-webkit-scrollbar-thumb { background-color: rgba(99,102,241,0.28); border-radius: 9999px; border: 2px solid transparent; transition: background-color .18s ease; }
-.custom-scrollbar::-webkit-scrollbar-thumb:hover { background-color: rgba(99,102,241,0.52); }
-`
-
 // Drop-bounce entrance animation for the chat icon.
 // The button is position:fixed bottom:24px, so translateY(-Y) moves it UP.
 // We animate from far above the viewport down to 0 with bounces.
@@ -46,6 +37,8 @@ const drawerKeyframes = `
 
 type Message = { id: number; text: string; from: 'user' | 'bot' }
 
+let hasPlayedChatBounceThisPage = false
+
 // Resize constraints
 const MIN_WIDTH = 320
 const MIN_HEIGHT = 300
@@ -58,9 +51,8 @@ export default function ChatWidget() {
   const [open, setOpen] = useState(false)
   const [input, setInput] = useState('')
   const [hasEntered, setHasEntered] = useState(false)
+  const [playBounce, setPlayBounce] = useState(false)
   const [animationDone, setAnimationDone] = useState(false)
-  // track whether the initial bounce has already played (persist during component lifecycle)
-  const bouncePlayedRef = useRef(false)
   // keep drawer mounted during exit animation
   const [renderDrawer, setRenderDrawer] = useState(open)
   const [apiHealthy, setApiHealthy] = useState<boolean | null>(null)
@@ -148,6 +140,7 @@ export default function ChatWidget() {
     '/skills',
     '/contact',
     '/cv',
+    '/terminal',
   ])
 
   function isInternalRoute(pathname: string) {
@@ -179,9 +172,7 @@ export default function ChatWidget() {
     setMessages((s) => [...s, msg])
     setInput('')
     setAwaitingReply(true)
-    const apiUrl = import.meta.env.DEV
-      ? '/api/chat'
-      : 'https://api.pedroduartek.com/chat'
+    const apiUrl = 'https://api.pedroduartek.com/chat'
 
     try {
       const maxAttempts = 2
@@ -368,9 +359,7 @@ export default function ChatWidget() {
   // Check API health on mount; only show widget if healthy
   useEffect(() => {
     let cancelled = false
-    const healthUrl = import.meta.env.DEV
-      ? '/api/health'
-      : 'https://api.pedroduartek.com/health'
+    const healthUrl = 'https://api.pedroduartek.com/health'
 
     fetch(healthUrl, { method: 'GET' })
       .then((res) => {
@@ -392,17 +381,17 @@ export default function ChatWidget() {
     return () => clearTimeout(timer)
   }, [apiHealthy])
 
+  useEffect(() => {
+    if (!hasEntered || hasPlayedChatBounceThisPage) return
+    setPlayBounce(true)
+  }, [hasEntered])
+
   // Don't render anything until health check passes
   if (apiHealthy !== true) return null
 
   return (
     <>
-      <style>
-        {typingKeyframes +
-          scrollbarStyles +
-          dropBounceKeyframes +
-          drawerKeyframes}
-      </style>
+      <style>{typingKeyframes + dropBounceKeyframes + drawerKeyframes}</style>
       {/* Floating Button (only when closed) */}
       {!open && (
         <button
@@ -411,11 +400,10 @@ export default function ChatWidget() {
           onClick={() => setOpen(true)}
           onAnimationEnd={() => {
             setAnimationDone(true)
-            // mark bounce as played so it won't run again during this session
-            try {
-              sessionStorage.setItem('pld_chat_bounce_played', 'true')
-            } catch {}
-            bouncePlayedRef.current = true
+            if (playBounce) {
+              hasPlayedChatBounceThisPage = true
+              setPlayBounce(false)
+            }
           }}
           className={`fixed right-6 bottom-6 z-50 flex h-14 w-14 items-center justify-center rounded-full text-white shadow-lg focus:outline-none overflow-hidden ${
             animationDone
@@ -428,21 +416,12 @@ export default function ChatWidget() {
             // afterwards keep it visible in place
             ...(!hasEntered
               ? { transform: 'translateY(calc(-100vh - 60px))', opacity: 0 }
-              : (() => {
-                  let played = false
-                  try {
-                    played =
-                      sessionStorage.getItem('pld_chat_bounce_played') ===
-                      'true'
-                  } catch {}
-                  if (!played && !bouncePlayedRef.current) {
-                    return {
-                      animation:
-                        'dropBounce 2s cubic-bezier(0.22, 1, 0.36, 1) forwards',
-                    }
+              : playBounce
+                ? {
+                    animation:
+                      'dropBounce 2s cubic-bezier(0.22, 1, 0.36, 1) forwards',
                   }
-                  return { transform: 'translateY(0)', opacity: 1 }
-                })()),
+                : { transform: 'translateY(0)', opacity: 1 }),
           }}
         >
           <img

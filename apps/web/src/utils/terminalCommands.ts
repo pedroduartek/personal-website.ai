@@ -34,8 +34,8 @@ export async function runCommand(
   if (name === 'help' || name === '?') {
     return [
       'Available commands:',
-      '  whoami       Show a short profile summary',
-      '  socials|contacts     Show social links and contact info',
+      '  whoami              Show a short profile summary',
+      '  socials|contacts    Show social links and contact info',
       '  skills              List skill groups and skills',
       '  experience          Summary of top 3 roles',
       '  projects            List notable projects with links',
@@ -44,6 +44,7 @@ export async function runCommand(
       '  download-cv         Navigate to /cv to download the CV',
       '  open <path>         Navigate to a site path (e.g. /projects)',
       '  clear               Clear the terminal (client-side)',
+      '  email               Compose and send an email from the terminal',
       '  chat <message>      Ask the chat API and return a response',
       '  help                Show this help message',
     ]
@@ -162,9 +163,7 @@ export async function runCommand(
     const message = args.join(' ').trim()
     if (!message) return ['Usage: chat <message>']
 
-    const apiUrl = import.meta.env.DEV
-      ? '/api/chat'
-      : 'https://api.pedroduartek.com/chat'
+    const apiUrl = 'https://api.pedroduartek.com/chat'
 
     try {
       const maxAttempts = 2
