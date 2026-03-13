@@ -14,7 +14,7 @@ export const conferences: ConferenceItem[] = [
     date: '2025-10',
     location: 'Lisbon, Portugal',
     description:
-      'Microsoft technology focused conference spanning 4 days. Included a full-day workshop building an app with Aspire.',
+      'Four-day conference focused on the Microsoft ecosystem, including a full-day hands-on workshop building an application with .NET Aspire.',
     logo: azureDevSummitLogo,
     photos: [
       {
@@ -42,7 +42,7 @@ export const conferences: ConferenceItem[] = [
     date: '2019-11',
     location: 'Lisbon, Portugal',
     description:
-      'Web Summit is a leading global technology conference, known for connecting professionals, startups, and industry leaders to discuss innovation and emerging trends. Helped organizing in the days prior to the event.',
+      "Volunteered in the days leading up to the event, helping with organization ahead of one of the world's best-known technology conferences.",
     logo: webSummitLogo,
     photos: [
       {

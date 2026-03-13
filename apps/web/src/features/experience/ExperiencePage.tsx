@@ -127,6 +127,13 @@ export default function ExperiencePage() {
         <h1 className="mb-8 text-3xl font-bold text-white md:text-4xl">
           Experience
         </h1>
+        <div className="mb-10 max-w-3xl">
+          <p className="text-base text-gray-300 md:text-lg">
+            Most of my work has centered on backend platform engineering,
+            integrations, and distributed systems, with increasing ownership of
+            architecture, delivery, and cross-team coordination.
+          </p>
+        </div>
         <div ref={wrapperRef} className="relative flex w-full">
           <div
             ref={leftRef}

@@ -31,9 +31,7 @@ export default function HomeAssistantProjectPage() {
           <span>←</span> Back to projects
         </Link>
 
-        <h1 className="mb-2 text-4xl font-bold text-white">
-          {project.title} (HAOS + ZHA, 50+ Zigbee Devices)
-        </h1>
+        <h1 className="mb-2 text-4xl font-bold text-white">{project.title}</h1>
 
         {/* Date */}
         <div className="mb-6 flex items-center gap-3 text-sm text-gray-400">
@@ -63,146 +61,69 @@ export default function HomeAssistantProjectPage() {
 
         <div className="prose prose-lg max-w-none text-gray-300">
           <section className="mb-12">
-            <h2 className="mb-4 text-2xl font-semibold text-white">Overview</h2>
+            <h2 className="mb-4 text-2xl font-semibold text-white">
+              Why This Project Exists
+            </h2>
             <p className="mb-4">{project.problem}</p>
-            <p className="mb-4">{project.approach}</p>
+          </section>
 
-            <div className="mb-6 grid gap-6 md:grid-cols-2">
+          <section className="mb-12">
+            <h2 className="mb-4 text-2xl font-semibold text-white">
+              How I Built It
+            </h2>
+            <p className="mb-4">{project.approach}</p>
+          </section>
+
+          <section className="mb-12">
+            <h2 className="mb-4 text-2xl font-semibold text-white">
+              What It Includes
+            </h2>
+            <div className="grid gap-6 md:grid-cols-2">
               <div className="rounded-lg border border-gray-700 bg-card p-6">
-                <h3 className="mb-3 text-xl font-semibold text-white">Goals</h3>
-                <ul className="space-y-2 text-gray-300">
-                  <li>
-                    <strong className="text-white">Comfort:</strong> routines
-                    that reduce manual steps (arriving/leaving, sleep routine)
-                  </li>
-                  <li>
-                    <strong className="text-white">Energy awareness:</strong>{' '}
-                    use smart plugs and measurements to understand consumption
-                    patterns
-                  </li>
-                  <li>
-                    <strong className="text-white">Security:</strong> window
-                    sensors + alarm state awareness (details intentionally
-                    high-level)
-                  </li>
-                  <li>
-                    <strong className="text-white">Learning:</strong> treat the
-                    house like a living lab for automation reliability
-                  </li>
-                </ul>
+                <h3 className="mb-3 text-xl font-semibold text-white">
+                  Local-first home automation
+                </h3>
+                <p className="text-sm text-gray-300">
+                  Core routines are designed to keep working even if the
+                  internet is unavailable. That matters because the system is
+                  not a toy. It supports everyday household habits such as
+                  lighting, blinds, comfort, and general home awareness.
+                </p>
               </div>
 
               <div className="rounded-lg border border-gray-700 bg-card p-6">
                 <h3 className="mb-3 text-xl font-semibold text-white">
-                  Constraints
+                  Reliability through network design
                 </h3>
-                <ul className="space-y-2 text-gray-300">
-                  <li>
-                    <strong className="text-white">Local-first:</strong> core
-                    functionality should keep working even if the internet is
-                    down
-                  </li>
-                  <li>
-                    <strong className="text-white">Simple UX:</strong> must be
-                    usable by non-technical users (my wife is the primary tester
-                    and quality gate)
-                  </li>
-                </ul>
-              </div>
-            </div>
-          </section>
-
-          <section className="mb-12">
-            <h2 className="mb-4 text-2xl font-semibold text-white">
-              Stack Choices
-            </h2>
-            <div className="rounded-lg border border-gray-700 bg-card p-6">
-              <ul className="space-y-2">
-                <li>
-                  <strong className="text-white">
-                    Home Assistant OS (HAOS)
-                  </strong>{' '}
-                  running on a used mini-PC
-                </li>
-                <li>
-                  <strong className="text-white">Zigbee:</strong> ZHA with a
-                  Home Assistant SkyConnect coordinator
-                </li>
-                <li>
-                  <strong className="text-white">Remote access:</strong> Nabu
-                  Casa (used only for access from anywhere)
-                </li>
-                <li>
-                  <strong className="text-white">Observability/tools:</strong>{' '}
-                  Grafana + VS Code add-on
-                </li>
-              </ul>
-            </div>
-          </section>
-
-          <section className="mb-12">
-            <h2 className="mb-4 text-2xl font-semibold text-white">
-              High-Level Architecture
-            </h2>
-            <div className="mb-4 rounded-lg border border-gray-700 bg-card p-6">
-              <h3 className="mb-3 text-lg font-semibold text-white">
-                Components
-              </h3>
-              <ul className="space-y-1">
-                <li>Home Assistant OS (core runtime)</li>
-                <li>ZHA (Zigbee network + device entities)</li>
-                <li>Dashboards (Lovelace UI)</li>
-                <li>Nabu Casa (remote access)</li>
-                <li>Optional tooling: Grafana, VS Code add-on</li>
-              </ul>
-            </div>
-            <div className="rounded-lg border border-gray-700 bg-card p-6">
-              <h3 className="mb-3 text-lg font-semibold text-white">
-                Typical Flow
-              </h3>
-              <ol className="list-decimal space-y-2 pl-5">
-                <li>
-                  A Zigbee device changes state (motion, temp, window, plug)
-                </li>
-                <li>Home Assistant updates entity state</li>
-                <li>An automation evaluates triggers/conditions</li>
-                <li>
-                  Actions execute (lights, covers, routines, notifications)
-                </li>
-              </ol>
-            </div>
-          </section>
-
-          <section className="mb-12">
-            <h2 className="mb-4 text-2xl font-semibold text-white">
-              Zigbee Network Design
-            </h2>
-            <div className="rounded-lg border border-gray-700 bg-card p-6">
-              <p className="mb-4">
-                <strong className="text-white">Device count:</strong> 53 Zigbee
-                devices
-              </p>
-              <p className="mb-4">
-                <strong className="text-white">Primary challenge:</strong> Range
-                and network stability
-              </p>
-              <div>
-                <p className="mb-2 font-semibold text-white">
-                  Mitigation strategy:
+                <p className="text-sm text-gray-300">
+                  The setup now includes more than 50 Zigbee devices. A big part
+                  of the work was not adding devices, but building a stable mesh
+                  with enough routing coverage to make the automations
+                  dependable.
                 </p>
-                <ul className="list-disc space-y-1 pl-5">
-                  <li>
-                    Add multiple Zigbee smart sockets around the house to act as
-                    routers
-                  </li>
-                  <li>
-                    Prefer relays with neutral where possible so they can
-                    operate reliably as routers
-                  </li>
-                </ul>
-                <p className="mt-4">
-                  This produced a stronger mesh by increasing the number and
-                  distribution of routing-capable devices.
+              </div>
+
+              <div className="rounded-lg border border-gray-700 bg-card p-6">
+                <h3 className="mb-3 text-xl font-semibold text-white">
+                  Designed for daily use
+                </h3>
+                <p className="text-sm text-gray-300">
+                  The user experience matters as much as the automation logic.
+                  The dashboards are used every day, and my wife is the ultimate
+                  tester. If something feels confusing or unreliable to a
+                  non-technical user, it is not good enough yet.
+                </p>
+              </div>
+
+              <div className="rounded-lg border border-gray-700 bg-card p-6">
+                <h3 className="mb-3 text-xl font-semibold text-white">
+                  Ongoing operations
+                </h3>
+                <p className="text-sm text-gray-300">
+                  Backups, weekly updates, and continuous cleanup are part of
+                  the project. Treating the setup like a living system keeps it
+                  useful over time instead of letting it drift into brittle
+                  hobby infrastructure.
                 </p>
               </div>
             </div>
@@ -210,46 +131,23 @@ export default function HomeAssistantProjectPage() {
 
           <section className="mb-12">
             <h2 className="mb-4 text-2xl font-semibold text-white">
-              What's Connected
+              Dashboard Snapshot
             </h2>
             <div className="rounded-lg border border-gray-700 bg-card p-6">
-              <p className="mb-3 text-sm text-gray-400">
-                Ordered by "what I use most"
-              </p>
-              <ol className="list-decimal space-y-2 pl-5">
-                <li>Temperature / humidity sensors</li>
-                <li>Smart plugs</li>
-                <li>Window sensors</li>
-                <li>Window covers (blinds/shutters)</li>
-                <li>Alarm integration (kept high-level)</li>
-                <li>Watering system</li>
-              </ol>
-            </div>
-          </section>
-
-          <section className="mb-12">
-            <h2 className="mb-4 text-2xl font-semibold text-white">
-              Dashboards & UX
-            </h2>
-            <div className="rounded-lg border border-gray-700 bg-card p-6">
-              <p className="mb-4">
-                <strong className="text-white">Dashboards:</strong> One main
-                dashboard built by me + multiple sub-views
-              </p>
-              <p className="mb-4">
-                <strong className="text-white">Quality gate:</strong> My wife
-                uses it daily and is the ultimate tester. If the UX is
-                confusing, it doesn't ship.
+              <p className="mb-4 text-sm text-gray-300">
+                A simplified dashboard keeps the most important information and
+                controls easy to reach. The goal is not to expose every device
+                at once. It is to make the system practical for everyday use.
               </p>
               <button
                 type="button"
                 onClick={() => setLightboxOpen(true)}
-                className="mt-6 w-full rounded-lg overflow-hidden focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="mt-2 w-full overflow-hidden rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
               >
                 <img
                   src={haScreenshot}
                   alt="Home Assistant Dashboard"
-                  className="w-full rounded-lg border border-gray-600 hover:opacity-90 transition-opacity cursor-pointer"
+                  className="w-full cursor-pointer rounded-lg border border-gray-600 transition-opacity hover:opacity-90"
                 />
               </button>
             </div>
@@ -257,81 +155,38 @@ export default function HomeAssistantProjectPage() {
 
           <section className="mb-12">
             <h2 className="mb-4 text-2xl font-semibold text-white">
-              Backups, Updates & Operations
+              What I Learned
             </h2>
-            <div className="rounded-lg border border-gray-700 bg-card p-6">
-              <ul className="space-y-2">
-                <li>
-                  <strong className="text-white">Backups:</strong> Handled by
-                  Nabu Casa
-                </li>
-                <li>
-                  <strong className="text-white">Update cadence:</strong> Weekly
-                </li>
-              </ul>
-            </div>
-          </section>
-
-          <section className="mb-12">
-            <h2 className="mb-4 text-2xl font-semibold text-white">
-              Security & Privacy
-            </h2>
-            <div className="rounded-lg border border-gray-700 bg-card p-6">
-              <p>
-                I avoid sharing sensitive operational/security details publicly.
-                The setup is local-first; remote access is via Nabu Casa.
-              </p>
-            </div>
-          </section>
-
-          <section className="mb-12">
-            <h2 className="mb-4 text-2xl font-semibold text-white">
-              Incident Story (Learning Moment)
-            </h2>
-            <div className="rounded-lg border border-gray-700 bg-card p-6">
-              <p className="mb-4">
-                I tried to install{' '}
-                <strong className="text-white">Frigate</strong> for local video
-                analytics, but the mini-PC did not have a sufficiently powerful
-                GPU. The attempt led to enough system churn that I nearly had to
-                reinstall HAOS from scratch.
-              </p>
-              <div>
-                <p className="mb-2 font-semibold text-white">
-                  What I took from it:
+            <p className="mb-4">
+              This project keeps reinforcing the same lesson: automation is only
+              valuable when it is dependable and genuinely helpful. The most
+              interesting work is often not adding one more device, but making
+              the whole system calmer, clearer, and easier to trust.
+            </p>
+            <div className="grid gap-6 md:grid-cols-2">
+              <div className="rounded-lg border border-gray-700 bg-card p-6">
+                <h3 className="mb-3 text-xl font-semibold text-white">
+                  A home behaves like a production environment
+                </h3>
+                <p className="text-sm text-gray-300">
+                  When an automation fails, it creates friction immediately.
+                  That makes reliability, rollback thinking, and operational
+                  discipline much more important than they might seem in a side
+                  project.
                 </p>
-                <ul className="list-disc space-y-1 pl-5">
-                  <li>
-                    Validate hardware requirements up front for compute-heavy
-                    add-ons
-                  </li>
-                  <li>
-                    Treat major add-on experiments like risky migrations:
-                    snapshot/back up, test incrementally, and have a rollback
-                    plan
-                  </li>
-                </ul>
               </div>
-            </div>
-          </section>
 
-          <section className="mb-12">
-            <h2 className="mb-4 text-2xl font-semibold text-white">Roadmap</h2>
-            <div className="rounded-lg border border-gray-700 bg-card p-6">
-              <ul className="list-disc space-y-2 pl-5">
-                <li>
-                  Add a well-documented "automation catalog" (8–12 best
-                  automations)
-                </li>
-                <li>
-                  Explore local camera/NVR options that match the available
-                  hardware
-                </li>
-                <li>
-                  Improve observability dashboards (device health, availability
-                  trends) without exposing sensitive details
-                </li>
-              </ul>
+              <div className="rounded-lg border border-gray-700 bg-card p-6">
+                <h3 className="mb-3 text-xl font-semibold text-white">
+                  Hardware constraints are real product constraints
+                </h3>
+                <p className="text-sm text-gray-300">
+                  An attempt to add local video analytics with Frigate pushed
+                  the available hardware too far and nearly forced a reinstall.
+                  It was a useful reminder to validate hardware assumptions
+                  before treating an idea as ready to ship.
+                </p>
+              </div>
             </div>
           </section>
         </div>

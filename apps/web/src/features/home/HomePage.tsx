@@ -32,23 +32,24 @@ export default function HomePage() {
           </p>
           <div className="mb-8 max-w-4xl">
             <p className="mb-4 text-base lg:text-lg text-gray-300">
-              Welcome! I'm a backend software engineer with {experience.text} of
-              experience in C#/.NET, microservices, and event-driven systems.{' '}
+              Welcome. I&apos;m a backend software engineer with{' '}
+              {experience.text} of experience in C#/.NET, microservices, and
+              event-driven systems.{' '}
               <StyledLink href="/about">Learn more about me</StyledLink>
             </p>
             <p className="mb-4 text-base lg:text-lg text-gray-300">
-              This website itself is a learning project. As someone who knows
-              close to nothing about frontend development, I'm using AI-assisted
-              tools to build this site and learn React, TypeScript, and modern
-              frontend practices along the way.{' '}
+              This website is also a learning project. Frontend development was
+              not the center of my background, so I used this portfolio as a
+              practical way to learn React, TypeScript, and modern UI work by
+              building something real.{' '}
               <StyledLink href="/projects">
                 See the full project details
               </StyledLink>
             </p>
             <p className="mb-4 text-base lg:text-lg text-gray-300">
-              It's an experiment in leveraging AI for developer productivity,
-              using the same curiosity and automation mindset I apply to backend
-              systems and my Home Assistant.
+              It is also an experiment in using AI thoughtfully in software
+              development: accelerating learning and iteration without giving up
+              judgment, ownership, or quality.
             </p>
           </div>
           <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">

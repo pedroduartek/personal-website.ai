@@ -20,6 +20,13 @@ export default function EducationPage() {
         <h1 className="mb-8 text-3xl font-bold text-white md:text-4xl">
           Education
         </h1>
+        <div className="mb-10 max-w-3xl">
+          <p className="text-base text-gray-300 md:text-lg">
+            Formal education, certification, and conference participation that
+            helped shape how I think about software, systems, and continuous
+            learning.
+          </p>
+        </div>
         <div className="space-y-6">
           {education.map((item) => (
             <article

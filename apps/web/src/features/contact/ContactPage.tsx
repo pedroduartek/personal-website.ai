@@ -108,10 +108,9 @@ export default function ContactPage() {
             Contact
           </h1>
           <p className="text-base text-gray-300 md:text-lg">
-            I am always interested in hearing about new opportunities,
-            collaborations, or just connecting with fellow developers. If you
-            want to reach me directly, open the message form or use any of the
-            contact options alongside it.
+            I&apos;m always open to relevant opportunities, thoughtful
+            conversations, and meeting other engineers. If you want to reach me,
+            use the message form or any of the direct contact options.
           </p>
         </div>
 

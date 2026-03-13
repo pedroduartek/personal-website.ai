@@ -6,7 +6,7 @@ function getProfile(): Profile {
   return {
     name: 'Pedro Duarte',
     role: 'Senior Software Engineer',
-    bio: `Senior Software Engineer with ${experience.text} of experience building scalable platforms in C#/.NET (8+), microservices, and event-driven architectures with Kafka. Proven track record as a Tech Lead, owning system design, delivery, and production reliability across SQL and NoSQL data stores. Passionate about developer productivity and automation, including running a self-hosted Home Assistant environment with 50+ Zigbee devices and custom automations.`,
+    bio: `Senior Software Engineer with ${experience.text} of experience building backend platforms in C#/.NET, microservices, and event-driven systems with Kafka. Experience leading system design, delivery, and production reliability across SQL and NoSQL environments. Particularly interested in developer productivity, automation, and practical AI-assisted development.`,
     email: 'pedroduartek@gmail.com',
     linkedin: 'https://www.linkedin.com/in/pedroduartek/',
     linkedinHandle: 'pedroduartek',

@@ -25,8 +25,8 @@ export default function ConferencesPage() {
   return (
     <>
       <PageSEO
-        title="Conferences & Talks"
-        description="Conference presentations, talks, and events"
+        title="Conferences & Events"
+        description="Conferences, events, and community experiences"
         image="/src/images/azure_dev_summit.png"
         url={
           typeof window !== 'undefined'
@@ -35,9 +35,15 @@ export default function ConferencesPage() {
         }
       />
       <div className="container mx-auto px-4 py-16 animate-slide-down">
-        <h1 className="mb-8 text-4xl font-bold text-white">
-          Conferences & Talks
+        <h1 className="mb-6 text-4xl font-bold text-white">
+          Conferences & Events
         </h1>
+        <div className="mb-10 max-w-3xl">
+          <p className="text-base text-gray-300 md:text-lg">
+            A few moments where I invested in learning, community, and exposure
+            to how other teams think about technology and software delivery.
+          </p>
+        </div>
         <div className="space-y-6">
           {conferences.map((item) => (
             <article

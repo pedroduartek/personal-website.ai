@@ -16,14 +16,12 @@ export default function CVPage() {
         }
       />
       <div className="container mx-auto px-4 py-8 animate-slide-down md:py-16">
-        <h1 className="mb-8 text-3xl font-bold text-white md:text-4xl">
-          Curriculum Vitae
-        </h1>
+        <h1 className="mb-8 text-3xl font-bold text-white md:text-4xl">CV</h1>
 
         <div className="max-w-4xl">
           <p className="mb-6 text-gray-300">
-            Download my CV as a PDF for easy sharing and printing. The CV
-            contains my complete professional experience, education, and skills.
+            Download a PDF version of my CV if you want a portable summary of my
+            experience, education, and skills.
           </p>
 
           <a
