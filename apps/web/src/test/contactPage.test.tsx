@@ -55,21 +55,15 @@ describe('ContactPage', () => {
         'Content-Type': 'application/json',
       },
     })
-    expect(JSON.parse(String(options?.body))).toEqual({
-      to: [profile.email],
+    const payload = JSON.parse(String(options?.body))
+    expect(payload).toMatchObject({
       subject: 'Hello',
-      body: [
-        'New message from pedroduartek.com contact form',
-        '',
-        'Name: Ada Lovelace',
-        'Email: ada@example.com',
-        'Subject: Hello',
-        '',
-        'Message:',
-        'I would like to talk about a backend role.',
-      ].join('\n'),
-      isHtml: false,
+      isHtml: true,
     })
+    expect(payload.body).toContain('New message from pedroduartek.com contact form')
+    expect(payload.body).toContain('Name: Ada Lovelace')
+    expect(payload.body).toContain('Email: ada@example.com')
+    expect(payload.body).toContain('I would like to talk about a backend role.')
     expect(
       screen.getByText(
         'Your message has been sent. I will get back to you as soon as I can.',

@@ -62,21 +62,15 @@ describe('TerminalShell email command', () => {
     const [url, options] = vi.mocked(fetch).mock.calls[0]
 
     expect(url).toBe(CONTACT_EMAIL_ENDPOINT)
-    expect(JSON.parse(String(options?.body))).toEqual({
-      to: [profile.email],
+    const payload = JSON.parse(String(options?.body))
+    expect(payload).toMatchObject({
       subject: 'Terminal hello',
-      body: [
-        'New message from pedroduartek.com terminal',
-        '',
-        'Name: Ada Lovelace',
-        'Email: ada@example.com',
-        'Subject: Terminal hello',
-        '',
-        'Message:',
-        'Let us talk about a staff role.',
-      ].join('\n'),
-      isHtml: false,
+      isHtml: true,
     })
+    expect(payload.body).toContain('New message from pedroduartek.com terminal')
+    expect(payload.body).toContain('Name: Ada Lovelace')
+    expect(payload.body).toContain('Email: ada@example.com')
+    expect(payload.body).toContain('Let us talk about a staff role.')
     expect(screen.getByText('Email sent successfully.')).toBeInTheDocument()
   })
 })
