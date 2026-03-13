@@ -1,10 +1,18 @@
+import { conferences } from '../content/conferences'
+import { education } from '../content/education'
 import { experience } from '../content/experience'
 import { profile as siteProfile } from '../content/profile'
 import { projects } from '../content/projects'
 import { skills } from '../content/skills'
 import type { Profile } from '../content/types'
+import { calculateYearsFromDate } from './experience'
 
 type RunOptions = { profile?: Partial<Profile> }
+
+type ExperienceGroup = {
+  company: string
+  roles: typeof experience
+}
 
 function safeWindowOpen(path: string) {
   if (typeof window !== 'undefined' && typeof window.open === 'function') {
@@ -16,6 +24,205 @@ function safeWindowOpen(path: string) {
     }
   }
   return false
+}
+
+function slugify(value: string) {
+  return value
+    .toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '')
+}
+
+function matchesQuery(value: string, query: string) {
+  const normalizedValue = slugify(value)
+  const normalizedQuery = slugify(query)
+
+  return (
+    normalizedValue === normalizedQuery ||
+    normalizedValue.includes(normalizedQuery) ||
+    normalizedQuery.includes(normalizedValue)
+  )
+}
+
+function formatMonthYear(value: string) {
+  const [year, month] = value.split('-')
+  if (!year || !month) return value
+
+  return new Date(Number(year), Number(month) - 1, 1).toLocaleDateString(
+    'en-US',
+    {
+      year: 'numeric',
+      month: 'short',
+    },
+  )
+}
+
+function formatPeriod(startDate: string, endDate?: string) {
+  return `${formatMonthYear(startDate)} - ${
+    endDate ? formatMonthYear(endDate) : 'Present'
+  }`
+}
+
+function groupExperienceByCompany() {
+  const grouped = new Map<string, ExperienceGroup>()
+
+  for (const role of experience) {
+    const existing = grouped.get(role.company)
+    if (existing) {
+      existing.roles.push(role)
+      continue
+    }
+
+    grouped.set(role.company, {
+      company: role.company,
+      roles: [role],
+    })
+  }
+
+  return Array.from(grouped.values())
+}
+
+function getCompanyTechnologies(roles: typeof experience) {
+  const seen = new Set<string>()
+  const items: string[] = []
+
+  for (const role of roles) {
+    for (const tech of role.technologies) {
+      const key = tech.toLowerCase()
+      if (seen.has(key)) continue
+      seen.add(key)
+      items.push(tech)
+    }
+  }
+
+  return items
+}
+
+function findExperienceGroup(query: string) {
+  return groupExperienceByCompany().find((group) =>
+    matchesQuery(group.company, query),
+  )
+}
+
+function findProject(query: string) {
+  return projects.find(
+    (project) =>
+      matchesQuery(project.slug, query) || matchesQuery(project.title, query),
+  )
+}
+
+function findSkillGroup(query: string) {
+  return skills.find(
+    (group) =>
+      matchesQuery(group.category, query) ||
+      matchesQuery(`skills ${group.category}`, query),
+  )
+}
+
+function listContentSections() {
+  return [
+    'Content sections:',
+    '  about',
+    '  experience',
+    '  projects',
+    '  education',
+    '  conferences',
+    '  skills',
+    '  contacts',
+    '',
+    'Tip: use `cat <section>` or `help` to explore further.',
+  ]
+}
+
+function listProjectSuggestions() {
+  return [
+    'Usage: project <slug-or-name>',
+    'Available projects:',
+    ...projects.map((project) => `  ${project.slug}`),
+  ]
+}
+
+async function handleCatCommand(
+  args: string[],
+  opts: RunOptions,
+): Promise<string[]> {
+  if (args.length === 0) {
+    return [
+      'Usage: cat <section[/item]>',
+      'Examples:',
+      '  cat about',
+      '  cat project/ai-chat-api',
+      '  cat experience/enhesa',
+      '  cat skills/backend',
+    ]
+  }
+
+  if (args.length > 1) {
+    const [head, ...tail] = args
+    if (
+      [
+        'about',
+        'project',
+        'projects',
+        'experience',
+        'skills',
+        'education',
+        'conference',
+        'conferences',
+        'contacts',
+        'contact',
+      ].includes(head.toLowerCase())
+    ) {
+      return runCommand(`${head} ${tail.join(' ')}`.trim(), opts)
+    }
+  }
+
+  const path = args.join(' ').replace(/^\/+/, '')
+  const parts = path.split('/').filter(Boolean)
+  const [section, ...tail] = parts
+
+  if (!section) {
+    return ['Usage: cat <section[/item]>']
+  }
+
+  const remainder = tail.join(' ')
+  const normalizedSection = section.toLowerCase()
+
+  if (normalizedSection === 'about') return runCommand('about', opts)
+  if (normalizedSection === 'project' || normalizedSection === 'projects') {
+    return remainder
+      ? runCommand(`project ${remainder}`, opts)
+      : runCommand('projects', opts)
+  }
+  if (normalizedSection === 'experience') {
+    return remainder
+      ? runCommand(`experience ${remainder}`, opts)
+      : runCommand('experience', opts)
+  }
+  if (normalizedSection === 'skills') {
+    return remainder
+      ? runCommand(`skills ${remainder}`, opts)
+      : runCommand('skills', opts)
+  }
+  if (normalizedSection === 'education') {
+    return remainder
+      ? runCommand(`education ${remainder}`, opts)
+      : runCommand('education', opts)
+  }
+  if (
+    normalizedSection === 'conference' ||
+    normalizedSection === 'conferences'
+  ) {
+    return remainder
+      ? runCommand(`conferences ${remainder}`, opts)
+      : runCommand('conferences', opts)
+  }
+  if (normalizedSection === 'contacts' || normalizedSection === 'contact') {
+    return runCommand('contacts', opts)
+  }
+
+  return [`Unknown section: ${path}`]
 }
 
 export async function runCommand(
@@ -34,11 +241,17 @@ export async function runCommand(
   if (name === 'help' || name === '?') {
     return [
       'Available commands:',
+      '  ls                  List the main content sections',
+      '  cat <section>       Read a section or item (e.g. cat about)',
       '  whoami              Show a short profile summary',
+      '  about               Show a broader personal summary',
       '  socials|contacts    Show social links and contact info',
-      '  skills              List skill groups and skills',
-      '  experience          Summary of top 3 roles',
-      '  projects            List notable projects with links',
+      '  skills [category]   List skill groups or inspect one category',
+      '  experience [name]   List companies or inspect one in detail',
+      '  projects            List notable projects',
+      '  project <slug>      Show one project in detail',
+      '  education           Show education and certifications',
+      '  conferences         Show conferences and community events',
       '  banner              Show a small ASCII header',
       '  sysinfo             Show basic system / navigator info',
       '  download-cv         Navigate to /cv to download the CV',
@@ -50,9 +263,17 @@ export async function runCommand(
     ]
   }
 
+  if (name === 'ls') {
+    return listContentSections()
+  }
+
+  if (name === 'cat') {
+    return handleCatCommand(args, _opts)
+  }
+
   if (name === 'whoami') {
     const out: string[] = []
-    out.push(`${p.name} — ${p.role}`)
+    out.push(`${p.name} - ${p.role}`)
     out.push('')
     out.push(p.bio)
     out.push('')
@@ -63,7 +284,20 @@ export async function runCommand(
     return out
   }
 
-  if (name === 'socials' || name === 'contacts') {
+  if (name === 'about' || name === 'bio') {
+    return [
+      `${p.name} - ${p.role}`,
+      '',
+      p.bio,
+      '',
+      `Location: ${p.location}`,
+      'Focus: backend platforms, distributed systems, developer productivity, and practical automation.',
+      'Product mindset: reliability and user experience matter as much as implementation details.',
+      'Outside work: fishing, motorcycling, cooking, and running a self-hosted Home Assistant setup with 50+ Zigbee devices.',
+    ]
+  }
+
+  if (name === 'socials' || name === 'contacts' || name === 'contact') {
     const out: string[] = []
     if (p.github) out.push(`GitHub: ${p.github}`)
     if (p.linkedin) out.push(`LinkedIn: ${p.linkedin}`)
@@ -74,41 +308,183 @@ export async function runCommand(
   }
 
   if (name === 'skills') {
-    const out: string[] = []
-    for (const g of skills) {
-      const skillNames = g.skills.map((s) => s.name).join(', ')
-      out.push(`${g.category}: ${skillNames}`)
+    if (args.length === 0) {
+      const out: string[] = ['Skill groups:']
+      for (const group of skills) {
+        out.push(
+          `  ${slugify(group.category)} - ${group.skills.map((skill) => skill.name).join(', ')}`,
+        )
+      }
+      out.push('')
+      out.push('Tip: run `skills backend` for a focused view.')
+      return out
     }
-    return out
+
+    const query = args.join(' ')
+    const group = findSkillGroup(query)
+    if (!group) {
+      return [
+        `No skill group matched: ${query}`,
+        'Try one of: backend, data-messaging, infrastructure-devops, other',
+      ]
+    }
+
+    return [
+      `${group.category} skills:`,
+      ...group.skills.map((skill) => {
+        const years = calculateYearsFromDate(skill.startDate)
+        const yearsText = years === 1 ? '1 year' : `${years} years`
+        return `  ${skill.name} - ~${yearsText}`
+      }),
+    ]
   }
 
   if (name === 'experience') {
-    const top = experience.slice(0, 3)
-    if (top.length === 0) return ['No experience entries available.']
+    if (args.length === 0) {
+      const groups = groupExperienceByCompany()
+      if (groups.length === 0) return ['No experience entries available.']
+
+      const out: string[] = ['Experience:']
+      for (const group of groups) {
+        const firstRole = group.roles[0]
+        const earliestRole = group.roles[group.roles.length - 1]
+        const titles = group.roles.map((role) => role.title).join(' | ')
+        out.push(
+          `  ${slugify(group.company)} - ${group.company} (${formatPeriod(earliestRole.startDate, firstRole.endDate)})`,
+        )
+        out.push(`    ${titles}`)
+      }
+      out.push('')
+      out.push('Tip: run `experience enhesa` for full details.')
+      return out
+    }
+
+    const query = args.join(' ')
+    const group = findExperienceGroup(query)
+    if (!group) {
+      return [
+        `No company matched: ${query}`,
+        'Try one of: enhesa, vortal, closer-consulting',
+      ]
+    }
+
     const out: string[] = []
-    for (const e of top) {
-      const dates = e.startDate + (e.endDate ? ` — ${e.endDate}` : ' — Present')
-      out.push(`${e.title} @ ${e.company} (${dates}) — ${e.location}`)
-      if (e.description && e.description.length > 0) {
-        out.push(`  • ${e.description[0]}`)
+    const location = group.roles[0]?.location
+    out.push(`${group.company}${location ? ` - ${location}` : ''}`)
+    out.push(`Route: /experience/${slugify(group.company)}`)
+    out.push('')
+
+    const companyTech = getCompanyTechnologies(group.roles)
+    if (companyTech.length > 0) {
+      out.push(`Technologies: ${companyTech.join(', ')}`)
+      out.push('')
+    }
+
+    for (const role of group.roles) {
+      out.push(`${role.title} (${formatPeriod(role.startDate, role.endDate)})`)
+      for (const line of role.description) {
+        out.push(`  - ${line}`)
       }
       out.push('')
     }
+
     return out
   }
 
-  if (name === 'projects' || name === 'ls') {
+  if (name === 'projects') {
     if (!projects || projects.length === 0) return ['No projects available.']
+
+    const out: string[] = ['Projects:']
+    for (const project of projects) {
+      out.push(`  ${project.slug} - ${project.title}`)
+      out.push(`    ${project.description}`)
+      out.push(`    route: /projects/${project.slug}`)
+    }
+    out.push('')
+    out.push('Tip: run `project ai-chat-api` for a detailed view.')
+    return out
+  }
+
+  if (name === 'project') {
+    const query = args.join(' ').trim()
+    if (!query) return listProjectSuggestions()
+
+    const project = findProject(query)
+    if (!project) {
+      return [
+        `No project matched: ${query}`,
+        'Try one of: personal-website, home-assistant, ai-chat-api',
+      ]
+    }
+
     const out: string[] = []
-    for (const pr of projects) {
-      out.push(`${pr.title} — ${pr.description}`)
-      if (pr.links) {
-        const linkParts: string[] = []
-        if (pr.links.github) linkParts.push(`github: ${pr.links.github}`)
-        if (pr.links.demo) linkParts.push(`demo: ${pr.links.demo}`)
-        if (pr.links.article) linkParts.push(`article: ${pr.links.article}`)
-        if (linkParts.length) out.push(`  ${linkParts.join(' | ')}`)
+    out.push(
+      `${project.title} (${formatPeriod(project.startDate, project.endDate)})`,
+    )
+    out.push('')
+    out.push(project.description)
+    out.push('')
+    out.push(`Why: ${project.problem}`)
+    out.push('')
+    out.push(`Approach: ${project.approach}`)
+    out.push('')
+    out.push(`Stack: ${project.technologies.join(', ')}`)
+    out.push(`Route: /projects/${project.slug}`)
+    if (project.links?.github) out.push(`GitHub: ${project.links.github}`)
+    if (project.links?.demo) out.push(`Demo: ${project.links.demo}`)
+    if (project.links?.article) out.push(`Article: ${project.links.article}`)
+    return out
+  }
+
+  if (name === 'education') {
+    const query = args.join(' ').trim()
+    const items = query
+      ? education.filter(
+          (item) =>
+            matchesQuery(item.institution, query) ||
+            matchesQuery(item.field, query),
+        )
+      : education
+
+    if (items.length === 0) {
+      return [`No education entry matched: ${query}`]
+    }
+
+    const out: string[] = ['Education:']
+    for (const item of items) {
+      out.push(
+        `  ${item.degree} in ${item.field} - ${item.institution} (${formatPeriod(item.startDate, item.endDate)})`,
+      )
+      out.push(`    ${item.location}`)
+      if (item.gpa) out.push(`    GPA: ${item.gpa}`)
+      for (const achievement of item.achievements ?? []) {
+        out.push(`    - ${achievement}`)
       }
+      if (item.certificateLabel) {
+        out.push(`    Certificate: ${item.certificateLabel}`)
+      }
+      out.push('')
+    }
+
+    return out
+  }
+
+  if (name === 'conference' || name === 'conferences') {
+    const query = args.join(' ').trim()
+    const items = query
+      ? conferences.filter((item) => matchesQuery(item.name, query))
+      : conferences
+
+    if (items.length === 0) {
+      return [`No conference matched: ${query}`]
+    }
+
+    const out: string[] = ['Conferences & events:']
+    for (const item of items) {
+      out.push(`  ${item.name} - ${item.type} (${formatMonthYear(item.date)})`)
+      out.push(`    ${item.location}`)
+      if (item.description) out.push(`    ${item.description}`)
+      if (item.links?.website) out.push(`    Website: ${item.links.website}`)
       out.push('')
     }
     return out
@@ -117,7 +493,7 @@ export async function runCommand(
   if (name === 'banner') {
     const lines: string[] = []
     lines.push('===================================')
-    lines.push(`${p.name} — ${p.role}`)
+    lines.push(`${p.name} - ${p.role}`)
     lines.push('Personal site terminal. Type `help` for commands.')
     lines.push('===================================')
     return lines
@@ -211,6 +587,5 @@ export async function runCommand(
     }
   }
 
-  // fallback
   return [`Command not found: ${cmd}`, 'Type "help" to see available commands.']
 }
