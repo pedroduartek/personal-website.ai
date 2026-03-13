@@ -2,15 +2,6 @@ import { useLayoutEffect, useMemo, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import PageSEO from '../../components/seo/PageSEO'
 import { experience } from '../../content/experience'
-import closerLogo from '../../images/closer_consulting.webp'
-import enhesaLogo from '../../images/enhesa.webp'
-import vortalLogo from '../../images/vortal.webp'
-
-const companyLogos: Record<string, string> = {
-  Enhesa: enhesaLogo,
-  VORTAL: vortalLogo,
-  'Closer Consulting': closerLogo,
-}
 
 const createCompanySlug = (company: string) =>
   company.toLowerCase().replace(/\s+/g, '-')
@@ -190,9 +181,9 @@ export default function ExperiencePage() {
                     className="block rounded-lg border border-gray-700 bg-card p-6 pl-4 md:pl-8 transition-all duration-300 hover:scale-[1.02] hover:bg-gray-800 hover:shadow-lg"
                   >
                     <div className="mb-6 flex items-center gap-4">
-                      {companyLogos[company] && (
+                      {roles[0]?.logo && (
                         <img
-                          src={companyLogos[company]}
+                          src={roles[0].logo}
                           alt={`${company} logo`}
                           loading="lazy"
                           decoding="async"

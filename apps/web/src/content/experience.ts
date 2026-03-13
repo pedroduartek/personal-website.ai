@@ -1,3 +1,6 @@
+import closerLogo from '../images/closer_consulting.webp'
+import enhesaLogo from '../images/enhesa.webp'
+import vortalLogo from '../images/vortal.webp'
 import type { ExperienceItem } from './types'
 
 export const experience: ExperienceItem[] = [
@@ -28,6 +31,7 @@ export const experience: ExperienceItem[] = [
       'Redis',
       'Structurizr',
     ],
+    logo: enhesaLogo,
   },
   {
     id: '2',
@@ -42,6 +46,7 @@ export const experience: ExperienceItem[] = [
       'Worked with C#/.NET, Kafka, and various data stores',
     ],
     technologies: ['C# .NET', 'Kafka', 'SQL Server', 'Microservices'],
+    logo: enhesaLogo,
   },
   {
     id: '3',
@@ -56,6 +61,7 @@ export const experience: ExperienceItem[] = [
       'Developed backend services using C# .NET Core and SQL Server',
     ],
     technologies: ['C# .NET Core', 'SQL Server', 'Entity Framework'],
+    logo: vortalLogo,
   },
   {
     id: '4',
@@ -70,6 +76,7 @@ export const experience: ExperienceItem[] = [
       'Contributed to various client projects',
     ],
     technologies: ['.NET MVC', 'Razor', 'SQL Server'],
+    logo: closerLogo,
   },
   {
     id: '5',
@@ -84,5 +91,6 @@ export const experience: ExperienceItem[] = [
       'Gained experience with SQL Server and Razor views',
     ],
     technologies: ['.NET MVC', 'Razor', 'SQL Server'],
+    logo: closerLogo,
   },
 ]

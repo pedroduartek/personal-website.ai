@@ -8,3 +8,4 @@ dist
 coverage
 .vscode/settings.json
 *.tsbuildinfo
+AGENTS.md

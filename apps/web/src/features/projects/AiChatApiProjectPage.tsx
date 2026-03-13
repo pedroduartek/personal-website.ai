@@ -74,14 +74,12 @@ export default function AiChatApiProjectPage() {
             <h2 className="mb-4 text-2xl font-semibold text-white">
               Motivation
             </h2>
-            <p className="mb-4">
-              Rather than relying on third-party AI services (and their costs,
-              rate limits, and data-privacy trade-offs), I wanted full ownership
-              of the inference pipeline. The goal was to ship a production-grade
-              API that runs entirely on a single VPS, model included, while
-              following the same engineering standards I apply to professional
-              backend systems.
-            </p>
+            <p className="mb-4">{project.problem}</p>
+          </section>
+
+          <section className="mb-12">
+            <h2 className="mb-4 text-2xl font-semibold text-white">Approach</h2>
+            <p className="mb-4">{project.approach}</p>
           </section>
 
           {/* What It Does */}

@@ -4,9 +4,18 @@ export interface Profile {
   bio: string
   email: string
   linkedin: string
+  linkedinHandle: string
   github?: string
+  githubHandle?: string
   twitter?: string
+  twitterHandle?: string
   location: string
+}
+
+export interface MediaAsset {
+  src: string
+  alt: string
+  objectPosition?: string
 }
 
 export interface ExperienceItem {
@@ -18,6 +27,7 @@ export interface ExperienceItem {
   location: string
   description: string[]
   technologies: string[]
+  logo?: string
 }
 
 export interface Project {
@@ -49,6 +59,8 @@ export interface EducationItem {
   achievements?: string[]
   gpa?: string
   certificateUrl?: string
+  certificateLabel?: string
+  logo?: string
 }
 
 export interface ConferenceItem {
@@ -59,6 +71,8 @@ export interface ConferenceItem {
   location: string
   title?: string
   description?: string
+  logo?: string
+  photos?: MediaAsset[]
   links?: {
     slides?: string
     video?: string
@@ -74,4 +88,9 @@ export interface SkillGroup {
 export interface Skill {
   name: string
   startDate: string
+}
+
+export interface ContentCard {
+  title: string
+  content: string
 }

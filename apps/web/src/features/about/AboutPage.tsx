@@ -5,11 +5,9 @@ import 'yet-another-react-lightbox/styles.css'
 import PageSEO from '../../components/seo/PageSEO'
 import { profile } from '../../content/profile'
 import systemDesign from '../../images/system_design_enhesa.webp'
-import { getExperience } from '../../utils/experience'
 
 export default function AboutPage() {
   const [lightboxOpen, setLightboxOpen] = useState(false)
-  const experience = getExperience()
 
   return (
     <>
@@ -30,21 +28,7 @@ export default function AboutPage() {
         <div className="flex flex-col md:flex-row gap-6">
           <div className="flex-1">
             <p className="mb-4 text-base text-gray-300 md:text-lg">
-              Senior Software Engineer with{' '}
-              <strong className="text-white">
-                {experience.text} of experience
-              </strong>{' '}
-              building scalable platforms in{' '}
-              <strong className="text-white">C#/.NET (8+)</strong>,
-              microservices, and event-driven architectures with Kafka. Proven
-              track record as a{' '}
-              <strong className="text-white">Tech Lead</strong>, owning system
-              design, delivery, and{' '}
-              <strong className="text-white">production reliability</strong>{' '}
-              across SQL and NoSQL data stores. Passionate about developer
-              productivity and automation, including running a self-hosted Home
-              Assistant environment with 50+ Zigbee devices and custom
-              automations.
+              {profile.bio}
             </p>
             <p className="mb-4 text-base text-gray-300 md:text-lg">
               I'm passionate about building{' '}

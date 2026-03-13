@@ -1,4 +1,6 @@
 import formabaseCertificate from '../CV/Certificado Pedro Duarte.pdf'
+import formabaseLogo from '../images/formabase.webp'
+import polytechnicLogo from '../images/polytechnic_setubal.webp'
 import type { EducationItem } from './types'
 
 export const education: EducationItem[] = [
@@ -15,6 +17,7 @@ export const education: EducationItem[] = [
       'Key courses: Application Development, Database Management, Information Systems (Analysis, Design, Architecture, Project Management, Quality, Security), Mathematics',
     ],
     gpa: '15/20',
+    logo: polytechnicLogo,
   },
   {
     id: '2',
@@ -26,5 +29,7 @@ export const education: EducationItem[] = [
     location: 'Lisbon, Portugal',
     achievements: ['PHP, HTML, CSS'],
     certificateUrl: formabaseCertificate,
+    certificateLabel: 'View Certificate',
+    logo: formabaseLogo,
   },
 ]

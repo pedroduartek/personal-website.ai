@@ -2,22 +2,8 @@ import { Link } from 'react-router-dom'
 import PageSEO from '../../components/seo/PageSEO'
 import { conferences } from '../../content/conferences'
 import { education } from '../../content/education'
-import azureDevSummitLogo from '../../images/azure_dev_summit.webp'
-import formabaseLogo from '../../images/formabase.webp'
-import polytechnicLogo from '../../images/polytechnic_setubal.webp'
-import webSummitLogo from '../../images/web_summit.webp'
 
 export default function EducationPage() {
-  const institutionLogos: Record<string, string> = {
-    'Polytechnic Institute Of Setúbal': polytechnicLogo,
-    Formabase: formabaseLogo,
-  }
-
-  const conferenceLogos: Record<string, string> = {
-    'Azure Dev Summit': azureDevSummitLogo,
-    'Web Summit': webSummitLogo,
-  }
-
   return (
     <>
       <PageSEO
@@ -41,9 +27,9 @@ export default function EducationPage() {
               className="rounded-lg border border-gray-700 bg-card p-6"
             >
               <div className="flex gap-4">
-                {institutionLogos[item.institution] && (
+                {item.logo && (
                   <img
-                    src={institutionLogos[item.institution]}
+                    src={item.logo}
                     alt={`${item.institution} logo`}
                     className="h-12 w-12 object-contain"
                   />
@@ -106,7 +92,7 @@ export default function EducationPage() {
                           d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
                         />
                       </svg>
-                      View Certificate
+                      {item.certificateLabel ?? 'View Certificate'}
                     </a>
                   )}
                 </div>
@@ -124,9 +110,9 @@ export default function EducationPage() {
             <Link key={item.id} to="/conferences" className="block">
               <article className="rounded-lg border border-gray-700 bg-card p-6 transition-all duration-200 hover:scale-[1.02] hover:bg-gray-800 hover:shadow-lg cursor-pointer">
                 <div className="mb-4 flex items-start gap-4">
-                  {conferenceLogos[item.name] && (
+                  {item.logo && (
                     <img
-                      src={conferenceLogos[item.name]}
+                      src={item.logo}
                       alt={`${item.name} logo`}
                       className="h-16 w-16 rounded object-contain"
                     />
