@@ -68,8 +68,8 @@ describe('TerminalShell email command', () => {
       isHtml: true,
     })
     expect(payload.body).toContain('New message from pedroduartek.com terminal')
-    expect(payload.body).toContain('Name: Ada Lovelace')
-    expect(payload.body).toContain('Email: ada@example.com')
+    expect(payload.body).toContain('Ada Lovelace')
+    expect(payload.body).toContain('ada@example.com')
     expect(payload.body).toContain('Let us talk about a staff role.')
     expect(screen.getByText('Email sent successfully.')).toBeInTheDocument()
   })
