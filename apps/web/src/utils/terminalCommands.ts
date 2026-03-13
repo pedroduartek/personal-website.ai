@@ -248,14 +248,12 @@ export async function runCommand(
       '  socials|contacts    Show social links and contact info',
       '  skills [category]   List skill groups or inspect one category',
       '  experience [name]   List companies or inspect one in detail',
-      '  projects            List notable projects',
-      '  project <slug>      Show one project in detail',
+      '  projects            List notable projects or inspect one with `project <slug>`',
       '  education           Show education and certifications',
       '  conferences         Show conferences and community events',
       '  banner              Show a small ASCII header',
       '  sysinfo             Show basic system / navigator info',
-      '  download-cv         Navigate to /cv to download the CV',
-      '  open <path>         Navigate to a site path (e.g. /projects)',
+        '  download-cv         Navigate to /cv to download the CV',
       '  clear               Clear the terminal (client-side)',
       '  email               Compose and send an email from the terminal',
       '  chat <message>      Ask the chat API and return a response',
@@ -527,13 +525,7 @@ export async function runCommand(
       : [`Navigation not available. Visit ${path}`]
   }
 
-  if (name === 'open') {
-    const path = args[0] ?? '/'
-    const ok = safeWindowOpen(path)
-    return ok
-      ? [`Navigating to ${path}...`]
-      : [`Navigation not available. Visit ${path}`]
-  }
+  // `open` command removed: navigation via terminal is intentionally disabled.
 
   if (name === 'chat') {
     const message = args.join(' ').trim()
