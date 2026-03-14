@@ -306,9 +306,13 @@ export default function TerminalShell({ onClose }: TerminalShellProps) {
 
       if (emailComposer.step === 'message') {
         if (!cmd) {
-          const currentMessage = emailComposer.draft.messageLines.join('\n').trim()
+          const currentMessage = emailComposer.draft.messageLines
+            .join('\n')
+            .trim()
           if (currentMessage.length < 10) {
-            appendOutput('Please enter a message between 10 and 4000 characters.')
+            appendOutput(
+              'Please enter a message between 10 and 4000 characters.',
+            )
             return
           }
 
@@ -330,7 +334,9 @@ export default function TerminalShell({ onClose }: TerminalShellProps) {
           return
         }
 
-        const nextMessage = [...emailComposer.draft.messageLines, cmdRaw].join('\n')
+        const nextMessage = [...emailComposer.draft.messageLines, cmdRaw].join(
+          '\n',
+        )
         if (nextMessage.length > 4000) {
           appendOutput('Please keep the message under 4000 characters.')
           return

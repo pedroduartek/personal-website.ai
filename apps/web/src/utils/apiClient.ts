@@ -61,21 +61,34 @@ export async function readApiError(
           errors?: Record<string, unknown>
         }
 
-        if (typeof maybePayload.error === 'string' && maybePayload.error.trim()) {
+        if (
+          typeof maybePayload.error === 'string' &&
+          maybePayload.error.trim()
+        ) {
           return maybePayload.error
         }
 
-        if (typeof maybePayload.detail === 'string' && maybePayload.detail.trim()) {
+        if (
+          typeof maybePayload.detail === 'string' &&
+          maybePayload.detail.trim()
+        ) {
           return maybePayload.detail
         }
 
-        if (typeof maybePayload.title === 'string' && maybePayload.title.trim()) {
+        if (
+          typeof maybePayload.title === 'string' &&
+          maybePayload.title.trim()
+        ) {
           return maybePayload.title
         }
 
         if (maybePayload.errors && typeof maybePayload.errors === 'object') {
           for (const value of Object.values(maybePayload.errors)) {
-            if (Array.isArray(value) && typeof value[0] === 'string' && value[0].trim()) {
+            if (
+              Array.isArray(value) &&
+              typeof value[0] === 'string' &&
+              value[0].trim()
+            ) {
               return value[0]
             }
           }
