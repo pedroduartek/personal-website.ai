@@ -130,8 +130,7 @@ export default function ContactPage() {
                   Send a message
                 </h2>
                 <p className="mt-2 text-sm text-gray-400">
-                  This sends a message directly to my inbox at{' '}
-                  {profile.email}.
+                  This sends a message directly to my inbox at {profile.email}.
                 </p>
               </div>
               <span className="rounded-lg border border-gray-700 px-4 py-2 text-sm font-medium text-gray-300 transition-colors hover:bg-gray-800 hover:text-white">
@@ -207,7 +206,9 @@ export default function ContactPage() {
                   autoComplete="off"
                   aria-hidden="true"
                   value={formValues.company ?? ''}
-                  onChange={(event) => updateField('company', event.target.value)}
+                  onChange={(event) =>
+                    updateField('company', event.target.value)
+                  }
                   className="hidden"
                 />
 
