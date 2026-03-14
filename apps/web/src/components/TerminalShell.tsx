@@ -26,8 +26,20 @@ type EmailComposerState = {
   }
 }
 
+type ActiveExecution = {
+  id: number
+  kind: 'chat' | 'email' | 'download-cv' | 'output'
+  interrupted: boolean
+}
+
+const INTERRUPT_WINDOW_MS = 800
+
 function isValidEmail(value: string) {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)
+}
+
+function sleep(ms: number) {
+  return new Promise((resolve) => globalThis.setTimeout(resolve, ms))
 }
 
 function AsciiArt({
@@ -82,6 +94,7 @@ export default function TerminalShell({ onClose }: TerminalShellProps) {
   const containerRef = useRef<HTMLDivElement | null>(null)
   const [chatMode, setChatMode] = useState(false)
   const [chatAwaiting, setChatAwaiting] = useState(false)
+  const [commandBusy, setCommandBusy] = useState(false)
   const [emailComposer, setEmailComposer] = useState<EmailComposerState | null>(
     null,
   )
@@ -90,16 +103,19 @@ export default function TerminalShell({ onClose }: TerminalShellProps) {
     null,
   )
   const [emailTurnstileResetSignal, setEmailTurnstileResetSignal] = useState(0)
+  const activeExecutionRef = useRef<ActiveExecution | null>(null)
+  const nextExecutionIdRef = useRef(0)
+  const interruptArmedAtRef = useRef(0)
   const turnstileAvailable = isTurnstileConfigured()
 
-  function appendOutput(text: string) {
+  const appendOutput = useCallback((text: string) => {
     setLines((current) => [
       ...current,
       { id: Date.now() + Math.random(), text, type: 'out' },
     ])
-  }
+  }, [])
 
-  function appendOutputs(texts: string[]) {
+  const appendOutputs = useCallback((texts: string[]) => {
     if (texts.length === 0) return
     setLines((current) => [
       ...current,
@@ -109,7 +125,85 @@ export default function TerminalShell({ onClose }: TerminalShellProps) {
         type: 'out' as const,
       })),
     ])
-  }
+  }, [])
+
+  const clearEmailComposer = useCallback(() => {
+    setEmailComposer(null)
+    setEmailTurnstileToken(null)
+    setEmailTurnstileResetSignal((value) => value + 1)
+  }, [])
+
+  const beginExecution = useCallback((kind: ActiveExecution['kind']) => {
+    const execution = {
+      id: ++nextExecutionIdRef.current,
+      kind,
+      interrupted: false,
+    }
+    activeExecutionRef.current = execution
+    setCommandBusy(true)
+    return execution
+  }, [])
+
+  const isExecutionCurrent = useCallback((execution: ActiveExecution) => {
+    return activeExecutionRef.current?.id === execution.id
+  }, [])
+
+  const finishExecution = useCallback((execution: ActiveExecution) => {
+    if (activeExecutionRef.current?.id === execution.id) {
+      activeExecutionRef.current = null
+      setCommandBusy(false)
+    }
+  }, [])
+
+  const interruptCurrentCommand = useCallback(() => {
+    let interrupted = false
+
+    if (activeExecutionRef.current) {
+      activeExecutionRef.current.interrupted = true
+      activeExecutionRef.current = null
+      setCommandBusy(false)
+      setChatAwaiting(false)
+      setEmailSending(false)
+      interrupted = true
+    }
+
+    if (pendingConfirm) {
+      setPendingConfirm(null)
+      interrupted = true
+    }
+
+    if (emailComposer) {
+      clearEmailComposer()
+      interrupted = true
+    }
+
+    if (chatMode) {
+      setChatMode(false)
+      setChatAwaiting(false)
+      interrupted = true
+    }
+
+    if (input.length > 0) {
+      setInput('')
+      interrupted = true
+    }
+
+    if (!interrupted) {
+      return false
+    }
+
+    interruptArmedAtRef.current = 0
+    appendOutputs(['^C', 'Command interrupted.'])
+    globalThis.setTimeout(() => inputRef.current?.focus(), 0)
+    return true
+  }, [
+    appendOutputs,
+    chatMode,
+    clearEmailComposer,
+    emailComposer,
+    input,
+    pendingConfirm,
+  ])
 
   const handleClose = useCallback(() => {
     if (chatMode) {
@@ -194,11 +288,49 @@ export default function TerminalShell({ onClose }: TerminalShellProps) {
 
   useEffect(() => {
     function onKey(e: KeyboardEvent) {
-      if (e.key === 'Escape') handleClose()
+      if (e.key === 'Escape') {
+        handleClose()
+        return
+      }
+
+      const isInterruptShortcut =
+        !e.repeat &&
+        (e.ctrlKey || e.metaKey) &&
+        e.key.toLowerCase() === 'c' &&
+        (commandBusy ||
+          emailSending ||
+          pendingConfirm !== null ||
+          emailComposer !== null ||
+          chatMode ||
+          input.length > 0)
+
+      if (isInterruptShortcut) {
+        e.preventDefault()
+        const now = Date.now()
+        if (now - interruptArmedAtRef.current <= INTERRUPT_WINDOW_MS) {
+          interruptCurrentCommand()
+        } else {
+          interruptArmedAtRef.current = now
+        }
+        return
+      }
+
+      if (e.key !== 'Control' && e.key !== 'Meta') {
+        interruptArmedAtRef.current = 0
+      }
     }
     document.addEventListener('keydown', onKey)
     return () => document.removeEventListener('keydown', onKey)
-  }, [handleClose])
+  }, [
+    chatMode,
+    commandBusy,
+    emailComposer,
+    emailSending,
+    handleClose,
+    input.length,
+    interruptCurrentCommand,
+    pendingConfirm,
+  ])
 
   async function handleSubmit(cmdRaw: string) {
     const cmd = cmdRaw.trim()
@@ -239,9 +371,7 @@ export default function TerminalShell({ onClose }: TerminalShellProps) {
       setInput('')
 
       if (lower === 'cancel') {
-        setEmailComposer(null)
-        setEmailTurnstileToken(null)
-        setEmailTurnstileResetSignal((value) => value + 1)
+        clearEmailComposer()
         appendOutput('Email composition cancelled.')
         return
       }
@@ -350,9 +480,7 @@ export default function TerminalShell({ onClose }: TerminalShellProps) {
         }
 
         if (lower === 'n' || lower === 'no') {
-          setEmailComposer(null)
-          setEmailTurnstileToken(null)
-          setEmailTurnstileResetSignal((value) => value + 1)
+          clearEmailComposer()
           appendOutput('Email sending cancelled.')
           return
         }
@@ -369,6 +497,7 @@ export default function TerminalShell({ onClose }: TerminalShellProps) {
           return
         }
 
+        const execution = beginExecution('email')
         setEmailSending(true)
         try {
           await sendContactEmail(
@@ -376,24 +505,37 @@ export default function TerminalShell({ onClose }: TerminalShellProps) {
             'terminal',
             emailTurnstileToken,
           )
-          setEmailComposer(null)
-          setEmailTurnstileToken(null)
+
+          if (!execution.interrupted) {
+            clearEmailComposer()
+          }
+
           appendOutput('Email sent successfully.')
         } catch (error) {
-          appendOutputs([
+          const detail =
             error instanceof Error && error.message
               ? error.message
-              : 'Unable to send your message right now.',
-            'Type y to try again or n to cancel.',
-          ])
-        } finally {
+              : 'Unable to send your message right now.'
+
+          if (execution.interrupted) {
+            appendOutput(detail)
+            return
+          }
+
+          setEmailTurnstileToken(null)
           setEmailTurnstileResetSignal((value) => value + 1)
-          setEmailSending(false)
+          appendOutputs([detail, 'Type y to try again or n to cancel.'])
+        } finally {
+          if (isExecutionCurrent(execution)) {
+            setEmailSending(false)
+            finishExecution(execution)
+          }
         }
         return
       }
     }
 
+    if (commandBusy) return
     if (!cmd) return
     const parts = cmd.split(/\s+/).filter(Boolean)
     setLines((l) => [...l, { id: Date.now(), text: `> ${cmd}`, type: 'in' }])
@@ -407,8 +549,7 @@ export default function TerminalShell({ onClose }: TerminalShellProps) {
     }
 
     if (cmd === 'email' && parts.length === 1) {
-      setEmailTurnstileToken(null)
-      setEmailTurnstileResetSignal((value) => value + 1)
+      clearEmailComposer()
       setEmailComposer({
         step: 'name',
         draft: {
@@ -454,28 +595,50 @@ export default function TerminalShell({ onClose }: TerminalShellProps) {
         return
       }
 
+      const execution = beginExecution('chat')
       setChatAwaiting(true)
-      // send to chat endpoint via runCommand
-      const chatOut = await runCommand(`chat ${cmd}`, { profile })
-      for (const ln of chatOut) {
-        setLines((l) => [
-          ...l,
-          { id: Date.now() + Math.random(), text: ln, type: 'out' },
-        ])
-        // small delay to simulate streaming
-        // eslint-disable-next-line no-await-in-loop
-        await new Promise((r) => setTimeout(r, 120))
+      try {
+        const chatOut = await runCommand(`chat ${cmd}`, { profile })
+        if (execution.interrupted) {
+          return
+        }
+
+        for (const ln of chatOut) {
+          if (execution.interrupted) {
+            return
+          }
+
+          setLines((l) => [
+            ...l,
+            { id: Date.now() + Math.random(), text: ln, type: 'out' },
+          ])
+
+          // small delay to simulate streaming
+          // eslint-disable-next-line no-await-in-loop
+          await sleep(120)
+        }
+      } catch (error) {
+        if (!execution.interrupted && isExecutionCurrent(execution)) {
+          appendOutput('Chat service unavailable.')
+        }
+      } finally {
+        if (isExecutionCurrent(execution)) {
+          setChatAwaiting(false)
+          finishExecution(execution)
+        }
       }
-      setChatAwaiting(false)
-      setInput('')
       return
     }
 
     // Interactive download-cv flow: prompt for confirmation with file size
     if (cmd === 'download-cv') {
+      const execution = beginExecution('download-cv')
       let sizeText = 'unknown size'
       try {
         const res = await fetch(cvPdf, { method: 'HEAD' })
+        if (execution.interrupted) {
+          return
+        }
         const cl = res.headers.get('content-length')
         if (cl) {
           const bytes = Number(cl)
@@ -486,6 +649,9 @@ export default function TerminalShell({ onClose }: TerminalShellProps) {
           sizeText = `${mb} MB`
         }
       } catch (err) {
+        if (execution.interrupted) {
+          return
+        }
         // Log errors to console and show in terminal output
         try {
           // eslint-disable-next-line no-console
@@ -499,6 +665,14 @@ export default function TerminalShell({ onClose }: TerminalShellProps) {
             type: 'out',
           },
         ])
+      } finally {
+        if (isExecutionCurrent(execution)) {
+          finishExecution(execution)
+        }
+      }
+
+      if (execution.interrupted) {
+        return
       }
 
       const message = `The CV file is ${sizeText}. Download? (y/n)`
@@ -522,18 +696,39 @@ export default function TerminalShell({ onClose }: TerminalShellProps) {
       return
     }
 
-    const out = await runCommand(cmd, { profile })
-    for (const ln of out) {
-      setLines((l) => [
-        ...l,
-        { id: Date.now() + Math.random(), text: ln, type: 'out' },
-      ])
-      await new Promise((r) => setTimeout(r, 80))
+    const execution = beginExecution('output')
+    try {
+      const out = await runCommand(cmd, { profile })
+      if (execution.interrupted) {
+        return
+      }
+
+      for (const ln of out) {
+        if (execution.interrupted) {
+          return
+        }
+
+        setLines((l) => [
+          ...l,
+          { id: Date.now() + Math.random(), text: ln, type: 'out' },
+        ])
+
+        // eslint-disable-next-line no-await-in-loop
+        await sleep(80)
+      }
+    } catch (error) {
+      if (!execution.interrupted && isExecutionCurrent(execution)) {
+        appendOutput('Command failed.')
+      }
+    } finally {
+      if (isExecutionCurrent(execution)) {
+        finishExecution(execution)
+      }
     }
   }
 
   function handleKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
-    if (emailSending) return
+    if (emailSending || commandBusy) return
 
     if (e.key === 'Enter') {
       e.preventDefault()
@@ -671,16 +866,18 @@ export default function TerminalShell({ onClose }: TerminalShellProps) {
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={handleKeyDown}
-            disabled={emailSending}
+            disabled={emailSending || commandBusy}
             className="w-full bg-transparent text-sm text-white placeholder:text-gray-500 focus:outline-none font-mono"
             placeholder={
-              emailComposer
-                ? emailComposer.step === 'message'
-                  ? 'type your message'
-                  : emailComposer.step === 'confirm'
-                    ? 'type y or n'
-                    : 'answer the prompt'
-                : 'type a command (help)'
+              commandBusy || emailSending
+                ? 'running... press Ctrl+C or Cmd+C twice to interrupt'
+                : emailComposer
+                  ? emailComposer.step === 'message'
+                    ? 'type your message'
+                    : emailComposer.step === 'confirm'
+                      ? 'type y or n'
+                      : 'answer the prompt'
+                  : 'type a command (help)'
             }
           />
         </div>
