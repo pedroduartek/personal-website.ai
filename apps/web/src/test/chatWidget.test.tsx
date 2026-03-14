@@ -33,10 +33,7 @@ describe('ChatWidget entrance bounce', () => {
 
     const button = screen.getByRole('button', { name: 'Open chat' })
 
-    expect(button).toHaveStyle({
-      transform: 'translateY(calc(-100vh - 60px))',
-      opacity: '0',
-    })
+    expect(button).toHaveClass('translate-y-[calc(-100vh-60px)]', 'opacity-0')
 
     act(() => {
       vi.advanceTimersByTime(500)
@@ -46,7 +43,7 @@ describe('ChatWidget entrance bounce', () => {
       await Promise.resolve()
     })
 
-    expect(button.style.animation).toContain('dropBounce')
+    expect(button).toHaveClass('animate-drop-bounce')
 
     fireEvent.animationEnd(button)
 
@@ -54,10 +51,7 @@ describe('ChatWidget entrance bounce', () => {
       await Promise.resolve()
     })
 
-    expect(button.style.animation).toBe('')
-    expect(button).toHaveStyle({
-      transform: 'translateY(0)',
-      opacity: '1',
-    })
+    expect(button).not.toHaveClass('animate-drop-bounce')
+    expect(button).toHaveClass('translate-y-0', 'opacity-100')
   })
 })

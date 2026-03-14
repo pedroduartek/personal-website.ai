@@ -277,7 +277,7 @@ export default function ContactPage() {
 
             <div className="group rounded-lg border border-gray-700 bg-card p-6 transition-colors hover:border-gray-600">
               <div className="flex items-center gap-4">
-                <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-lg bg-[#0077B5]">
+                <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-lg bg-linkedin">
                   <svg
                     className="h-6 w-6 text-white"
                     fill="currentColor"
