@@ -10,6 +10,7 @@ type TurnstileWidgetProps = {
   onTokenChange: (token: string | null) => void
   resetSignal?: number
   className?: string
+  variant?: 'default' | 'terminal'
 }
 
 let turnstileScriptPromise: Promise<void> | null = null
@@ -59,22 +60,26 @@ export default function TurnstileWidget({
   onTokenChange,
   resetSignal = 0,
   className,
+  variant = 'default',
 }: TurnstileWidgetProps) {
   const siteKey = getTurnstileSiteKey()
   const containerRef = useRef<HTMLDivElement | null>(null)
   const widgetIdRef = useRef<string | null>(null)
   const lastResetSignalRef = useRef(resetSignal)
   const [errorMessage, setErrorMessage] = useState('')
+  const [isVerified, setIsVerified] = useState(false)
 
   useEffect(() => {
     if (!siteKey) {
       onTokenChange(null)
       setErrorMessage('Spam verification is not configured right now.')
+      setIsVerified(false)
       return
     }
 
     if (import.meta.env.MODE === 'test') {
       setErrorMessage('')
+      setIsVerified(true)
       onTokenChange(TURNSTILE_TEST_TOKEN)
       return
     }
@@ -100,11 +105,13 @@ export default function TurnstileWidget({
           callback: (token) => {
             if (disposed) return
             setErrorMessage('')
+            setIsVerified(true)
             onTokenChange(token)
           },
           'expired-callback': () => {
             if (disposed) return
             onTokenChange(null)
+            setIsVerified(false)
             setErrorMessage(
               'Spam verification expired. Please complete it again.',
             )
@@ -112,6 +119,7 @@ export default function TurnstileWidget({
           'error-callback': () => {
             if (disposed) return
             onTokenChange(null)
+            setIsVerified(false)
             setErrorMessage(
               'Spam verification failed to load. Refresh and try again.',
             )
@@ -121,6 +129,7 @@ export default function TurnstileWidget({
       .catch(() => {
         if (disposed) return
         onTokenChange(null)
+        setIsVerified(false)
         setErrorMessage(
           'Spam verification failed to load. Refresh and try again.',
         )
@@ -129,6 +138,7 @@ export default function TurnstileWidget({
     return () => {
       disposed = true
       onTokenChange(null)
+      setIsVerified(false)
       if (widgetIdRef.current && window.turnstile) {
         window.turnstile.remove(widgetIdRef.current)
         widgetIdRef.current = null
@@ -144,26 +154,65 @@ export default function TurnstileWidget({
     lastResetSignalRef.current = resetSignal
 
     if (import.meta.env.MODE === 'test') {
+      setIsVerified(true)
       onTokenChange(TURNSTILE_TEST_TOKEN)
       return
     }
 
     onTokenChange(null)
+    setIsVerified(false)
     setErrorMessage('')
     if (widgetIdRef.current && window.turnstile) {
       window.turnstile.reset(widgetIdRef.current)
     }
   }, [onTokenChange, resetSignal])
 
+  const successMessage =
+    variant === 'terminal' ? (
+      <div
+        className="rounded-md border border-[#1f3f31] bg-[#091427] px-3 py-2 font-mono text-xs text-terminal-green shadow-[inset_0_1px_0_rgba(126,231,135,0.08)]"
+        aria-live="polite"
+      >
+        <div className="flex items-center justify-between gap-3 uppercase tracking-[0.22em]">
+          <span className="text-[10px] text-green-300/70">spam check</span>
+          <span className="text-[10px] text-green-300/60">verified</span>
+        </div>
+        <div className="mt-1 text-[13px] text-terminal-green">
+          Verification accepted. You can send the message now.
+        </div>
+      </div>
+    ) : (
+      <div
+        className="rounded-md border border-emerald-500/30 bg-emerald-500/10 px-3 py-2 text-sm text-emerald-200"
+        aria-live="polite"
+      >
+        Spam check completed.
+      </div>
+    )
+
+  const widgetFrameClassName =
+    variant === 'terminal'
+      ? 'overflow-hidden rounded-md border border-gray-800 bg-black/30 p-2 shadow-[inset_0_1px_0_rgba(255,255,255,0.03)]'
+      : ''
+  const errorClassName =
+    variant === 'terminal'
+      ? 'mt-2 font-mono text-xs text-red-300'
+      : 'mt-2 text-xs text-red-300'
+
   return (
     <div className={className}>
+      {isVerified && !errorMessage && successMessage}
       <div
         ref={containerRef}
         data-testid="turnstile-widget"
-        className={siteKey ? '' : 'hidden'}
+        className={
+          siteKey && !isVerified
+            ? widgetFrameClassName
+            : `hidden ${widgetFrameClassName}`.trim()
+        }
       />
       {errorMessage && (
-        <p className="mt-2 text-xs text-red-300" role="alert">
+        <p className={errorClassName} role="alert">
           {errorMessage}
         </p>
       )}

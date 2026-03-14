@@ -647,28 +647,46 @@ export default function TerminalShell({ onClose }: TerminalShellProps) {
             <span className="inline-block ml-1 animate-pulse">...</span>
           </div>
         )}
+      </div>
+
+      <div className="border-t border-gray-800 bg-[#060d18] px-4 py-3">
         {emailComposer && (
-          <div className="mt-4 rounded-lg border border-gray-800 bg-black/30 p-3">
-            <div className="mb-2 text-xs uppercase tracking-[0.2em] text-gray-500">
-              Spam Check
+          <div className="mb-3 rounded-xl border border-[#173225] bg-[#081221] px-3 py-3 shadow-[inset_0_1px_0_rgba(126,231,135,0.05)]">
+            <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
+              <div>
+                <div className="font-mono text-[10px] uppercase tracking-[0.32em] text-green-300/70">
+                  Message Verification
+                </div>
+                <p className="mt-1 text-xs text-gray-400">
+                  {emailTurnstileToken
+                    ? 'Verification is complete. Answer y to send when you are ready.'
+                    : 'Complete the spam check to unlock sending from the terminal.'}
+                </p>
+              </div>
+              <div className="self-start rounded-full border border-[#1b3a31] bg-black/30 px-2.5 py-1 font-mono text-[10px] uppercase tracking-[0.2em] text-terminal-accent">
+                email mode
+              </div>
             </div>
+
             {turnstileAvailable ? (
               <TurnstileWidget
                 action="terminal_email"
                 onTokenChange={setEmailTurnstileToken}
                 resetSignal={emailTurnstileResetSignal}
+                className="mt-3"
+                variant="terminal"
               />
             ) : (
-              <div className="text-sm text-red-300">
+              <div
+                className="mt-3 rounded-md border border-red-500/30 bg-red-500/10 px-3 py-2 text-sm text-red-200"
+                role="alert"
+              >
                 Spam verification is not configured right now. Please use the
                 direct email link instead.
               </div>
             )}
           </div>
         )}
-      </div>
-
-      <div className="border-t border-gray-800 px-4 py-3">
         <div className="flex items-center gap-3">
           <div className="font-mono text-terminal-green">$</div>
           <input
