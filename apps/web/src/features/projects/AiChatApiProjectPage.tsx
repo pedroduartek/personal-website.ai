@@ -69,109 +69,143 @@ export default function AiChatApiProjectPage() {
         </div>
 
         <div className="prose prose-lg max-w-none text-gray-300">
+          {/* Motivation */}
           <section className="mb-12">
             <h2 className="mb-4 text-2xl font-semibold text-white">
-              Why This Project Exists
+              Motivation
             </h2>
-            <p className="mb-4">{project.problem}</p>
+            <p className="mb-4">
+              Rather than relying on third-party AI services (and their costs,
+              rate limits, and data-privacy trade-offs), I wanted full ownership
+              of the inference pipeline. The goal was to ship a production-grade
+              API that runs entirely on a single VPS, model included, while
+              following the same engineering standards I apply to professional
+              backend systems.
+            </p>
           </section>
 
+          {/* What It Does */}
           <section className="mb-12">
             <h2 className="mb-4 text-2xl font-semibold text-white">
-              How I Built It
+              What It Does
             </h2>
-            <p className="mb-4">{project.approach}</p>
-          </section>
+            <p className="mb-4">
+              Every response is grounded in a local knowledge base that contains
+              structured facts about my career, skills, projects, and contact
+              info. If the model can't answer from the knowledge base, it says
+              so explicitly instead of guessing.
+            </p>
 
-          <section className="mb-12">
-            <h2 className="mb-4 text-2xl font-semibold text-white">
-              What It Includes
-            </h2>
-            <div className="grid gap-4 md:grid-cols-2">
-              <div className="rounded-lg border border-gray-700 bg-card p-5">
-                <h3 className="mb-2 text-lg font-semibold text-white">
-                  Grounded answers, not generic AI
-                </h3>
-                <p className="text-gray-300 text-sm">
-                  Responses are based on a local knowledge base about my work,
-                  background, and website content. The system is intentionally
-                  designed to stay factual and to fall back cleanly when the
-                  answer is not actually supported by that content.
+            <div className="space-y-3">
+              <div className="rounded-lg border border-gray-700 bg-card p-4">
+                <p>
+                  <span className="inline-block rounded bg-gray-800 px-1.5 py-0.5 text-sm font-mono text-gray-200 border border-gray-700">
+                    POST /chat
+                  </span>{' '}
+                  Accepts a user message, injects knowledge-base context into
+                  the prompt, calls Llama 3 via Ollama, and returns a JSON
+                  answer.
                 </p>
               </div>
 
-              <div className="rounded-lg border border-gray-700 bg-card p-5">
-                <h3 className="mb-2 text-lg font-semibold text-white">
-                  Real-time chat for the website
-                </h3>
-                <p className="text-gray-300 text-sm">
-                  The API powers the assistant on pedroduartek.com in both
-                  standard and streaming modes, which helps the chat feel
-                  responsive while still running on self-hosted infrastructure.
+              <div className="rounded-lg border border-gray-700 bg-card p-4">
+                <p>
+                  <span className="inline-block rounded bg-gray-800 px-1.5 py-0.5 text-sm font-mono text-gray-200 border border-gray-700">
+                    POST /chat/stream
+                  </span>{' '}
+                  Same flow but streams tokens back over Server-Sent Events for
+                  a real-time typing experience.
                 </p>
               </div>
 
-              <div className="rounded-lg border border-gray-700 bg-card p-5">
-                <h3 className="mb-2 text-lg font-semibold text-white">
-                  More than a single chat endpoint
-                </h3>
-                <p className="text-gray-300 text-sm">
-                  The same backend also handles email delivery for the
-                  website&apos;s contact flows, which turns it into a compact
-                  service layer for the portfolio rather than a one-feature AI
-                  demo.
-                </p>
-              </div>
-
-              <div className="rounded-lg border border-gray-700 bg-card p-5">
-                <h3 className="mb-2 text-lg font-semibold text-white">
-                  Lean self-hosted deployment
-                </h3>
-                <p className="text-gray-300 text-sm">
-                  The production setup is intentionally small: the API, the
-                  local model runtime, and the reverse proxy are containerized
-                  together so the system stays understandable, portable, and
-                  cost-conscious.
+              <div className="rounded-lg border border-gray-700 bg-card p-4">
+                <p>
+                  <span className="inline-block rounded bg-gray-800 px-1.5 py-0.5 text-sm font-mono text-gray-200 border border-gray-700">
+                    GET /health
+                  </span>{' '}
+                  Readiness probe for the container orchestration layer.
                 </p>
               </div>
             </div>
           </section>
 
+          {/* Architecture Highlights */}
           <section className="mb-12">
             <h2 className="mb-4 text-2xl font-semibold text-white">
-              How I Kept It Reliable
+              Architecture Highlights
             </h2>
-            <p className="mb-4">
-              Because this service sits behind a public website, I treated
-              predictable behavior as part of the product. The API includes rate
-              limiting, prompt-injection filtering, health checks, structured
-              logging, unit tests around the core chat pipeline, and a keep-warm
-              background process that reduces the cold-start feel of a small
-              local model after idle periods.
-            </p>
             <div className="grid gap-4 md:grid-cols-2">
               <div className="rounded-lg border border-gray-700 bg-card p-5">
                 <h3 className="mb-2 text-lg font-semibold text-white">
-                  Prefer safe fallback over bluffing
+                  Clean layered design
                 </h3>
                 <p className="text-gray-300 text-sm">
-                  If the model drifts into unsupported claims or the answer
-                  cannot be grounded in the website content, the API normalizes
-                  the reply back to a consistent fallback instead of letting a
-                  shaky answer through.
+                  Controllers, Services, and Infrastructure layers with
+                  dependency injection and interface-defined boundaries for easy
+                  testing and extensibility.
                 </p>
               </div>
 
               <div className="rounded-lg border border-gray-700 bg-card p-5">
                 <h3 className="mb-2 text-lg font-semibold text-white">
-                  Built as a service, not a lab experiment
+                  Knowledge-base augmentation
                 </h3>
                 <p className="text-gray-300 text-sm">
-                  Clear boundaries between controllers, application logic, model
-                  integration, and knowledge-base loading make the API easier to
-                  test, extend, and operate in production.
+                  The system prompt is dynamically composed at request time from
+                  a small, file-backed knowledge base so the model receives
+                  targeted context without fine-tuning.
                 </p>
               </div>
+
+              <div className="rounded-lg border border-gray-700 bg-card p-5">
+                <h3 className="mb-2 text-lg font-semibold text-white">
+                  Streaming support
+                </h3>
+                <p className="text-gray-300 text-sm">
+                  The streaming endpoint re-emits Ollama tokens as SSE events,
+                  keeping memory usage low and time-to-first-token fast.
+                </p>
+              </div>
+
+              <div className="rounded-lg border border-gray-700 bg-card p-5">
+                <h3 className="mb-2 text-lg font-semibold text-white">
+                  Resilience
+                </h3>
+                <p className="text-gray-300 text-sm">
+                  IP-based rate limiting (partitioned by `x-api-key` when
+                  present), exponential-backoff retries via Polly, and
+                  structured logging (Serilog) with optional Grafana/Loki
+                  integration.
+                </p>
+              </div>
+            </div>
+          </section>
+
+          {/* Infrastructure */}
+          <section className="mb-12">
+            <h2 className="mb-4 text-2xl font-semibold text-white">
+              Infrastructure
+            </h2>
+            <p className="mb-4">
+              Ships with Docker Compose manifests for both development and
+              production. The development compose is intended for local testing
+              (and may expose Ollama for debugging), while the production
+              compose runs a three-service stack (API, Ollama, Caddy) with
+              Ollama kept on an internal network and automatic TLS via Caddy.
+              Model weights are persisted via a Docker volume.
+            </p>
+          </section>
+
+          {/* Testing */}
+          <section className="mb-12">
+            <h2 className="mb-4 text-2xl font-semibold text-white">Testing</h2>
+            <div className="rounded-lg border border-gray-700 bg-card p-6">
+              <p className="text-gray-300">
+                Unit tests cover the service layer, response parser, and
+                controller using in-memory fakes. No running model or HTTP
+                server is required, keeping the test suite fast and
+                deterministic.
+              </p>
             </div>
           </section>
         </div>

@@ -12,6 +12,7 @@ const initialFormValues = {
   email: '',
   subject: '',
   message: '',
+  company: '',
 }
 
 type ContactFormValues = ContactEmailValues
@@ -48,6 +49,7 @@ export default function ContactPage() {
       email: formValues.email.trim(),
       subject: formValues.subject.trim(),
       message: formValues.message.trim(),
+      company: (formValues.company ?? '').trim(),
     }
 
     if (
@@ -128,7 +130,7 @@ export default function ContactPage() {
                   Send a message
                 </h2>
                 <p className="mt-2 text-sm text-gray-400">
-                  This sends a plain-text email directly to my inbox at{' '}
+                  This sends a message directly to my inbox at{' '}
                   {profile.email}.
                 </p>
               </div>
@@ -197,6 +199,17 @@ export default function ContactPage() {
                     className="w-full rounded-lg border border-gray-700 bg-gray-900/70 px-4 py-3 text-sm text-white outline-none transition focus:border-gray-500 focus:ring-2 focus:ring-gray-700/50"
                   />
                 </label>
+
+                <input
+                  type="text"
+                  name="company"
+                  tabIndex={-1}
+                  autoComplete="off"
+                  aria-hidden="true"
+                  value={formValues.company ?? ''}
+                  onChange={(event) => updateField('company', event.target.value)}
+                  className="hidden"
+                />
 
                 <label className="block">
                   <span className="mb-2 block text-sm font-medium text-gray-200">

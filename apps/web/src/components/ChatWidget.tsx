@@ -2,6 +2,7 @@ import type React from 'react'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import ollamaIcon from '../images/ollama.png'
+import { postJson, readApiError } from '../utils/apiClient'
 
 type Message = { id: number; text: string; from: 'user' | 'bot' }
 
@@ -143,33 +144,23 @@ export default function ChatWidget() {
     const apiUrl = 'https://api.pedroduartek.com/chat'
 
     try {
-      const maxAttempts = 2
-      let res: Response | null = null
-      let lastErr: unknown = null
+      const res = await postJson(apiUrl, { message: text }, 2)
 
-      for (let attempt = 1; attempt <= maxAttempts; attempt++) {
+      if (!res.ok) {
         try {
-          res = await fetch(apiUrl, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ message: text }),
-          })
-          if (res.ok) break
-          lastErr = new Error(`HTTP ${res.status}`)
-        } catch (e) {
-          lastErr = e
-        }
-      }
-
-      if (!res || !res.ok) {
-        try {
-          console.error('ChatWidget fetch failed after retries:', lastErr)
+          console.error('ChatWidget fetch failed:', res.status)
         } catch {}
+        const errorMessage = await readApiError(
+          res,
+          res.status === 429
+            ? 'The chat is busy right now. Please wait a minute and try again.'
+            : 'Sorry, the chat service is unavailable right now. Please try again later.',
+        )
         setMessages((s) => [
           ...s,
           {
             id: Date.now() + 1,
-            text: 'Sorry, the chat service is unavailable right now. Please try again later.',
+            text: errorMessage,
             from: 'bot',
           },
         ])
