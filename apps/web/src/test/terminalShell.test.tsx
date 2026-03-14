@@ -226,4 +226,50 @@ describe('TerminalShell email command', () => {
       expect(screen.queryByText(chatReply)).not.toBeInTheDocument()
     })
   })
+
+  it('keeps the current spam check when the email endpoint rate-limits the request', async () => {
+    const user = userEvent.setup()
+
+    vi.stubGlobal(
+      'fetch',
+      vi.fn().mockResolvedValue(
+        new Response(
+          JSON.stringify({
+            error: 'Too many requests',
+          }),
+          {
+            status: 429,
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          },
+        ),
+      ),
+    )
+
+    render(<TerminalShell onClose={() => {}} />)
+
+    const input = screen.getByPlaceholderText('type a command (help)')
+
+    await user.type(input, 'email{enter}')
+    await user.type(input, 'Ada Lovelace{enter}')
+    await user.type(input, 'ada@example.com{enter}')
+    await user.type(input, 'Terminal hello{enter}')
+    await user.type(input, 'Let us talk about a staff role.{enter}')
+    await user.type(input, 'y{enter}')
+
+    await waitFor(() => {
+      expect(screen.getByText('Too many requests')).toBeInTheDocument()
+    })
+
+    expect(
+      screen.getByText(
+        'Spam check already passed. Wait before retrying or type n to cancel.',
+      ),
+    ).toBeInTheDocument()
+    expect(screen.getByText('Message Verification')).toBeInTheDocument()
+    expect(
+      screen.queryByText('Type y to try again or n to cancel.'),
+    ).not.toBeInTheDocument()
+  })
 })
