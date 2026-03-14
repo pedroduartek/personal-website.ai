@@ -157,7 +157,7 @@ export default function ExperiencePage() {
             <span
               aria-hidden
               style={{ left: Math.max(0, Math.round(leftWidth / 2)) }}
-              className="absolute inline-flex items-center justify-center px-3 py-0.5 rounded-full text-xs font-semibold bg-gradient-to-r from-blue-600 to-blue-500 text-white shadow-sm ring-1 ring-blue-900/40 z-20 recording -top-3 -translate-x-1/2"
+              className="absolute -top-3 z-20 inline-flex -translate-x-1/2 animate-recording items-center justify-center rounded-full bg-gradient-to-r from-blue-600 to-blue-500 px-3 py-0.5 text-xs font-semibold text-white shadow-sm ring-1 ring-blue-900/40"
             >
               Now
             </span>

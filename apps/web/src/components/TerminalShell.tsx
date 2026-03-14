@@ -57,15 +57,7 @@ function AsciiArt({
 
   return (
     <div key={id} className="py-1">
-      <pre
-        className="font-mono text-green-200"
-        style={{
-          whiteSpace: 'pre',
-          margin: 0,
-          fontSize: '6.75px',
-          lineHeight: '0.525',
-        }}
-      >
+      <pre className="m-0 whitespace-pre font-mono text-[6.75px] leading-[0.525] text-terminal-green">
         {artLines.slice(0, visible).join('\n')}
       </pre>
     </div>
@@ -137,7 +129,7 @@ export default function TerminalShell({ onClose }: TerminalShellProps) {
             href={part}
             target="_blank"
             rel="noopener noreferrer"
-            className="text-blue-300 underline hover:text-blue-100"
+            className="text-terminal-accent underline transition-colors hover:text-white"
             onClick={(e) => e.stopPropagation()}
           >
             {part}
@@ -149,7 +141,7 @@ export default function TerminalShell({ onClose }: TerminalShellProps) {
           <a
             key={key}
             href={`mailto:${part}`}
-            className="text-blue-300 underline hover:text-blue-100"
+            className="text-terminal-accent underline transition-colors hover:text-white"
             onClick={(e) => e.stopPropagation()}
           >
             {part}
@@ -534,10 +526,10 @@ export default function TerminalShell({ onClose }: TerminalShellProps) {
   return (
     <section
       aria-label="Terminal shell"
-      className="flex min-h-0 flex-1 w-full flex-col overflow-hidden bg-[#071021]"
+      className="flex min-h-0 w-full flex-1 flex-col overflow-hidden bg-terminal-bg"
     >
       <div className="flex items-center justify-between border-b border-gray-800 px-4 py-2">
-        <div className="text-sm text-green-300 font-mono">
+        <div className="font-mono text-sm text-terminal-green">
           terminal — pedroduartek
         </div>
         <div className="flex items-center gap-2">
@@ -560,10 +552,10 @@ export default function TerminalShell({ onClose }: TerminalShellProps) {
 
       <div
         ref={containerRef}
-        className="custom-scrollbar min-h-0 flex-1 overflow-auto overflow-x-hidden overscroll-contain p-4 pr-[5px] font-mono text-sm text-green-200"
+        className="custom-scrollbar min-h-0 flex-1 overflow-auto overflow-x-hidden overscroll-contain p-4 pr-[5px] font-mono text-sm text-terminal-green"
       >
         {lines.length === 0 ? (
-          <div className="text-green-300">
+          <div className="text-terminal-green">
             {profile.name} — {profile.role}
           </div>
         ) : (
@@ -600,7 +592,7 @@ export default function TerminalShell({ onClose }: TerminalShellProps) {
 
       <div className="border-t border-gray-800 px-4 py-3">
         <div className="flex items-center gap-3">
-          <div className="text-green-400 font-mono">$</div>
+          <div className="font-mono text-terminal-green">$</div>
           <input
             ref={inputRef}
             value={input}

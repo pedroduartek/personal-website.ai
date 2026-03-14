@@ -198,7 +198,7 @@ export default function CommandPaletteTip() {
   if (!mounted) return null
 
   const baseClasses =
-    'max-w-xs rounded-lg border border-gray-700 bg-gray-900/95 px-3 py-2 text-sm text-gray-200 transition-opacity duration-500 ease-in-out cursor-pointer select-none'
+    'max-w-xs cursor-pointer select-none rounded-lg border border-gray-700 bg-gray-900/95 px-3 py-2 text-sm text-gray-200 transition-[opacity,transform] duration-500 ease-in-out'
   const visibleClass = visible ? 'opacity-100 shadow-2xl' : 'opacity-0'
 
   // fixed style when button scrolls away

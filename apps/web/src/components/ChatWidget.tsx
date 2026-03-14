@@ -3,38 +3,6 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import ollamaIcon from '../images/ollama.png'
 
-// small keyframes for typing dots animation (inlined style fallback)
-const typingKeyframes =
-  '@keyframes typing { 0% { transform: translateY(0); opacity: 0.3 } 50% { transform: translateY(-4px); opacity: 1 } 100% { transform: translateY(0); opacity: 0.3 } }'
-
-// Drop-bounce entrance animation for the chat icon.
-// The button is position:fixed bottom:24px, so translateY(-Y) moves it UP.
-// We animate from far above the viewport down to 0 with bounces.
-const dropBounceKeyframes = `
-@keyframes dropBounce {
-  0%   { transform: translateY(calc(-100vh - 60px)); opacity: 0; }
-  8%   { opacity: 1; }
-  30%  { transform: translateY(0); }
-  45%  { transform: translateY(-40px); }
-  60%  { transform: translateY(0); }
-  72%  { transform: translateY(-14px); }
-  84%  { transform: translateY(0); }
-  100% { transform: translateY(0); }
-}
-`
-
-// subtle drawer enter/exit animations
-const drawerKeyframes = `
-@keyframes drawerIn {
-  0% { transform: translateY(12px) scale(.985); opacity: 0 }
-  100% { transform: translateY(0) scale(1); opacity: 1 }
-}
-@keyframes drawerOut {
-  0% { transform: translateY(0) scale(1); opacity: 1 }
-  100% { transform: translateY(12px) scale(.985); opacity: 0 }
-}
-`
-
 type Message = { id: number; text: string; from: 'user' | 'bot' }
 
 let hasPlayedChatBounceThisPage = false
@@ -391,7 +359,6 @@ export default function ChatWidget() {
 
   return (
     <>
-      <style>{typingKeyframes + dropBounceKeyframes + drawerKeyframes}</style>
       {/* Floating Button (only when closed) */}
       {!open && (
         <button
@@ -405,29 +372,22 @@ export default function ChatWidget() {
               setPlayBounce(false)
             }
           }}
-          className={`fixed right-6 bottom-6 z-50 flex h-14 w-14 items-center justify-center rounded-full text-white shadow-lg focus:outline-none overflow-hidden ${
+          className={`fixed bottom-6 right-6 z-50 flex h-14 w-14 items-center justify-center overflow-hidden rounded-full bg-chat text-white shadow-lg ${
+            !hasEntered
+              ? 'translate-y-[calc(-100vh-60px)] opacity-0'
+              : playBounce
+                ? 'animate-drop-bounce'
+                : 'translate-y-0 opacity-100'
+          } ${
             animationDone
-              ? 'transition-all duration-200 hover:scale-110 hover:shadow-xl hover:shadow-indigo-500/30'
+              ? 'transition-all duration-200 hover:scale-110 hover:shadow-xl hover:shadow-chat/30'
               : ''
           }`}
-          style={{
-            backgroundColor: '#1D4ED8',
-            // before entrance keep it off-screen; play bounce once after entrance;
-            // afterwards keep it visible in place
-            ...(!hasEntered
-              ? { transform: 'translateY(calc(-100vh - 60px))', opacity: 0 }
-              : playBounce
-                ? {
-                    animation:
-                      'dropBounce 2s cubic-bezier(0.22, 1, 0.36, 1) forwards',
-                  }
-                : { transform: 'translateY(0)', opacity: 1 }),
-          }}
         >
           <img
             src={ollamaIcon}
             alt="Chat bot"
-            className="h-10 w-10 object-contain rounded-full"
+            className="h-10 w-10 rounded-full object-contain"
           />
         </button>
       )}
@@ -435,19 +395,15 @@ export default function ChatWidget() {
       {/* Chat Drawer */}
       {renderDrawer && (
         <div
-          className="fixed right-6 bottom-6 z-50 max-w-full transform-gpu rounded-lg bg-gray-900 shadow-xl flex flex-col overflow-hidden"
+          className={`fixed bottom-6 right-6 z-50 flex max-w-full origin-bottom-right transform-gpu flex-col overflow-hidden rounded-lg border-[3px] border-chat bg-gray-900 shadow-xl transition-[pointer-events] duration-[1ms] ease-linear ${
+            open
+              ? 'pointer-events-auto animate-drawer-in'
+              : 'pointer-events-none animate-drawer-out'
+          }`}
           style={{
-            transition: 'pointer-events 1ms linear',
-            // animate using keyframes so the easing feels consistent
-            animation: open
-              ? 'drawerIn 220ms cubic-bezier(.2,.9,.2,1) forwards'
-              : 'drawerOut 220ms cubic-bezier(.2,.9,.2,1) forwards',
-            transformOrigin: 'right bottom',
-            pointerEvents: open ? 'auto' : 'none',
             ...(isDesktop()
               ? { width: chatSize.w, height: chatSize.h }
               : { width: 320, height: DEFAULT_HEIGHT }),
-            border: '3px solid #1D4ED7',
           }}
         >
           {/* Resize handles — desktop only */}
@@ -496,10 +452,7 @@ export default function ChatWidget() {
               </button>
             </div>
           )}
-          <div
-            className="relative flex flex-col gap-2 overflow-hidden p-3"
-            style={{ flex: '1 1 0%', minHeight: 0 }}
-          >
+          <div className="relative flex min-h-0 flex-1 basis-0 flex-col gap-2 overflow-hidden p-3">
             <div
               ref={containerRef}
               className="flex-1 overflow-auto overflow-x-hidden custom-scrollbar pr-[5px]"
@@ -790,8 +743,11 @@ export default function ChatWidget() {
                   if (!awaitingReply) send()
                 }}
                 disabled={awaitingReply}
-                className={`rounded px-3 py-2 text-sm font-medium text-white ${awaitingReply ? 'opacity-70 cursor-not-allowed' : 'hover:brightness-110'}`}
-                style={{ backgroundColor: '#1D4ED8' }}
+                className={`rounded bg-chat px-3 py-2 text-sm font-medium text-white transition ${
+                  awaitingReply
+                    ? 'cursor-not-allowed opacity-70'
+                    : 'hover:brightness-110'
+                }`}
               >
                 {awaitingReply ? (
                   <svg
