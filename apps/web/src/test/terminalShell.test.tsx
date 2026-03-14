@@ -68,6 +68,7 @@ describe('TerminalShell email command', () => {
       email: 'ada@example.com',
       subject: 'Terminal hello',
       source: 'terminal',
+      turnstileToken: 'XXXX.DUMMY.TOKEN.XXXX',
       company: '',
     })
     expect(payload.message).toBe('Let us talk about a staff role.')

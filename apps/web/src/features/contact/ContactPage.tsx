@@ -1,11 +1,13 @@
 import { type FormEvent, useState } from 'react'
 import StyledLink from '../../components/StyledLink'
+import TurnstileWidget from '../../components/TurnstileWidget'
 import PageSEO from '../../components/seo/PageSEO'
 import { profile } from '../../content/profile'
 import {
   type ContactEmailValues,
   sendContactEmail,
 } from '../../utils/contactEmail'
+import { isTurnstileConfigured } from '../../utils/turnstile'
 
 const initialFormValues = {
   name: '',
@@ -25,6 +27,9 @@ export default function ContactPage() {
   const [statusMessage, setStatusMessage] = useState('')
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [showMessageForm, setShowMessageForm] = useState(false)
+  const [turnstileToken, setTurnstileToken] = useState<string | null>(null)
+  const [turnstileResetSignal, setTurnstileResetSignal] = useState(0)
+  const turnstileAvailable = isTurnstileConfigured()
 
   function updateField<K extends keyof ContactFormValues>(
     field: K,
@@ -63,14 +68,29 @@ export default function ContactPage() {
       return
     }
 
+    if (!turnstileAvailable) {
+      setSubmitState('error')
+      setStatusMessage(
+        'Spam verification is not configured right now. Please use the direct email link instead.',
+      )
+      return
+    }
+
+    if (!turnstileToken) {
+      setSubmitState('error')
+      setStatusMessage('Complete the spam check before sending your message.')
+      return
+    }
+
     setIsSubmitting(true)
     setSubmitState('idle')
     setStatusMessage('')
 
     try {
-      await sendContactEmail(trimmedValues, 'contact form')
+      await sendContactEmail(trimmedValues, 'contact form', turnstileToken)
 
       setFormValues(initialFormValues)
+      setTurnstileToken(null)
       setSubmitState('success')
       setStatusMessage(
         'Your message has been sent. I will get back to you as soon as I can.',
@@ -83,6 +103,7 @@ export default function ContactPage() {
           : 'Unable to send your message right now. Please use the email link below instead.',
       )
     } finally {
+      setTurnstileResetSignal((value) => value + 1)
       setIsSubmitting(false)
     }
   }
@@ -229,6 +250,24 @@ export default function ContactPage() {
                   />
                 </label>
 
+                <div className="rounded-lg border border-gray-700 bg-gray-900/50 p-4">
+                  <p className="mb-3 text-sm text-gray-300">
+                    Complete the spam check before sending.
+                  </p>
+                  {turnstileAvailable ? (
+                    <TurnstileWidget
+                      action="contact_form"
+                      onTokenChange={setTurnstileToken}
+                      resetSignal={turnstileResetSignal}
+                    />
+                  ) : (
+                    <p className="text-sm text-red-300" role="alert">
+                      Spam verification is not configured right now. Please use
+                      the direct email link instead.
+                    </p>
+                  )}
+                </div>
+
                 {submitState !== 'idle' && statusMessage && (
                   <div
                     role={submitState === 'error' ? 'alert' : 'status'}
@@ -246,7 +285,7 @@ export default function ContactPage() {
                   </p>
                   <button
                     type="submit"
-                    disabled={isSubmitting}
+                    disabled={isSubmitting || !turnstileAvailable}
                     className="inline-flex items-center justify-center rounded-lg bg-brand px-5 py-3 text-sm font-semibold text-white transition-all duration-200 hover:scale-[1.02] hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-brand/50 disabled:cursor-not-allowed disabled:opacity-70"
                   >
                     {isSubmitting ? 'Sending...' : 'Send email'}

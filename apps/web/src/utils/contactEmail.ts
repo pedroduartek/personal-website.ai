@@ -47,9 +47,14 @@ function assertContactEmailValues(values: ContactEmailValues) {
 export async function sendContactEmail(
   values: ContactEmailValues,
   source: ContactEmailSource,
+  turnstileToken: string,
 ) {
   const normalizedValues = normalizeValues(values)
   assertContactEmailValues(normalizedValues)
+
+  if (!turnstileToken.trim()) {
+    throw new Error('Complete the spam check before sending your message.')
+  }
 
   const response = await postJson(
     CONTACT_EMAIL_ENDPOINT,
@@ -59,6 +64,7 @@ export async function sendContactEmail(
       subject: normalizedValues.subject,
       message: normalizedValues.message,
       source,
+      turnstileToken,
       company: normalizedValues.company ?? '',
     },
     1,

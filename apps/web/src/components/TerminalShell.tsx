@@ -7,6 +7,8 @@ import {
   sendContactEmail,
 } from '../utils/contactEmail'
 import { runCommand } from '../utils/terminalCommands'
+import { isTurnstileConfigured } from '../utils/turnstile'
+import TurnstileWidget from './TurnstileWidget'
 
 interface TerminalShellProps {
   onClose: () => void
@@ -84,6 +86,11 @@ export default function TerminalShell({ onClose }: TerminalShellProps) {
     null,
   )
   const [emailSending, setEmailSending] = useState(false)
+  const [emailTurnstileToken, setEmailTurnstileToken] = useState<string | null>(
+    null,
+  )
+  const [emailTurnstileResetSignal, setEmailTurnstileResetSignal] = useState(0)
+  const turnstileAvailable = isTurnstileConfigured()
 
   function appendOutput(text: string) {
     setLines((current) => [
@@ -233,6 +240,8 @@ export default function TerminalShell({ onClose }: TerminalShellProps) {
 
       if (lower === 'cancel') {
         setEmailComposer(null)
+        setEmailTurnstileToken(null)
+        setEmailTurnstileResetSignal((value) => value + 1)
         appendOutput('Email composition cancelled.')
         return
       }
@@ -365,14 +374,33 @@ export default function TerminalShell({ onClose }: TerminalShellProps) {
 
         if (lower === 'n' || lower === 'no') {
           setEmailComposer(null)
+          setEmailTurnstileToken(null)
+          setEmailTurnstileResetSignal((value) => value + 1)
           appendOutput('Email sending cancelled.')
+          return
+        }
+
+        if (!turnstileAvailable) {
+          appendOutput(
+            'Spam verification is not configured right now. Please use the direct email link instead.',
+          )
+          return
+        }
+
+        if (!emailTurnstileToken) {
+          appendOutput('Complete the spam check before sending your message.')
           return
         }
 
         setEmailSending(true)
         try {
-          await sendContactEmail(getEmailDraft(emailComposer), 'terminal')
+          await sendContactEmail(
+            getEmailDraft(emailComposer),
+            'terminal',
+            emailTurnstileToken,
+          )
           setEmailComposer(null)
+          setEmailTurnstileToken(null)
           appendOutput('Email sent successfully.')
         } catch (error) {
           appendOutputs([
@@ -382,6 +410,7 @@ export default function TerminalShell({ onClose }: TerminalShellProps) {
             'Type y to try again or n to cancel.',
           ])
         } finally {
+          setEmailTurnstileResetSignal((value) => value + 1)
           setEmailSending(false)
         }
         return
@@ -401,6 +430,8 @@ export default function TerminalShell({ onClose }: TerminalShellProps) {
     }
 
     if (cmd === 'email' && parts.length === 1) {
+      setEmailTurnstileToken(null)
+      setEmailTurnstileResetSignal((value) => value + 1)
       setEmailComposer({
         step: 'name',
         draft: {
@@ -413,6 +444,7 @@ export default function TerminalShell({ onClose }: TerminalShellProps) {
       appendOutputs([
         'Email mode — type `cancel` at any prompt to stop.',
         `This message will be sent to ${profile.email}.`,
+        'Complete the verification block below before sending.',
         'Your name:',
       ])
       return
@@ -613,6 +645,25 @@ export default function TerminalShell({ onClose }: TerminalShellProps) {
           <div className="text-yellow-300 whitespace-pre-wrap py-0.5 font-mono">
             AI is thinking
             <span className="inline-block ml-1 animate-pulse">...</span>
+          </div>
+        )}
+        {emailComposer && (
+          <div className="mt-4 rounded-lg border border-gray-800 bg-black/30 p-3">
+            <div className="mb-2 text-xs uppercase tracking-[0.2em] text-gray-500">
+              Spam Check
+            </div>
+            {turnstileAvailable ? (
+              <TurnstileWidget
+                action="terminal_email"
+                onTokenChange={setEmailTurnstileToken}
+                resetSignal={emailTurnstileResetSignal}
+              />
+            ) : (
+              <div className="text-sm text-red-300">
+                Spam verification is not configured right now. Please use the
+                direct email link instead.
+              </div>
+            )}
           </div>
         )}
       </div>

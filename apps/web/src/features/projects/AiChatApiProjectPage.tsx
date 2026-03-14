@@ -126,6 +126,17 @@ export default function AiChatApiProjectPage() {
                   Readiness probe for the container orchestration layer.
                 </p>
               </div>
+
+              <div className="rounded-lg border border-gray-700 bg-card p-4">
+                <p>
+                  <span className="inline-block rounded bg-gray-800 px-1.5 py-0.5 text-sm font-mono text-gray-200 border border-gray-700">
+                    POST /email
+                  </span>{' '}
+                  Accepts structured contact-form payloads, verifies a
+                  Cloudflare Turnstile token server-side, and only then relays
+                  the message through SMTP.
+                </p>
+              </div>
             </div>
           </section>
 
@@ -172,9 +183,9 @@ export default function AiChatApiProjectPage() {
                   Resilience
                 </h3>
                 <p className="text-gray-300 text-sm">
-                  IP-based rate limiting (partitioned by `x-api-key` when
-                  present), exponential-backoff retries via Polly, and
-                  structured logging (Serilog) with optional Grafana/Loki
+                  Endpoint-specific IP rate limits, Cloudflare Turnstile on the
+                  email path, exponential-backoff retries via Polly, and
+                  structured logging with Serilog and optional Grafana/Loki
                   integration.
                 </p>
               </div>
