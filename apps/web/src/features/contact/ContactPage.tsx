@@ -5,6 +5,7 @@ import PageSEO from '../../components/seo/PageSEO'
 import { profile } from '../../content/profile'
 import {
   type ContactEmailValues,
+  isContactEmailRateLimited,
   sendContactEmail,
 } from '../../utils/contactEmail'
 import { isTurnstileConfigured } from '../../utils/turnstile'
@@ -91,19 +92,28 @@ export default function ContactPage() {
 
       setFormValues(initialFormValues)
       setTurnstileToken(null)
+      setTurnstileResetSignal((value) => value + 1)
       setSubmitState('success')
       setStatusMessage(
         'Your message has been sent. I will get back to you as soon as I can.',
       )
     } catch (error) {
+      const isRateLimited = isContactEmailRateLimited(error)
+
+      if (!isRateLimited) {
+        setTurnstileToken(null)
+        setTurnstileResetSignal((value) => value + 1)
+      }
+
       setSubmitState('error')
       setStatusMessage(
         error instanceof Error && error.message
-          ? error.message
+          ? isRateLimited
+            ? `${error.message} Spam check already passed, so wait before retrying.`
+            : error.message
           : 'Unable to send your message right now. Please use the email link below instead.',
       )
     } finally {
-      setTurnstileResetSignal((value) => value + 1)
       setIsSubmitting(false)
     }
   }

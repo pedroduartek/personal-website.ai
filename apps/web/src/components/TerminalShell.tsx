@@ -4,6 +4,7 @@ import cvPdf from '../CV/Pedro_Duarte_CV.pdf'
 import { profile } from '../content/profile'
 import {
   type ContactEmailValues,
+  isContactEmailRateLimited,
   sendContactEmail,
 } from '../utils/contactEmail'
 import { runCommand } from '../utils/terminalCommands'
@@ -516,9 +517,18 @@ export default function TerminalShell({ onClose }: TerminalShellProps) {
             error instanceof Error && error.message
               ? error.message
               : 'Unable to send your message right now.'
+          const isRateLimited = isContactEmailRateLimited(error)
 
           if (execution.interrupted) {
             appendOutput(detail)
+            return
+          }
+
+          if (isRateLimited) {
+            appendOutputs([
+              detail,
+              'Spam check already passed. Wait before retrying or type n to cancel.',
+            ])
             return
           }
 

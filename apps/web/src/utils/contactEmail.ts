@@ -12,6 +12,20 @@ export type ContactEmailValues = {
 
 type ContactEmailSource = 'contact form' | 'terminal'
 
+export class ContactEmailRequestError extends Error {
+  constructor(
+    message: string,
+    public readonly status: number,
+  ) {
+    super(message)
+    this.name = 'ContactEmailRequestError'
+  }
+}
+
+export function isContactEmailRateLimited(error: unknown) {
+  return error instanceof ContactEmailRequestError && error.status === 429
+}
+
 function normalizeValues(values: ContactEmailValues): ContactEmailValues {
   return {
     name: values.name.trim(),
@@ -77,6 +91,6 @@ export async function sendContactEmail(
         ? 'Too many messages were sent from your connection. Please try again later.'
         : 'Unable to send your message right now.',
     )
-    throw new Error(detail)
+    throw new ContactEmailRequestError(detail, response.status)
   }
 }

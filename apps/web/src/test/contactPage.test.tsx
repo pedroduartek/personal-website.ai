@@ -70,4 +70,50 @@ describe('ContactPage', () => {
       ),
     ).toBeInTheDocument()
   })
+
+  it('explains rate limiting without blaming the spam check', async () => {
+    const user = userEvent.setup()
+
+    vi.stubGlobal(
+      'fetch',
+      vi.fn().mockResolvedValue(
+        new Response(
+          JSON.stringify({
+            error: 'Too many requests',
+          }),
+          {
+            status: 429,
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          },
+        ),
+      ),
+    )
+
+    render(
+      <MemoryRouter>
+        <ContactPage />
+      </MemoryRouter>,
+    )
+
+    await user.click(screen.getByRole('button', { name: /open form/i }))
+
+    await user.type(screen.getByLabelText('Name'), 'Ada Lovelace')
+    await user.type(screen.getByLabelText('Email'), 'ada@example.com')
+    await user.type(screen.getByLabelText('Subject'), 'Hello')
+    await user.type(
+      screen.getByLabelText('Message'),
+      'I would like to talk about a backend role.',
+    )
+    await user.click(screen.getByRole('button', { name: 'Send email' }))
+
+    await waitFor(() => {
+      expect(
+        screen.getByText(
+          'Too many requests Spam check already passed, so wait before retrying.',
+        ),
+      ).toBeInTheDocument()
+    })
+  })
 })
