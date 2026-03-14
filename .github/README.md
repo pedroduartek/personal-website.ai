@@ -1,83 +1,62 @@
+# Personal Website AI
 
-# Personal Website
+Frontend for pedroduartek.com. This repository is a `pnpm` workspace that
+currently contains a single Vite/React application in `apps/web`. It renders
+the portfolio, terminal-style navigation, CV, project detail pages, and the
+chat entry point backed by `ai-chat-api`.
 
-This is the source code for my personal website, a modern, fast, and accessible portfolio built with React, TypeScript, and Tailwind CSS. The site showcases professional experience, projects, skills, and a downloadable CV.
+## Stack
 
-## 🌟 Features
-
-- **Home:** Quick intro and highlights
-- **Projects:** Portfolio with detailed project pages and screenshots
-- **Experience:** Professional timeline with roles, companies, and technologies
-- **Education:** Academic background
-- **Conferences:** Speaking engagements and event attendance
-- **Skills:** Categorized technical skills
-- **CV:** Downloadable PDF resume and in-browser preview
-- **SEO:** Optimized for search engines and social sharing
-- **Performance:** Fast, code-split, and optimized
-- **Accessibility:** Keyboard navigation, semantic HTML, dark mode
-
-## 🛠️ Tech Stack
-
-- React 18 + TypeScript
+- React 19 + TypeScript
 - Vite
 - Tailwind CSS
-- React Router
-- Markdown (react-markdown, gray-matter)
-- PDF (react-pdf/renderer)
-- Vitest + React Testing Library
-- Biome (lint/format)
-- pnpm (monorepo)
-- Vercel (deployment & analytics)
+- Vitest + Testing Library
+- Biome
 
-## 🚀 Getting Started
+## Local development
 
-### Prerequisites
-- Node.js 18+
-- pnpm 9+
+Prerequisites: Node.js and `pnpm`.
 
-### Installation
-Clone the repo and install dependencies:
 ```bash
 pnpm install
-```
-
-### Development
-Start the local dev server:
-```bash
 pnpm dev
 ```
 
-### Build
-Create a production build:
+Run only the website app:
+
 ```bash
-pnpm build
+pnpm --filter @personal-website/web dev
 ```
 
-### Test
-Run all tests:
+## Repository layout
+
+```text
+personal-website-ai/
+├── apps/web/            # frontend app
+│   ├── src/features/    # route-level pages
+│   ├── src/components/  # shared UI
+│   ├── src/content/     # structured site data
+│   ├── src/hooks/       # reusable hooks
+│   ├── src/utils/       # non-UI helpers
+│   └── src/test/        # Vitest + Testing Library
+├── docs/                # project notes
+└── scripts/             # workspace helpers
+```
+
+## Quality gates
+
+Primary local checks:
+
 ```bash
-pnpm test
+pnpm -r check
+pnpm -r test
+pnpm --filter @personal-website/web test -- --coverage
+pnpm -r build
 ```
 
-### Lint & Format
-```bash
-pnpm check
-pnpm lint
-pnpm format
-```
+CI also runs a workspace dependency audit and fails on high or critical
+vulnerabilities.
 
-## 📁 Project Structure
+## License
 
-```
-personal-website/
-├── apps/
-│   └── web/          # React frontend
-├── infra/            # Infrastructure (docker, etc)
-├── docs/             # Planning & documentation
-└── .github/          # GitHub Actions CI/CD
-```
-
-
-## 📄 License
-
-Private
+Proprietary. All rights reserved. See [LICENSE](LICENSE).
