@@ -22,7 +22,7 @@ type EmailComposerState = {
     name: string
     email: string
     subject: string
-    messageLines: string[]
+    message: string
   }
 }
 
@@ -164,7 +164,7 @@ export default function TerminalShell({ onClose }: TerminalShellProps) {
       name: state.draft.name,
       email: state.draft.email,
       subject: state.draft.subject,
-      message: state.draft.messageLines.join('\n'),
+      message: state.draft.message,
     }
   }
 
@@ -307,57 +307,34 @@ export default function TerminalShell({ onClose }: TerminalShellProps) {
             subject: cmd,
           },
         })
-        appendOutput(
-          'Message: type your message. Press Enter on an empty line when finished.',
-        )
+        appendOutput('Message: type your message and press Enter to continue.')
         return
       }
 
       if (emailComposer.step === 'message') {
-        if (!cmd) {
-          const currentMessage = emailComposer.draft.messageLines
-            .join('\n')
-            .trim()
-          if (currentMessage.length < 10) {
-            appendOutput(
-              'Please enter a message between 10 and 4000 characters.',
-            )
-            return
-          }
-
-          const nextState: EmailComposerState = {
-            step: 'confirm',
-            draft: emailComposer.draft,
-          }
-          const draft = getEmailDraft(nextState)
-          setEmailComposer(nextState)
-          appendOutputs([
-            `Ready to send to ${profile.email}:`,
-            `From: ${draft.name} <${draft.email}>`,
-            `Subject: ${draft.subject}`,
-            '',
-            draft.message,
-            '',
-            'Send now? (y/n)',
-          ])
+        if (cmd.length < 10 || cmd.length > 4000) {
+          appendOutput('Please enter a message between 10 and 4000 characters.')
           return
         }
 
-        const nextMessage = [...emailComposer.draft.messageLines, cmdRaw].join(
-          '\n',
-        )
-        if (nextMessage.length > 4000) {
-          appendOutput('Please keep the message under 4000 characters.')
-          return
-        }
-
-        setEmailComposer({
-          step: 'message',
+        const nextState: EmailComposerState = {
+          step: 'confirm',
           draft: {
             ...emailComposer.draft,
-            messageLines: [...emailComposer.draft.messageLines, cmdRaw],
+            message: cmdRaw,
           },
-        })
+        }
+        const draft = getEmailDraft(nextState)
+        setEmailComposer(nextState)
+        appendOutputs([
+          `Ready to send to ${profile.email}:`,
+          `From: ${draft.name} <${draft.email}>`,
+          `Subject: ${draft.subject}`,
+          '',
+          draft.message,
+          '',
+          'Send now? (y/n)',
+        ])
         return
       }
 
@@ -438,13 +415,13 @@ export default function TerminalShell({ onClose }: TerminalShellProps) {
           name: '',
           email: '',
           subject: '',
-          messageLines: [],
+          message: '',
         },
       })
       appendOutputs([
         'Email mode — type `cancel` at any prompt to stop.',
         `This message will be sent to ${profile.email}.`,
-        'Complete the verification block below before sending.',
+        'The spam check appears right before send confirmation.',
         'Your name:',
       ])
       return
@@ -650,7 +627,7 @@ export default function TerminalShell({ onClose }: TerminalShellProps) {
       </div>
 
       <div className="border-t border-gray-800 bg-[#060d18] px-4 py-3">
-        {emailComposer && (
+        {emailComposer?.step === 'confirm' && (
           <div className="mb-3 rounded-xl border border-[#173225] bg-[#081221] px-3 py-3 shadow-[inset_0_1px_0_rgba(126,231,135,0.05)]">
             <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
               <div>
@@ -699,7 +676,7 @@ export default function TerminalShell({ onClose }: TerminalShellProps) {
             placeholder={
               emailComposer
                 ? emailComposer.step === 'message'
-                  ? 'type message lines; empty line finishes'
+                  ? 'type your message'
                   : emailComposer.step === 'confirm'
                     ? 'type y or n'
                     : 'answer the prompt'
