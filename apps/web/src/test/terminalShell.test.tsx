@@ -64,13 +64,13 @@ describe('TerminalShell email command', () => {
     expect(url).toBe(CONTACT_EMAIL_ENDPOINT)
     const payload = JSON.parse(String(options?.body))
     expect(payload).toMatchObject({
+      name: 'Ada Lovelace',
+      email: 'ada@example.com',
       subject: 'Terminal hello',
-      isHtml: true,
+      source: 'terminal',
+      company: '',
     })
-    expect(payload.body).toContain('New message from pedroduartek.com terminal')
-    expect(payload.body).toContain('Ada Lovelace')
-    expect(payload.body).toContain('ada@example.com')
-    expect(payload.body).toContain('Let us talk about a staff role.')
+    expect(payload.message).toBe('Let us talk about a staff role.')
     expect(screen.getByText('Email sent successfully.')).toBeInTheDocument()
   })
 })

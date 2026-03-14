@@ -1,3 +1,5 @@
+import { postJson, readApiError } from './apiClient'
+
 export const CONTACT_EMAIL_ENDPOINT = 'https://api.pedroduartek.com/email'
 
 export type ContactEmailValues = {
@@ -5,6 +7,7 @@ export type ContactEmailValues = {
   email: string
   subject: string
   message: string
+  company?: string
 }
 
 type ContactEmailSource = 'contact form' | 'terminal'
@@ -15,22 +18,30 @@ function normalizeValues(values: ContactEmailValues): ContactEmailValues {
     email: values.email.trim(),
     subject: values.subject.trim(),
     message: values.message.trim(),
+    company: values.company?.trim() ?? '',
   }
 }
 
-export function buildContactEmailBody(
-  values: ContactEmailValues,
-  source: ContactEmailSource,
-) {
-  const normalizedValues = normalizeValues(values)
+function assertContactEmailValues(values: ContactEmailValues) {
+  if (values.company) {
+    throw new Error('Unable to send your message right now.')
+  }
 
-  return [
-    `<p>New message from pedroduartek.com ${source}</p>`,
-    `<p><strong>Name:</strong> ${normalizedValues.name}<br/><strong>Email:</strong> ${normalizedValues.email}</p>`,
-    `<p><strong>Subject:</strong> ${normalizedValues.subject}</p>`,
-    '<p><strong>Message:</strong></p>',
-    `<p>${normalizedValues.message.replace(/\n/g, '<br/>')}</p>`,
-  ].join('\n')
+  if (values.name.length < 2 || values.name.length > 100) {
+    throw new Error('Please enter a name between 2 and 100 characters.')
+  }
+
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(values.email)) {
+    throw new Error('Please enter a valid email address.')
+  }
+
+  if (values.subject.length < 3 || values.subject.length > 160) {
+    throw new Error('Please enter a subject between 3 and 160 characters.')
+  }
+
+  if (values.message.length < 10 || values.message.length > 4000) {
+    throw new Error('Please enter a message between 10 and 4000 characters.')
+  }
 }
 
 export async function sendContactEmail(
@@ -38,21 +49,28 @@ export async function sendContactEmail(
   source: ContactEmailSource,
 ) {
   const normalizedValues = normalizeValues(values)
+  assertContactEmailValues(normalizedValues)
 
-  const response = await fetch(CONTACT_EMAIL_ENDPOINT, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
+  const response = await postJson(
+    CONTACT_EMAIL_ENDPOINT,
+    {
+      name: normalizedValues.name,
+      email: normalizedValues.email,
       subject: normalizedValues.subject,
-      body: buildContactEmailBody(normalizedValues, source),
-      isHtml: true,
-    }),
-  })
+      message: normalizedValues.message,
+      source,
+      company: normalizedValues.company ?? '',
+    },
+    1,
+  )
 
   if (!response.ok) {
-    const detail = await response.text().catch(() => '')
-    throw new Error(detail || 'Unable to send your message right now.')
+    const detail = await readApiError(
+      response,
+      response.status === 429
+        ? 'Too many messages were sent from your connection. Please try again later.'
+        : 'Unable to send your message right now.',
+    )
+    throw new Error(detail)
   }
 }

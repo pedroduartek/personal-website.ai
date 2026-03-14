@@ -238,8 +238,19 @@ export default function TerminalShell({ onClose }: TerminalShellProps) {
       }
 
       if (emailComposer.step === 'name') {
-        if (!cmd) {
-          appendOutputs(['Name cannot be empty.', 'Your name:'])
+        if (cmd.length < 2) {
+          appendOutputs([
+            'Please enter a name between 2 and 100 characters.',
+            'Your name:',
+          ])
+          return
+        }
+
+        if (cmd.length > 100) {
+          appendOutputs([
+            'Please enter a name between 2 and 100 characters.',
+            'Your name:',
+          ])
           return
         }
 
@@ -272,8 +283,11 @@ export default function TerminalShell({ onClose }: TerminalShellProps) {
       }
 
       if (emailComposer.step === 'subject') {
-        if (!cmd) {
-          appendOutputs(['Subject cannot be empty.', 'Subject:'])
+        if (cmd.length < 3 || cmd.length > 160) {
+          appendOutputs([
+            'Please enter a subject between 3 and 160 characters.',
+            'Subject:',
+          ])
           return
         }
 
@@ -292,8 +306,9 @@ export default function TerminalShell({ onClose }: TerminalShellProps) {
 
       if (emailComposer.step === 'message') {
         if (!cmd) {
-          if (emailComposer.draft.messageLines.length === 0) {
-            appendOutput('Message cannot be empty.')
+          const currentMessage = emailComposer.draft.messageLines.join('\n').trim()
+          if (currentMessage.length < 10) {
+            appendOutput('Please enter a message between 10 and 4000 characters.')
             return
           }
 
@@ -312,6 +327,12 @@ export default function TerminalShell({ onClose }: TerminalShellProps) {
             '',
             'Send now? (y/n)',
           ])
+          return
+        }
+
+        const nextMessage = [...emailComposer.draft.messageLines, cmdRaw].join('\n')
+        if (nextMessage.length > 4000) {
+          appendOutput('Please keep the message under 4000 characters.')
           return
         }
 

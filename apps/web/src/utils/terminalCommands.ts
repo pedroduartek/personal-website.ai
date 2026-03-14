@@ -6,6 +6,7 @@ import { projects } from '../content/projects'
 import { skills } from '../content/skills'
 import type { Profile } from '../content/types'
 import myselfUrl from '../images/myself.webp'
+import { postJson, readApiError } from './apiClient'
 import { calculateYearsFromDate } from './experience'
 
 async function imageToAscii(url: string, charsWide?: number) {
@@ -677,29 +678,19 @@ export async function runCommand(
     const apiUrl = 'https://api.pedroduartek.com/chat'
 
     try {
-      const maxAttempts = 2
-      let res: Response | null = null
-      let lastErr: unknown = null
+      const res = await postJson(apiUrl, { message }, 2)
 
-      for (let attempt = 1; attempt <= maxAttempts; attempt++) {
+      if (!res.ok) {
         try {
-          res = await fetch(apiUrl, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ message }),
-          })
-          if (res.ok) break
-          lastErr = new Error(`HTTP ${res.status}`)
-        } catch (e) {
-          lastErr = e
-        }
-      }
-
-      if (!res || !res.ok) {
-        try {
-          console.error('chat command fetch failed:', lastErr)
+          console.error('chat command fetch failed:', res.status)
         } catch {}
-        return ['Chat service unavailable.']
+        const errorMessage = await readApiError(
+          res,
+          res.status === 429
+            ? 'The chat is busy right now. Please wait a minute and try again.'
+            : 'Chat service unavailable.',
+        )
+        return [errorMessage]
       }
 
       const data = await res.json()
