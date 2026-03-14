@@ -137,8 +137,9 @@ export default function PersonalWebsiteProjectPage() {
                 <p className="text-gray-300 text-sm">
                   Recruiters and hiring managers can reach out through standard
                   contact links, a direct message form, or even from inside the
-                  terminal experience. The goal is simple: make it easy to go
-                  from reading about the work to starting a conversation.
+                  terminal experience. Cloudflare Turnstile protects the form
+                  submission path so the inbox stays usable without turning the
+                  contact flow into an account-based experience.
                 </p>
               </div>
             </div>

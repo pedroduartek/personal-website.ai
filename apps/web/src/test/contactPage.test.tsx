@@ -60,6 +60,7 @@ describe('ContactPage', () => {
       email: 'ada@example.com',
       subject: 'Hello',
       source: 'contact form',
+      turnstileToken: 'XXXX.DUMMY.TOKEN.XXXX',
       company: '',
     })
     expect(payload.message).toBe('I would like to talk about a backend role.')
