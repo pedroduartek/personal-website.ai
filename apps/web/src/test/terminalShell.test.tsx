@@ -37,6 +37,7 @@ describe('TerminalShell email command', () => {
     expect(
       screen.getByRole('link', { name: profile.email }),
     ).toBeInTheDocument()
+    expect(screen.queryByText('Message Verification')).not.toBeInTheDocument()
 
     await user.type(input, 'Ada Lovelace{enter}')
     await user.type(input, 'ada@example.com{enter}')
@@ -44,14 +45,14 @@ describe('TerminalShell email command', () => {
 
     expect(
       screen.getByText(
-        'Message: type your message. Press Enter on an empty line when finished.',
+        'Message: type your message and press Enter to continue.',
       ),
     ).toBeInTheDocument()
 
     await user.type(input, 'Let us talk about a staff role.{enter}')
-    await user.keyboard('{Enter}')
 
     expect(screen.getByText('Send now? (y/n)')).toBeInTheDocument()
+    expect(screen.getByText('Message Verification')).toBeInTheDocument()
 
     await user.type(input, 'y{enter}')
 
