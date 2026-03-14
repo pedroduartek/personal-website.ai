@@ -102,25 +102,82 @@ describe('TerminalShell email command', () => {
     expect(screen.getByText('Available commands:')).toBeInTheDocument()
   })
 
-  it('double ctrl+c aborts a running chat command and restores the prompt', async () => {
+  it('double ctrl+c lets an in-flight email finish while restoring the prompt', async () => {
     const user = userEvent.setup()
-    const chatFetch = vi.fn(
-      (_input: RequestInfo | URL, init?: RequestInit) =>
-        new Promise<Response>((_resolve, reject) => {
-          const signal = init?.signal
-          signal?.addEventListener(
-            'abort',
-            () => {
-              const error = new Error('Aborted')
-              error.name = 'AbortError'
-              reject(error)
-            },
-            { once: true },
-          )
-        }),
+    let resolveEmailRequest: ((value: Response) => void) | null = null
+
+    vi.stubGlobal(
+      'fetch',
+      vi.fn(
+        () =>
+          new Promise<Response>((resolve) => {
+            resolveEmailRequest = resolve
+          }),
+      ),
     )
 
-    vi.stubGlobal('fetch', chatFetch)
+    render(<TerminalShell onClose={() => {}} />)
+
+    const input = screen.getByPlaceholderText('type a command (help)')
+
+    await user.type(input, 'email{enter}')
+    await user.type(input, 'Ada Lovelace{enter}')
+    await user.type(input, 'ada@example.com{enter}')
+    await user.type(input, 'Terminal hello{enter}')
+    await user.type(input, 'Let us talk about a staff role.{enter}')
+    await user.type(input, 'y{enter}')
+
+    await waitFor(() => {
+      expect(fetch).toHaveBeenCalledTimes(1)
+    })
+    expect(input).toBeDisabled()
+
+    fireEvent.keyDown(document, { key: 'c', ctrlKey: true })
+    fireEvent.keyDown(document, { key: 'c', ctrlKey: true })
+
+    await waitFor(() => {
+      expect(screen.getByPlaceholderText('type a command (help)')).toBeEnabled()
+    })
+
+    expect(screen.getByText('Command interrupted.')).toBeInTheDocument()
+
+    await user.type(
+      screen.getByPlaceholderText('type a command (help)'),
+      'help{enter}',
+    )
+
+    expect(screen.getByText('Available commands:')).toBeInTheDocument()
+
+    const completeEmailRequest =
+      resolveEmailRequest ??
+      ((_value: Response) => {
+        throw new Error('Email request resolver was not assigned.')
+      })
+    completeEmailRequest(
+      new Response(null, {
+        status: 200,
+      }),
+    )
+
+    await waitFor(() => {
+      expect(screen.getByText('Email sent successfully.')).toBeInTheDocument()
+    })
+  })
+
+  it('double ctrl+c hides a late chat response and restores the prompt', async () => {
+    const user = userEvent.setup()
+    let resolveChatRequest: ((value: Response) => void) | null = null
+    const chatReply = 'Late chat reply that should stay hidden.'
+
+    vi.stubGlobal(
+      'fetch',
+      vi.fn(
+        () =>
+          new Promise<Response>((resolve) => {
+            resolveChatRequest = resolve
+          }),
+      ),
+    )
 
     render(<TerminalShell onClose={() => {}} />)
 
@@ -150,6 +207,23 @@ describe('TerminalShell email command', () => {
     )
 
     expect(screen.getByText('Available commands:')).toBeInTheDocument()
-    expect(chatFetch).toHaveBeenCalledTimes(1)
+
+    const completeChatRequest =
+      resolveChatRequest ??
+      ((_value: Response) => {
+        throw new Error('Chat request resolver was not assigned.')
+      })
+    completeChatRequest(
+      new Response(JSON.stringify({ answer: chatReply }), {
+        status: 200,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      }),
+    )
+
+    await waitFor(() => {
+      expect(screen.queryByText(chatReply)).not.toBeInTheDocument()
+    })
   })
 })
