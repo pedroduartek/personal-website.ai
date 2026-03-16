@@ -1,9 +1,18 @@
 import { fireEvent, render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
+import { ThemeProvider } from '../app/theme/ThemeProvider'
 import TerminalShell from '../components/TerminalShell'
 import { profile } from '../content/profile'
 import { CONTACT_EMAIL_ENDPOINT } from '../utils/contactEmail'
+
+function renderTerminalShell() {
+  return render(
+    <ThemeProvider>
+      <TerminalShell onClose={() => {}} />
+    </ThemeProvider>,
+  )
+}
 
 describe('TerminalShell email command', () => {
   beforeEach(() => {
@@ -22,7 +31,7 @@ describe('TerminalShell email command', () => {
   it('walks through composing and sending an email', async () => {
     const user = userEvent.setup()
 
-    render(<TerminalShell onClose={() => {}} />)
+    renderTerminalShell()
 
     const input = screen.getByPlaceholderText('type a command (help)')
 
@@ -79,7 +88,7 @@ describe('TerminalShell email command', () => {
   it('double ctrl+c cancels the interactive email composer', async () => {
     const user = userEvent.setup()
 
-    render(<TerminalShell onClose={() => {}} />)
+    renderTerminalShell()
 
     const input = screen.getByPlaceholderText('type a command (help)')
 
@@ -116,7 +125,7 @@ describe('TerminalShell email command', () => {
       ),
     )
 
-    render(<TerminalShell onClose={() => {}} />)
+    renderTerminalShell()
 
     const input = screen.getByPlaceholderText('type a command (help)')
 
@@ -179,7 +188,7 @@ describe('TerminalShell email command', () => {
       ),
     )
 
-    render(<TerminalShell onClose={() => {}} />)
+    renderTerminalShell()
 
     const input = screen.getByPlaceholderText('type a command (help)')
 
@@ -230,7 +239,7 @@ describe('TerminalShell email command', () => {
   it('restores prompt focus after a command finishes streaming output', async () => {
     const user = userEvent.setup()
 
-    render(<TerminalShell onClose={() => {}} />)
+    renderTerminalShell()
 
     const input = screen.getByPlaceholderText('type a command (help)')
 
@@ -267,7 +276,7 @@ describe('TerminalShell email command', () => {
       ),
     )
 
-    render(<TerminalShell onClose={() => {}} />)
+    renderTerminalShell()
 
     const input = screen.getByPlaceholderText('type a command (help)')
 

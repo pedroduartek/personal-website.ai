@@ -22,17 +22,17 @@ export default function PersonalWebsiteProjectPage() {
       <div className="container mx-auto px-4 py-8 animate-slide-down md:py-16">
         <Link
           to="/projects"
-          className="mb-6 inline-flex items-center gap-2 rounded-lg border border-gray-700 px-4 py-2 text-sm font-medium text-gray-300 transition-all duration-200 hover:scale-105 hover:bg-gray-800 hover:text-white hover:shadow-lg"
+          className="theme-button-secondary mb-6 inline-flex items-center gap-2"
         >
           <span>←</span> Back to projects
         </Link>
 
-        <h1 className="mb-2 text-3xl font-bold text-white md:text-4xl">
+        <h1 className="mb-2 text-3xl font-bold text-foreground md:text-4xl">
           {project.title}
         </h1>
 
         {/* Date */}
-        <div className="mb-4 flex items-center gap-3 text-sm text-gray-400">
+        <div className="mb-4 flex items-center gap-3 text-sm text-foreground-subtle">
           <time>
             {project.startDate &&
               new Date(project.startDate).toLocaleDateString('en-US', {
@@ -44,7 +44,7 @@ export default function PersonalWebsiteProjectPage() {
           </time>
         </div>
 
-        <p className="mb-4 text-lg text-gray-400 md:text-xl">
+        <p className="mb-4 text-lg text-foreground-subtle md:text-xl">
           {project.description}
         </p>
 
@@ -68,31 +68,31 @@ export default function PersonalWebsiteProjectPage() {
           ))}
         </div>
 
-        <div className="prose prose-lg max-w-none text-gray-300">
+        <div className="theme-prose">
           <section className="mb-12">
-            <h2 className="mb-4 text-2xl font-semibold text-white">
+            <h2 className="mb-4 text-2xl font-semibold text-foreground">
               Why This Project Exists
             </h2>
             <p className="mb-4">{project.problem}</p>
           </section>
 
           <section className="mb-12">
-            <h2 className="mb-4 text-2xl font-semibold text-white">
+            <h2 className="mb-4 text-2xl font-semibold text-foreground">
               How I Built It
             </h2>
             <p className="mb-4">{project.approach}</p>
           </section>
 
           <section className="mb-12">
-            <h2 className="mb-4 text-2xl font-semibold text-white">
+            <h2 className="mb-4 text-2xl font-semibold text-foreground">
               What It Includes
             </h2>
             <div className="grid gap-4 md:grid-cols-2">
-              <div className="rounded-lg border border-gray-700 bg-card p-5">
-                <h3 className="mb-2 text-lg font-semibold text-white">
+              <div className="theme-card p-5">
+                <h3 className="mb-2 text-lg font-semibold text-foreground">
                   Structured portfolio content
                 </h3>
-                <p className="text-gray-300 text-sm">
+                <p className="text-sm text-foreground-muted">
                   Core information about my background, projects, education, and
                   conferences is managed in a structured way so the site stays
                   consistent as it evolves. That makes it easier to keep the
@@ -101,11 +101,11 @@ export default function PersonalWebsiteProjectPage() {
                 </p>
               </div>
 
-              <div className="rounded-lg border border-gray-700 bg-card p-5">
-                <h3 className="mb-2 text-lg font-semibold text-white">
+              <div className="theme-card p-5">
+                <h3 className="mb-2 text-lg font-semibold text-foreground">
                   AI chat assistant
                 </h3>
-                <p className="text-gray-300 text-sm">
+                <p className="text-sm text-foreground-muted">
                   Visitors can ask natural-language questions about my
                   experience, skills, and projects through an integrated chat
                   assistant powered by the{' '}
@@ -117,11 +117,11 @@ export default function PersonalWebsiteProjectPage() {
                 </p>
               </div>
 
-              <div className="rounded-lg border border-gray-700 bg-card p-5">
-                <h3 className="mb-2 text-lg font-semibold text-white">
+              <div className="theme-card p-5">
+                <h3 className="mb-2 text-lg font-semibold text-foreground">
                   Fast, memorable navigation
                 </h3>
-                <p className="text-gray-300 text-sm">
+                <p className="text-sm text-foreground-muted">
                   The site works like a traditional portfolio, but it also
                   offers a command palette and a terminal-style route for people
                   who enjoy a more interactive experience. Those touches are
@@ -130,11 +130,11 @@ export default function PersonalWebsiteProjectPage() {
                 </p>
               </div>
 
-              <div className="rounded-lg border border-gray-700 bg-card p-5">
-                <h3 className="mb-2 text-lg font-semibold text-white">
+              <div className="theme-card p-5">
+                <h3 className="mb-2 text-lg font-semibold text-foreground">
                   Low-friction contact flow
                 </h3>
-                <p className="text-gray-300 text-sm">
+                <p className="text-sm text-foreground-muted">
                   Recruiters and hiring managers can reach out through standard
                   contact links, a direct message form, or even from inside the
                   terminal experience. Cloudflare Turnstile protects the form
@@ -146,7 +146,7 @@ export default function PersonalWebsiteProjectPage() {
           </section>
 
           <section className="mb-12">
-            <h2 className="mb-4 text-2xl font-semibold text-white">
+            <h2 className="mb-4 text-2xl font-semibold text-foreground">
               What AI Changed
             </h2>
             <p className="mb-4">
@@ -157,11 +157,11 @@ export default function PersonalWebsiteProjectPage() {
               the final product.
             </p>
             <div className="grid gap-4 md:grid-cols-2">
-              <div className="rounded-lg border border-gray-700 bg-card p-5">
-                <h3 className="mb-2 text-lg font-semibold text-white">
+              <div className="theme-card p-5">
+                <h3 className="mb-2 text-lg font-semibold text-foreground">
                   Faster learning through a real product
                 </h3>
-                <p className="text-gray-300 text-sm">
+                <p className="text-sm text-foreground-muted">
                   Instead of learning frontend development through isolated
                   exercises, I used a public-facing product with real users and
                   real constraints. That made the learning process more
@@ -169,11 +169,11 @@ export default function PersonalWebsiteProjectPage() {
                 </p>
               </div>
 
-              <div className="rounded-lg border border-gray-700 bg-card p-5">
-                <h3 className="mb-2 text-lg font-semibold text-white">
+              <div className="theme-card p-5">
+                <h3 className="mb-2 text-lg font-semibold text-foreground">
                   Human judgment stayed central
                 </h3>
-                <p className="text-gray-300 text-sm">
+                <p className="text-sm text-foreground-muted">
                   AI accelerated execution, but the decisions about user
                   experience, tone, structure, trade-offs, and final quality
                   were still mine. That balance is the part of AI-assisted

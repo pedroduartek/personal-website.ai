@@ -3,6 +3,7 @@ import userEvent from '@testing-library/user-event'
 import { RouterProvider, createMemoryRouter } from 'react-router-dom'
 import { describe, expect, it, vi } from 'vitest'
 import AppLayout from '../app/layout/AppLayout'
+import { ThemeProvider } from '../app/theme/ThemeProvider'
 import TerminalPage from '../features/terminal/TerminalPage'
 
 vi.mock('../components/ChatWidget', () => ({
@@ -32,7 +33,11 @@ describe('AppLayout terminal mode', () => {
       },
     )
 
-    const { container } = render(<RouterProvider router={router} />)
+    const { container } = render(
+      <ThemeProvider>
+        <RouterProvider router={router} />
+      </ThemeProvider>,
+    )
 
     const appRoot = container.firstElementChild
     const main = container.querySelector('main')

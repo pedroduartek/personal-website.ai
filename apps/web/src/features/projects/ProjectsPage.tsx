@@ -17,11 +17,11 @@ export default function ProjectsPage() {
         }
       />
       <div className="container mx-auto px-4 py-8 animate-slide-down md:py-16">
-        <h1 className="mb-8 text-3xl font-bold text-white md:text-4xl">
+        <h1 className="mb-8 text-3xl font-bold text-foreground md:text-4xl">
           Projects
         </h1>
         <div className="mb-10 max-w-3xl">
-          <p className="text-base text-gray-300 md:text-lg">
+          <p className="text-base text-foreground-muted md:text-lg">
             A selection of projects that reflect how I learn, what I enjoy
             building, and the kinds of systems I like to own end to end.
           </p>
@@ -31,14 +31,16 @@ export default function ProjectsPage() {
             <Link
               key={project.slug}
               to={`/projects/${project.slug}`}
-              className="group block rounded-lg border border-gray-700 bg-card p-6 transition-all duration-300 hover:scale-[1.02] hover:bg-gray-800 hover:shadow-lg"
+              className="theme-card-hover group block p-6"
             >
               <div className="flex-1">
-                <h2 className="mb-2 text-xl font-bold text-white md:text-2xl">
+                <h2 className="mb-2 text-xl font-bold text-foreground md:text-2xl">
                   {project.title}
                 </h2>
-                <p className="mb-3 text-gray-400">{project.description}</p>
-                <div className="mb-4 flex items-center gap-4 text-sm text-gray-400">
+                <p className="mb-3 text-foreground-subtle">
+                  {project.description}
+                </p>
+                <div className="mb-4 flex items-center gap-4 text-sm text-foreground-subtle">
                   <time>
                     {new Date(project.startDate).toLocaleDateString('en-US', {
                       year: 'numeric',
@@ -62,10 +64,7 @@ export default function ProjectsPage() {
                         ? 'IoT Automation'
                         : tech
                     return (
-                      <span
-                        key={tech}
-                        className="inline-flex items-center gap-2 rounded bg-gray-800 px-2 py-1 text-xs text-gray-300"
-                      >
+                      <span key={tech} className="theme-chip">
                         <span className="flex-shrink-0">
                           <TechIcon tech={displayTech} className="w-5 h-5" />
                         </span>

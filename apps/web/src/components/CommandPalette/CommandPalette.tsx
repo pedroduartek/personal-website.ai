@@ -219,14 +219,14 @@ export function CommandPalette({ isOpen, onClose }: CommandPaletteProps) {
   return (
     // biome-ignore lint/a11y/useKeyWithClickEvents: Keyboard events handled by window listener in useEffect
     <div
-      className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm"
+      className="fixed inset-0 z-50 bg-overlay/55 backdrop-blur-sm"
       onClick={onClose}
       aria-label="Close command palette"
     >
       <div className="flex min-h-screen items-start justify-center p-4 pt-[20vh]">
         {/* biome-ignore lint/a11y/useKeyWithClickEvents: Click handler only prevents event bubbling */}
         <div
-          className="w-full max-w-2xl rounded-lg border border-gray-700 bg-gray-900 shadow-2xl"
+          className="theme-card w-full max-w-2xl overflow-hidden shadow-2xl"
           onClick={(e) => e.stopPropagation()}
           aria-modal="true"
           aria-label="Command palette"
@@ -239,14 +239,14 @@ export function CommandPalette({ isOpen, onClose }: CommandPaletteProps) {
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               placeholder="Type a command or search..."
-              className="w-full rounded-lg border border-gray-700 bg-gray-800/50 px-4 py-3 text-lg text-white outline-none placeholder:text-gray-500 transition-colors focus:border-gray-600 focus:bg-gray-800 focus:ring-2 focus:ring-gray-700/50"
+              className="theme-input text-lg"
             />
           </div>
 
           {/* Commands List */}
-          <div className="custom-scrollbar max-h-96 overflow-y-auto border-t border-gray-800 p-2">
+          <div className="custom-scrollbar max-h-96 overflow-y-auto border-t border-border p-2">
             {filteredCommands.length === 0 ? (
-              <div className="px-4 py-8 text-center text-gray-500">
+              <div className="px-4 py-8 text-center text-foreground-subtle">
                 No commands found
               </div>
             ) : (
@@ -261,7 +261,7 @@ export function CommandPalette({ isOpen, onClose }: CommandPaletteProps) {
                     className={`flex w-full items-center gap-3 rounded-md px-4 py-3 text-left transition-colors ${
                       index === selectedIndex
                         ? 'bg-blue-600 text-white'
-                        : 'text-gray-300 hover:bg-gray-800'
+                        : 'text-foreground-muted hover:bg-surface-muted hover:text-foreground'
                     }`}
                   >
                     <span className="text-xl">{command.icon}</span>
@@ -272,7 +272,7 @@ export function CommandPalette({ isOpen, onClose }: CommandPaletteProps) {
                           className={`text-sm ${
                             index === selectedIndex
                               ? 'text-blue-200'
-                              : 'text-gray-500'
+                              : 'text-foreground-subtle'
                           }`}
                         >
                           {command.description}
@@ -283,7 +283,7 @@ export function CommandPalette({ isOpen, onClose }: CommandPaletteProps) {
                       className={`text-xs ${
                         index === selectedIndex
                           ? 'text-blue-200'
-                          : 'text-gray-600'
+                          : 'text-foreground-subtle'
                       }`}
                     >
                       {command.category}
@@ -295,20 +295,17 @@ export function CommandPalette({ isOpen, onClose }: CommandPaletteProps) {
           </div>
 
           {/* Footer */}
-          <div className="border-t border-gray-700 px-4 py-2">
-            <div className="flex items-center justify-between text-xs text-gray-500">
+          <div className="border-t border-border px-4 py-2">
+            <div className="flex items-center justify-between text-xs text-foreground-subtle">
               <div className="flex gap-4">
                 <span>
-                  <kbd className="rounded bg-gray-800 px-1.5 py-0.5">↑↓</kbd>{' '}
-                  Navigate
+                  <kbd className="theme-kbd">↑↓</kbd> Navigate
                 </span>
                 <span>
-                  <kbd className="rounded bg-gray-800 px-1.5 py-0.5">Enter</kbd>{' '}
-                  Select
+                  <kbd className="theme-kbd">Enter</kbd> Select
                 </span>
                 <span>
-                  <kbd className="rounded bg-gray-800 px-1.5 py-0.5">Esc</kbd>{' '}
-                  Close
+                  <kbd className="theme-kbd">Esc</kbd> Close
                 </span>
               </div>
             </div>

@@ -4,7 +4,9 @@ import ChatWidget from '../../components/ChatWidget'
 import { CommandPalette } from '../../components/CommandPalette'
 import CommandPaletteTip from '../../components/CommandPalette/CommandPaletteTip'
 import SiteContainer from '../../components/SiteContainer'
+import ThemeToggle from '../../components/ThemeToggle'
 import { useCommandPalette } from '../../hooks/useCommandPalette'
+import { useTheme } from '../theme/ThemeProvider'
 const logo = '/pld_logo_header.webp'
 
 export default function AppLayout() {
@@ -28,7 +30,7 @@ export default function AppLayout() {
             <Suspense
               fallback={
                 <div className="flex flex-1 items-center justify-center py-16">
-                  <div className="text-gray-300">Loading...</div>
+                  <div className="text-foreground-muted">Loading...</div>
                 </div>
               }
             >
@@ -40,7 +42,7 @@ export default function AppLayout() {
             <Suspense
               fallback={
                 <div className="flex items-center justify-center py-16">
-                  <div className="text-gray-300">Loading...</div>
+                  <div className="text-foreground-muted">Loading...</div>
                 </div>
               }
             >
@@ -49,7 +51,7 @@ export default function AppLayout() {
           </SiteContainer>
         )}
       </main>
-      <footer className="border-t border-gray-800 bg-header py-4 text-center text-xs text-gray-400">
+      <footer className="border-t border-border bg-header py-4 text-center text-xs text-foreground-subtle">
         {lastUpdated ? `Last updated: ${lastUpdated}` : null}
       </footer>
       <CommandPalette isOpen={isOpen} onClose={close} />
@@ -66,22 +68,25 @@ function Header({
   onOpenCommandPalette: () => void
 }) {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
+  const { theme } = useTheme()
   const isMac =
     typeof navigator !== 'undefined' &&
     /(Mac|iPhone|iPod|iPad)/i.test(navigator.platform)
 
   if (isTerminalRoute) {
     return (
-      <header className="border-b border-gray-800 bg-header">
-        <nav className="px-3 py-2 2xl:px-6">
+      <header className="border-b border-border bg-header">
+        <nav className="flex items-center justify-between gap-4 px-3 py-2 2xl:px-6">
           <Link
             to="/"
-            className="flex items-center gap-3 text-xl font-bold text-white"
+            className="flex items-center gap-3 text-xl font-bold text-foreground"
           >
             <img
               src={logo}
               alt="PLD Logo"
-              className="h-[70px] w-auto"
+              className={`h-[70px] w-auto transition-[filter] ${
+                theme === 'light' ? 'brightness-0' : ''
+              }`}
               width={70}
               height={70}
               fetchPriority="high"
@@ -89,23 +94,26 @@ function Header({
             />
             PEDRODUARTEK
           </Link>
+          <ThemeToggle />
         </nav>
       </header>
     )
   }
 
   return (
-    <header className="border-b border-gray-800 bg-header">
+    <header className="border-b border-border bg-header">
       <nav className="relative px-3 py-2 2xl:px-6">
         <div className="flex items-center justify-between gap-4">
           <Link
             to="/"
-            className="flex items-center gap-3 text-xl font-bold text-white"
+            className="flex items-center gap-3 text-xl font-bold text-foreground"
           >
             <img
               src={logo}
               alt="PLD Logo"
-              className="h-[70px] w-auto"
+              className={`h-[70px] w-auto transition-[filter] ${
+                theme === 'light' ? 'brightness-0' : ''
+              }`}
               width={70}
               height={70}
               fetchPriority="high"
@@ -128,7 +136,7 @@ function Header({
                 }
                 onOpenCommandPalette()
               }}
-              className="hidden 2xl:flex items-center gap-2 rounded-lg border border-gray-700 bg-gray-800/50 px-4 py-2 text-sm text-gray-400 transition-colors hover:border-gray-600 hover:bg-gray-800 hover:text-gray-300 min-w-[200px] justify-between"
+              className="hidden min-w-[200px] items-center justify-between gap-2 rounded-lg border border-border bg-surface-muted/80 px-4 py-2 text-sm text-foreground-subtle transition-colors hover:border-border-strong hover:bg-surface-muted hover:text-foreground-muted 2xl:flex"
               aria-label="Open command palette"
             >
               <svg
@@ -148,20 +156,20 @@ function Header({
                 />
               </svg>
               <span>Search</span>
-              <kbd className="ml-1 rounded bg-gray-700 px-1.5 py-0.5 text-xs text-gray-400">
-                {isMac ? '⌘K' : 'Ctrl+K'}
-              </kbd>
+              <kbd className="theme-kbd ml-1">{isMac ? '⌘K' : 'Ctrl+K'}</kbd>
             </button>
 
             <CommandPaletteTip />
           </div>
 
           <div className="flex items-center gap-3">
+            <ThemeToggle />
+
             {/* Mobile menu button */}
             <button
               type="button"
               onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="2xl:hidden rounded-lg border border-gray-700 p-2 text-gray-300 hover:bg-gray-800 hover:text-white"
+              className="theme-button-secondary p-2 2xl:hidden"
               aria-label="Toggle menu"
             >
               <svg
@@ -244,11 +252,7 @@ function NavLink({
   onClick,
 }: { to: string; children: React.ReactNode; onClick?: () => void }) {
   return (
-    <Link
-      to={to}
-      onClick={onClick}
-      className="rounded-lg border border-gray-700 px-4 py-2 text-sm font-medium text-gray-300 transition-all duration-200 hover:scale-105 hover:bg-gray-800 hover:text-white hover:shadow-lg"
-    >
+    <Link to={to} onClick={onClick} className="theme-button-secondary">
       {children}
     </Link>
   )

@@ -386,7 +386,7 @@ export default function ChatWidget() {
       {/* Chat Drawer */}
       {renderDrawer && (
         <div
-          className={`fixed bottom-6 right-6 z-50 flex max-w-full origin-bottom-right transform-gpu flex-col overflow-hidden rounded-lg border-[3px] border-chat bg-gray-900 shadow-xl transition-[pointer-events] duration-[1ms] ease-linear ${
+          className={`fixed bottom-6 right-6 z-50 flex max-w-full origin-bottom-right transform-gpu flex-col overflow-hidden rounded-lg border-[3px] border-chat bg-surface-strong shadow-xl transition-[pointer-events] duration-[1ms] ease-linear ${
             open
               ? 'pointer-events-auto animate-drawer-in'
               : 'pointer-events-none animate-drawer-out'
@@ -417,19 +417,19 @@ export default function ChatWidget() {
               />
             </>
           )}
-          <div className="flex items-center justify-between border-b border-gray-800 px-3 py-2">
-            <div className="text-sm font-medium text-white">Chat</div>
+          <div className="flex items-center justify-between border-b border-border px-3 py-2">
+            <div className="text-sm font-medium text-foreground">Chat</div>
             <button
               type="button"
               onClick={() => setOpen(false)}
-              className="rounded p-1 text-gray-300 hover:text-white"
+              className="rounded p-1 text-foreground-muted hover:text-foreground"
               aria-label="Close chat"
             >
               ✕
             </button>
           </div>
           {showNote && (
-            <div className="relative px-3 pr-10 py-2 text-xs text-yellow-100 bg-yellow-700/10 border-t border-yellow-700/20">
+            <div className="relative border-t border-yellow-700/20 bg-yellow-700/10 px-3 py-2 pr-10 text-xs text-amber-800 dark:text-yellow-100">
               <strong className="font-medium">Note: </strong>
               This is a basic POC. Responses may be inaccurate. It only uses
               content from this website to reply to your questions.
@@ -437,7 +437,7 @@ export default function ChatWidget() {
                 type="button"
                 aria-label="Dismiss note"
                 onClick={() => setShowNote(false)}
-                className="absolute right-2 top-2 rounded p-1 text-yellow-200 hover:text-white"
+                className="absolute right-2 top-2 rounded p-1 text-amber-700 hover:text-amber-900 dark:text-yellow-200 dark:hover:text-white"
               >
                 ✕
               </button>
@@ -450,7 +450,7 @@ export default function ChatWidget() {
             >
               <div className="flex flex-col gap-2">
                 {messages.length === 0 && (
-                  <div className="text-sm text-gray-400">
+                  <div className="text-sm text-foreground-subtle">
                     Hey! 👋
                     <br />
                     <br />
@@ -465,7 +465,7 @@ export default function ChatWidget() {
                     className={`max-w-[85%] rounded-lg p-2 text-sm break-words whitespace-pre-wrap ${
                       m.from === 'user'
                         ? 'ml-auto bg-indigo-700 text-white'
-                        : 'bg-gray-800 text-gray-200'
+                        : 'bg-surface-muted text-foreground-muted'
                     }`}
                   >
                     {m.from === 'bot'
@@ -510,7 +510,7 @@ export default function ChatWidget() {
                                   <Link
                                     key={`${keyPrefix}-${nodes.length}`}
                                     to={pathname}
-                                    className="text-indigo-300 underline"
+                                    className="text-blue-600 underline dark:text-indigo-300"
                                     onClick={() => setOpen(false)}
                                   >
                                     {matched}
@@ -523,7 +523,7 @@ export default function ChatWidget() {
                                     href={matched}
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    className="text-indigo-300 underline"
+                                    className="text-blue-600 underline dark:text-indigo-300"
                                   >
                                     {matched}
                                   </a>,
@@ -619,7 +619,7 @@ export default function ChatWidget() {
                             if (group.type === 'section') {
                               return (
                                 <div key={`${m.id}-g${gi}`} className="my-1">
-                                  <strong className="text-gray-100">
+                                  <strong className="text-foreground">
                                     {parseUrls(group.label, `${m.id}-g${gi}-h`)}
                                   </strong>
                                   {group.items.length > 0 && (
@@ -669,7 +669,7 @@ export default function ChatWidget() {
                 {awaitingReply && (
                   <output
                     aria-live="polite"
-                    className="max-w-[80%] rounded-lg p-2 text-sm bg-gray-800 text-gray-400"
+                    className="max-w-[80%] rounded-lg bg-surface-muted p-2 text-sm text-foreground-subtle"
                   >
                     <div className="flex flex-wrap items-center gap-2">
                       {(() => {
@@ -687,7 +687,7 @@ export default function ChatWidget() {
                                 data-placeholder-last={
                                   i === lastIndex ? String(i) : undefined
                                 }
-                                className="inline-block h-3 rounded bg-gray-600 animate-pulse"
+                                className="inline-block h-3 animate-pulse rounded bg-border-strong"
                                 style={style}
                               />
                             )
@@ -718,11 +718,11 @@ export default function ChatWidget() {
                     awaitingReply ? 'Waiting for reply...' : 'Type a message...'
                   }
                   disabled={awaitingReply}
-                  className={`w-full rounded border border-gray-700 bg-gray-800 px-3 py-2 text-sm text-gray-200 placeholder-gray-500 focus:outline-none ${awaitingReply ? 'opacity-70' : ''}`}
+                  className={`theme-input rounded px-3 py-2 ${awaitingReply ? 'opacity-70' : ''}`}
                 />
                 {input.length > 400 && (
                   <span
-                    className={`absolute right-2 -top-5 text-xs ${input.length >= 500 ? 'text-red-400' : 'text-gray-500'}`}
+                    className={`absolute right-2 -top-5 text-xs ${input.length >= 500 ? 'text-red-500 dark:text-red-400' : 'text-foreground-subtle'}`}
                   >
                     {input.length}/500
                   </span>

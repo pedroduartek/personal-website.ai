@@ -8,13 +8,28 @@ export default {
   theme: {
     extend: {
       colors: {
-        background: '#212830',
-        card: '#262C36',
-        header: '#151B23',
+        background: 'rgb(var(--color-background) / <alpha-value>)',
+        card: 'rgb(var(--color-surface) / <alpha-value>)',
+        header: 'rgb(var(--color-header) / <alpha-value>)',
+        surface: {
+          DEFAULT: 'rgb(var(--color-surface) / <alpha-value>)',
+          muted: 'rgb(var(--color-surface-muted) / <alpha-value>)',
+          strong: 'rgb(var(--color-surface-strong) / <alpha-value>)',
+        },
+        border: {
+          DEFAULT: 'rgb(var(--color-border) / <alpha-value>)',
+          strong: 'rgb(var(--color-border-strong) / <alpha-value>)',
+        },
+        foreground: {
+          DEFAULT: 'rgb(var(--color-foreground) / <alpha-value>)',
+          muted: 'rgb(var(--color-foreground-muted) / <alpha-value>)',
+          subtle: 'rgb(var(--color-foreground-subtle) / <alpha-value>)',
+        },
+        overlay: 'rgb(var(--color-overlay) / <alpha-value>)',
         terminal: {
-          bg: '#071021',
-          green: '#7EE787',
-          accent: '#9AD1FF',
+          bg: 'rgb(var(--color-terminal-bg) / <alpha-value>)',
+          green: 'rgb(var(--color-terminal-green) / <alpha-value>)',
+          accent: 'rgb(var(--color-terminal-accent) / <alpha-value>)',
         },
         brand: {
           DEFAULT: '#347D39',

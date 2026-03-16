@@ -120,8 +120,8 @@ export default function ContactPage() {
 
   const statusClasses =
     submitState === 'success'
-      ? 'border-emerald-500/40 bg-emerald-500/10 text-emerald-200'
-      : 'border-red-500/40 bg-red-500/10 text-red-200'
+      ? 'border-emerald-500/40 bg-emerald-500/10 text-emerald-700 dark:text-emerald-200'
+      : 'border-red-500/40 bg-red-500/10 text-red-700 dark:text-red-200'
 
   return (
     <>
@@ -137,10 +137,10 @@ export default function ContactPage() {
       />
       <div className="container mx-auto px-4 py-8 animate-slide-down md:py-16">
         <div className="max-w-3xl">
-          <h1 className="mb-8 text-3xl font-bold text-white md:text-4xl">
+          <h1 className="mb-8 text-3xl font-bold text-foreground md:text-4xl">
             Contact
           </h1>
-          <p className="text-base text-gray-300 md:text-lg">
+          <p className="text-base text-foreground-muted md:text-lg">
             I&apos;m always open to relevant opportunities, thoughtful
             conversations, and meeting other engineers. If you want to reach me,
             use the message form or any of the direct contact options.
@@ -148,7 +148,7 @@ export default function ContactPage() {
         </div>
 
         <div className="mt-10 grid items-start gap-6 lg:grid-cols-[minmax(0,1.25fr)_minmax(280px,0.9fr)]">
-          <section className="self-start rounded-lg border border-gray-700 bg-card p-6 md:p-8">
+          <section className="theme-card self-start p-6 md:p-8">
             <button
               type="button"
               aria-expanded={showMessageForm}
@@ -157,14 +157,14 @@ export default function ContactPage() {
               className="flex w-full items-start justify-between gap-4 text-left"
             >
               <div>
-                <h2 className="text-2xl font-semibold text-white">
+                <h2 className="text-2xl font-semibold text-foreground">
                   Send a message
                 </h2>
-                <p className="mt-2 text-sm text-gray-400">
+                <p className="mt-2 text-sm text-foreground-subtle">
                   This sends a message directly to my inbox at {profile.email}.
                 </p>
               </div>
-              <span className="rounded-lg border border-gray-700 px-4 py-2 text-sm font-medium text-gray-300 transition-colors hover:bg-gray-800 hover:text-white">
+              <span className="theme-button-secondary">
                 {showMessageForm ? 'Hide form' : 'Open form'}
               </span>
             </button>
@@ -172,12 +172,12 @@ export default function ContactPage() {
             {showMessageForm && (
               <form
                 id="contact-message-form"
-                className="mt-6 space-y-5 border-t border-gray-700 pt-6"
+                className="mt-6 space-y-5 border-t border-border pt-6"
                 onSubmit={handleSubmit}
               >
                 <div className="grid gap-5 md:grid-cols-2">
                   <label className="block">
-                    <span className="mb-2 block text-sm font-medium text-gray-200">
+                    <span className="mb-2 block text-sm font-medium text-foreground">
                       Name
                     </span>
                     <input
@@ -190,12 +190,12 @@ export default function ContactPage() {
                       onChange={(event) =>
                         updateField('name', event.target.value)
                       }
-                      className="w-full rounded-lg border border-gray-700 bg-gray-900/70 px-4 py-3 text-sm text-white outline-none transition focus:border-gray-500 focus:ring-2 focus:ring-gray-700/50"
+                      className="theme-input"
                     />
                   </label>
 
                   <label className="block">
-                    <span className="mb-2 block text-sm font-medium text-gray-200">
+                    <span className="mb-2 block text-sm font-medium text-foreground">
                       Email
                     </span>
                     <input
@@ -208,13 +208,13 @@ export default function ContactPage() {
                       onChange={(event) =>
                         updateField('email', event.target.value)
                       }
-                      className="w-full rounded-lg border border-gray-700 bg-gray-900/70 px-4 py-3 text-sm text-white outline-none transition focus:border-gray-500 focus:ring-2 focus:ring-gray-700/50"
+                      className="theme-input"
                     />
                   </label>
                 </div>
 
                 <label className="block">
-                  <span className="mb-2 block text-sm font-medium text-gray-200">
+                  <span className="mb-2 block text-sm font-medium text-foreground">
                     Subject
                   </span>
                   <input
@@ -226,7 +226,7 @@ export default function ContactPage() {
                     onChange={(event) =>
                       updateField('subject', event.target.value)
                     }
-                    className="w-full rounded-lg border border-gray-700 bg-gray-900/70 px-4 py-3 text-sm text-white outline-none transition focus:border-gray-500 focus:ring-2 focus:ring-gray-700/50"
+                    className="theme-input"
                   />
                 </label>
 
@@ -244,7 +244,7 @@ export default function ContactPage() {
                 />
 
                 <label className="block">
-                  <span className="mb-2 block text-sm font-medium text-gray-200">
+                  <span className="mb-2 block text-sm font-medium text-foreground">
                     Message
                   </span>
                   <textarea
@@ -256,12 +256,12 @@ export default function ContactPage() {
                     onChange={(event) =>
                       updateField('message', event.target.value)
                     }
-                    className="min-h-48 w-full rounded-lg border border-gray-700 bg-gray-900/70 px-4 py-3 text-sm text-white outline-none transition focus:border-gray-500 focus:ring-2 focus:ring-gray-700/50"
+                    className="theme-input min-h-48"
                   />
                 </label>
 
-                <div className="rounded-lg border border-gray-700 bg-gray-900/50 p-4">
-                  <p className="mb-3 text-sm text-gray-300">
+                <div className="rounded-lg border border-border bg-surface-muted p-4">
+                  <p className="mb-3 text-sm text-foreground-muted">
                     Complete the spam check before sending.
                   </p>
                   {turnstileAvailable ? (
@@ -271,7 +271,10 @@ export default function ContactPage() {
                       resetSignal={turnstileResetSignal}
                     />
                   ) : (
-                    <p className="text-sm text-red-300" role="alert">
+                    <p
+                      className="text-sm text-red-700 dark:text-red-300"
+                      role="alert"
+                    >
                       Spam verification is not configured right now. Please use
                       the direct email link instead.
                     </p>
@@ -289,7 +292,7 @@ export default function ContactPage() {
                 )}
 
                 <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-                  <p className="text-xs text-gray-500">
+                  <p className="text-xs text-foreground-subtle">
                     Include enough detail for context. Your own email address is
                     included in the message body so I can reply directly.
                   </p>
@@ -306,11 +309,11 @@ export default function ContactPage() {
           </section>
 
           <div className="space-y-6">
-            <div className="group rounded-lg border border-gray-700 bg-card p-6 transition-colors hover:border-gray-600">
+            <div className="theme-card group p-6 transition-colors hover:border-border-strong">
               <div className="flex items-center gap-4">
-                <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-lg bg-gray-800">
+                <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-lg bg-surface-muted">
                   <svg
-                    className="h-6 w-6 text-gray-300"
+                    className="h-6 w-6 text-foreground-muted"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -325,7 +328,7 @@ export default function ContactPage() {
                   </svg>
                 </div>
                 <div className="flex-1">
-                  <h2 className="mb-1 text-xl font-semibold text-white">
+                  <h2 className="mb-1 text-xl font-semibold text-foreground">
                     Email
                   </h2>
                   <StyledLink
@@ -338,7 +341,7 @@ export default function ContactPage() {
               </div>
             </div>
 
-            <div className="group rounded-lg border border-gray-700 bg-card p-6 transition-colors hover:border-gray-600">
+            <div className="theme-card group p-6 transition-colors hover:border-border-strong">
               <div className="flex items-center gap-4">
                 <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-lg bg-linkedin">
                   <svg
@@ -351,7 +354,7 @@ export default function ContactPage() {
                   </svg>
                 </div>
                 <div className="flex-1">
-                  <h2 className="mb-1 text-xl font-semibold text-white">
+                  <h2 className="mb-1 text-xl font-semibold text-foreground">
                     LinkedIn
                   </h2>
                   <StyledLink
@@ -367,11 +370,11 @@ export default function ContactPage() {
             </div>
 
             {profile.github && (
-              <div className="group rounded-lg border border-gray-700 bg-card p-6 transition-colors hover:border-gray-600">
+              <div className="theme-card group p-6 transition-colors hover:border-border-strong">
                 <div className="flex items-center gap-4">
-                  <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-lg bg-gray-800">
+                  <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-lg bg-surface-muted">
                     <svg
-                      className="h-6 w-6 text-white"
+                      className="h-6 w-6 text-foreground"
                       fill="currentColor"
                       viewBox="0 0 24 24"
                     >
@@ -380,7 +383,7 @@ export default function ContactPage() {
                     </svg>
                   </div>
                   <div className="flex-1">
-                    <h2 className="mb-1 text-xl font-semibold text-white">
+                    <h2 className="mb-1 text-xl font-semibold text-foreground">
                       GitHub
                     </h2>
                     <StyledLink
@@ -397,8 +400,8 @@ export default function ContactPage() {
             )}
 
             {profile.twitter && (
-              <div className="rounded-lg border border-gray-700 bg-card p-6">
-                <h2 className="mb-2 text-xl font-semibold text-white">
+              <div className="theme-card p-6">
+                <h2 className="mb-2 text-xl font-semibold text-foreground">
                   Twitter
                 </h2>
                 <StyledLink

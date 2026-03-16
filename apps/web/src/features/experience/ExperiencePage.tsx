@@ -124,11 +124,11 @@ export default function ExperiencePage() {
         }
       />
       <div className="container mx-auto px-4 py-8 animate-slide-down md:py-16">
-        <h1 className="mb-8 text-3xl font-bold text-white md:text-4xl">
+        <h1 className="mb-8 text-3xl font-bold text-foreground md:text-4xl">
           Experience
         </h1>
         <div className="mb-10 max-w-3xl">
-          <p className="text-base text-gray-300 md:text-lg">
+          <p className="text-base text-foreground-muted md:text-lg">
             Most of my work has centered on backend platform engineering,
             integrations, and distributed systems, with increasing ownership of
             architecture, delivery, and cross-team coordination.
@@ -185,7 +185,7 @@ export default function ExperiencePage() {
                 <div key={company} className="mb-8">
                   <Link
                     to={`/experience/${createCompanySlug(company)}`}
-                    className="block rounded-lg border border-gray-700 bg-card p-6 pl-4 md:pl-8 transition-all duration-300 hover:scale-[1.02] hover:bg-gray-800 hover:shadow-lg"
+                    className="theme-card-hover block p-6 pl-4 md:pl-8"
                   >
                     <div className="mb-6 flex items-center gap-4">
                       {roles[0]?.logo && (
@@ -197,7 +197,7 @@ export default function ExperiencePage() {
                           className="h-12 w-12 rounded object-contain"
                         />
                       )}
-                      <h2 className="text-xl font-bold text-white md:text-2xl">
+                      <h2 className="text-xl font-bold text-foreground md:text-2xl">
                         {company}
                       </h2>
                     </div>
@@ -220,12 +220,12 @@ export default function ExperiencePage() {
                             ref={(el) => {
                               roleRefs.current[key] = el
                             }}
-                            className="rounded-lg border border-gray-600 bg-gray-800/50 p-4"
+                            className="rounded-lg border border-border bg-surface-muted p-4"
                           >
-                            <h3 className="text-lg font-bold text-white md:text-xl">
+                            <h3 className="text-lg font-bold text-foreground md:text-xl">
                               {item.title}
                             </h3>
-                            <div className="mt-2 flex flex-col gap-1 text-sm text-gray-400 sm:flex-row sm:items-center sm:gap-4">
+                            <div className="mt-2 flex flex-col gap-1 text-sm text-foreground-subtle sm:flex-row sm:items-center sm:gap-4">
                               <time>
                                 {new Date(item.startDate).toLocaleDateString(
                                   'en-US',

@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
+import { useTheme } from '../app/theme/ThemeProvider'
 import {
   TURNSTILE_SCRIPT_SRC,
   TURNSTILE_TEST_TOKEN,
@@ -62,6 +63,7 @@ export default function TurnstileWidget({
   className,
   variant = 'default',
 }: TurnstileWidgetProps) {
+  const { theme } = useTheme()
   const siteKey = getTurnstileSiteKey()
   const containerRef = useRef<HTMLDivElement | null>(null)
   const widgetIdRef = useRef<string | null>(null)
@@ -100,7 +102,7 @@ export default function TurnstileWidget({
         widgetIdRef.current = window.turnstile.render(containerRef.current, {
           sitekey: siteKey,
           action,
-          theme: 'dark',
+          theme,
           size: 'flexible',
           callback: (token) => {
             if (disposed) return
@@ -144,7 +146,7 @@ export default function TurnstileWidget({
         widgetIdRef.current = null
       }
     }
-  }, [action, onTokenChange, siteKey])
+  }, [action, onTokenChange, siteKey, theme])
 
   useEffect(() => {
     if (lastResetSignalRef.current === resetSignal) {
@@ -183,7 +185,7 @@ export default function TurnstileWidget({
       </div>
     ) : (
       <div
-        className="rounded-md border border-emerald-500/30 bg-emerald-500/10 px-3 py-2 text-sm text-emerald-200"
+        className="rounded-md border border-emerald-500/30 bg-emerald-500/10 px-3 py-2 text-sm text-emerald-700 dark:text-emerald-200"
         aria-live="polite"
       >
         Spam check completed.
@@ -197,7 +199,7 @@ export default function TurnstileWidget({
   const errorClassName =
     variant === 'terminal'
       ? 'mt-2 font-mono text-xs text-red-300'
-      : 'mt-2 text-xs text-red-300'
+      : 'mt-2 text-xs text-red-700 dark:text-red-300'
 
   return (
     <div className={className}>

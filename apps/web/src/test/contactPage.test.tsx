@@ -2,6 +2,7 @@ import { render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { MemoryRouter } from 'react-router-dom'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
+import { ThemeProvider } from '../app/theme/ThemeProvider'
 import ContactPage from '../features/contact/ContactPage'
 import { CONTACT_EMAIL_ENDPOINT } from '../utils/contactEmail'
 
@@ -23,9 +24,11 @@ describe('ContactPage', () => {
     const user = userEvent.setup()
 
     render(
-      <MemoryRouter>
-        <ContactPage />
-      </MemoryRouter>,
+      <ThemeProvider>
+        <MemoryRouter>
+          <ContactPage />
+        </MemoryRouter>
+      </ThemeProvider>,
     )
 
     expect(screen.queryByLabelText('Name')).not.toBeInTheDocument()
@@ -92,9 +95,11 @@ describe('ContactPage', () => {
     )
 
     render(
-      <MemoryRouter>
-        <ContactPage />
-      </MemoryRouter>,
+      <ThemeProvider>
+        <MemoryRouter>
+          <ContactPage />
+        </MemoryRouter>
+      </ThemeProvider>,
     )
 
     await user.click(screen.getByRole('button', { name: /open form/i }))

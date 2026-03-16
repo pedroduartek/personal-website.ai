@@ -26,15 +26,17 @@ export default function HomeAssistantProjectPage() {
       <div className="container mx-auto px-4 py-16 animate-slide-down">
         <Link
           to="/projects"
-          className="mb-6 inline-flex items-center gap-2 rounded-lg border border-gray-700 px-4 py-2 text-sm font-medium text-gray-300 transition-all duration-200 hover:scale-105 hover:bg-gray-800 hover:text-white hover:shadow-lg"
+          className="theme-button-secondary mb-6 inline-flex items-center gap-2"
         >
           <span>←</span> Back to projects
         </Link>
 
-        <h1 className="mb-2 text-4xl font-bold text-white">{project.title}</h1>
+        <h1 className="mb-2 text-4xl font-bold text-foreground">
+          {project.title}
+        </h1>
 
         {/* Date */}
-        <div className="mb-6 flex items-center gap-3 text-sm text-gray-400">
+        <div className="mb-6 flex items-center gap-3 text-sm text-foreground-subtle">
           <time>
             {project.startDate &&
               new Date(project.startDate).toLocaleDateString('en-US', {
@@ -46,7 +48,9 @@ export default function HomeAssistantProjectPage() {
           </time>
         </div>
 
-        <p className="mb-8 text-xl text-gray-400">{project.description}</p>
+        <p className="mb-8 text-xl text-foreground-subtle">
+          {project.description}
+        </p>
 
         <div className="mb-8 flex flex-wrap gap-2">
           {project.technologies.map((tech) => (
@@ -59,31 +63,31 @@ export default function HomeAssistantProjectPage() {
           ))}
         </div>
 
-        <div className="prose prose-lg max-w-none text-gray-300">
+        <div className="theme-prose">
           <section className="mb-12">
-            <h2 className="mb-4 text-2xl font-semibold text-white">
+            <h2 className="mb-4 text-2xl font-semibold text-foreground">
               Why This Project Exists
             </h2>
             <p className="mb-4">{project.problem}</p>
           </section>
 
           <section className="mb-12">
-            <h2 className="mb-4 text-2xl font-semibold text-white">
+            <h2 className="mb-4 text-2xl font-semibold text-foreground">
               How I Built It
             </h2>
             <p className="mb-4">{project.approach}</p>
           </section>
 
           <section className="mb-12">
-            <h2 className="mb-4 text-2xl font-semibold text-white">
+            <h2 className="mb-4 text-2xl font-semibold text-foreground">
               What It Includes
             </h2>
             <div className="grid gap-6 md:grid-cols-2">
-              <div className="rounded-lg border border-gray-700 bg-card p-6">
-                <h3 className="mb-3 text-xl font-semibold text-white">
+              <div className="theme-card p-6">
+                <h3 className="mb-3 text-xl font-semibold text-foreground">
                   Local-first home automation
                 </h3>
-                <p className="text-sm text-gray-300">
+                <p className="text-sm text-foreground-muted">
                   Core routines are designed to keep working even if the
                   internet is unavailable. That matters because the system is
                   not a toy. It supports everyday household habits such as
@@ -91,11 +95,11 @@ export default function HomeAssistantProjectPage() {
                 </p>
               </div>
 
-              <div className="rounded-lg border border-gray-700 bg-card p-6">
-                <h3 className="mb-3 text-xl font-semibold text-white">
+              <div className="theme-card p-6">
+                <h3 className="mb-3 text-xl font-semibold text-foreground">
                   Reliability through network design
                 </h3>
-                <p className="text-sm text-gray-300">
+                <p className="text-sm text-foreground-muted">
                   The setup now includes more than 50 Zigbee devices. A big part
                   of the work was not adding devices, but building a stable mesh
                   with enough routing coverage to make the automations
@@ -103,11 +107,11 @@ export default function HomeAssistantProjectPage() {
                 </p>
               </div>
 
-              <div className="rounded-lg border border-gray-700 bg-card p-6">
-                <h3 className="mb-3 text-xl font-semibold text-white">
+              <div className="theme-card p-6">
+                <h3 className="mb-3 text-xl font-semibold text-foreground">
                   Designed for daily use
                 </h3>
-                <p className="text-sm text-gray-300">
+                <p className="text-sm text-foreground-muted">
                   The user experience matters as much as the automation logic.
                   The dashboards are used every day, and my wife is the ultimate
                   tester. If something feels confusing or unreliable to a
@@ -115,11 +119,11 @@ export default function HomeAssistantProjectPage() {
                 </p>
               </div>
 
-              <div className="rounded-lg border border-gray-700 bg-card p-6">
-                <h3 className="mb-3 text-xl font-semibold text-white">
+              <div className="theme-card p-6">
+                <h3 className="mb-3 text-xl font-semibold text-foreground">
                   Ongoing operations
                 </h3>
-                <p className="text-sm text-gray-300">
+                <p className="text-sm text-foreground-muted">
                   Backups, weekly updates, and continuous cleanup are part of
                   the project. Treating the setup like a living system keeps it
                   useful over time instead of letting it drift into brittle
@@ -130,11 +134,11 @@ export default function HomeAssistantProjectPage() {
           </section>
 
           <section className="mb-12">
-            <h2 className="mb-4 text-2xl font-semibold text-white">
+            <h2 className="mb-4 text-2xl font-semibold text-foreground">
               Dashboard Snapshot
             </h2>
-            <div className="rounded-lg border border-gray-700 bg-card p-6">
-              <p className="mb-4 text-sm text-gray-300">
+            <div className="theme-card p-6">
+              <p className="mb-4 text-sm text-foreground-muted">
                 A simplified dashboard keeps the most important information and
                 controls easy to reach. The goal is not to expose every device
                 at once. It is to make the system practical for everyday use.
@@ -147,14 +151,14 @@ export default function HomeAssistantProjectPage() {
                 <img
                   src={haScreenshot}
                   alt="Home Assistant Dashboard"
-                  className="w-full cursor-pointer rounded-lg border border-gray-600 transition-opacity hover:opacity-90"
+                  className="w-full cursor-pointer rounded-lg border border-border-strong transition-opacity hover:opacity-90"
                 />
               </button>
             </div>
           </section>
 
           <section className="mb-12">
-            <h2 className="mb-4 text-2xl font-semibold text-white">
+            <h2 className="mb-4 text-2xl font-semibold text-foreground">
               What I Learned
             </h2>
             <p className="mb-4">
@@ -164,11 +168,11 @@ export default function HomeAssistantProjectPage() {
               the whole system calmer, clearer, and easier to trust.
             </p>
             <div className="grid gap-6 md:grid-cols-2">
-              <div className="rounded-lg border border-gray-700 bg-card p-6">
-                <h3 className="mb-3 text-xl font-semibold text-white">
+              <div className="theme-card p-6">
+                <h3 className="mb-3 text-xl font-semibold text-foreground">
                   A home behaves like a production environment
                 </h3>
-                <p className="text-sm text-gray-300">
+                <p className="text-sm text-foreground-muted">
                   When an automation fails, it creates friction immediately.
                   That makes reliability, rollback thinking, and operational
                   discipline much more important than they might seem in a side
@@ -176,11 +180,11 @@ export default function HomeAssistantProjectPage() {
                 </p>
               </div>
 
-              <div className="rounded-lg border border-gray-700 bg-card p-6">
-                <h3 className="mb-3 text-xl font-semibold text-white">
+              <div className="theme-card p-6">
+                <h3 className="mb-3 text-xl font-semibold text-foreground">
                   Hardware constraints are real product constraints
                 </h3>
-                <p className="text-sm text-gray-300">
+                <p className="text-sm text-foreground-muted">
                   An attempt to add local video analytics with Frigate pushed
                   the available hardware too far and nearly forced a reinstall.
                   It was a useful reminder to validate hardware assumptions

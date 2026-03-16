@@ -35,21 +35,18 @@ export default function ConferencesPage() {
         }
       />
       <div className="container mx-auto px-4 py-16 animate-slide-down">
-        <h1 className="mb-6 text-4xl font-bold text-white">
+        <h1 className="mb-6 text-4xl font-bold text-foreground">
           Conferences & Events
         </h1>
         <div className="mb-10 max-w-3xl">
-          <p className="text-base text-gray-300 md:text-lg">
+          <p className="text-base text-foreground-muted md:text-lg">
             A few moments where I invested in learning, community, and exposure
             to how other teams think about technology and software delivery.
           </p>
         </div>
         <div className="space-y-6">
           {conferences.map((item) => (
-            <article
-              key={item.id}
-              className="rounded-lg border border-gray-700 bg-card p-6"
-            >
+            <article key={item.id} className="theme-card p-6">
               <div className="mb-4 flex items-start gap-4">
                 {item.logo && (
                   <img
@@ -60,7 +57,7 @@ export default function ConferencesPage() {
                 )}
                 <div className="flex-1">
                   <div className="mb-2 flex items-center gap-2">
-                    <h2 className="text-2xl font-bold text-white">
+                    <h2 className="text-2xl font-bold text-foreground">
                       {item.name}
                     </h2>
                     <span
@@ -69,21 +66,23 @@ export default function ConferencesPage() {
                           ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200'
                           : item.type === 'Volunteer'
                             ? 'bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200'
-                            : 'bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-200'
+                            : 'bg-surface-muted text-foreground-muted'
                       }`}
                     >
                       {item.type}
                     </span>
                   </div>
                   {item.title && (
-                    <p className="mb-2 text-lg font-semibold text-gray-300">
+                    <p className="mb-2 text-lg font-semibold text-foreground-muted">
                       {item.title}
                     </p>
                   )}
                   {item.description && (
-                    <p className="mb-3 text-gray-400">{item.description}</p>
+                    <p className="mb-3 text-foreground-subtle">
+                      {item.description}
+                    </p>
                   )}
-                  <div className="mb-3 flex items-center gap-4 text-sm text-gray-400">
+                  <div className="mb-3 flex items-center gap-4 text-sm text-foreground-subtle">
                     <time>
                       {new Date(item.date).toLocaleDateString('en-US', {
                         year: 'numeric',
@@ -136,7 +135,7 @@ export default function ConferencesPage() {
                       key={photo.src}
                       type="button"
                       onClick={() => openLightbox(item.name, index)}
-                      className="rounded-lg overflow-hidden focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      className="overflow-hidden rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                     >
                       <img
                         src={photo.src}

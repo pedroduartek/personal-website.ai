@@ -198,7 +198,7 @@ export default function CommandPaletteTip() {
   if (!mounted) return null
 
   const baseClasses =
-    'max-w-xs cursor-pointer select-none rounded-lg border border-gray-700 bg-gray-900/95 px-3 py-2 text-sm text-gray-200 transition-[opacity,transform] duration-500 ease-in-out'
+    'max-w-xs cursor-pointer select-none rounded-lg border border-border bg-surface-strong/95 px-3 py-2 text-sm text-foreground shadow-2xl backdrop-blur transition-[opacity,transform] duration-500 ease-in-out'
   const visibleClass = visible ? 'opacity-100 shadow-2xl' : 'opacity-0'
 
   // fixed style when button scrolls away
@@ -220,9 +220,9 @@ export default function CommandPaletteTip() {
         <div className="flex items-start gap-3">
           <div>
             <div className="font-medium">Try the command palette</div>
-            <div className="mt-1 text-sm text-gray-200">
+            <div className="mt-1 text-sm text-foreground-muted">
               Press
-              <span className="mx-2 inline-block rounded bg-gray-800 px-2 py-0.5 text-sm font-bold text-white">
+              <span className="theme-kbd mx-2 inline-block text-sm font-bold text-foreground">
                 {isMac ? '⌘K' : 'Ctrl+K'}
               </span>
               to open it
@@ -247,9 +247,9 @@ export default function CommandPaletteTip() {
         <div className="flex items-start gap-3">
           <div>
             <div className="font-medium">Try the command palette</div>
-            <div className="mt-1 text-sm text-gray-200">
+            <div className="mt-1 text-sm text-foreground-muted">
               Press
-              <span className="mx-2 inline-block rounded bg-gray-800 px-2 py-0.5 text-sm font-bold text-white">
+              <span className="theme-kbd mx-2 inline-block text-sm font-bold text-foreground">
                 {isMac ? '⌘K' : 'Ctrl+K'}
               </span>
               to open it

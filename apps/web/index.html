@@ -8,6 +8,37 @@
     <link rel="apple-touch-icon" href="/favicon_v2.png" />
     <link rel="shortcut icon" href="/favicon.ico" />
     <link rel="preload" as="image" href="/pld_logo_header.webp" type="image/webp" />
+    <script>
+      ;(() => {
+        const storageKey = 'pedroduartek-theme'
+        const metaColors = {
+          light: '#f4f7fb',
+          dark: '#151b23',
+        }
+
+        let storedTheme = null
+        try {
+          storedTheme = window.localStorage.getItem(storageKey)
+        } catch {}
+
+        const systemTheme =
+          typeof window.matchMedia === 'function' &&
+          window.matchMedia('(prefers-color-scheme: dark)').matches
+            ? 'dark'
+            : 'light'
+        const theme =
+          storedTheme === 'light' || storedTheme === 'dark'
+            ? storedTheme
+            : systemTheme
+
+        document.documentElement.classList.toggle('dark', theme === 'dark')
+        document.documentElement.dataset.theme = theme
+        document.documentElement.style.colorScheme = theme
+        document
+          .querySelector('meta[name="theme-color"]')
+          ?.setAttribute('content', metaColors[theme])
+      })()
+    </script>
     <title>PEDRODUARTEK</title>
   </head>
   <body>

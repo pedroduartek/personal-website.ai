@@ -16,10 +16,12 @@ export default function CVPage() {
         }
       />
       <div className="container mx-auto px-4 py-8 animate-slide-down md:py-16">
-        <h1 className="mb-8 text-3xl font-bold text-white md:text-4xl">CV</h1>
+        <h1 className="mb-8 text-3xl font-bold text-foreground md:text-4xl">
+          CV
+        </h1>
 
         <div className="max-w-4xl">
-          <p className="mb-6 text-gray-300">
+          <p className="mb-6 text-foreground-muted">
             Download a PDF version of my CV if you want a portable summary of my
             experience, education, and skills.
           </p>
@@ -34,9 +36,11 @@ export default function CVPage() {
 
           {/* PDF Preview */}
           <div className="mt-8">
-            <div className="rounded-lg border border-gray-700 bg-card p-4">
-              <h2 className="mb-3 text-lg font-semibold text-white">Preview</h2>
-              <div className="overflow-hidden rounded border border-gray-800">
+            <div className="theme-card p-4">
+              <h2 className="mb-3 text-lg font-semibold text-foreground">
+                Preview
+              </h2>
+              <div className="overflow-hidden rounded border border-border">
                 <iframe
                   src={`${cvPdf}#view=FitH`}
                   title="CV Preview"

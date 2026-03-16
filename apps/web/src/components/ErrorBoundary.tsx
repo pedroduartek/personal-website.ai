@@ -16,25 +16,25 @@ export default function ErrorBoundary() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-background px-4">
-      <div className="max-w-md w-full text-center">
+    <div className="flex min-h-screen items-center justify-center bg-background px-4">
+      <div className="w-full max-w-md text-center">
         <div className="mb-8">
           {errorStatus && (
-            <h1 className="text-6xl font-bold text-white mb-4">
+            <h1 className="mb-4 text-6xl font-bold text-foreground">
               {errorStatus}
             </h1>
           )}
-          <h2 className="text-2xl font-semibold text-white mb-2">
+          <h2 className="mb-2 text-2xl font-semibold text-foreground">
             Oops! Something went wrong
           </h2>
-          <p className="text-gray-400 mb-6">{errorMessage}</p>
+          <p className="mb-6 text-foreground-subtle">{errorMessage}</p>
         </div>
 
         <div className="flex flex-col gap-3 sm:flex-row sm:justify-center">
           <button
             type="button"
             onClick={() => window.history.back()}
-            className="rounded-lg bg-gray-700 px-6 py-3 text-white hover:bg-gray-600 transition-colors"
+            className="theme-button-secondary-prominent"
           >
             Go Back
           </button>
@@ -48,10 +48,10 @@ export default function ErrorBoundary() {
 
         {import.meta.env.DEV && error instanceof Error && (
           <details className="mt-8 text-left">
-            <summary className="cursor-pointer text-gray-400 hover:text-gray-300 mb-2">
+            <summary className="mb-2 cursor-pointer text-foreground-subtle hover:text-foreground-muted">
               Error Details (dev only)
             </summary>
-            <pre className="bg-gray-900 p-4 rounded text-xs text-red-400 overflow-auto">
+            <pre className="overflow-auto rounded bg-surface-strong p-4 text-xs text-red-500 dark:text-red-400">
               {error.stack}
             </pre>
           </details>

@@ -22,17 +22,17 @@ export default function AiChatApiProjectPage() {
       <div className="container mx-auto px-4 py-8 animate-slide-down md:py-16">
         <Link
           to="/projects"
-          className="mb-6 inline-flex items-center gap-2 rounded-lg border border-gray-700 px-4 py-2 text-sm font-medium text-gray-300 transition-all duration-200 hover:scale-105 hover:bg-gray-800 hover:text-white hover:shadow-lg"
+          className="theme-button-secondary mb-6 inline-flex items-center gap-2"
         >
           <span>←</span> Back to projects
         </Link>
 
-        <h1 className="mb-2 text-3xl font-bold text-white md:text-4xl">
+        <h1 className="mb-2 text-3xl font-bold text-foreground md:text-4xl">
           {project.title}
         </h1>
 
         {/* Date */}
-        <div className="mb-4 flex items-center gap-3 text-sm text-gray-400">
+        <div className="mb-4 flex items-center gap-3 text-sm text-foreground-subtle">
           <time>
             {project.startDate &&
               new Date(project.startDate).toLocaleDateString('en-US', {
@@ -44,7 +44,7 @@ export default function AiChatApiProjectPage() {
           </time>
         </div>
 
-        <p className="mb-4 text-lg text-gray-400 md:text-xl">
+        <p className="mb-4 text-lg text-foreground-subtle md:text-xl">
           {project.description}
         </p>
 
@@ -68,10 +68,10 @@ export default function AiChatApiProjectPage() {
           ))}
         </div>
 
-        <div className="prose prose-lg max-w-none text-gray-300">
+        <div className="theme-prose">
           {/* Motivation */}
           <section className="mb-12">
-            <h2 className="mb-4 text-2xl font-semibold text-white">
+            <h2 className="mb-4 text-2xl font-semibold text-foreground">
               Motivation
             </h2>
             <p className="mb-4">
@@ -86,7 +86,7 @@ export default function AiChatApiProjectPage() {
 
           {/* What It Does */}
           <section className="mb-12">
-            <h2 className="mb-4 text-2xl font-semibold text-white">
+            <h2 className="mb-4 text-2xl font-semibold text-foreground">
               What It Does
             </h2>
             <p className="mb-4">
@@ -97,9 +97,9 @@ export default function AiChatApiProjectPage() {
             </p>
 
             <div className="space-y-3">
-              <div className="rounded-lg border border-gray-700 bg-card p-4">
+              <div className="theme-card p-4">
                 <p>
-                  <span className="inline-block rounded bg-gray-800 px-1.5 py-0.5 text-sm font-mono text-gray-200 border border-gray-700">
+                  <span className="inline-block rounded border border-border bg-surface-muted px-1.5 py-0.5 font-mono text-sm text-foreground">
                     POST /chat
                   </span>{' '}
                   Accepts a user message, injects knowledge-base context into
@@ -108,9 +108,9 @@ export default function AiChatApiProjectPage() {
                 </p>
               </div>
 
-              <div className="rounded-lg border border-gray-700 bg-card p-4">
+              <div className="theme-card p-4">
                 <p>
-                  <span className="inline-block rounded bg-gray-800 px-1.5 py-0.5 text-sm font-mono text-gray-200 border border-gray-700">
+                  <span className="inline-block rounded border border-border bg-surface-muted px-1.5 py-0.5 font-mono text-sm text-foreground">
                     POST /chat/stream
                   </span>{' '}
                   Same flow but streams tokens back over Server-Sent Events for
@@ -118,18 +118,18 @@ export default function AiChatApiProjectPage() {
                 </p>
               </div>
 
-              <div className="rounded-lg border border-gray-700 bg-card p-4">
+              <div className="theme-card p-4">
                 <p>
-                  <span className="inline-block rounded bg-gray-800 px-1.5 py-0.5 text-sm font-mono text-gray-200 border border-gray-700">
+                  <span className="inline-block rounded border border-border bg-surface-muted px-1.5 py-0.5 font-mono text-sm text-foreground">
                     GET /health
                   </span>{' '}
                   Readiness probe for the container orchestration layer.
                 </p>
               </div>
 
-              <div className="rounded-lg border border-gray-700 bg-card p-4">
+              <div className="theme-card p-4">
                 <p>
-                  <span className="inline-block rounded bg-gray-800 px-1.5 py-0.5 text-sm font-mono text-gray-200 border border-gray-700">
+                  <span className="inline-block rounded border border-border bg-surface-muted px-1.5 py-0.5 font-mono text-sm text-foreground">
                     POST /email
                   </span>{' '}
                   Accepts structured contact-form payloads, verifies a
@@ -142,47 +142,47 @@ export default function AiChatApiProjectPage() {
 
           {/* Architecture Highlights */}
           <section className="mb-12">
-            <h2 className="mb-4 text-2xl font-semibold text-white">
+            <h2 className="mb-4 text-2xl font-semibold text-foreground">
               Architecture Highlights
             </h2>
             <div className="grid gap-4 md:grid-cols-2">
-              <div className="rounded-lg border border-gray-700 bg-card p-5">
-                <h3 className="mb-2 text-lg font-semibold text-white">
+              <div className="theme-card p-5">
+                <h3 className="mb-2 text-lg font-semibold text-foreground">
                   Clean layered design
                 </h3>
-                <p className="text-gray-300 text-sm">
+                <p className="text-sm text-foreground-muted">
                   Controllers, Services, and Infrastructure layers with
                   dependency injection and interface-defined boundaries for easy
                   testing and extensibility.
                 </p>
               </div>
 
-              <div className="rounded-lg border border-gray-700 bg-card p-5">
-                <h3 className="mb-2 text-lg font-semibold text-white">
+              <div className="theme-card p-5">
+                <h3 className="mb-2 text-lg font-semibold text-foreground">
                   Knowledge-base augmentation
                 </h3>
-                <p className="text-gray-300 text-sm">
+                <p className="text-sm text-foreground-muted">
                   The system prompt is dynamically composed at request time from
                   a small, file-backed knowledge base so the model receives
                   targeted context without fine-tuning.
                 </p>
               </div>
 
-              <div className="rounded-lg border border-gray-700 bg-card p-5">
-                <h3 className="mb-2 text-lg font-semibold text-white">
+              <div className="theme-card p-5">
+                <h3 className="mb-2 text-lg font-semibold text-foreground">
                   Streaming support
                 </h3>
-                <p className="text-gray-300 text-sm">
+                <p className="text-sm text-foreground-muted">
                   The streaming endpoint re-emits Ollama tokens as SSE events,
                   keeping memory usage low and time-to-first-token fast.
                 </p>
               </div>
 
-              <div className="rounded-lg border border-gray-700 bg-card p-5">
-                <h3 className="mb-2 text-lg font-semibold text-white">
+              <div className="theme-card p-5">
+                <h3 className="mb-2 text-lg font-semibold text-foreground">
                   Resilience
                 </h3>
-                <p className="text-gray-300 text-sm">
+                <p className="text-sm text-foreground-muted">
                   Endpoint-specific IP rate limits, Cloudflare Turnstile on the
                   email path, exponential-backoff retries via Polly, and
                   structured logging with Serilog and optional Grafana/Loki
@@ -194,7 +194,7 @@ export default function AiChatApiProjectPage() {
 
           {/* Infrastructure */}
           <section className="mb-12">
-            <h2 className="mb-4 text-2xl font-semibold text-white">
+            <h2 className="mb-4 text-2xl font-semibold text-foreground">
               Infrastructure
             </h2>
             <p className="mb-4">
@@ -209,9 +209,11 @@ export default function AiChatApiProjectPage() {
 
           {/* Testing */}
           <section className="mb-12">
-            <h2 className="mb-4 text-2xl font-semibold text-white">Testing</h2>
-            <div className="rounded-lg border border-gray-700 bg-card p-6">
-              <p className="text-gray-300">
+            <h2 className="mb-4 text-2xl font-semibold text-foreground">
+              Testing
+            </h2>
+            <div className="theme-card p-6">
+              <p className="text-foreground-muted">
                 Unit tests cover the service layer, response parser, and
                 controller using in-memory fakes. No running model or HTTP
                 server is required, keeping the test suite fast and

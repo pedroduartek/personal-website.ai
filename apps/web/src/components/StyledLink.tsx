@@ -50,7 +50,7 @@ export default function StyledLink({
         const base =
           'inline-block text-sm px-2 py-0.5 rounded border transition-all duration-200 focus:outline-none'
         const defaults =
-          'bg-gray-800 text-gray-100 border-gray-700 no-underline hover:translate-x-1 hover:bg-gray-700 hover:shadow-lg focus:ring-2 focus:ring-indigo-300'
+          'border-border bg-surface-muted text-foreground no-underline hover:translate-x-1 hover:border-border-strong hover:bg-surface-strong hover:shadow-lg focus:ring-2 focus:ring-indigo-300'
         const sizeClass = bigger ? 'transform origin-left scale-110' : ''
         return `${base} ${defaults} ${sizeClass}`.trim()
       })()}

@@ -16,12 +16,12 @@ export default function ExperienceDetailPage() {
   if (companyRoles.length === 0) {
     return (
       <div className="container mx-auto px-4 py-8 animate-slide-down md:py-16">
-        <h1 className="text-xl font-bold text-white md:text-2xl">
+        <h1 className="text-xl font-bold text-foreground md:text-2xl">
           Experience not found
         </h1>
         <Link
           to="/experience"
-          className="mt-4 inline-flex items-center gap-2 rounded-lg border border-gray-700 px-4 py-2 text-sm font-medium text-gray-300 transition-all duration-200 hover:scale-105 hover:bg-gray-800 hover:text-white hover:shadow-lg"
+          className="theme-button-secondary mt-4 inline-flex items-center gap-2"
         >
           <span>←</span> Back to experience
         </Link>
@@ -94,7 +94,7 @@ export default function ExperienceDetailPage() {
       <div className="container mx-auto px-4 py-8 animate-slide-down md:py-16">
         <Link
           to="/experience"
-          className="mb-6 inline-flex items-center gap-2 rounded-lg border border-gray-700 px-4 py-2 text-sm font-medium text-gray-300 transition-all duration-200 hover:scale-105 hover:bg-gray-800 hover:text-white hover:shadow-lg"
+          className="theme-button-secondary mb-6 inline-flex items-center gap-2"
         >
           <span>←</span> Back to experience
         </Link>
@@ -108,15 +108,17 @@ export default function ExperienceDetailPage() {
             />
           )}
           <div>
-            <h1 className="mb-2 text-3xl font-bold text-white md:text-4xl">
+            <h1 className="mb-2 text-3xl font-bold text-foreground md:text-4xl">
               {company}
             </h1>
-            <p className="text-base text-gray-400 md:text-lg">{location}</p>
+            <p className="text-base text-foreground-subtle md:text-lg">
+              {location}
+            </p>
           </div>
         </div>
 
-        <div className="mb-8 rounded-lg border border-gray-700 bg-card p-6">
-          <h2 className="mb-4 text-xl font-semibold text-white">
+        <div className="theme-card mb-8 p-6">
+          <h2 className="mb-4 text-xl font-semibold text-foreground">
             Technologies & Tools
           </h2>
           <div className="flex flex-wrap gap-2">
@@ -133,15 +135,12 @@ export default function ExperienceDetailPage() {
 
         <div className="mb-8 space-y-8">
           {companyRoles.map((role) => (
-            <div
-              key={role.id}
-              className="rounded-lg border border-gray-700 bg-card p-6"
-            >
+            <div key={role.id} className="theme-card p-6">
               <div className="mb-6">
-                <h2 className="text-xl font-bold text-white md:text-2xl">
+                <h2 className="text-xl font-bold text-foreground md:text-2xl">
                   {role.title}
                 </h2>
-                <div className="mt-2 flex items-center gap-4 text-gray-400">
+                <div className="mt-2 flex items-center gap-4 text-foreground-subtle">
                   <time>
                     {new Date(role.startDate).toLocaleDateString('en-US', {
                       year: 'numeric',
@@ -159,10 +158,10 @@ export default function ExperienceDetailPage() {
               </div>
 
               <div>
-                <h3 className="mb-3 text-lg font-semibold text-white">
+                <h3 className="mb-3 text-lg font-semibold text-foreground">
                   Key Responsibilities & Achievements
                 </h3>
-                <ul className="space-y-2 text-gray-300">
+                <ul className="space-y-2 text-foreground-muted">
                   {role.description.map((desc) => (
                     <li key={desc} className="flex gap-3">
                       <span className="mt-2 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-blue-500" />
