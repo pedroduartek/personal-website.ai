@@ -82,11 +82,11 @@
   }
 
   .theme-chip {
-    @apply inline-flex items-center gap-2 rounded border border-border bg-surface-muted px-2 py-1 text-xs text-foreground-muted;
+    @apply inline-flex items-center gap-2 rounded bg-surface-muted px-2 py-1 text-xs text-foreground-muted;
   }
 
   .theme-kbd {
-    @apply rounded border border-border bg-surface-muted px-1.5 py-0.5 text-xs text-foreground-subtle;
+    @apply rounded bg-surface-muted px-1.5 py-0.5 text-xs text-foreground-subtle;
   }
 
   .theme-prose {
