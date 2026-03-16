@@ -109,6 +109,18 @@ export default function TerminalShell({ onClose }: TerminalShellProps) {
   const interruptArmedAtRef = useRef(0)
   const turnstileAvailable = isTurnstileConfigured()
 
+  const focusPrompt = useCallback(() => {
+    const inputElement = inputRef.current
+    if (!inputElement || inputElement.disabled) return
+
+    inputElement.focus()
+
+    const valueLength = inputElement.value.length
+    try {
+      inputElement.setSelectionRange(valueLength, valueLength)
+    } catch {}
+  }, [])
+
   const appendOutput = useCallback((text: string) => {
     setLines((current) => [
       ...current,
@@ -195,13 +207,14 @@ export default function TerminalShell({ onClose }: TerminalShellProps) {
 
     interruptArmedAtRef.current = 0
     appendOutputs(['^C', 'Command interrupted.'])
-    globalThis.setTimeout(() => inputRef.current?.focus(), 0)
+    globalThis.setTimeout(() => focusPrompt(), 0)
     return true
   }, [
     appendOutputs,
     chatMode,
     clearEmailComposer,
     emailComposer,
+    focusPrompt,
     input,
     pendingConfirm,
   ])
@@ -264,7 +277,7 @@ export default function TerminalShell({ onClose }: TerminalShellProps) {
   }
 
   useEffect(() => {
-    const timeoutId = window.setTimeout(() => inputRef.current?.focus(), 50)
+    const timeoutId = window.setTimeout(() => focusPrompt(), 50)
     setLines((l) =>
       l.length > 0
         ? l
@@ -278,7 +291,15 @@ export default function TerminalShell({ onClose }: TerminalShellProps) {
     )
 
     return () => window.clearTimeout(timeoutId)
-  }, [])
+  }, [focusPrompt])
+
+  useEffect(() => {
+    if (commandBusy || emailSending) return
+
+    // Browsers drop focus when a focused input becomes disabled.
+    const timeoutId = window.setTimeout(() => focusPrompt(), 0)
+    return () => window.clearTimeout(timeoutId)
+  }, [commandBusy, emailSending, focusPrompt])
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: intentionally only run when lines change
   useEffect(() => {
@@ -764,6 +785,11 @@ export default function TerminalShell({ onClose }: TerminalShellProps) {
     }
   }
 
+  function handleClearMouseDown(e: React.MouseEvent<HTMLButtonElement>) {
+    e.preventDefault()
+    focusPrompt()
+  }
+
   return (
     <section
       aria-label="Terminal shell"
@@ -776,6 +802,7 @@ export default function TerminalShell({ onClose }: TerminalShellProps) {
         <div className="flex items-center gap-2">
           <button
             type="button"
+            onMouseDown={handleClearMouseDown}
             onClick={() => setLines([])}
             className="text-xs text-gray-400 hover:text-white"
           >

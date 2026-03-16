@@ -227,6 +227,26 @@ describe('TerminalShell email command', () => {
     })
   })
 
+  it('restores prompt focus after a command finishes streaming output', async () => {
+    const user = userEvent.setup()
+
+    render(<TerminalShell onClose={() => {}} />)
+
+    const input = screen.getByPlaceholderText('type a command (help)')
+
+    await user.type(input, 'about{enter}')
+
+    await waitFor(() => {
+      expect(
+        screen.getByText(
+          'Outside work: fishing, motorcycling, cooking, and running a self-hosted Home Assistant setup with 50+ Zigbee devices.',
+        ),
+      ).toBeInTheDocument()
+      expect(input).toBeEnabled()
+      expect(input).toHaveFocus()
+    })
+  })
+
   it('keeps the current spam check when the email endpoint rate-limits the request', async () => {
     const user = userEvent.setup()
 
