@@ -95,6 +95,55 @@
 }
 
 @layer utilities {
+  @keyframes thinkingSpotlight {
+    0% {
+      background-position: -140% 50%;
+    }
+
+    100% {
+      background-position: 240% 50%;
+    }
+  }
+
+  .thinking-spotlight {
+    color: transparent;
+    background-size: 220% 100%;
+    animation: thinkingSpotlight 1.8s linear infinite;
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    will-change: background-position;
+  }
+
+  .thinking-spotlight-surface {
+    background-image: linear-gradient(
+      110deg,
+      rgb(var(--color-foreground-subtle) / 0.28) 0%,
+      rgb(var(--color-foreground-subtle) / 0.62) 32%,
+      rgb(var(--color-foreground) / 0.96) 50%,
+      rgb(var(--color-foreground-subtle) / 0.62) 68%,
+      rgb(var(--color-foreground-subtle) / 0.28) 100%
+    );
+  }
+
+  .thinking-spotlight-terminal {
+    background-image: linear-gradient(
+      110deg,
+      rgb(var(--color-terminal-green) / 0.22) 0%,
+      rgb(var(--color-terminal-green) / 0.52) 32%,
+      rgb(var(--color-terminal-accent) / 0.95) 50%,
+      rgb(var(--color-terminal-green) / 0.52) 68%,
+      rgb(var(--color-terminal-green) / 0.22) 100%
+    );
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .thinking-spotlight {
+      animation: none;
+      background-position: 50% 50%;
+    }
+  }
+
   .custom-scrollbar {
     scrollbar-width: thin;
     scrollbar-color: rgb(var(--color-scrollbar) / 0.38) transparent;

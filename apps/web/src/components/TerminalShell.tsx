@@ -9,6 +9,7 @@ import {
 } from '../utils/contactEmail'
 import { runCommand } from '../utils/terminalCommands'
 import { isTurnstileConfigured } from '../utils/turnstile'
+import ThinkingIndicator from './ThinkingIndicator'
 import TurnstileWidget from './TurnstileWidget'
 
 interface TerminalShellProps {
@@ -851,10 +852,11 @@ export default function TerminalShell({ onClose }: TerminalShellProps) {
           })
         )}
         {chatAwaiting && (
-          <div className="text-yellow-300 whitespace-pre-wrap py-0.5 font-mono">
-            AI is thinking
-            <span className="inline-block ml-1 animate-pulse">...</span>
-          </div>
+          <ThinkingIndicator
+            label="AI is thinking..."
+            variant="terminal"
+            className="whitespace-pre-wrap py-0.5 font-mono text-sm"
+          />
         )}
       </div>
 

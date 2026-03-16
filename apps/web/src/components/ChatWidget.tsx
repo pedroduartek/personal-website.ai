@@ -3,6 +3,7 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import ollamaIcon from '../images/ollama.png'
 import { postJson, readApiError } from '../utils/apiClient'
+import ThinkingIndicator from './ThinkingIndicator'
 
 type Message = { id: number; text: string; from: 'user' | 'bot' }
 
@@ -29,9 +30,6 @@ export default function ChatWidget() {
   const containerRef = useRef<HTMLDivElement | null>(null)
   const inputRef = useRef<HTMLInputElement | null>(null)
   const [awaitingReply, setAwaitingReply] = useState(false)
-  const [placeholderWords, setPlaceholderWords] = useState(0)
-  const placeholderIntervalRef = useRef<number | null>(null)
-  const placeholderWidths = [40, 65, 35, 50, 60, 30, 45, 55, 38, 48, 62, 34]
   const [showNote, setShowNote] = useState(true)
 
   // --- Resize state (desktop only) ---
@@ -266,54 +264,10 @@ export default function ChatWidget() {
     return () => clearTimeout(t)
   }, [open])
 
-  // Always follow latest message (including when a placeholder is shown)
+  // Always follow the latest visible state, including the thinking indicator.
   useEffect(() => {
-    // when awaitingReply is true we let the placeholder effect control scrolling
-    if (awaitingReply) return
     scrollToBottom('smooth')
-  }, [awaitingReply, scrollToBottom])
-
-  // Simulate streaming words while awaiting a reply
-  useEffect(() => {
-    const maxWords = 12
-    if (awaitingReply) {
-      setPlaceholderWords(0)
-      // use window.setInterval so TS infers number
-      placeholderIntervalRef.current = window.setInterval(() => {
-        setPlaceholderWords((n) => Math.min(maxWords, n + 1))
-      }, 300)
-    } else {
-      if (placeholderIntervalRef.current) {
-        clearInterval(placeholderIntervalRef.current)
-        placeholderIntervalRef.current = null
-      }
-      setPlaceholderWords(0)
-    }
-    return () => {
-      if (placeholderIntervalRef.current) {
-        clearInterval(placeholderIntervalRef.current)
-        placeholderIntervalRef.current = null
-      }
-    }
-  }, [awaitingReply])
-
-  // Scroll the last placeholder word into view so the bottom aligns with the container
-  useEffect(() => {
-    if (!awaitingReply) return
-    const el = containerRef.current
-    if (!el) return
-    const lastIndex = Math.min(placeholderWords, placeholderWidths.length) - 1
-    if (lastIndex < 0) return
-    const selector = `[data-placeholder-last="${lastIndex}"]`
-    const node = el.querySelector(selector) as HTMLElement | null
-    if (node) {
-      // compute scrollTop so the container is scrolled ~10px below the last placeholder
-      const nodeBottom = node.offsetTop + node.offsetHeight
-      const desiredTop = nodeBottom - el.clientHeight + 10
-      const top = Math.max(0, desiredTop)
-      el.scrollTo({ top, behavior: 'smooth' })
-    }
-  }, [placeholderWords, awaitingReply])
+  }, [messages, awaitingReply, scrollToBottom])
 
   // Check API health on mount; only show widget if healthy
   useEffect(() => {
@@ -671,31 +625,10 @@ export default function ChatWidget() {
                     aria-live="polite"
                     className="max-w-[80%] rounded-lg bg-surface-muted p-2 text-sm text-foreground-subtle"
                   >
-                    <div className="flex flex-wrap items-center gap-2">
-                      {(() => {
-                        const lastIndex =
-                          Math.min(placeholderWords, placeholderWidths.length) -
-                          1
-                        return placeholderWidths.map((w, i) => {
-                          const key = `ph-${i}`
-                          const style: React.CSSProperties = { width: `${w}%` }
-                          // keep skeleton blinking for all generated/visible words
-                          if (i <= placeholderWords) {
-                            return (
-                              <span
-                                key={key}
-                                data-placeholder-last={
-                                  i === lastIndex ? String(i) : undefined
-                                }
-                                className="inline-block h-3 animate-pulse rounded bg-border-strong"
-                                style={style}
-                              />
-                            )
-                          }
-                          return null
-                        })
-                      })()}
-                    </div>
+                    <ThinkingIndicator
+                      label="AI is thinking..."
+                      className="font-medium tracking-[0.01em]"
+                    />
                   </output>
                 )}
               </div>

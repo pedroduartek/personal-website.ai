@@ -196,7 +196,7 @@ describe('TerminalShell email command', () => {
     await user.type(input, 'Tell me about your projects{enter}')
 
     await waitFor(() => {
-      expect(screen.getByText('AI is thinking')).toBeInTheDocument()
+      expect(screen.getByText(/AI is thinking/i)).toBeInTheDocument()
     })
     expect(input).toBeDisabled()
 
@@ -204,7 +204,7 @@ describe('TerminalShell email command', () => {
     fireEvent.keyDown(document, { key: 'c', ctrlKey: true })
 
     await waitFor(() => {
-      expect(screen.queryByText('AI is thinking')).not.toBeInTheDocument()
+      expect(screen.queryByText(/AI is thinking/i)).not.toBeInTheDocument()
       expect(screen.getByPlaceholderText('type a command (help)')).toBeEnabled()
     })
 
@@ -248,7 +248,7 @@ describe('TerminalShell email command', () => {
     await waitFor(() => {
       expect(
         screen.getByText(
-          'Outside work: fishing, motorcycling, cooking, and running a self-hosted Home Assistant setup with 50+ Zigbee devices.',
+          'Outside work: fishing, motorcycling, cooking, and running a self-hosted Home Assistant setup as a personal lab for automation and reliability.',
         ),
       ).toBeInTheDocument()
       expect(input).toBeEnabled()
