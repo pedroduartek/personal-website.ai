@@ -7,6 +7,60 @@ import PageSEO from '../../components/seo/PageSEO'
 import { projects } from '../../content/projects'
 import haScreenshot from '../../images/ha.webp'
 
+const capabilityCards = [
+  {
+    title: 'Reliable Zigbee foundation',
+    description:
+      'A large ZHA mesh underpins lights, covers, plugs, sensors, and buttons throughout the house. A meaningful part of the work was not adding devices, but making the network dependable enough that the automations could be trusted every day.',
+  },
+  {
+    title: 'Room-first Lovelace UX',
+    description:
+      'The dashboard is organized around rooms and common actions instead of raw entity lists. That keeps the system understandable for non-technical users while still surfacing enough state to explain what the house is doing.',
+  },
+  {
+    title: 'State abstractions for awkward hardware',
+    description:
+      'Some hardware does not map cleanly to a good user experience. Virtual states and sync automations smooth over momentary relays and other device quirks so the home behaves more like a coherent product than a collection of parts.',
+  },
+  {
+    title: 'One system across many domains',
+    description:
+      'This setup is not just lights. The same Home Assistant instance coordinates gates, covers, climate, alarm, cameras, reminders, and a handful of background routines that make the house feel calmer without constantly demanding attention.',
+  },
+]
+
+const standoutAutomations = [
+  {
+    title: 'Last-person-leaves routine',
+    description:
+      'Triggered when the last person leaves, not just when someone leaves. It combines presence checks with a staged shutdown routine that secures the house, closes covers, and powers down selected systems without firing prematurely.',
+  },
+  {
+    title: 'Phone-charging sleep routine',
+    description:
+      'This routine uses charging state, presence, time of day, and alarm state to infer bedtime instead of requiring a manual scene trigger. It turns a few small signals into a dependable night routine that still adapts to whether one or two people are home.',
+  },
+  {
+    title: 'Waste collection scheduler',
+    description:
+      'A single scheduler handles the recurring reminder logic for waste collection, including alternating pickup patterns that are easy to forget manually. It is a good example of using simple state and calendar logic to solve a real household annoyance.',
+  },
+]
+
+const learningCards = [
+  {
+    title: 'State modeling matters more than device count',
+    description:
+      'The most reliable parts of the setup are not the flashiest ones. They are the explicit pieces of state that sit between messy hardware and a clean UI: virtual gates, mail counters, waste booleans, and presence checks that stop routines from firing at the wrong time.',
+  },
+  {
+    title: 'Dashboards are part of the system',
+    description:
+      'The Lovelace UI is not decoration layered on top of automations. It is the control surface and the debugging surface. If someone at home cannot tell what the house thinks is happening, the automation model is not finished yet.',
+  },
+]
+
 export default function HomeAssistantProjectPage() {
   const [lightboxOpen, setLightboxOpen] = useState(false)
   const project = projects.find((p) => p.slug === 'home-assistant')
@@ -23,7 +77,7 @@ export default function HomeAssistantProjectPage() {
             : `https://www.pedroduartek.com/projects/${project.slug}`
         }
       />
-      <div className="container mx-auto px-4 py-16 animate-slide-down">
+      <div className="container mx-auto px-4 py-8 animate-slide-down md:py-16">
         <Link
           to="/projects"
           className="theme-button-secondary mb-6 inline-flex items-center gap-2"
@@ -31,12 +85,12 @@ export default function HomeAssistantProjectPage() {
           <span>←</span> Back to projects
         </Link>
 
-        <h1 className="mb-2 text-4xl font-bold text-foreground">
+        <h1 className="mb-2 text-3xl font-bold text-foreground md:text-4xl">
           {project.title}
         </h1>
 
         {/* Date */}
-        <div className="mb-6 flex items-center gap-3 text-sm text-foreground-subtle">
+        <div className="mb-4 flex items-center gap-3 text-sm text-foreground-subtle">
           <time>
             {project.startDate &&
               new Date(project.startDate).toLocaleDateString('en-US', {
@@ -48,7 +102,7 @@ export default function HomeAssistantProjectPage() {
           </time>
         </div>
 
-        <p className="mb-8 text-xl text-foreground-subtle">
+        <p className="mb-4 text-lg text-foreground-subtle md:text-xl">
           {project.description}
         </p>
 
@@ -82,54 +136,40 @@ export default function HomeAssistantProjectPage() {
             <h2 className="mb-4 text-2xl font-semibold text-foreground">
               What It Includes
             </h2>
-            <div className="grid gap-6 md:grid-cols-2">
-              <div className="theme-card p-6">
-                <h3 className="mb-3 text-xl font-semibold text-foreground">
-                  Local-first home automation
-                </h3>
-                <p className="text-sm text-foreground-muted">
-                  Core routines are designed to keep working even if the
-                  internet is unavailable. That matters because the system is
-                  not a toy. It supports everyday household habits such as
-                  lighting, blinds, comfort, and general home awareness.
-                </p>
-              </div>
+            <div className="grid gap-4 md:grid-cols-2">
+              {capabilityCards.map((card) => (
+                <div key={card.title} className="theme-card p-5">
+                  <h3 className="mb-2 text-lg font-semibold text-foreground">
+                    {card.title}
+                  </h3>
+                  <p className="text-sm text-foreground-muted">
+                    {card.description}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </section>
 
-              <div className="theme-card p-6">
-                <h3 className="mb-3 text-xl font-semibold text-foreground">
-                  Reliability through network design
-                </h3>
-                <p className="text-sm text-foreground-muted">
-                  The setup now includes more than 50 Zigbee devices. A big part
-                  of the work was not adding devices, but building a stable mesh
-                  with enough routing coverage to make the automations
-                  dependable.
-                </p>
-              </div>
-
-              <div className="theme-card p-6">
-                <h3 className="mb-3 text-xl font-semibold text-foreground">
-                  Designed for daily use
-                </h3>
-                <p className="text-sm text-foreground-muted">
-                  The user experience matters as much as the automation logic.
-                  The dashboards are used every day, and my wife is the ultimate
-                  tester. If something feels confusing or unreliable to a
-                  non-technical user, it is not good enough yet.
-                </p>
-              </div>
-
-              <div className="theme-card p-6">
-                <h3 className="mb-3 text-xl font-semibold text-foreground">
-                  Ongoing operations
-                </h3>
-                <p className="text-sm text-foreground-muted">
-                  Backups, weekly updates, and continuous cleanup are part of
-                  the project. Treating the setup like a living system keeps it
-                  useful over time instead of letting it drift into brittle
-                  hobby infrastructure.
-                </p>
-              </div>
+          <section className="mb-12">
+            <h2 className="mb-4 text-2xl font-semibold text-foreground">
+              Standout Automations
+            </h2>
+            <p className="mb-4">
+              Among the live automations, these three best show the kind of
+              state coordination that makes the system feel intentional rather
+              than gimmicky.
+            </p>
+            <div className="grid gap-4 md:grid-cols-3">
+              {standoutAutomations.map((automation) => (
+                <div key={automation.title} className="theme-card p-5">
+                  <h3 className="mb-2 text-lg font-semibold text-foreground">
+                    {automation.title}
+                  </h3>
+                  <p className="text-sm text-foreground-muted">
+                    {automation.description}
+                  </p>
+                </div>
+              ))}
             </div>
           </section>
 
@@ -139,9 +179,10 @@ export default function HomeAssistantProjectPage() {
             </h2>
             <div className="theme-card p-6">
               <p className="mb-4 text-sm text-foreground-muted">
-                A simplified dashboard keeps the most important information and
-                controls easy to reach. The goal is not to expose every device
-                at once. It is to make the system practical for everyday use.
+                The main dashboard is area-based on purpose: room entry points
+                first, then just enough shared state to answer common questions
+                at a glance. The goal is not to expose everything. It is to
+                make the system understandable and usable in daily life.
               </p>
               <button
                 type="button"
@@ -162,35 +203,22 @@ export default function HomeAssistantProjectPage() {
               What I Learned
             </h2>
             <p className="mb-4">
-              This project keeps reinforcing the same lesson: automation is only
-              valuable when it is dependable and genuinely helpful. The most
-              interesting work is often not adding one more device, but making
-              the whole system calmer, clearer, and easier to trust.
+              Building a smart home stopped feeling like gadget orchestration
+              and started feeling like state management. The useful work is
+              usually not adding one more device. It is making the house easier
+              to reason about, both for automations and for humans.
             </p>
-            <div className="grid gap-6 md:grid-cols-2">
-              <div className="theme-card p-6">
-                <h3 className="mb-3 text-xl font-semibold text-foreground">
-                  A home behaves like a production environment
-                </h3>
-                <p className="text-sm text-foreground-muted">
-                  When an automation fails, it creates friction immediately.
-                  That makes reliability, rollback thinking, and operational
-                  discipline much more important than they might seem in a side
-                  project.
-                </p>
-              </div>
-
-              <div className="theme-card p-6">
-                <h3 className="mb-3 text-xl font-semibold text-foreground">
-                  Hardware constraints are real product constraints
-                </h3>
-                <p className="text-sm text-foreground-muted">
-                  An attempt to add local video analytics with Frigate pushed
-                  the available hardware too far and nearly forced a reinstall.
-                  It was a useful reminder to validate hardware assumptions
-                  before treating an idea as ready to ship.
-                </p>
-              </div>
+            <div className="grid gap-4 md:grid-cols-2">
+              {learningCards.map((card) => (
+                <div key={card.title} className="theme-card p-5">
+                  <h3 className="mb-2 text-lg font-semibold text-foreground">
+                    {card.title}
+                  </h3>
+                  <p className="text-sm text-foreground-muted">
+                    {card.description}
+                  </p>
+                </div>
+              ))}
             </div>
           </section>
         </div>

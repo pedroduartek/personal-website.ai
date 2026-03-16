@@ -32,18 +32,18 @@ function getProjects(): Project[] {
       slug: 'home-assistant',
       title: 'Home Assistant: Local-First Smart Home',
       description:
-        'Self-hosted smart home platform built around Home Assistant and 50+ Zigbee devices, with a focus on reliability, local control, and everyday usability.',
+        'Self-hosted smart home platform built on Home Assistant, with local automations, a room-first dashboard, and a focus on reliability over novelty.',
       problem:
-        'I wanted to make day-to-day life at home smoother without depending on the internet or building something only I could operate. The system needed to be reliable enough for everyday routines, simple enough for non-technical users, and flexible enough to keep evolving as I learned.',
+        'I wanted a smart home that removed friction from everyday life without turning the house into a gadget demo that only I could understand. That meant local control where possible, clear dashboards for non-technical users, and automations that had to earn their place through reliability rather than novelty.',
       approach:
-        'I built the setup around Home Assistant OS, Zigbee, and a growing set of practical automations for comfort, energy awareness, and household routines. I treated the house like a production environment: strengthening the mesh, keeping backups and weekly updates in place, and testing changes against a simple rule - if they add complexity without improving everyday life, they do not stay.',
+        'I built the setup around Home Assistant OS, a ZHA-based Zigbee network, mobile presence, and a Lovelace dashboard customized for everyday use. It coordinates lighting, covers, gates, climate, alarm, cameras, and household reminders, with the same rule across every automation: if it adds complexity without clearly improving daily life, it does not stay.',
       technologies: [
         'Home Assistant OS',
         'Zigbee (ZHA)',
         'SkyConnect Coordinator',
+        'Lovelace',
+        'HACS',
         'Nabu Casa',
-        'Grafana',
-        'IoT Automation',
       ],
       featured: true,
       startDate: '2023-09',
