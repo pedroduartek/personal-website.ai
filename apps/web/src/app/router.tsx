@@ -28,6 +28,7 @@ const Skills = lazy(() => import('../features/skills/SkillsPage'))
 // Blog routes removed (no blog posts)
 const Contact = lazy(() => import('../features/contact/ContactPage'))
 const CV = lazy(() => import('../features/cv/CVPage'))
+const NewGuid = lazy(() => import('../features/newguid/NewGuidPage'))
 const Terminal = lazy(() => import('../features/terminal/TerminalPage'))
 
 export const router = createBrowserRouter([
@@ -52,6 +53,7 @@ export const router = createBrowserRouter([
       { path: 'skills', element: <Skills /> },
       { path: 'contact', element: <Contact /> },
       { path: 'cv', element: <CV /> },
+      { path: 'newguid', element: <NewGuid /> },
       { path: 'terminal', element: <Terminal /> },
     ],
   },
