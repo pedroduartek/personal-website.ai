@@ -627,11 +627,11 @@ export default function ChatWidget() {
                 {awaitingReply && (
                   <output
                     aria-live="polite"
-                    className="max-w-[80%] rounded-lg bg-surface-muted p-2 text-sm text-foreground-subtle"
+                    className="max-w-[80%] self-start rounded-lg bg-surface-muted p-2 text-sm text-foreground-subtle w-fit"
                   >
                     <ThinkingIndicator
                       label="AI is thinking..."
-                      className="font-medium tracking-[0.01em]"
+                      className="inline-block font-medium tracking-[0.01em]"
                     />
                   </output>
                 )}

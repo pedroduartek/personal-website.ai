@@ -875,7 +875,7 @@ export default function TerminalShell({ onClose }: TerminalShellProps) {
           <ThinkingIndicator
             label="AI is thinking..."
             variant="terminal"
-            className="whitespace-pre-wrap py-0.5 font-mono text-sm"
+            className="block whitespace-pre-wrap py-0.5 font-mono text-sm"
           />
         )}
       </div>

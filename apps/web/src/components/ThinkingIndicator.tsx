@@ -15,8 +15,8 @@ export default function ThinkingIndicator({
       : 'thinking-spotlight-surface'
 
   return (
-    <div className={className}>
+    <span className={className}>
       <span className={`thinking-spotlight ${variantClass}`}>{label}</span>
-    </div>
+    </span>
   )
 }
