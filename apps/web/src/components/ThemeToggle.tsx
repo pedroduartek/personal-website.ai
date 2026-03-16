@@ -15,12 +15,9 @@ export default function ThemeToggle({ className = '' }: ThemeToggleProps) {
       aria-label={`Switch to ${nextTheme} mode`}
       aria-pressed={theme === 'dark'}
       title={`Switch to ${nextTheme} mode`}
-      className={`theme-button-secondary inline-flex items-center gap-2 px-3 py-2 ${className}`.trim()}
+      className={`theme-button-secondary inline-flex items-center justify-center p-2 ${className}`.trim()}
     >
       {theme === 'dark' ? <SunIcon /> : <MoonIcon />}
-      <span className="hidden sm:inline">
-        {nextTheme === 'dark' ? 'Dark mode' : 'Light mode'}
-      </span>
     </button>
   )
 }

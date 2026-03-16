@@ -163,6 +163,18 @@ function Header({
           </div>
 
           <div className="flex items-center gap-3">
+            {/* Desktop navigation */}
+            <div className="hidden 2xl:flex gap-3">
+              <NavLink to="/about">About Me</NavLink>
+              <NavLink to="/experience">Experience</NavLink>
+              <NavLink to="/projects">Projects</NavLink>
+              <NavLink to="/education">Education</NavLink>
+              <NavLink to="/conferences">Conferences</NavLink>
+              <NavLink to="/skills">Skills</NavLink>
+              <NavLink to="/cv">Download CV</NavLink>
+              <NavLink to="/contact">Contacts</NavLink>
+            </div>
+
             <ThemeToggle />
 
             {/* Mobile menu button */}
@@ -197,18 +209,6 @@ function Header({
                 )}
               </svg>
             </button>
-
-            {/* Desktop navigation */}
-            <div className="hidden 2xl:flex gap-3">
-              <NavLink to="/about">About Me</NavLink>
-              <NavLink to="/experience">Experience</NavLink>
-              <NavLink to="/projects">Projects</NavLink>
-              <NavLink to="/education">Education</NavLink>
-              <NavLink to="/conferences">Conferences</NavLink>
-              <NavLink to="/skills">Skills</NavLink>
-              <NavLink to="/cv">Download CV</NavLink>
-              <NavLink to="/contact">Contacts</NavLink>
-            </div>
           </div>
         </div>
 
