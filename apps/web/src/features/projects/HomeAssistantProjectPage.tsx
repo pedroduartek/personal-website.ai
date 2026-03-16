@@ -181,8 +181,8 @@ export default function HomeAssistantProjectPage() {
               <p className="mb-4 text-sm text-foreground-muted">
                 The main dashboard is area-based on purpose: room entry points
                 first, then just enough shared state to answer common questions
-                at a glance. The goal is not to expose everything. It is to
-                make the system understandable and usable in daily life.
+                at a glance. The goal is not to expose everything. It is to make
+                the system understandable and usable in daily life.
               </p>
               <button
                 type="button"

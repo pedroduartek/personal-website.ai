@@ -1,4 +1,6 @@
 const RETRYABLE_STATUS_CODES = new Set([408, 500, 502, 503, 504])
+export const CHAT_API_URL = 'https://api.pedroduartek.com/chat'
+export const CHAT_API_HEALTH_URL = 'https://api.pedroduartek.com/health'
 
 function sleep(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms))
@@ -6,6 +8,15 @@ function sleep(ms: number) {
 
 function shouldRetry(response: Response) {
   return RETRYABLE_STATUS_CODES.has(response.status)
+}
+
+export async function checkApiHealth(url: string) {
+  try {
+    const response = await fetch(url, { method: 'GET' })
+    return response.status === 200
+  } catch {
+    return false
+  }
 }
 
 export async function postJson(

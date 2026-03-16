@@ -50,8 +50,12 @@ describe('terminalCommands', () => {
     const joined = output.join('\n')
 
     expect(output[0]).toContain('Pedro Duarte')
-    expect(joined).toContain('Leadership: mentoring junior and mid-level engineers')
-    expect(joined).toContain('Product mindset: reliability and user experience matter as much as implementation details.')
+    expect(joined).toContain(
+      'Leadership: mentoring junior and mid-level engineers',
+    )
+    expect(joined).toContain(
+      'Product mindset: reliability and user experience matter as much as implementation details.',
+    )
   })
 
   it('shows focused skills by category', async () => {

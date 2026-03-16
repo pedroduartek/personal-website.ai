@@ -6,7 +6,7 @@ import { projects } from '../content/projects'
 import { skills } from '../content/skills'
 import type { Profile } from '../content/types'
 import myselfUrl from '../images/myself.webp'
-import { postJson, readApiError } from './apiClient'
+import { CHAT_API_URL, postJson, readApiError } from './apiClient'
 import { calculateYearsFromDate } from './experience'
 
 async function imageToAscii(url: string, charsWide?: number) {
@@ -676,10 +676,8 @@ export async function runCommand(
     const message = args.join(' ').trim()
     if (!message) return ['Usage: chat <message>']
 
-    const apiUrl = 'https://api.pedroduartek.com/chat'
-
     try {
-      const res = await postJson(apiUrl, { message }, 2)
+      const res = await postJson(CHAT_API_URL, { message }, 2)
 
       if (!res.ok) {
         try {

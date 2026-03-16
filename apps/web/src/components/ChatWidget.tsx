@@ -2,7 +2,13 @@ import type React from 'react'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import ollamaIcon from '../images/ollama.png'
-import { postJson, readApiError } from '../utils/apiClient'
+import {
+  CHAT_API_HEALTH_URL,
+  CHAT_API_URL,
+  checkApiHealth,
+  postJson,
+  readApiError,
+} from '../utils/apiClient'
 import ThinkingIndicator from './ThinkingIndicator'
 
 type Message = { id: number; text: string; from: 'user' | 'bot' }
@@ -139,10 +145,8 @@ export default function ChatWidget() {
     setMessages((s) => [...s, msg])
     setInput('')
     setAwaitingReply(true)
-    const apiUrl = 'https://api.pedroduartek.com/chat'
-
     try {
-      const res = await postJson(apiUrl, { message: text }, 2)
+      const res = await postJson(CHAT_API_URL, { message: text }, 2)
 
       if (!res.ok) {
         try {
@@ -266,17 +270,17 @@ export default function ChatWidget() {
 
   // Always follow the latest visible state, including the thinking indicator.
   useEffect(() => {
+    if (messages.length === 0 && !awaitingReply) return
     scrollToBottom('smooth')
   }, [messages, awaitingReply, scrollToBottom])
 
   // Check API health on mount; only show widget if healthy
   useEffect(() => {
     let cancelled = false
-    const healthUrl = 'https://api.pedroduartek.com/health'
 
-    fetch(healthUrl, { method: 'GET' })
-      .then((res) => {
-        if (!cancelled) setApiHealthy(res.ok)
+    checkApiHealth(CHAT_API_HEALTH_URL)
+      .then((healthy) => {
+        if (!cancelled) setApiHealthy(healthy)
       })
       .catch(() => {
         if (!cancelled) setApiHealthy(false)

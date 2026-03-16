@@ -8,9 +8,11 @@ describe('ChatWidget entrance bounce', () => {
     vi.useFakeTimers()
     vi.stubGlobal(
       'fetch',
-      vi.fn().mockResolvedValue({
-        ok: true,
-      }),
+      vi.fn().mockResolvedValue(
+        new Response(null, {
+          status: 200,
+        }),
+      ),
     )
   })
 

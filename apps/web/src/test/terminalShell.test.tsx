@@ -18,9 +18,11 @@ describe('TerminalShell email command', () => {
   beforeEach(() => {
     vi.stubGlobal(
       'fetch',
-      vi.fn().mockResolvedValue({
-        ok: true,
-      }),
+      vi.fn().mockResolvedValue(
+        new Response(null, {
+          status: 200,
+        }),
+      ),
     )
   })
 
@@ -180,12 +182,19 @@ describe('TerminalShell email command', () => {
 
     vi.stubGlobal(
       'fetch',
-      vi.fn(
-        () =>
-          new Promise<Response>((resolve) => {
-            resolveChatRequest = resolve
+      vi
+        .fn()
+        .mockResolvedValueOnce(
+          new Response(null, {
+            status: 200,
           }),
-      ),
+        )
+        .mockImplementationOnce(
+          () =>
+            new Promise<Response>((resolve) => {
+              resolveChatRequest = resolve
+            }),
+        ),
     )
 
     renderTerminalShell()
@@ -234,6 +243,40 @@ describe('TerminalShell email command', () => {
     await waitFor(() => {
       expect(screen.queryByText(chatReply)).not.toBeInTheDocument()
     })
+  })
+
+  it('does not enter chat mode when the chat API health check fails', async () => {
+    const user = userEvent.setup()
+
+    vi.stubGlobal(
+      'fetch',
+      vi.fn().mockResolvedValue(
+        new Response(null, {
+          status: 503,
+        }),
+      ),
+    )
+
+    renderTerminalShell()
+
+    const input = screen.getByPlaceholderText('type a command (help)')
+
+    await user.type(input, 'chat{enter}')
+
+    await waitFor(() => {
+      expect(
+        screen.getByText(
+          'Chat is not available right now. Please try again later.',
+        ),
+      ).toBeInTheDocument()
+    })
+
+    expect(
+      screen.queryByText(
+        'Chat mode — type your message. Type `exit` to leave.',
+      ),
+    ).not.toBeInTheDocument()
+    expect(screen.getByPlaceholderText('type a command (help)')).toBeEnabled()
   })
 
   it('restores prompt focus after a command finishes streaming output', async () => {

@@ -2,6 +2,7 @@ import type React from 'react'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import cvPdf from '../CV/Pedro_Duarte_CV.pdf'
 import { profile } from '../content/profile'
+import { CHAT_API_HEALTH_URL, checkApiHealth } from '../utils/apiClient'
 import {
   type ContactEmailValues,
   isContactEmailRateLimited,
@@ -602,16 +603,35 @@ export default function TerminalShell({ onClose }: TerminalShellProps) {
 
     // Enter interactive chat mode
     if (cmd === 'chat' && parts.length === 1) {
-      setChatMode(true)
-      setLines((l) => [
-        ...l,
-        {
-          id: Date.now() + 1,
-          text: 'Chat mode — type your message. Type `exit` to leave.',
-          type: 'out',
-        },
-      ])
-      setInput('')
+      const execution = beginExecution('output')
+      try {
+        const chatAvailable = await checkApiHealth(CHAT_API_HEALTH_URL)
+        if (execution.interrupted) {
+          return
+        }
+
+        if (!chatAvailable) {
+          appendOutput(
+            'Chat is not available right now. Please try again later.',
+          )
+          return
+        }
+
+        setChatMode(true)
+        setLines((l) => [
+          ...l,
+          {
+            id: Date.now() + 1,
+            text: 'Chat mode — type your message. Type `exit` to leave.',
+            type: 'out',
+          },
+        ])
+        setInput('')
+      } finally {
+        if (isExecutionCurrent(execution)) {
+          finishExecution(execution)
+        }
+      }
       return
     }
 
