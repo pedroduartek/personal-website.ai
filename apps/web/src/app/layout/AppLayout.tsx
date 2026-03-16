@@ -51,7 +51,7 @@ export default function AppLayout() {
           </SiteContainer>
         )}
       </main>
-      <footer className="border-t border-border bg-header py-4 text-center text-xs text-foreground-subtle">
+      <footer className="bg-header py-4 text-center text-xs text-foreground-subtle">
         {lastUpdated ? `Last updated: ${lastUpdated}` : null}
       </footer>
       <CommandPalette isOpen={isOpen} onClose={close} />
@@ -75,7 +75,7 @@ function Header({
 
   if (isTerminalRoute) {
     return (
-      <header className="border-b border-border bg-header">
+      <header className="bg-header">
         <nav className="flex items-center justify-between gap-4 px-3 py-2 2xl:px-6">
           <Link
             to="/"
@@ -101,7 +101,7 @@ function Header({
   }
 
   return (
-    <header className="border-b border-border bg-header">
+    <header className="bg-header">
       <nav className="relative px-3 py-2 2xl:px-6">
         <div className="flex items-center justify-between gap-4">
           <Link
