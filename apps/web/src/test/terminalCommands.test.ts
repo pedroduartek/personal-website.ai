@@ -45,6 +45,15 @@ describe('terminalCommands', () => {
     expect(joined).toContain('Introduced Stryker mutation testing')
   })
 
+  it('shows the broader about summary', async () => {
+    const output = await runCommand('about')
+    const joined = output.join('\n')
+
+    expect(output[0]).toContain('Pedro Duarte')
+    expect(joined).toContain('Leadership: mentoring junior and mid-level engineers')
+    expect(joined).toContain('Product mindset: reliability and user experience matter as much as implementation details.')
+  })
+
   it('shows focused skills by category', async () => {
     const output = await runCommand('skills backend')
     const joined = output.join('\n')

@@ -434,8 +434,9 @@ export async function runCommand(
       '',
       `Location: ${p.location}`,
       'Focus: backend platforms, distributed systems, developer productivity, and practical automation.',
+      'Leadership: mentoring junior and mid-level engineers through technical sessions, code reviews, and day-to-day collaboration.',
       'Product mindset: reliability and user experience matter as much as implementation details.',
-      'Outside work: fishing, motorcycling, cooking, and running a self-hosted Home Assistant setup with 50+ Zigbee devices.',
+      'Outside work: fishing, motorcycling, cooking, and running a self-hosted Home Assistant setup as a personal lab for automation and reliability.',
     ]
   }
 

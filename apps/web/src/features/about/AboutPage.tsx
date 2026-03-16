@@ -31,34 +31,42 @@ export default function AboutPage() {
               {profile.bio}
             </p>
             <p className="mb-4 text-base text-foreground-muted md:text-lg">
-              I'm passionate about building{' '}
-              <strong className="text-foreground">
-                reliable, scalable systems
-              </strong>{' '}
-              that solve real problems. I believe in writing clean, maintainable
-              code and treating production reliability as a first-class concern.
+              Most of my professional work sits in the backend: service
+              boundaries, data flows, production reliability, and the habits
+              that help teams ship without creating avoidable operational risk.
+              I enjoy turning messy technical problems into systems that are
+              easier to reason about, easier to change, and easier to trust.
             </p>
             <p className="mb-4 text-base text-foreground-muted md:text-lg">
-              Frontend development has not been the center of my career, but I
-              care deeply about{' '}
-              <strong className="text-foreground">user experience</strong>. I
-              like being involved in product and UX discussions because good
-              software is not only about solid backend architecture. It is also
-              about making systems understandable, efficient, and pleasant to
-              use.
+              I also spend time helping junior and mid-level engineers grow
+              through technical sessions, code reviews, and day-to-day
+              collaboration. That part of the job matters to me because strong
+              systems come from strong engineering habits shared across a team,
+              not just from a few good individual decisions.
+            </p>
+            <p className="mb-4 text-base text-foreground-muted md:text-lg">
+              I care about user experience more than people usually expect from
+              a backend engineer. Even when I am working on APIs, platform
+              concerns, or architecture, I want the result to be understandable
+              and practical for the people using it. That is part of why I like
+              being involved in product and UX discussions as well as systems
+              design.
+            </p>
+            <p className="mb-4 text-base text-foreground-muted md:text-lg">
+              Personal projects are where I pressure-test that mindset. They
+              give me room to learn outside my day job, explore AI-assisted
+              development in a practical way, and build things that solve real
+              problems instead of stopping at prototypes.
             </p>
             <p className="mb-6 text-base text-foreground-muted md:text-lg">
               Outside work, you will usually find me fishing, riding my
-              motorcycle, or cooking. I also run a self-hosted{' '}
-              <strong className="text-foreground">
-                Home Assistant setup with 50+ Zigbee devices
-              </strong>{' '}
-              as a personal lab where I experiment with automation reliability
-              and apply event-driven thinking to real-world scenarios.
+              motorcycle, or cooking. I also run a self-hosted Home Assistant
+              setup as a long-running personal lab for automation, reliability,
+              and real-world feedback loops.
             </p>
             <div className="theme-card p-6">
               <h2 className="mb-3 text-xl font-semibold text-foreground">
-                Location
+                Based In
               </h2>
               <p className="text-foreground-muted">{profile.location}</p>
             </div>
