@@ -22,7 +22,7 @@ const projectHighlights = [
   {
     title: 'Production-minded frontend',
     description:
-      'The build uses lazy-loaded routes, an error boundary, responsive layouts, optimized WebP images, and automated checks for linting, tests, accessibility, bundle size, and Lighthouse budgets.',
+      'The build uses a resilient route shell, responsive layouts, optimized WebP images, and automated checks for linting, tests, accessibility, bundle size, and Lighthouse budgets.',
   },
 ]
 
@@ -142,6 +142,7 @@ export default function OurivesariaRinchoaProjectPage() {
                 href={liveSiteUrl}
                 domain="ourivesariarinchoa.pt"
                 title="Ourivesaria Rinchoa homepage"
+                className="mx-auto w-full md:max-w-[80%]"
               />
             )}
           </section>

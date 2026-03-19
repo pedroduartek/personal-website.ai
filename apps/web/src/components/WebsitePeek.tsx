@@ -12,6 +12,7 @@ export default function WebsitePeek({
   className,
 }: WebsitePeekProps) {
   const displayDomain = domain ?? new URL(href).host
+  const scrollbarCompensation = 18
 
   return (
     <div className={`theme-card overflow-hidden ${className ?? ''}`.trim()}>
@@ -28,17 +29,24 @@ export default function WebsitePeek({
         </div>
       </div>
 
-      <div className="relative bg-white">
-        <iframe
-          src={href}
-          title={`${title} live preview`}
-          loading="lazy"
-          tabIndex={-1}
-          aria-hidden="true"
-          sandbox="allow-scripts allow-same-origin"
-          referrerPolicy="strict-origin-when-cross-origin"
-          className="pointer-events-none h-[440px] w-full border-0 bg-white"
-        />
+      <div className="relative overflow-hidden bg-white">
+        <div className="pointer-events-none overflow-hidden bg-white">
+          <iframe
+            src={href}
+            title={`${title} live preview`}
+            loading="lazy"
+            tabIndex={-1}
+            aria-hidden="true"
+            sandbox="allow-scripts allow-same-origin"
+            referrerPolicy="strict-origin-when-cross-origin"
+            scrolling="no"
+            className="block h-[440px] border-0 bg-white"
+            style={{
+              width: `calc(100% + ${scrollbarCompensation}px)`,
+              marginRight: `-${scrollbarCompensation}px`,
+            }}
+          />
+        </div>
 
         <a
           href={href}
