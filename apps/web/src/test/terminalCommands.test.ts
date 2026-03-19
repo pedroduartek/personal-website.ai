@@ -31,8 +31,19 @@ describe('terminalCommands', () => {
     expect(output).toContain('Usage: project <slug-or-name>')
     expect(output).toContain('Available projects:')
     expect(output).toContain('  personal-website')
+    expect(output).toContain('  ourivesaria-rinchoa')
     expect(output).toContain('  home-assistant')
     expect(output).toContain('  ai-chat-api')
+  })
+
+  it('shows a private project with a public demo link', async () => {
+    const output = await runCommand('project ourivesaria-rinchoa')
+    const joined = output.join('\n')
+
+    expect(output[0]).toMatch(/Ourivesaria Rinchoa Website/)
+    expect(joined).toContain('Route: /projects/ourivesaria-rinchoa')
+    expect(joined).toContain('Demo: https://ourivesariarinchoa.pt')
+    expect(joined).not.toContain('GitHub:')
   })
 
   it('shows detailed company experience and supports cat aliases', async () => {

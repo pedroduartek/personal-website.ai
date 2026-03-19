@@ -26,6 +26,16 @@
     <priority>0.7</priority>
   </url>
   <url>
+    <loc>https://www.pedroduartek.com/projects/ai-chat-api</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.pedroduartek.com/projects/ourivesaria-rinchoa</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://www.pedroduartek.com/contact</loc>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>

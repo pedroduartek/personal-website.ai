@@ -29,6 +29,30 @@ function getProjects(): Project[] {
       startDate: '2026-02',
     },
     {
+      slug: 'ourivesaria-rinchoa',
+      title: 'Ourivesaria Rinchoa Website',
+      description:
+        "Public-facing website for my parents-in-law's jewelry and watch store, built to present in-store services, wedding rings, and contact details with clear Portuguese copy and strong local-business SEO.",
+      problem:
+        'The store needed a website that matched how the business actually works: a physical shop, personalized service, appointments for wedding rings and watch evaluations, and clear local contact details. Generic small-business templates tend to flatten that into stock sections and vague copy, so I wanted something more specific, easier to trust, and easier for local customers to use.',
+      approach:
+        'I built a focused React SPA around the main customer journeys: homepage, watch repair and maintenance, weddings, and contacts. Business details, route-level SEO metadata, and reusable copy live in centralized content files so the site stays consistent as details evolve. On top of that, I added lazy-loaded routes, an error boundary, responsive layouts, WebP image delivery, LocalBusiness structured data, and tests covering navigation, accessibility, and SEO behavior so the final site feels tailored rather than templated.',
+      technologies: [
+        'React 19',
+        'TypeScript 5',
+        'Vite',
+        'Tailwind CSS 4',
+        'React Router 7',
+        'Vitest',
+        'Vercel',
+      ],
+      links: {
+        demo: 'https://ourivesariarinchoa.pt',
+      },
+      featured: false,
+      startDate: '2026-03',
+    },
+    {
       slug: 'home-assistant',
       title: 'Home Assistant: Local-First Smart Home',
       description:

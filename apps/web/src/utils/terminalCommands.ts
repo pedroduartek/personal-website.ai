@@ -556,7 +556,7 @@ export async function runCommand(
     if (!project) {
       return [
         `No project matched: ${query}`,
-        'Try one of: personal-website, home-assistant, ai-chat-api',
+        'Try one of: personal-website, ourivesaria-rinchoa, home-assistant, ai-chat-api',
       ]
     }
 
