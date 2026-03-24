@@ -230,18 +230,14 @@ export default function HomeHeroCarousel({ slides }: HomeHeroCarouselProps) {
   const isContainedMedia = activeContent.media.fit === 'contain'
   const usesTerminalPreview = activeSlide.customMedia === 'terminal'
   const usesChatPreview = activeSlide.customMedia === 'chat'
-  const usesCompactMobileProjectLayout =
-    !usesTerminalPreview && !usesChatPreview
+  const usesCompactMobileLayout = !usesTerminalPreview
   const slideTransitionClass = prefersReducedMotion
     ? ''
     : slideDirection === 'forward'
       ? 'animate-carousel-slide-in-forward'
       : 'animate-carousel-slide-in-backward'
-  const cardClasses = `group relative flex overflow-hidden rounded-[2rem] border border-border bg-surface shadow-[0_24px_80px_rgba(15,23,42,0.18)] transition-transform duration-300 hover:-translate-y-1 ${
-    usesCompactMobileProjectLayout
-      ? 'min-h-[24rem] sm:h-[31rem] md:h-[35rem]'
-      : 'h-[31rem] md:h-[35rem]'
-  }`
+  const cardClasses =
+    'group relative flex h-[31rem] overflow-hidden rounded-[2rem] border border-border bg-surface shadow-[0_24px_80px_rgba(15,23,42,0.18)] transition-transform duration-300 hover:-translate-y-1 md:h-[35rem]'
 
   const goToPrevious = () => {
     setSlideDirection('backward')
@@ -348,7 +344,14 @@ export default function HomeHeroCarousel({ slides }: HomeHeroCarouselProps) {
           />
 
           <div className="relative flex h-full w-full flex-col">
-            <div className="flex h-[17rem] flex-1 overflow-hidden px-6 py-6 md:h-[19rem] md:px-8 md:py-8">
+            <div
+              data-testid="carousel-media-panel"
+              className={`${
+                usesCompactMobileLayout
+                  ? 'hidden h-[17rem] flex-1 overflow-hidden px-6 py-6 sm:flex md:h-[19rem] md:px-8 md:py-8'
+                  : 'flex h-[17rem] flex-1 overflow-hidden px-6 py-6 md:h-[19rem] md:px-8 md:py-8'
+              }`}
+            >
               <div
                 className={`flex h-full w-full items-center justify-center overflow-hidden rounded-[1.5rem] border shadow-[0_18px_45px_rgba(15,23,42,0.26)] ${theme.mediaFrame}`}
               >
@@ -388,7 +391,13 @@ export default function HomeHeroCarousel({ slides }: HomeHeroCarouselProps) {
               </div>
             </div>
 
-            <div className="relative z-10 flex flex-1 flex-col border-t border-white/10 bg-gradient-to-t from-overlay/90 to-overlay/70 px-6 py-6 text-white md:px-8 md:py-7">
+            <div
+              className={`relative z-10 flex flex-1 flex-col bg-gradient-to-t from-overlay/90 to-overlay/70 px-6 py-6 text-white md:px-8 md:py-7 ${
+                usesCompactMobileLayout
+                  ? 'sm:border-t sm:border-white/10'
+                  : 'border-t border-white/10'
+              }`}
+            >
               <div
                 className={`mb-3 inline-flex w-fit self-start rounded-full border px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em] ${theme.badge}`}
               >
@@ -448,8 +457,9 @@ export default function HomeHeroCarousel({ slides }: HomeHeroCarouselProps) {
 
           <div className="relative flex h-full w-full flex-col">
             <div
+              data-testid="carousel-media-panel"
               className={`${
-                usesCompactMobileProjectLayout
+                usesCompactMobileLayout
                   ? 'hidden h-[17rem] flex-1 overflow-hidden px-6 py-6 sm:flex md:h-[19rem] md:px-8 md:py-8'
                   : 'flex h-[17rem] flex-1 overflow-hidden px-6 py-6 md:h-[19rem] md:px-8 md:py-8'
               }`}
@@ -516,7 +526,7 @@ export default function HomeHeroCarousel({ slides }: HomeHeroCarouselProps) {
 
             <div
               className={`relative z-10 flex flex-1 flex-col bg-gradient-to-t from-overlay/90 to-overlay/70 px-6 py-6 text-white md:px-8 md:py-7 ${
-                usesCompactMobileProjectLayout
+                usesCompactMobileLayout
                   ? 'sm:border-t sm:border-white/10'
                   : 'border-t border-white/10'
               }`}

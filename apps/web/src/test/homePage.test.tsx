@@ -352,4 +352,43 @@ describe('HomePage hero carousel', () => {
       }),
     ).not.toBeInTheDocument()
   })
+
+  it('keeps a consistent card height and hides the media panel on mobile chat slide', async () => {
+    Object.defineProperty(window, 'innerWidth', {
+      configurable: true,
+      writable: true,
+      value: 375,
+    })
+
+    render(
+      <MemoryRouter>
+        <HomePage />
+      </MemoryRouter>,
+    )
+
+    await settleChatAvailability()
+
+    const carousel = screen.getByRole('region', {
+      name: /featured project carousel/i,
+    })
+
+    expect(
+      within(carousel).getByRole('link', {
+        name: /AI-Assisted Personal Website/i,
+      }),
+    ).toHaveClass('h-[31rem]')
+
+    fireEvent.keyDown(carousel, { key: 'End' })
+
+    expect(
+      within(carousel).getByRole('button', {
+        name: /Open AI Chat Assistant/i,
+      }),
+    ).toHaveClass('h-[31rem]')
+
+    expect(within(carousel).getByTestId('carousel-media-panel')).toHaveClass(
+      'hidden',
+      'sm:flex',
+    )
+  })
 })
