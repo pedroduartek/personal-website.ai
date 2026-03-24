@@ -2,9 +2,11 @@ import { act, fireEvent, render, screen } from '@testing-library/react'
 import { MemoryRouter } from 'react-router-dom'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import ChatWidget from '../components/ChatWidget'
+import { resetChatAvailabilityCache } from '../hooks/useChatAvailability'
 
 describe('ChatWidget entrance bounce', () => {
   beforeEach(() => {
+    resetChatAvailabilityCache()
     vi.useFakeTimers()
     vi.stubGlobal(
       'fetch',
@@ -17,6 +19,7 @@ describe('ChatWidget entrance bounce', () => {
   })
 
   afterEach(() => {
+    resetChatAvailabilityCache()
     vi.runOnlyPendingTimers()
     vi.useRealTimers()
     vi.unstubAllGlobals()

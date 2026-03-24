@@ -16,6 +16,13 @@ export interface MediaAsset {
   src: string
   alt: string
   objectPosition?: string
+  fit?: 'cover' | 'contain'
+}
+
+export interface ProjectHeroContent {
+  eyebrow: string
+  summary: string
+  media: MediaAsset
 }
 
 export interface ExperienceItem {
@@ -43,6 +50,7 @@ export interface Project {
     article?: string
   }
   screenshots?: string[]
+  homeHero?: ProjectHeroContent
   featured: boolean
   startDate: string
   endDate?: string

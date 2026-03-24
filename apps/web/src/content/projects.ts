@@ -1,3 +1,5 @@
+import haScreenshot from '../images/ha.webp'
+import ollamaIcon from '../images/ollama_icon.webp'
 import { getExperience } from '../utils/experience'
 import type { Project } from './types'
 
@@ -24,6 +26,16 @@ function getProjects(): Project[] {
       ],
       links: {
         github: 'https://github.com/pedroduartek/personal-website.ai',
+      },
+      homeHero: {
+        eyebrow: 'AI-assisted product build',
+        summary:
+          'A content-driven portfolio that combines clear career storytelling with a chat assistant, command palette, and terminal-like exploration paths.',
+        media: {
+          src: '/pld_logo_header.webp',
+          alt: 'Pedroduartek logo used as the visual mark for the personal website project',
+          fit: 'contain',
+        },
       },
       featured: true,
       startDate: '2026-02',
@@ -69,6 +81,16 @@ function getProjects(): Project[] {
         'HACS',
         'Nabu Casa',
       ],
+      homeHero: {
+        eyebrow: 'Smart Home',
+        summary:
+          'A self-hosted dashboard and automation stack built around rooms, dependable state modeling, and local control instead of gadget-driven novelty.',
+        media: {
+          src: haScreenshot,
+          alt: 'Home Assistant dashboard screenshot',
+          fit: 'cover',
+        },
+      },
       featured: true,
       startDate: '2023-09',
     },
@@ -96,6 +118,16 @@ function getProjects(): Project[] {
       ],
       links: {
         github: 'https://github.com/pedroduartek/ai-chat-api',
+      },
+      homeHero: {
+        eyebrow: 'Self-hosted AI backend',
+        summary:
+          'An ASP.NET Core API that keeps responses grounded with a local knowledge base, streams answers, and protects the contact flow with Turnstile verification.',
+        media: {
+          src: ollamaIcon,
+          alt: 'Ollama icon representing the AI Chat API project',
+          fit: 'contain',
+        },
       },
       featured: true,
       startDate: '2026-02',

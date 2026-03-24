@@ -1,14 +1,10 @@
 import type React from 'react'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
+import { useChatAvailability } from '../hooks/useChatAvailability'
 import ollamaIcon from '../images/ollama.png'
-import {
-  CHAT_API_HEALTH_URL,
-  CHAT_API_URL,
-  checkApiHealth,
-  postJson,
-  readApiError,
-} from '../utils/apiClient'
+import { CHAT_API_URL, postJson, readApiError } from '../utils/apiClient'
+import { OPEN_CHAT_WIDGET_EVENT } from '../utils/chatWidget'
 import ThinkingIndicator from './ThinkingIndicator'
 
 type Message = { id: number; text: string; from: 'user' | 'bot' }
@@ -31,7 +27,7 @@ export default function ChatWidget() {
   const [animationDone, setAnimationDone] = useState(false)
   // keep drawer mounted during exit animation
   const [renderDrawer, setRenderDrawer] = useState(open)
-  const [apiHealthy, setApiHealthy] = useState<boolean | null>(null)
+  const apiHealthy = useChatAvailability()
   const [messages, setMessages] = useState<Message[]>([])
   const containerRef = useRef<HTMLDivElement | null>(null)
   const inputRef = useRef<HTMLInputElement | null>(null)
@@ -274,23 +270,6 @@ export default function ChatWidget() {
     scrollToBottom('smooth')
   }, [messages, awaitingReply, scrollToBottom])
 
-  // Check API health on mount; only show widget if healthy
-  useEffect(() => {
-    let cancelled = false
-
-    checkApiHealth(CHAT_API_HEALTH_URL)
-      .then((healthy) => {
-        if (!cancelled) setApiHealthy(healthy)
-      })
-      .catch(() => {
-        if (!cancelled) setApiHealthy(false)
-      })
-
-    return () => {
-      cancelled = true
-    }
-  }, [])
-
   // Trigger the entrance animation after a short delay once API is healthy
   useEffect(() => {
     if (apiHealthy !== true) return
@@ -302,6 +281,26 @@ export default function ChatWidget() {
     if (!hasEntered || hasPlayedChatBounceThisPage) return
     setPlayBounce(true)
   }, [hasEntered])
+
+  useEffect(() => {
+    if (typeof window === 'undefined') {
+      return
+    }
+
+    const openWidget = () => {
+      setHasEntered(true)
+      setAnimationDone(true)
+      setPlayBounce(false)
+      hasPlayedChatBounceThisPage = true
+      setOpen(true)
+    }
+
+    window.addEventListener(OPEN_CHAT_WIDGET_EVENT, openWidget)
+
+    return () => {
+      window.removeEventListener(OPEN_CHAT_WIDGET_EVENT, openWidget)
+    }
+  }, [])
 
   // Don't render anything until health check passes
   if (apiHealthy !== true) return null
