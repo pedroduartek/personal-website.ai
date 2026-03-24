@@ -1,5 +1,10 @@
 import { Suspense, useState } from 'react'
-import { Link, Outlet, useLocation } from 'react-router-dom'
+import {
+  Link,
+  Outlet,
+  NavLink as RouterNavLink,
+  useLocation,
+} from 'react-router-dom'
 import ChatWidget from '../../components/ChatWidget'
 import { CommandPalette } from '../../components/CommandPalette'
 import CommandPaletteTip from '../../components/CommandPalette/CommandPaletteTip'
@@ -7,7 +12,26 @@ import SiteContainer from '../../components/SiteContainer'
 import ThemeToggle from '../../components/ThemeToggle'
 import { useCommandPalette } from '../../hooks/useCommandPalette'
 import { useTheme } from '../theme/ThemeProvider'
+
 const logo = '/pld_logo_header.webp'
+
+const desktopHeaderLinks = [
+  { to: '/about', label: 'About' },
+  { to: '/experience', label: 'Experience' },
+  { to: '/projects', label: 'Projects' },
+  { to: '/education', label: 'Education' },
+  { to: '/skills', label: 'Skills' },
+  { to: '/contact', label: 'Contact' },
+] as const
+
+const mobileHeaderLinks = [
+  { to: '/about', label: 'About Me' },
+  { to: '/experience', label: 'Professional Experience' },
+  { to: '/projects', label: 'Personal Projects' },
+  { to: '/education', label: 'Education' },
+  { to: '/skills', label: 'Skills' },
+  { to: '/contact', label: 'Contacts' },
+] as const
 
 export default function AppLayout() {
   const { isOpen, close, open } = useCommandPalette()
@@ -163,26 +187,32 @@ function Header({
           </div>
 
           <div className="flex items-center gap-3">
-            {/* Desktop navigation */}
-            <div className="hidden 2xl:flex gap-3">
-              <NavLink to="/about">About Me</NavLink>
-              <NavLink to="/experience">Experience</NavLink>
-              <NavLink to="/projects">Projects</NavLink>
-              <NavLink to="/education">Education</NavLink>
-              <NavLink to="/conferences">Conferences</NavLink>
-              <NavLink to="/skills">Skills</NavLink>
-              <NavLink to="/cv">Download CV</NavLink>
-              <NavLink to="/contact">Contacts</NavLink>
+            <div className="hidden 2xl:flex items-center gap-3">
+              <div className="flex items-center gap-1 rounded-full border border-border/70 bg-surface-muted/60 p-1 shadow-sm shadow-slate-950/5">
+                {desktopHeaderLinks.map((link) => (
+                  <HeaderNavLink key={link.to} to={link.to}>
+                    {link.label}
+                  </HeaderNavLink>
+                ))}
+              </div>
+
+              <Link
+                to="/cv"
+                className="inline-flex items-center rounded-full border border-chat/20 bg-chat px-4 py-2 text-sm font-semibold text-white shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:bg-blue-700 hover:shadow-lg"
+              >
+                Download CV
+              </Link>
             </div>
 
-            <ThemeToggle />
+            <ThemeToggle className="rounded-full border-border/80 bg-surface-muted/70 hover:bg-surface" />
 
             {/* Mobile menu button */}
             <button
               type="button"
               onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="theme-button-secondary p-2 2xl:hidden"
+              className="inline-flex items-center justify-center rounded-full border border-border bg-surface-muted/80 p-2 text-foreground-muted transition-all duration-200 hover:border-border-strong hover:bg-surface hover:text-foreground 2xl:hidden"
               aria-label="Toggle menu"
+              aria-expanded={isMenuOpen}
             >
               <svg
                 role="img"
@@ -214,31 +244,26 @@ function Header({
 
         {/* Mobile navigation */}
         {isMenuOpen && (
-          <div className="2xl:hidden mt-4 flex flex-col gap-2">
-            <NavLink to="/about" onClick={() => setIsMenuOpen(false)}>
-              About Me
-            </NavLink>
-            <NavLink to="/experience" onClick={() => setIsMenuOpen(false)}>
-              Professional Experience
-            </NavLink>
-            <NavLink to="/projects" onClick={() => setIsMenuOpen(false)}>
-              Personal Projects
-            </NavLink>
-            <NavLink to="/education" onClick={() => setIsMenuOpen(false)}>
-              Education
-            </NavLink>
-            <NavLink to="/conferences" onClick={() => setIsMenuOpen(false)}>
-              Conferences
-            </NavLink>
-            <NavLink to="/skills" onClick={() => setIsMenuOpen(false)}>
-              Skills
-            </NavLink>
-            <NavLink to="/cv" onClick={() => setIsMenuOpen(false)}>
+          <div className="mt-4 rounded-[1.5rem] border border-border bg-surface p-3 shadow-lg shadow-slate-950/5 2xl:hidden">
+            <Link
+              to="/cv"
+              onClick={() => setIsMenuOpen(false)}
+              className="mb-3 inline-flex w-full items-center justify-center rounded-xl border border-chat/20 bg-chat px-4 py-3 text-sm font-semibold text-white shadow-sm transition-all duration-200 hover:bg-blue-700"
+            >
               Download CV
-            </NavLink>
-            <NavLink to="/contact" onClick={() => setIsMenuOpen(false)}>
-              Contacts
-            </NavLink>
+            </Link>
+
+            <div className="flex flex-col gap-1">
+              {mobileHeaderLinks.map((link) => (
+                <MobileNavLink
+                  key={link.to}
+                  to={link.to}
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  {link.label}
+                </MobileNavLink>
+              ))}
+            </div>
           </div>
         )}
       </nav>
@@ -246,14 +271,44 @@ function Header({
   )
 }
 
-function NavLink({
+function HeaderNavLink({
+  to,
+  children,
+}: { to: string; children: React.ReactNode }) {
+  return (
+    <RouterNavLink
+      to={to}
+      className={({ isActive }) =>
+        `inline-flex items-center rounded-full px-3 py-2 text-sm font-medium transition-all duration-200 ${
+          isActive
+            ? 'bg-surface text-foreground shadow-sm'
+            : 'text-foreground-muted hover:bg-surface hover:text-foreground'
+        }`
+      }
+    >
+      {children}
+    </RouterNavLink>
+  )
+}
+
+function MobileNavLink({
   to,
   children,
   onClick,
 }: { to: string; children: React.ReactNode; onClick?: () => void }) {
   return (
-    <Link to={to} onClick={onClick} className="theme-button-secondary">
+    <RouterNavLink
+      to={to}
+      onClick={onClick}
+      className={({ isActive }) =>
+        `inline-flex items-center rounded-xl px-3 py-2.5 text-sm font-medium transition-colors duration-200 ${
+          isActive
+            ? 'bg-surface-muted text-foreground'
+            : 'text-foreground-muted hover:bg-surface-muted hover:text-foreground'
+        }`
+      }
+    >
       {children}
-    </Link>
+    </RouterNavLink>
   )
 }
