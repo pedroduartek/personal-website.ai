@@ -112,6 +112,9 @@ export default function HomeHeroCarousel({ slides }: HomeHeroCarouselProps) {
   const [activeIndex, setActiveIndex] = useState(0)
   const [isPaused, setIsPaused] = useState(false)
   const [isDesktop, setIsDesktop] = useState(isDesktopViewport)
+  const [slideDirection, setSlideDirection] = useState<'forward' | 'backward'>(
+    'forward',
+  )
   const [prefersReducedMotion, setPrefersReducedMotion] = useState(
     getInitialReducedMotionPreference,
   )
@@ -194,14 +197,16 @@ export default function HomeHeroCarousel({ slides }: HomeHeroCarouselProps) {
       return
     }
 
+    const nextIndex = (activeIndex + 1) % carouselSlides.length
+
     const timer = window.setTimeout(() => {
-      setActiveIndex((current) => (current + 1) % carouselSlides.length)
-    }, 4800)
+      setActiveIndex(nextIndex)
+    }, 3600)
 
     return () => {
       window.clearTimeout(timer)
     }
-  }, [carouselSlides.length, isPaused, prefersReducedMotion])
+  }, [activeIndex, carouselSlides.length, isPaused, prefersReducedMotion])
 
   const activeSlide = carouselSlides[activeIndex]
   const activeContent = activeSlide.homeHero
@@ -217,6 +222,11 @@ export default function HomeHeroCarousel({ slides }: HomeHeroCarouselProps) {
   const usesChatPreview = activeSlide.customMedia === 'chat'
   const usesCompactMobileProjectLayout =
     !usesTerminalPreview && !usesChatPreview
+  const slideTransitionClass = prefersReducedMotion
+    ? ''
+    : slideDirection === 'forward'
+      ? 'animate-carousel-slide-in-forward'
+      : 'animate-carousel-slide-in-backward'
   const cardClasses = `group relative flex overflow-hidden rounded-[2rem] border border-border bg-surface shadow-[0_24px_80px_rgba(15,23,42,0.18)] transition-transform duration-300 hover:-translate-y-1 ${
     usesCompactMobileProjectLayout
       ? 'min-h-[24rem] sm:h-[31rem] md:h-[35rem]'
@@ -224,6 +234,7 @@ export default function HomeHeroCarousel({ slides }: HomeHeroCarouselProps) {
   }`
 
   const goToPrevious = () => {
+    setSlideDirection('backward')
     setActiveIndex(
       (current) =>
         (current - 1 + carouselSlides.length) % carouselSlides.length,
@@ -231,7 +242,13 @@ export default function HomeHeroCarousel({ slides }: HomeHeroCarouselProps) {
   }
 
   const goToNext = () => {
+    setSlideDirection('forward')
     setActiveIndex((current) => (current + 1) % carouselSlides.length)
+  }
+
+  const goToIndex = (nextIndex: number) => {
+    setSlideDirection(nextIndex < activeIndex ? 'backward' : 'forward')
+    setActiveIndex(nextIndex)
   }
 
   return (
@@ -264,12 +281,12 @@ export default function HomeHeroCarousel({ slides }: HomeHeroCarouselProps) {
 
         if (event.key === 'Home') {
           event.preventDefault()
-          setActiveIndex(0)
+          goToIndex(0)
         }
 
         if (event.key === 'End') {
           event.preventDefault()
-          setActiveIndex(carouselSlides.length - 1)
+          goToIndex(carouselSlides.length - 1)
         }
       }}
       onTouchStart={(event) => {
@@ -305,9 +322,10 @@ export default function HomeHeroCarousel({ slides }: HomeHeroCarouselProps) {
 
       {usesChatPreview ? (
         <button
+          key={activeSlide.slug}
           type="button"
           onClick={() => openChatWidget()}
-          className={cardClasses}
+          className={`${cardClasses} ${slideTransitionClass}`}
           aria-label={`Open ${activeSlide.title}`}
         >
           <div
@@ -404,7 +422,11 @@ export default function HomeHeroCarousel({ slides }: HomeHeroCarouselProps) {
           </div>
         </button>
       ) : (
-        <Link to={activeSlide.href} className={cardClasses}>
+        <Link
+          key={activeSlide.slug}
+          to={activeSlide.href}
+          className={`${cardClasses} ${slideTransitionClass}`}
+        >
           <div
             className={`absolute inset-0 bg-gradient-to-br ${theme.shell}`}
             aria-hidden="true"
@@ -542,7 +564,7 @@ export default function HomeHeroCarousel({ slides }: HomeHeroCarouselProps) {
               <button
                 key={slide.slug}
                 type="button"
-                onClick={() => setActiveIndex(index)}
+                onClick={() => goToIndex(index)}
                 aria-label={`Show slide ${index + 1}: ${slide.title}`}
                 aria-pressed={isActive}
                 className={`h-2 rounded-full transition-all duration-200 ${

@@ -81,7 +81,7 @@ describe('HomePage hero carousel', () => {
     })
 
     act(() => {
-      vi.advanceTimersByTime(4800)
+      vi.advanceTimersByTime(3600)
     })
 
     expect(
@@ -95,6 +95,40 @@ describe('HomePage hero carousel', () => {
         name: /Home Assistant: Local-First Smart Home/i,
       }),
     ).toHaveAttribute('href', '/projects/home-assistant')
+  })
+
+  it('keeps auto-rotating beyond the home assistant slide', async () => {
+    render(
+      <MemoryRouter>
+        <HomePage />
+      </MemoryRouter>,
+    )
+
+    await settleChatAvailability()
+
+    const carousel = screen.getByRole('region', {
+      name: /featured project carousel/i,
+    })
+
+    act(() => {
+      vi.advanceTimersByTime(3600)
+    })
+
+    expect(
+      within(carousel).getByRole('link', {
+        name: /Home Assistant: Local-First Smart Home/i,
+      }),
+    ).toHaveAttribute('href', '/projects/home-assistant')
+
+    act(() => {
+      vi.advanceTimersByTime(3600)
+    })
+
+    expect(
+      within(carousel).getByRole('link', {
+        name: /AI Chat API/i,
+      }),
+    ).toHaveAttribute('href', '/projects/ai-chat-api')
   })
 
   it('pauses auto-rotation while hovered', async () => {
