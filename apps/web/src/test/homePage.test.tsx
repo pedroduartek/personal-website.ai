@@ -86,18 +86,12 @@ describe('HomePage hero carousel', () => {
 
     expect(
       within(carousel).getByRole('link', {
-        name: /Home Assistant: Local-First Smart Home|AI Chat Assistant/i,
+        name: /Ourivesaria Rinchoa Website/i,
       }),
-    ).toBeInTheDocument()
-
-    expect(
-      within(carousel).getByRole('link', {
-        name: /Home Assistant: Local-First Smart Home/i,
-      }),
-    ).toHaveAttribute('href', '/projects/home-assistant')
+    ).toHaveAttribute('href', '/projects/ourivesaria-rinchoa')
   })
 
-  it('keeps auto-rotating beyond the home assistant slide', async () => {
+  it('keeps auto-rotating across the featured project slides', async () => {
     render(
       <MemoryRouter>
         <HomePage />
@@ -109,6 +103,16 @@ describe('HomePage hero carousel', () => {
     const carousel = screen.getByRole('region', {
       name: /featured project carousel/i,
     })
+
+    act(() => {
+      vi.advanceTimersByTime(3600)
+    })
+
+    expect(
+      within(carousel).getByRole('link', {
+        name: /Ourivesaria Rinchoa Website/i,
+      }),
+    ).toHaveAttribute('href', '/projects/ourivesaria-rinchoa')
 
     act(() => {
       vi.advanceTimersByTime(3600)
@@ -174,9 +178,9 @@ describe('HomePage hero carousel', () => {
 
     expect(
       within(carousel).getByRole('link', {
-        name: /Home Assistant: Local-First Smart Home/i,
+        name: /Ourivesaria Rinchoa Website/i,
       }),
-    ).toHaveAttribute('href', '/projects/home-assistant')
+    ).toHaveAttribute('href', '/projects/ourivesaria-rinchoa')
 
     fireEvent.keyDown(carousel, { key: 'ArrowLeft' })
 

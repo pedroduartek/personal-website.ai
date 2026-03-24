@@ -67,6 +67,16 @@ function getSlideTheme(slug: string) {
         mediaFrame:
           'bg-emerald-500/12 dark:bg-emerald-500/18 border-emerald-400/20 dark:border-emerald-400/20',
       }
+    case 'ourivesaria-rinchoa':
+      return {
+        shell:
+          'from-rose-400/24 via-amber-300/10 to-transparent dark:from-rose-400/18 dark:via-amber-300/8 dark:to-transparent',
+        halo: 'bg-rose-400/12 dark:bg-rose-400/18',
+        badge:
+          'border-rose-400/30 bg-rose-400/10 text-rose-700 dark:text-rose-200',
+        mediaFrame:
+          'bg-rose-400/12 dark:bg-rose-400/16 border-rose-300/20 dark:border-rose-300/20',
+      }
     case 'ai-chat-api':
       return {
         shell:

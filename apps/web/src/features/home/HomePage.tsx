@@ -8,7 +8,7 @@ import { projects } from '../../content/projects'
 import { getExperience } from '../../utils/experience'
 
 export default function HomePage() {
-  const featuredProjects = projects.filter((p) => p.featured).slice(0, 3)
+  const featuredProjects = projects.filter((p) => p.featured)
   const experience = getExperience()
   const currentCompany = experienceItems[0]?.company
 
@@ -52,14 +52,16 @@ export default function HomePage() {
                   Welcome. I&apos;m a backend software engineer with{' '}
                   {experience.text} of experience in C#/.NET, microservices, and
                   event-driven systems.{' '}
-                  <StyledLink href="/about">Learn more about me</StyledLink>
+                  <StyledLink href="/about" variant="inline-underline">
+                    Learn more about me
+                  </StyledLink>
                 </p>
                 <p className="mb-4 text-base text-foreground-muted lg:text-lg">
                   This website is also a learning project. Frontend development
                   was not the center of my background, so I used this portfolio
                   as a practical way to learn React, TypeScript, and modern UI
                   work by building something real.{' '}
-                  <StyledLink href="/projects">
+                  <StyledLink href="/projects" variant="inline-underline">
                     See the full project details
                   </StyledLink>
                 </p>

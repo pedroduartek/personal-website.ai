@@ -61,7 +61,18 @@ function getProjects(): Project[] {
       links: {
         demo: 'https://ourivesariarinchoa.pt',
       },
-      featured: false,
+      homeHero: {
+        eyebrow: 'Local business website',
+        summary:
+          'A focused storefront site for a real jewelry and watch business, built around trust, wedding-ring appointments, service visibility, and local SEO.',
+        media: {
+          src: 'https://ourivesariarinchoa.pt/images/social-share.webp',
+          alt: 'Social share image for the Ourivesaria Rinchoa website project',
+          fit: 'cover',
+          objectPosition: 'center top',
+        },
+      },
+      featured: true,
       startDate: '2026-03',
     },
     {

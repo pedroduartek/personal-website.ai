@@ -1,6 +1,12 @@
 import { useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
 
+type StyledLinkVariant =
+  | 'card'
+  | 'inline-underline'
+  | 'inline-accent'
+  | 'inline-chip'
+
 type Props = {
   href?: string
   children?: React.ReactNode
@@ -8,6 +14,17 @@ type Props = {
   rel?: string
   bigger?: boolean
   ariaLabel?: string
+  variant?: StyledLinkVariant
+}
+
+const variantClasses: Record<StyledLinkVariant, string> = {
+  card: 'inline-block rounded border border-border bg-surface-muted px-2 py-0.5 text-sm text-foreground no-underline transition-all duration-200 hover:translate-x-1 hover:border-border-strong hover:bg-surface-strong hover:shadow-lg',
+  'inline-underline':
+    'inline font-medium text-foreground underline decoration-chat/55 decoration-2 underline-offset-[0.24em] transition-colors duration-200 hover:text-chat hover:decoration-chat',
+  'inline-accent':
+    'inline rounded-[0.35rem] px-1 py-0.5 font-medium text-foreground underline decoration-transparent decoration-2 underline-offset-4 shadow-[inset_0_-0.58em_0_0_rgba(52,125,57,0.14)] transition-all duration-200 hover:text-foreground hover:shadow-[inset_0_-0.95em_0_0_rgba(52,125,57,0.2)]',
+  'inline-chip':
+    'inline rounded-md border border-border bg-surface-muted px-2 py-0.5 text-[0.92em] font-medium text-foreground no-underline transition-all duration-200 hover:border-border-strong hover:bg-surface hover:shadow-sm',
 }
 
 export default function StyledLink({
@@ -17,6 +34,7 @@ export default function StyledLink({
   rel,
   bigger = false,
   ariaLabel,
+  variant = 'card',
 }: Props) {
   const navigate = useNavigate()
 
@@ -47,12 +65,15 @@ export default function StyledLink({
       target={target}
       aria-label={ariaLabel}
       className={(() => {
-        const base =
-          'inline-block text-sm px-2 py-0.5 rounded border transition-all duration-200 focus:outline-none'
-        const defaults =
-          'border-border bg-surface-muted text-foreground no-underline hover:translate-x-1 hover:border-border-strong hover:bg-surface-strong hover:shadow-lg focus:ring-2 focus:ring-indigo-300'
-        const sizeClass = bigger ? 'transform origin-left scale-110' : ''
-        return `${base} ${defaults} ${sizeClass}`.trim()
+        const base = 'focus:outline-none'
+        const sizeClass =
+          bigger && variant === 'card'
+            ? 'transform origin-left scale-110'
+            : bigger
+              ? 'text-[1.05em]'
+              : ''
+
+        return `${base} ${variantClasses[variant]} ${sizeClass}`.trim()
       })()}
     >
       {children}
