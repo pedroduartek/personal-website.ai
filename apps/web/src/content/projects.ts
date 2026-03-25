@@ -59,6 +59,7 @@ function getProjects(): Project[] {
         'Vercel',
       ],
       links: {
+        github: 'https://github.com/pedroduartek/ourivesaria-rinchoa',
         demo: 'https://ourivesariarinchoa.pt',
       },
       homeHero: {

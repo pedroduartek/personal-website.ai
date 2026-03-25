@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom'
+import GithubButton from '../../components/GithubButton'
 import WebsitePeek from '../../components/WebsitePeek'
 import PageSEO from '../../components/seo/PageSEO'
 import { projects } from '../../content/projects'
@@ -42,6 +43,7 @@ const projectPriorities = [
 export default function OurivesariaRinchoaProjectPage() {
   const project = projects.find((p) => p.slug === 'ourivesaria-rinchoa')
   if (!project) return null
+  const githubUrl = project.links?.github
   const liveSiteUrl = project.links?.demo
 
   return (
@@ -95,10 +97,14 @@ export default function OurivesariaRinchoaProjectPage() {
           >
             Visit live site
           </a>
-          <p className="theme-button-secondary-prominent text-sm text-foreground-subtle ml-5 cursor-default hover:scale-100 hover:bg-transparent focus:ring-0">
-            The repository stays private because this is a real business
-            website.
-          </p>
+          {githubUrl && (
+            <GithubButton
+              href={githubUrl}
+              ariaLabel="View repository on GitHub"
+            >
+              View on GitHub
+            </GithubButton>
+          )}
         </div>
 
         <div className="mb-8 flex flex-wrap gap-2">

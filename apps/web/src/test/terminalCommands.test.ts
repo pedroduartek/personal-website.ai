@@ -36,14 +36,16 @@ describe('terminalCommands', () => {
     expect(output).toContain('  ai-chat-api')
   })
 
-  it('shows a private project with a public demo link', async () => {
+  it('shows a project with public demo and GitHub links', async () => {
     const output = await runCommand('project ourivesaria-rinchoa')
     const joined = output.join('\n')
 
     expect(output[0]).toMatch(/Ourivesaria Rinchoa Website/)
     expect(joined).toContain('Route: /projects/ourivesaria-rinchoa')
     expect(joined).toContain('Demo: https://ourivesariarinchoa.pt')
-    expect(joined).not.toContain('GitHub:')
+    expect(joined).toContain(
+      'GitHub: https://github.com/pedroduartek/ourivesaria-rinchoa',
+    )
   })
 
   it('shows detailed company experience and supports cat aliases', async () => {

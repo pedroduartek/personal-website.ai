@@ -39,7 +39,16 @@ describe('HomeAssistantProjectPage', () => {
       screen.getByRole('link', { name: /visit live site/i }),
     ).toHaveAttribute('href', 'https://ourivesariarinchoa.pt')
     expect(
+      screen.getByRole('link', { name: /view repository on github/i }),
+    ).toHaveAttribute(
+      'href',
+      'https://github.com/pedroduartek/ourivesaria-rinchoa',
+    )
+    expect(
       screen.getByRole('link', { name: /open ourivesaria rinchoa homepage/i }),
     ).toHaveAttribute('href', 'https://ourivesariarinchoa.pt')
+    expect(
+      screen.queryByText(/repository stays private/i),
+    ).not.toBeInTheDocument()
   })
 })
