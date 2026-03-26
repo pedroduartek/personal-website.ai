@@ -54,7 +54,7 @@ function getSlideTheme(slug: string) {
         shell:
           'from-sky-500/28 via-cyan-500/12 to-transparent dark:from-sky-500/18 dark:via-cyan-500/8 dark:to-transparent',
         halo: 'bg-sky-500/12 dark:bg-sky-500/18',
-        badge: 'border-sky-500/30 bg-sky-500/10 text-sky-700 dark:text-sky-200',
+        badge: 'border-sky-500/30 bg-sky-500/10 text-sky-200',
         mediaFrame:
           'bg-sky-500/12 dark:bg-sky-500/18 border-sky-400/20 dark:border-sky-400/20',
       }
@@ -63,8 +63,7 @@ function getSlideTheme(slug: string) {
         shell:
           'from-emerald-500/28 via-teal-500/12 to-transparent dark:from-emerald-500/20 dark:via-teal-500/10 dark:to-transparent',
         halo: 'bg-emerald-500/12 dark:bg-emerald-500/18',
-        badge:
-          'border-emerald-500/30 bg-emerald-500/10 text-emerald-700 dark:text-emerald-200',
+        badge: 'border-emerald-500/30 bg-emerald-500/10 text-emerald-200',
         mediaFrame:
           'bg-emerald-500/12 dark:bg-emerald-500/18 border-emerald-400/20 dark:border-emerald-400/20',
       }
@@ -73,8 +72,7 @@ function getSlideTheme(slug: string) {
         shell:
           'from-rose-400/24 via-amber-300/10 to-transparent dark:from-rose-400/18 dark:via-amber-300/8 dark:to-transparent',
         halo: 'bg-rose-400/12 dark:bg-rose-400/18',
-        badge:
-          'border-rose-400/30 bg-rose-400/10 text-rose-700 dark:text-rose-200',
+        badge: 'border-rose-400/30 bg-rose-400/10 text-rose-200',
         mediaFrame:
           'bg-rose-400/12 dark:bg-rose-400/16 border-rose-300/20 dark:border-rose-300/20',
       }
@@ -83,8 +81,7 @@ function getSlideTheme(slug: string) {
         shell:
           'from-blue-600/28 via-indigo-500/12 to-transparent dark:from-blue-500/22 dark:via-indigo-500/10 dark:to-transparent',
         halo: 'bg-blue-500/12 dark:bg-blue-500/18',
-        badge:
-          'border-blue-500/30 bg-blue-500/10 text-blue-700 dark:text-blue-200',
+        badge: 'border-blue-500/30 bg-blue-500/10 text-blue-200',
         mediaFrame:
           'bg-blue-500/12 dark:bg-blue-500/18 border-blue-400/20 dark:border-blue-400/20',
       }
@@ -93,8 +90,7 @@ function getSlideTheme(slug: string) {
         shell:
           'from-fuchsia-500/24 via-pink-500/10 to-transparent dark:from-fuchsia-500/18 dark:via-pink-500/8 dark:to-transparent',
         halo: 'bg-fuchsia-400/14 dark:bg-fuchsia-400/18',
-        badge:
-          'border-fuchsia-400/30 bg-fuchsia-400/10 text-fuchsia-700 dark:text-fuchsia-200',
+        badge: 'border-fuchsia-400/30 bg-fuchsia-400/10 text-fuchsia-200',
         mediaFrame:
           'bg-fuchsia-400/12 dark:bg-fuchsia-400/16 border-fuchsia-300/20 dark:border-fuchsia-300/20',
       }
@@ -103,8 +99,7 @@ function getSlideTheme(slug: string) {
         shell:
           'from-amber-500/22 via-orange-500/10 to-transparent dark:from-amber-500/18 dark:via-orange-500/8 dark:to-transparent',
         halo: 'bg-amber-400/14 dark:bg-amber-400/18',
-        badge:
-          'border-amber-400/30 bg-amber-400/10 text-amber-700 dark:text-amber-200',
+        badge: 'border-amber-400/30 bg-amber-400/10 text-amber-200',
         mediaFrame:
           'bg-amber-400/12 dark:bg-amber-400/16 border-amber-300/20 dark:border-amber-300/20',
       }
