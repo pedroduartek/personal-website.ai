@@ -49,6 +49,7 @@
 
   html {
     background-color: rgb(var(--color-background));
+    overflow-y: scroll;
   }
 
   body {
