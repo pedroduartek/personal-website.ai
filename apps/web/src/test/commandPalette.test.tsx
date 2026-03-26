@@ -148,7 +148,7 @@ describe('CommandPaletteTip', () => {
     )
     // advance timers beyond initial schedule
     act(() => vi.advanceTimersByTime(6000))
-    expect(queryByText(/Try the command palette/i)).toBeNull()
+    expect(queryByText(/Open commands fast/i)).toBeNull()
   })
 
   it('does not show when address bar is focused until user interacts', () => {
@@ -164,7 +164,7 @@ describe('CommandPaletteTip', () => {
       window.dispatchEvent(new Event('focus'))
       vi.advanceTimersByTime(6000)
     })
-    expect(queryByText(/Try the command palette/i)).toBeNull()
+    expect(queryByText(/Open commands fast/i)).toBeNull()
 
     // simulate a pointerdown interaction
     act(() => {
@@ -173,6 +173,6 @@ describe('CommandPaletteTip', () => {
       vi.advanceTimersByTime(6000)
     })
 
-    expect(queryByText(/Try the command palette/i)).not.toBeNull()
+    expect(queryByText(/Open commands fast/i)).not.toBeNull()
   })
 })

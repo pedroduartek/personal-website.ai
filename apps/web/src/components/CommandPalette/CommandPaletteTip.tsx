@@ -218,13 +218,13 @@ export default function CommandPaletteTip() {
       >
         <div className="flex items-start gap-3">
           <div>
-            <div className="font-medium">Try the command palette</div>
+            <div className="font-medium">Open commands fast</div>
             <div className="mt-1 text-sm text-foreground-muted">
               Press
               <span className="theme-kbd mx-2 inline-block text-sm font-bold text-foreground">
                 {isMac ? '⌘K' : 'Ctrl+K'}
               </span>
-              to open it
+              to jump anywhere
             </div>
           </div>
         </div>
@@ -245,13 +245,13 @@ export default function CommandPaletteTip() {
       >
         <div className="flex items-start gap-3">
           <div>
-            <div className="font-medium">Try the command palette</div>
+            <div className="font-medium">Open commands fast</div>
             <div className="mt-1 text-sm text-foreground-muted">
               Press
               <span className="theme-kbd mx-2 inline-block text-sm font-bold text-foreground">
                 {isMac ? '⌘K' : 'Ctrl+K'}
               </span>
-              to open it
+              to jump anywhere
             </div>
           </div>
         </div>

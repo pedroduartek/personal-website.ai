@@ -236,7 +236,7 @@ export function CommandPalette({ isOpen, onClose }: CommandPaletteProps) {
               type="text"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              placeholder="Type a command or search..."
+              placeholder="Go to a page or run a command..."
               className="theme-input text-lg"
             />
           </div>

@@ -527,8 +527,8 @@ const HeaderCommandButton = forwardRef<
       type="button"
       id={measure ? undefined : id}
       onClick={measure ? undefined : onClick}
-      className="ml-10 inline-flex w-[18rem] items-center gap-2 rounded-full border border-border bg-surface-muted/90 px-4 py-2.5 text-sm text-foreground-subtle transition-colors hover:border-border-strong hover:bg-surface hover:text-foreground-muted min-[1600px]:w-[21rem]"
-      aria-label={measure ? undefined : 'Open command palette'}
+      className="ml-10 inline-flex w-[18rem] items-center gap-3 rounded-full border border-border bg-surface-muted/90 px-4 py-2.5 text-sm font-medium text-foreground-muted transition-colors hover:border-border-strong hover:bg-surface hover:text-foreground min-[1600px]:w-[21rem]"
+      aria-label={measure ? undefined : 'Open commands'}
     >
       <span className="flex min-w-0 flex-1 items-center gap-2">
         <svg
@@ -536,18 +536,22 @@ const HeaderCommandButton = forwardRef<
           fill="none"
           stroke="currentColor"
           viewBox="0 0 24 24"
-          role="img"
-          aria-label="Search icon"
+          aria-hidden="true"
         >
-          <title>Search</title>
           <path
             strokeLinecap="round"
             strokeLinejoin="round"
             strokeWidth={2}
-            d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+            d="M5 7l4.5 5L5 17"
+          />
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+            d="M11.5 17H19"
           />
         </svg>
-        <span className="truncate">Search</span>
+        <span className="truncate">Commands</span>
       </span>
       <kbd className="theme-kbd hidden border-0 bg-surface px-1.5 py-0.5 sm:inline-flex">
         {isMac ? '⌘K' : 'Ctrl+K'}
