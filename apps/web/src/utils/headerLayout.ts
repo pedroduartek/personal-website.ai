@@ -1,4 +1,16 @@
-const HEADER_COMMAND_MIN_WIDTH = 560
+export type HeaderLayoutInput = {
+  commandButtonWidth: number
+  desktopControlsWidth: number
+  gap?: number
+  keyboardCapable: boolean
+  logoWidth: number
+  containerWidth: number
+}
+
+export type HeaderLayout = {
+  showCommandButton: boolean
+  showDesktopNav: boolean
+}
 
 export function isKeyboardCapableDevice() {
   if (
@@ -11,12 +23,34 @@ export function isKeyboardCapableDevice() {
   return window.matchMedia('(any-hover: hover) and (any-pointer: fine)').matches
 }
 
-export function canShowHeaderCommandPalette(viewportWidth?: number) {
-  const width =
-    viewportWidth ??
-    (typeof window !== 'undefined'
-      ? window.innerWidth
-      : HEADER_COMMAND_MIN_WIDTH)
+export function resolveHeaderLayout({
+  commandButtonWidth,
+  desktopControlsWidth,
+  gap = 16,
+  keyboardCapable,
+  logoWidth,
+  containerWidth,
+}: HeaderLayoutInput): HeaderLayout {
+  const desktopRequired = logoWidth + desktopControlsWidth + gap
+  const desktopWithCommandRequired =
+    logoWidth + commandButtonWidth + desktopControlsWidth + gap * 2
 
-  return isKeyboardCapableDevice() && width >= HEADER_COMMAND_MIN_WIDTH
+  if (keyboardCapable && containerWidth >= desktopWithCommandRequired) {
+    return {
+      showCommandButton: true,
+      showDesktopNav: true,
+    }
+  }
+
+  if (containerWidth >= desktopRequired) {
+    return {
+      showCommandButton: false,
+      showDesktopNav: true,
+    }
+  }
+
+  return {
+    showCommandButton: false,
+    showDesktopNav: false,
+  }
 }

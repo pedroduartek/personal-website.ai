@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import {
-  canShowHeaderCommandPalette,
   isKeyboardCapableDevice,
+  resolveHeaderLayout,
 } from '../utils/headerLayout'
 
 describe('headerLayout helpers', () => {
@@ -24,23 +24,63 @@ describe('headerLayout helpers', () => {
     expect(isKeyboardCapableDevice()).toBe(true)
   })
 
-  it('hides the header command palette on narrow viewports even on keyboard devices', () => {
-    Object.defineProperty(window, 'matchMedia', {
-      configurable: true,
-      writable: true,
-      value: (query: string) => ({
-        matches: query === '(any-hover: hover) and (any-pointer: fine)',
-        media: query,
-        onchange: null,
-        addEventListener: () => {},
-        removeEventListener: () => {},
-        addListener: () => {},
-        removeListener: () => {},
-        dispatchEvent: () => false,
+  it('shows desktop navigation and command palette when both fit', () => {
+    expect(
+      resolveHeaderLayout({
+        commandButtonWidth: 320,
+        containerWidth: 1700,
+        desktopControlsWidth: 900,
+        keyboardCapable: true,
+        logoWidth: 280,
       }),
+    ).toEqual({
+      showCommandButton: true,
+      showDesktopNav: true,
     })
+  })
 
-    expect(canShowHeaderCommandPalette(375)).toBe(false)
-    expect(canShowHeaderCommandPalette(560)).toBe(true)
+  it('keeps desktop navigation and hides the command palette first when space gets tight', () => {
+    expect(
+      resolveHeaderLayout({
+        commandButtonWidth: 320,
+        containerWidth: 1300,
+        desktopControlsWidth: 900,
+        keyboardCapable: true,
+        logoWidth: 280,
+      }),
+    ).toEqual({
+      showCommandButton: false,
+      showDesktopNav: true,
+    })
+  })
+
+  it('falls back to hamburger mode without bringing back the command palette', () => {
+    expect(
+      resolveHeaderLayout({
+        commandButtonWidth: 320,
+        containerWidth: 1000,
+        desktopControlsWidth: 900,
+        keyboardCapable: true,
+        logoWidth: 280,
+      }),
+    ).toEqual({
+      showCommandButton: false,
+      showDesktopNav: false,
+    })
+  })
+
+  it('never shows the command palette on touch-first devices', () => {
+    expect(
+      resolveHeaderLayout({
+        commandButtonWidth: 320,
+        containerWidth: 1700,
+        desktopControlsWidth: 900,
+        keyboardCapable: false,
+        logoWidth: 280,
+      }),
+    ).toEqual({
+      showCommandButton: false,
+      showDesktopNav: true,
+    })
   })
 })

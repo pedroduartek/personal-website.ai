@@ -1,4 +1,4 @@
-import { Suspense, useEffect, useState } from 'react'
+import { Suspense, forwardRef, useEffect, useRef, useState } from 'react'
 import {
   Link,
   Outlet,
@@ -12,8 +12,8 @@ import SiteContainer from '../../components/SiteContainer'
 import ThemeToggle from '../../components/ThemeToggle'
 import { useCommandPalette } from '../../hooks/useCommandPalette'
 import {
-  canShowHeaderCommandPalette,
   isKeyboardCapableDevice,
+  resolveHeaderLayout,
 } from '../../utils/headerLayout'
 import { useTheme } from '../theme/ThemeProvider'
 
@@ -106,25 +106,104 @@ function Header({
   onOpenCommandPalette: () => void
 }) {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
-  const [showCommandButton, setShowCommandButton] = useState(() =>
-    canShowHeaderCommandPalette(),
-  )
+  const [headerLayout, setHeaderLayout] = useState(() => ({
+    showCommandButton: false,
+    showDesktopNav: true,
+  }))
   const { theme } = useTheme()
+  const navRowRef = useRef<HTMLDivElement>(null)
+  const logoRef = useRef<HTMLAnchorElement>(null)
+  const commandMeasureRef = useRef<HTMLButtonElement>(null)
+  const desktopControlsMeasureRef = useRef<HTMLDivElement>(null)
   const isMac =
     typeof navigator !== 'undefined' &&
     /(Mac|iPhone|iPod|iPad)/i.test(navigator.platform)
-  const keyboardCapable = isKeyboardCapableDevice()
 
   useEffect(() => {
-    const updateCommandButtonVisibility = () => {
-      setShowCommandButton(canShowHeaderCommandPalette())
+    const updateLayout = () => {
+      if (
+        !navRowRef.current ||
+        !logoRef.current ||
+        !commandMeasureRef.current ||
+        !desktopControlsMeasureRef.current
+      ) {
+        return
+      }
+
+      const nextLayout = resolveHeaderLayout({
+        commandButtonWidth:
+          commandMeasureRef.current.getBoundingClientRect().width,
+        containerWidth: navRowRef.current.clientWidth,
+        desktopControlsWidth:
+          desktopControlsMeasureRef.current.getBoundingClientRect().width,
+        keyboardCapable: isKeyboardCapableDevice(),
+        logoWidth: logoRef.current.getBoundingClientRect().width,
+      })
+
+      setHeaderLayout((previousLayout) =>
+        previousLayout.showCommandButton === nextLayout.showCommandButton &&
+        previousLayout.showDesktopNav === nextLayout.showDesktopNav
+          ? previousLayout
+          : nextLayout,
+      )
     }
 
-    updateCommandButtonVisibility()
-    window.addEventListener('resize', updateCommandButtonVisibility)
-    return () =>
-      window.removeEventListener('resize', updateCommandButtonVisibility)
+    updateLayout()
+
+    const resizeObserver =
+      typeof ResizeObserver !== 'undefined'
+        ? new ResizeObserver(updateLayout)
+        : null
+
+    const observedElements = [
+      navRowRef.current,
+      logoRef.current,
+      commandMeasureRef.current,
+      desktopControlsMeasureRef.current,
+    ]
+
+    for (const element of observedElements) {
+      if (element) {
+        resizeObserver?.observe(element)
+      }
+    }
+
+    const mediaQuery =
+      typeof window !== 'undefined' && typeof window.matchMedia === 'function'
+        ? window.matchMedia('(any-hover: hover) and (any-pointer: fine)')
+        : null
+
+    const onMediaQueryChange = () => updateLayout()
+    const addMediaListener = mediaQuery?.addEventListener?.bind(mediaQuery)
+    const removeMediaListener =
+      mediaQuery?.removeEventListener?.bind(mediaQuery)
+    const addLegacyMediaListener = mediaQuery?.addListener?.bind(mediaQuery)
+    const removeLegacyMediaListener =
+      mediaQuery?.removeListener?.bind(mediaQuery)
+
+    window.addEventListener('resize', updateLayout)
+    if (addMediaListener && removeMediaListener) {
+      addMediaListener('change', onMediaQueryChange)
+    } else if (addLegacyMediaListener && removeLegacyMediaListener) {
+      addLegacyMediaListener(onMediaQueryChange)
+    }
+
+    return () => {
+      resizeObserver?.disconnect()
+      window.removeEventListener('resize', updateLayout)
+      if (removeMediaListener) {
+        removeMediaListener('change', onMediaQueryChange)
+      } else if (removeLegacyMediaListener) {
+        removeLegacyMediaListener(onMediaQueryChange)
+      }
+    }
   }, [])
+
+  useEffect(() => {
+    if (headerLayout.showDesktopNav) {
+      setIsMenuOpen(false)
+    }
+  }, [headerLayout.showDesktopNav])
 
   if (isTerminalRoute) {
     return (
@@ -155,9 +234,10 @@ function Header({
 
   return (
     <header className="bg-header">
-      <nav className="px-3 py-2 2xl:px-6">
-        <div className="flex items-center gap-3 xl:gap-5">
+      <nav className="relative px-3 py-2 2xl:px-6">
+        <div ref={navRowRef} className="flex items-center gap-4">
           <Link
+            ref={logoRef}
             to="/"
             className="flex shrink-0 items-center gap-3 text-xl font-bold text-foreground"
           >
@@ -175,110 +255,84 @@ function Header({
             <span className="text-lg sm:text-xl">PEDRODUARTEK</span>
           </Link>
 
-          {keyboardCapable && showCommandButton ? (
-            <div className="min-w-0 flex-1">
-              <div className="relative mx-auto w-full max-w-[22rem] min-[1440px]:max-w-[18rem] min-[1600px]:max-w-[21rem]">
-                <button
-                  type="button"
-                  id="command-palette-button"
-                  onClick={() => {
-                    try {
-                      if (typeof window !== 'undefined')
-                        localStorage.setItem('commandPaletteTipDismissed', '1')
-                    } catch (e) {
-                      // ignore
-                    }
-                    onOpenCommandPalette()
-                  }}
-                  className="inline-flex w-full min-w-0 items-center gap-2 rounded-full border border-border bg-surface-muted/90 px-4 py-2.5 text-sm text-foreground-subtle transition-colors hover:border-border-strong hover:bg-surface hover:text-foreground-muted"
-                  aria-label="Open command palette"
-                >
-                  <span className="flex min-w-0 flex-1 items-center gap-2">
-                    <svg
-                      className="h-4 w-4 shrink-0"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                      role="img"
-                      aria-label="Search icon"
-                    >
-                      <title>Search</title>
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-                      />
-                    </svg>
-                    <span className="truncate">Search</span>
-                  </span>
-                  <kbd className="theme-kbd hidden border-0 bg-surface px-1.5 py-0.5 sm:inline-flex">
-                    {isMac ? '⌘K' : 'Ctrl+K'}
-                  </kbd>
-                </button>
+          {headerLayout.showCommandButton ? (
+            <div className="relative">
+              <HeaderCommandButton
+                id="command-palette-button"
+                isMac={isMac}
+                onClick={() => {
+                  try {
+                    if (typeof window !== 'undefined')
+                      localStorage.setItem('commandPaletteTipDismissed', '1')
+                  } catch (e) {
+                    // ignore
+                  }
+                  onOpenCommandPalette()
+                }}
+              />
 
-                <CommandPaletteTip />
-              </div>
+              <CommandPaletteTip />
             </div>
           ) : null}
 
           <div className="ml-auto flex shrink-0 items-center gap-3">
-            <div className="hidden min-[1440px]:flex min-[1440px]:items-center min-[1440px]:gap-5">
-              <div className="flex items-stretch gap-1 pl-3">
-                {desktopHeaderLinks.map((link) => (
-                  <HeaderNavLink key={link.to} to={link.to} icon={link.icon}>
-                    {link.label}
-                  </HeaderNavLink>
-                ))}
-              </div>
-
-              <Link
-                to="/cv"
-                className="inline-flex min-h-[72px] items-center rounded-2xl px-3 py-2 text-sm font-semibold text-chat transition-colors duration-200 hover:text-blue-700"
-              >
-                Download CV
-              </Link>
-            </div>
+            {headerLayout.showDesktopNav ? <HeaderDesktopNavGroup /> : null}
 
             <ThemeToggle className="rounded-full border-border/80 bg-surface-muted/70 hover:bg-surface" />
 
-            <button
-              type="button"
-              onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="inline-flex items-center justify-center rounded-full border border-border bg-surface-muted/80 p-2 text-foreground-muted transition-all duration-200 hover:border-border-strong hover:bg-surface hover:text-foreground min-[1440px]:hidden"
-              aria-label="Toggle menu"
-              aria-expanded={isMenuOpen}
-            >
-              <svg
-                role="img"
-                aria-label="Menu icon"
-                className="h-6 w-6"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
+            {!headerLayout.showDesktopNav ? (
+              <button
+                type="button"
+                onClick={() => setIsMenuOpen(!isMenuOpen)}
+                className="inline-flex items-center justify-center rounded-full border border-border bg-surface-muted/80 p-2 text-foreground-muted transition-all duration-200 hover:border-border-strong hover:bg-surface hover:text-foreground"
+                aria-label="Toggle menu"
+                aria-expanded={isMenuOpen}
               >
-                {isMenuOpen ? (
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M6 18L18 6M6 6l12 12"
-                  />
-                ) : (
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M4 6h16M4 12h16M4 18h16"
-                  />
-                )}
-              </svg>
-            </button>
+                <svg
+                  role="img"
+                  aria-label="Menu icon"
+                  className="h-6 w-6"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  {isMenuOpen ? (
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M6 18L18 6M6 6l12 12"
+                    />
+                  ) : (
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M4 6h16M4 12h16M4 18h16"
+                    />
+                  )}
+                </svg>
+              </button>
+            ) : null}
           </div>
         </div>
 
-        {isMenuOpen ? (
-          <div className="mt-4 rounded-[1.5rem] border border-border bg-surface p-3 shadow-lg shadow-slate-950/5 min-[1440px]:hidden">
+        <div
+          className="pointer-events-none absolute left-0 top-0 -z-10 invisible whitespace-nowrap"
+          aria-hidden="true"
+        >
+          <HeaderCommandButton ref={commandMeasureRef} isMac={isMac} measure />
+          <div
+            ref={desktopControlsMeasureRef}
+            className="mt-4 flex items-center gap-3"
+          >
+            <HeaderDesktopNavGroup measure />
+            <ThemeToggle className="rounded-full border-border/80 bg-surface-muted/70 hover:bg-surface" />
+          </div>
+        </div>
+
+        {isMenuOpen && !headerLayout.showDesktopNav ? (
+          <div className="mt-4 rounded-[1.5rem] border border-border bg-surface p-3 shadow-lg shadow-slate-950/5">
             <Link
               to="/cv"
               onClick={() => setIsMenuOpen(false)}
@@ -453,5 +507,102 @@ function MobileNavLink({
     >
       {children}
     </RouterNavLink>
+  )
+}
+
+type HeaderCommandButtonProps = {
+  id?: string
+  isMac: boolean
+  measure?: boolean
+  onClick?: () => void
+}
+
+const HeaderCommandButton = forwardRef<
+  HTMLButtonElement,
+  HeaderCommandButtonProps
+>(function HeaderCommandButton({ id, isMac, measure = false, onClick }, ref) {
+  return (
+    <button
+      ref={ref}
+      type="button"
+      id={measure ? undefined : id}
+      onClick={measure ? undefined : onClick}
+      className="ml-10 inline-flex w-[18rem] items-center gap-2 rounded-full border border-border bg-surface-muted/90 px-4 py-2.5 text-sm text-foreground-subtle transition-colors hover:border-border-strong hover:bg-surface hover:text-foreground-muted min-[1600px]:w-[21rem]"
+      aria-label={measure ? undefined : 'Open command palette'}
+    >
+      <span className="flex min-w-0 flex-1 items-center gap-2">
+        <svg
+          className="h-4 w-4 shrink-0"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+          role="img"
+          aria-label="Search icon"
+        >
+          <title>Search</title>
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+            d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+          />
+        </svg>
+        <span className="truncate">Search</span>
+      </span>
+      <kbd className="theme-kbd hidden border-0 bg-surface px-1.5 py-0.5 sm:inline-flex">
+        {isMac ? '⌘K' : 'Ctrl+K'}
+      </kbd>
+    </button>
+  )
+})
+
+type HeaderDesktopNavGroupProps = {
+  measure?: boolean
+}
+
+function HeaderDesktopNavGroup({
+  measure = false,
+}: HeaderDesktopNavGroupProps) {
+  if (measure) {
+    return (
+      <div className="flex items-center gap-5">
+        <div className="flex items-stretch gap-1 pl-3">
+          {desktopHeaderLinks.map((link) => (
+            <div
+              key={link.to}
+              className="inline-flex min-w-[76px] flex-col items-center justify-center gap-1 border-b-[3px] border-transparent px-3 pb-[11px] pt-2 text-center text-[11px] font-medium leading-none text-foreground-subtle"
+            >
+              <span className="flex h-6 items-center justify-center">
+                <HeaderNavIcon icon={link.icon} isActive={false} />
+              </span>
+              <span className="text-[11px] leading-none">{link.label}</span>
+            </div>
+          ))}
+        </div>
+
+        <span className="inline-flex min-h-[72px] items-center rounded-2xl px-3 py-2 text-sm font-semibold text-chat">
+          Download CV
+        </span>
+      </div>
+    )
+  }
+
+  return (
+    <div className="flex items-center gap-5">
+      <div className="flex items-stretch gap-1 pl-3">
+        {desktopHeaderLinks.map((link) => (
+          <HeaderNavLink key={link.to} to={link.to} icon={link.icon}>
+            {link.label}
+          </HeaderNavLink>
+        ))}
+      </div>
+
+      <Link
+        to="/cv"
+        className="inline-flex min-h-[72px] items-center rounded-2xl px-3 py-2 text-sm font-semibold text-chat transition-colors duration-200 hover:text-blue-700"
+      >
+        Download CV
+      </Link>
+    </div>
   )
 }
