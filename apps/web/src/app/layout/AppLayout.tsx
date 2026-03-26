@@ -1,4 +1,4 @@
-import { Suspense, useEffect, useLayoutEffect, useRef, useState } from 'react'
+import { Suspense, useState } from 'react'
 import {
   Link,
   Outlet,
@@ -16,12 +16,12 @@ import { useTheme } from '../theme/ThemeProvider'
 const logo = '/pld_logo_header.webp'
 
 const desktopHeaderLinks = [
-  { to: '/about', label: 'About' },
-  { to: '/experience', label: 'Experience' },
-  { to: '/projects', label: 'Projects' },
-  { to: '/education', label: 'Education' },
-  { to: '/skills', label: 'Skills' },
-  { to: '/contact', label: 'Contact' },
+  { to: '/about', label: 'About', icon: 'profile' },
+  { to: '/experience', label: 'Experience', icon: 'briefcase' },
+  { to: '/projects', label: 'Projects', icon: 'grid' },
+  { to: '/education', label: 'Education', icon: 'book' },
+  { to: '/skills', label: 'Skills', icon: 'spark' },
+  { to: '/contact', label: 'Contact', icon: 'chat' },
 ] as const
 
 const mobileHeaderLinks = [
@@ -92,92 +92,10 @@ function Header({
   onOpenCommandPalette: () => void
 }) {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
-  const [activeUnderline, setActiveUnderline] = useState<{
-    left: number
-    width: number
-    visible: boolean
-  }>({ left: 0, width: 0, visible: false })
-  const desktopNavRefs = useRef<Record<string, HTMLAnchorElement | null>>({})
-  const desktopNavContainerRef = useRef<HTMLDivElement | null>(null)
-  const location = useLocation()
   const { theme } = useTheme()
   const isMac =
     typeof navigator !== 'undefined' &&
     /(Mac|iPhone|iPod|iPad)/i.test(navigator.platform)
-
-  useLayoutEffect(() => {
-    const activeLink = desktopHeaderLinks.find(
-      (link) =>
-        location.pathname === link.to ||
-        location.pathname.startsWith(`${link.to}/`),
-    )
-
-    if (!activeLink) {
-      setActiveUnderline((current) =>
-        current.visible ? { ...current, visible: false } : current,
-      )
-      return
-    }
-
-    const activeElement = desktopNavRefs.current[activeLink.to]
-    const containerElement = desktopNavContainerRef.current
-
-    if (!activeElement || !containerElement) {
-      return
-    }
-
-    const nextUnderline = {
-      left: activeElement.offsetLeft,
-      width: activeElement.offsetWidth,
-      visible: true,
-    }
-
-    setActiveUnderline((current) => {
-      if (
-        current.left === nextUnderline.left &&
-        current.width === nextUnderline.width &&
-        current.visible === nextUnderline.visible
-      ) {
-        return current
-      }
-
-      return nextUnderline
-    })
-  }, [location.pathname])
-
-  useEffect(() => {
-    const syncUnderline = () => {
-      const activeLink = desktopHeaderLinks.find(
-        (link) =>
-          location.pathname === link.to ||
-          location.pathname.startsWith(`${link.to}/`),
-      )
-
-      if (!activeLink) {
-        return
-      }
-
-      const activeElement = desktopNavRefs.current[activeLink.to]
-      const containerElement = desktopNavContainerRef.current
-
-      if (!activeElement || !containerElement) {
-        return
-      }
-
-      setActiveUnderline({
-        left: activeElement.offsetLeft,
-        width: activeElement.offsetWidth,
-        visible: true,
-      })
-    }
-
-    syncUnderline()
-    window.addEventListener('resize', syncUnderline)
-
-    return () => {
-      window.removeEventListener('resize', syncUnderline)
-    }
-  }, [location.pathname])
 
   if (isTerminalRoute) {
     return (
@@ -242,7 +160,7 @@ function Header({
                 }
                 onOpenCommandPalette()
               }}
-              className="hidden min-w-[200px] items-center justify-between gap-2 rounded-lg border border-border bg-surface-muted/80 px-4 py-2 text-sm text-foreground-subtle transition-colors hover:border-border-strong hover:bg-surface-muted hover:text-foreground-muted 2xl:flex"
+              className="hidden min-w-[220px] items-center justify-between gap-2 rounded-full border border-border bg-surface-muted/90 px-4 py-2.5 text-sm text-foreground-subtle transition-colors hover:border-border-strong hover:bg-surface hover:text-foreground-muted 2xl:flex"
               aria-label="Open command palette"
             >
               <svg
@@ -271,36 +189,18 @@ function Header({
           </div>
 
           <div className="flex items-center gap-3">
-            <div className="hidden 2xl:flex items-center gap-6">
-              <div
-                ref={desktopNavContainerRef}
-                className="relative flex items-center gap-5"
-              >
+            <div className="hidden 2xl:flex items-center gap-5">
+              <div className="flex items-stretch gap-1 pl-3">
                 {desktopHeaderLinks.map((link) => (
-                  <HeaderNavLink
-                    key={link.to}
-                    to={link.to}
-                    navRef={(element) => {
-                      desktopNavRefs.current[link.to] = element
-                    }}
-                  >
+                  <HeaderNavLink key={link.to} to={link.to} icon={link.icon}>
                     {link.label}
                   </HeaderNavLink>
                 ))}
-                <span
-                  aria-hidden="true"
-                  className="pointer-events-none absolute bottom-0 block h-0.5 rounded-full bg-foreground transition-[transform,width,opacity] duration-300 ease-out"
-                  style={{
-                    width: `${activeUnderline.width}px`,
-                    transform: `translateX(${activeUnderline.left}px)`,
-                    opacity: activeUnderline.visible ? 1 : 0,
-                  }}
-                />
               </div>
 
               <Link
                 to="/cv"
-                className="inline-flex items-center rounded-md px-2 py-2 text-sm font-semibold text-chat transition-colors duration-200 hover:text-blue-700"
+                className="inline-flex min-h-[72px] items-center rounded-2xl px-3 py-2 text-sm font-semibold text-chat transition-colors duration-200 hover:text-blue-700"
               >
                 Download CV
               </Link>
@@ -376,27 +276,130 @@ function Header({
 function HeaderNavLink({
   to,
   children,
-  navRef,
+  icon,
 }: {
   to: string
   children: React.ReactNode
-  navRef?: (element: HTMLAnchorElement | null) => void
+  icon: (typeof desktopHeaderLinks)[number]['icon']
 }) {
   return (
     <RouterNavLink
       to={to}
-      ref={navRef}
       className={({ isActive }) =>
-        `inline-flex items-center px-1 py-2 text-sm font-medium transition-colors duration-200 ${
+        `inline-flex min-w-[76px] flex-col items-center justify-center gap-1 border-b-[3px] px-3 pb-[11px] pt-2 text-center text-[11px] font-medium leading-none transition-colors duration-200 ${
           isActive
-            ? 'text-foreground'
-            : 'border-transparent text-foreground-muted hover:text-foreground'
+            ? 'border-foreground text-foreground'
+            : 'border-transparent text-foreground-subtle hover:text-foreground'
         }`
       }
     >
-      {children}
+      {({ isActive }) => (
+        <>
+          <span className="flex h-6 items-center justify-center">
+            <HeaderNavIcon icon={icon} isActive={isActive} />
+          </span>
+          <span className="text-[11px] leading-none">{children}</span>
+        </>
+      )}
     </RouterNavLink>
   )
+}
+
+function HeaderNavIcon({
+  icon,
+  isActive,
+}: {
+  icon: (typeof desktopHeaderLinks)[number]['icon']
+  isActive: boolean
+}) {
+  const className = `h-5 w-5 ${isActive ? 'text-foreground' : 'text-current'}`
+
+  switch (icon) {
+    case 'profile':
+      return (
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          className={className}
+          aria-hidden="true"
+        >
+          <path
+            d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8Zm0 2c-4.418 0-8 2.239-8 5v1h16v-1c0-2.761-3.582-5-8-5Z"
+            fill="currentColor"
+          />
+        </svg>
+      )
+    case 'briefcase':
+      return (
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          className={className}
+          aria-hidden="true"
+        >
+          <path
+            d="M9 4.5A2.5 2.5 0 0 1 11.5 2h1A2.5 2.5 0 0 1 15 4.5V6h3A2 2 0 0 1 20 8v8.5A2.5 2.5 0 0 1 17.5 19h-11A2.5 2.5 0 0 1 4 16.5V8a2 2 0 0 1 2-2h3V4.5Zm1.5 0V6h3V4.5a.5.5 0 0 0-.5-.5h-2a.5.5 0 0 0-.5.5Zm-4.5 6v6a.5.5 0 0 0 .5.5h11a.5.5 0 0 0 .5-.5v-6h-4v1h-4v-1H6Z"
+            fill="currentColor"
+          />
+        </svg>
+      )
+    case 'grid':
+      return (
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          className={className}
+          aria-hidden="true"
+        >
+          <path
+            d="M4 4h7v7H4V4Zm9 0h7v7h-7V4ZM4 13h7v7H4v-7Zm9 0h7v7h-7v-7Z"
+            fill="currentColor"
+          />
+        </svg>
+      )
+    case 'book':
+      return (
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          className={className}
+          aria-hidden="true"
+        >
+          <path
+            d="M6.5 4A2.5 2.5 0 0 0 4 6.5v11A2.5 2.5 0 0 0 6.5 20H19V4H6.5Zm0 2H17v12H6.5a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5Zm2 2h5v1.5h-5V8Zm0 3h7v1.5h-7V11Z"
+            fill="currentColor"
+          />
+        </svg>
+      )
+    case 'spark':
+      return (
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          className={className}
+          aria-hidden="true"
+        >
+          <path
+            d="m12 2 1.8 5.2L19 9l-5.2 1.8L12 16l-1.8-5.2L5 9l5.2-1.8L12 2Zm6 11 1 2.8L22 17l-3 1.2L18 21l-1.2-2.8L14 17l2.8-1.2L18 13ZM6 14l1 2.3L9.3 17 7 17.7 6 20l-.8-2.3L3 17l2.2-.7L6 14Z"
+            fill="currentColor"
+          />
+        </svg>
+      )
+    case 'chat':
+      return (
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          className={className}
+          aria-hidden="true"
+        >
+          <path
+            d="M5 5.5A2.5 2.5 0 0 1 7.5 3h9A2.5 2.5 0 0 1 19 5.5v6A2.5 2.5 0 0 1 16.5 14H11l-4.5 3v-3H7.5A2.5 2.5 0 0 1 5 11.5v-6Zm3 2.25h8V9H8V7.75Zm0 3h5v1.25H8v-1.25Z"
+            fill="currentColor"
+          />
+        </svg>
+      )
+  }
 }
 
 function MobileNavLink({
