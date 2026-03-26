@@ -38,19 +38,6 @@ function getStoredTheme(): Theme | null {
   }
 }
 
-function getSystemTheme(): Theme {
-  if (
-    typeof window === 'undefined' ||
-    typeof window.matchMedia !== 'function'
-  ) {
-    return 'dark'
-  }
-
-  return window.matchMedia('(prefers-color-scheme: dark)').matches
-    ? 'dark'
-    : 'light'
-}
-
 function getBootstrappedTheme(): Theme | null {
   if (typeof document === 'undefined') return null
 
@@ -71,33 +58,14 @@ function applyTheme(theme: Theme) {
 }
 
 export function ThemeProvider({ children }: { children: ReactNode }) {
-  const [systemTheme, setSystemTheme] = useState<Theme>(() => {
-    return getBootstrappedTheme() ?? getSystemTheme()
-  })
   const [preference, setPreference] = useState<Theme | null>(() => {
     return getStoredTheme()
   })
+  const [fallbackTheme, setFallbackTheme] = useState<Theme>(() => {
+    return getBootstrappedTheme() ?? 'dark'
+  })
 
-  const theme = preference ?? systemTheme
-
-  useEffect(() => {
-    if (
-      typeof window === 'undefined' ||
-      typeof window.matchMedia !== 'function'
-    ) {
-      return
-    }
-
-    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)')
-    const handleChange = (event: MediaQueryListEvent) => {
-      setSystemTheme(event.matches ? 'dark' : 'light')
-    }
-
-    setSystemTheme(mediaQuery.matches ? 'dark' : 'light')
-    mediaQuery.addEventListener('change', handleChange)
-
-    return () => mediaQuery.removeEventListener('change', handleChange)
-  }, [])
+  const theme = preference ?? fallbackTheme
 
   useEffect(() => {
     applyTheme(theme)
@@ -127,7 +95,7 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
       }
 
       setPreference(null)
-      setSystemTheme(getSystemTheme())
+      setFallbackTheme('dark')
     }
 
     window.addEventListener('storage', handleStorage)
@@ -139,7 +107,9 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
       value={{
         theme,
         preference,
-        setTheme: (nextTheme) => setPreference(nextTheme),
+        setTheme: (nextTheme) => {
+          setPreference(nextTheme)
+        },
         toggleTheme: () => {
           setPreference(theme === 'dark' ? 'light' : 'dark')
         },

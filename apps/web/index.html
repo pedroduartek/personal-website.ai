@@ -21,15 +21,10 @@
           storedTheme = window.localStorage.getItem(storageKey)
         } catch {}
 
-        const systemTheme =
-          typeof window.matchMedia === 'function' &&
-          window.matchMedia('(prefers-color-scheme: dark)').matches
-            ? 'dark'
-            : 'light'
         const theme =
           storedTheme === 'light' || storedTheme === 'dark'
             ? storedTheme
-            : systemTheme
+            : 'dark'
 
         document.documentElement.classList.toggle('dark', theme === 'dark')
         document.documentElement.dataset.theme = theme

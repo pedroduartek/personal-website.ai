@@ -37,9 +37,9 @@ describe('ThemeToggle', () => {
     themeColorMeta.setAttribute('content', '#151b23')
   })
 
-  it('uses the system theme until the user toggles and then persists it', async () => {
+  it('defaults to dark and only switches after an explicit user choice', async () => {
     const user = userEvent.setup()
-    stubMatchMedia(true)
+    stubMatchMedia(false)
 
     render(
       <ThemeProvider>
