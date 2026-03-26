@@ -1,4 +1,4 @@
-import { Suspense, useState } from 'react'
+import { Suspense, useEffect, useLayoutEffect, useRef, useState } from 'react'
 import {
   Link,
   Outlet,
@@ -92,10 +92,92 @@ function Header({
   onOpenCommandPalette: () => void
 }) {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
+  const [activeUnderline, setActiveUnderline] = useState<{
+    left: number
+    width: number
+    visible: boolean
+  }>({ left: 0, width: 0, visible: false })
+  const desktopNavRefs = useRef<Record<string, HTMLAnchorElement | null>>({})
+  const desktopNavContainerRef = useRef<HTMLDivElement | null>(null)
+  const location = useLocation()
   const { theme } = useTheme()
   const isMac =
     typeof navigator !== 'undefined' &&
     /(Mac|iPhone|iPod|iPad)/i.test(navigator.platform)
+
+  useLayoutEffect(() => {
+    const activeLink = desktopHeaderLinks.find(
+      (link) =>
+        location.pathname === link.to ||
+        location.pathname.startsWith(`${link.to}/`)
+    )
+
+    if (!activeLink) {
+      setActiveUnderline((current) =>
+        current.visible ? { ...current, visible: false } : current
+      )
+      return
+    }
+
+    const activeElement = desktopNavRefs.current[activeLink.to]
+    const containerElement = desktopNavContainerRef.current
+
+    if (!activeElement || !containerElement) {
+      return
+    }
+
+    const nextUnderline = {
+      left: activeElement.offsetLeft,
+      width: activeElement.offsetWidth,
+      visible: true,
+    }
+
+    setActiveUnderline((current) => {
+      if (
+        current.left === nextUnderline.left &&
+        current.width === nextUnderline.width &&
+        current.visible === nextUnderline.visible
+      ) {
+        return current
+      }
+
+      return nextUnderline
+    })
+  }, [location.pathname])
+
+  useEffect(() => {
+    const syncUnderline = () => {
+      const activeLink = desktopHeaderLinks.find(
+        (link) =>
+          location.pathname === link.to ||
+          location.pathname.startsWith(`${link.to}/`)
+      )
+
+      if (!activeLink) {
+        return
+      }
+
+      const activeElement = desktopNavRefs.current[activeLink.to]
+      const containerElement = desktopNavContainerRef.current
+
+      if (!activeElement || !containerElement) {
+        return
+      }
+
+      setActiveUnderline({
+        left: activeElement.offsetLeft,
+        width: activeElement.offsetWidth,
+        visible: true,
+      })
+    }
+
+    syncUnderline()
+    window.addEventListener('resize', syncUnderline)
+
+    return () => {
+      window.removeEventListener('resize', syncUnderline)
+    }
+  }, [location.pathname])
 
   if (isTerminalRoute) {
     return (
@@ -180,25 +262,45 @@ function Header({
                 />
               </svg>
               <span>Search</span>
-              <kbd className="theme-kbd ml-1">{isMac ? '⌘K' : 'Ctrl+K'}</kbd>
+              <kbd className="theme-kbd ml-1 border-0 bg-surface px-1.5 py-0.5">
+                {isMac ? '⌘K' : 'Ctrl+K'}
+              </kbd>
             </button>
 
             <CommandPaletteTip />
           </div>
 
           <div className="flex items-center gap-3">
-            <div className="hidden 2xl:flex items-center gap-3">
-              <div className="flex items-center gap-1 rounded-full border border-border/70 bg-surface-muted/60 p-1 shadow-sm shadow-slate-950/5">
+            <div className="hidden 2xl:flex items-center gap-6">
+              <div
+                ref={desktopNavContainerRef}
+                className="relative flex items-center gap-5"
+              >
                 {desktopHeaderLinks.map((link) => (
-                  <HeaderNavLink key={link.to} to={link.to}>
+                  <HeaderNavLink
+                    key={link.to}
+                    to={link.to}
+                    navRef={(element) => {
+                      desktopNavRefs.current[link.to] = element
+                    }}
+                  >
                     {link.label}
                   </HeaderNavLink>
                 ))}
+                <span
+                  aria-hidden="true"
+                  className="pointer-events-none absolute bottom-0 block h-0.5 rounded-full bg-foreground transition-[transform,width,opacity] duration-300 ease-out"
+                  style={{
+                    width: `${activeUnderline.width}px`,
+                    transform: `translateX(${activeUnderline.left}px)`,
+                    opacity: activeUnderline.visible ? 1 : 0,
+                  }}
+                />
               </div>
 
               <Link
                 to="/cv"
-                className="inline-flex items-center rounded-full border border-chat/20 bg-chat px-4 py-2 text-sm font-semibold text-white shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:bg-blue-700 hover:shadow-lg"
+                className="inline-flex items-center rounded-md px-2 py-2 text-sm font-semibold text-chat transition-colors duration-200 hover:text-blue-700"
               >
                 Download CV
               </Link>
@@ -248,7 +350,7 @@ function Header({
             <Link
               to="/cv"
               onClick={() => setIsMenuOpen(false)}
-              className="mb-3 inline-flex w-full items-center justify-center rounded-xl border border-chat/20 bg-chat px-4 py-3 text-sm font-semibold text-white shadow-sm transition-all duration-200 hover:bg-blue-700"
+              className="mb-2 inline-flex w-full items-center justify-start rounded-md px-2 py-2 text-sm font-semibold text-chat transition-colors duration-200 hover:text-blue-700"
             >
               Download CV
             </Link>
@@ -274,15 +376,21 @@ function Header({
 function HeaderNavLink({
   to,
   children,
-}: { to: string; children: React.ReactNode }) {
+  navRef,
+}: {
+  to: string
+  children: React.ReactNode
+  navRef?: (element: HTMLAnchorElement | null) => void
+}) {
   return (
     <RouterNavLink
       to={to}
+      ref={navRef}
       className={({ isActive }) =>
-        `inline-flex items-center rounded-full px-3 py-2 text-sm font-medium transition-all duration-200 ${
+        `inline-flex items-center px-1 py-2 text-sm font-medium transition-colors duration-200 ${
           isActive
-            ? 'bg-surface text-foreground shadow-sm'
-            : 'text-foreground-muted hover:bg-surface hover:text-foreground'
+            ? 'text-foreground'
+            : 'border-transparent text-foreground-muted hover:text-foreground'
         }`
       }
     >
@@ -301,10 +409,10 @@ function MobileNavLink({
       to={to}
       onClick={onClick}
       className={({ isActive }) =>
-        `inline-flex items-center rounded-xl px-3 py-2.5 text-sm font-medium transition-colors duration-200 ${
+        `inline-flex items-center border-b border-transparent px-2 py-2.5 text-sm font-medium transition-colors duration-200 ${
           isActive
-            ? 'bg-surface-muted text-foreground'
-            : 'text-foreground-muted hover:bg-surface-muted hover:text-foreground'
+            ? 'border-border text-foreground'
+            : 'text-foreground-muted hover:text-foreground'
         }`
       }
     >
