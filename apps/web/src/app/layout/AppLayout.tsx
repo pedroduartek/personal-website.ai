@@ -109,12 +109,12 @@ function Header({
     const activeLink = desktopHeaderLinks.find(
       (link) =>
         location.pathname === link.to ||
-        location.pathname.startsWith(`${link.to}/`)
+        location.pathname.startsWith(`${link.to}/`),
     )
 
     if (!activeLink) {
       setActiveUnderline((current) =>
-        current.visible ? { ...current, visible: false } : current
+        current.visible ? { ...current, visible: false } : current,
       )
       return
     }
@@ -150,7 +150,7 @@ function Header({
       const activeLink = desktopHeaderLinks.find(
         (link) =>
           location.pathname === link.to ||
-          location.pathname.startsWith(`${link.to}/`)
+          location.pathname.startsWith(`${link.to}/`),
       )
 
       if (!activeLink) {

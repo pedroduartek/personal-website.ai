@@ -35,9 +35,7 @@ export default function HomePage() {
                 {profile.role}
                 {currentCompany ? (
                   <>
-                      <span className="ml-3">
-                        @
-                      </span>
+                    <span className="ml-3">@</span>
                     <Link
                       to="/experience"
                       className="ml-3 inline-flex items-baseline gap-2 text-inherit no-underline transition-colors duration-200 hover:text-foreground"
