@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
+import { isKeyboardCapableDevice } from '../../utils/headerLayout'
 
 export default function CommandPaletteTip() {
   const [mounted, setMounted] = useState(false)
@@ -27,10 +28,8 @@ export default function CommandPaletteTip() {
       dismissed = false
       used = false
     }
-    const isDesktop = typeof window !== 'undefined' && window.innerWidth >= 1536
-
     // Don't show if user dismissed tip earlier or already used the keyboard shortcut
-    if (dismissed || used || !isDesktop) return
+    if (dismissed || used || !isKeyboardCapableDevice()) return
 
     // keep a ref of mounted so focus handler can check current state
 
@@ -213,7 +212,7 @@ export default function CommandPaletteTip() {
           left: `${centerX}px`,
           transform: transformVisible,
         }}
-        className={`fixed top-2 z-50 hidden 2xl:block ${baseClasses} ${visibleClass}`}
+        className={`fixed top-2 z-50 ${baseClasses} ${visibleClass}`}
         aria-label="Dismiss command palette tip"
         onClick={dismiss}
       >
@@ -236,7 +235,7 @@ export default function CommandPaletteTip() {
   // default: positioned under the button container
   const transformVisible = visible ? 'translateY(0px)' : 'translateY(-24px)'
   return (
-    <div className="absolute left-0 top-full mt-2 z-50 hidden 2xl:block">
+    <div className="absolute left-0 top-full z-50 mt-2">
       <button
         type="button"
         aria-label="Dismiss command palette tip"

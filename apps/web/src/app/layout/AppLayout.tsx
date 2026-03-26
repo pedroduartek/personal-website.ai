@@ -1,4 +1,4 @@
-import { Suspense, useState } from 'react'
+import { Suspense, useEffect, useState } from 'react'
 import {
   Link,
   Outlet,
@@ -11,6 +11,10 @@ import CommandPaletteTip from '../../components/CommandPalette/CommandPaletteTip
 import SiteContainer from '../../components/SiteContainer'
 import ThemeToggle from '../../components/ThemeToggle'
 import { useCommandPalette } from '../../hooks/useCommandPalette'
+import {
+  canShowHeaderCommandPalette,
+  isKeyboardCapableDevice,
+} from '../../utils/headerLayout'
 import { useTheme } from '../theme/ThemeProvider'
 
 const logo = '/pld_logo_header.webp'
@@ -102,10 +106,25 @@ function Header({
   onOpenCommandPalette: () => void
 }) {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
+  const [showCommandButton, setShowCommandButton] = useState(() =>
+    canShowHeaderCommandPalette(),
+  )
   const { theme } = useTheme()
   const isMac =
     typeof navigator !== 'undefined' &&
     /(Mac|iPhone|iPod|iPad)/i.test(navigator.platform)
+  const keyboardCapable = isKeyboardCapableDevice()
+
+  useEffect(() => {
+    const updateCommandButtonVisibility = () => {
+      setShowCommandButton(canShowHeaderCommandPalette())
+    }
+
+    updateCommandButtonVisibility()
+    window.addEventListener('resize', updateCommandButtonVisibility)
+    return () =>
+      window.removeEventListener('resize', updateCommandButtonVisibility)
+  }, [])
 
   if (isTerminalRoute) {
     return (
@@ -136,11 +155,11 @@ function Header({
 
   return (
     <header className="bg-header">
-      <nav className="relative px-3 py-2 2xl:px-6">
-        <div className="flex items-center justify-between gap-4">
+      <nav className="px-3 py-2 2xl:px-6">
+        <div className="flex items-center gap-3 xl:gap-5">
           <Link
             to="/"
-            className="flex items-center gap-3 text-xl font-bold text-foreground"
+            className="flex shrink-0 items-center gap-3 text-xl font-bold text-foreground"
           >
             <img
               src={logo}
@@ -153,53 +172,58 @@ function Header({
               fetchPriority="high"
               decoding="sync"
             />
-            PEDRODUARTEK
+            <span className="text-lg sm:text-xl">PEDRODUARTEK</span>
           </Link>
 
-          {/* Command Palette Button - Desktop only, centered */}
-          <div className="relative">
-            <button
-              type="button"
-              id="command-palette-button"
-              onClick={() => {
-                try {
-                  if (typeof window !== 'undefined')
-                    localStorage.setItem('commandPaletteTipDismissed', '1')
-                } catch (e) {
-                  // ignore
-                }
-                onOpenCommandPalette()
-              }}
-              className="hidden min-w-[220px] items-center justify-between gap-2 rounded-full border border-border bg-surface-muted/90 px-4 py-2.5 text-sm text-foreground-subtle transition-colors hover:border-border-strong hover:bg-surface hover:text-foreground-muted 2xl:flex"
-              aria-label="Open command palette"
-            >
-              <svg
-                className="h-4 w-4"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-                role="img"
-                aria-label="Search icon"
-              >
-                <title>Search</title>
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-                />
-              </svg>
-              <span>Search</span>
-              <kbd className="theme-kbd ml-1 border-0 bg-surface px-1.5 py-0.5">
-                {isMac ? '⌘K' : 'Ctrl+K'}
-              </kbd>
-            </button>
+          {keyboardCapable && showCommandButton ? (
+            <div className="min-w-0 flex-1">
+              <div className="relative mx-auto w-full max-w-[22rem] min-[1440px]:max-w-[18rem] min-[1600px]:max-w-[21rem]">
+                <button
+                  type="button"
+                  id="command-palette-button"
+                  onClick={() => {
+                    try {
+                      if (typeof window !== 'undefined')
+                        localStorage.setItem('commandPaletteTipDismissed', '1')
+                    } catch (e) {
+                      // ignore
+                    }
+                    onOpenCommandPalette()
+                  }}
+                  className="inline-flex w-full min-w-0 items-center gap-2 rounded-full border border-border bg-surface-muted/90 px-4 py-2.5 text-sm text-foreground-subtle transition-colors hover:border-border-strong hover:bg-surface hover:text-foreground-muted"
+                  aria-label="Open command palette"
+                >
+                  <span className="flex min-w-0 flex-1 items-center gap-2">
+                    <svg
+                      className="h-4 w-4 shrink-0"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                      role="img"
+                      aria-label="Search icon"
+                    >
+                      <title>Search</title>
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                      />
+                    </svg>
+                    <span className="truncate">Search</span>
+                  </span>
+                  <kbd className="theme-kbd hidden border-0 bg-surface px-1.5 py-0.5 sm:inline-flex">
+                    {isMac ? '⌘K' : 'Ctrl+K'}
+                  </kbd>
+                </button>
 
-            <CommandPaletteTip />
-          </div>
+                <CommandPaletteTip />
+              </div>
+            </div>
+          ) : null}
 
-          <div className="flex items-center gap-3">
-            <div className="hidden 2xl:flex items-center gap-5">
+          <div className="ml-auto flex shrink-0 items-center gap-3">
+            <div className="hidden min-[1440px]:flex min-[1440px]:items-center min-[1440px]:gap-5">
               <div className="flex items-stretch gap-1 pl-3">
                 {desktopHeaderLinks.map((link) => (
                   <HeaderNavLink key={link.to} to={link.to} icon={link.icon}>
@@ -218,11 +242,10 @@ function Header({
 
             <ThemeToggle className="rounded-full border-border/80 bg-surface-muted/70 hover:bg-surface" />
 
-            {/* Mobile menu button */}
             <button
               type="button"
               onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="inline-flex items-center justify-center rounded-full border border-border bg-surface-muted/80 p-2 text-foreground-muted transition-all duration-200 hover:border-border-strong hover:bg-surface hover:text-foreground 2xl:hidden"
+              className="inline-flex items-center justify-center rounded-full border border-border bg-surface-muted/80 p-2 text-foreground-muted transition-all duration-200 hover:border-border-strong hover:bg-surface hover:text-foreground min-[1440px]:hidden"
               aria-label="Toggle menu"
               aria-expanded={isMenuOpen}
             >
@@ -254,9 +277,8 @@ function Header({
           </div>
         </div>
 
-        {/* Mobile navigation */}
-        {isMenuOpen && (
-          <div className="mt-4 rounded-[1.5rem] border border-border bg-surface p-3 shadow-lg shadow-slate-950/5 2xl:hidden">
+        {isMenuOpen ? (
+          <div className="mt-4 rounded-[1.5rem] border border-border bg-surface p-3 shadow-lg shadow-slate-950/5 min-[1440px]:hidden">
             <Link
               to="/cv"
               onClick={() => setIsMenuOpen(false)}
@@ -277,7 +299,7 @@ function Header({
               ))}
             </div>
           </div>
-        )}
+        ) : null}
       </nav>
     </header>
   )

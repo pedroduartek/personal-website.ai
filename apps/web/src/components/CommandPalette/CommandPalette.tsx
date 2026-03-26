@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
-
-const desktopBreakpoint = 1536
+import { isKeyboardCapableDevice } from '../../utils/headerLayout'
 
 interface Command {
   id: string
@@ -20,9 +19,8 @@ interface CommandPaletteProps {
 export function CommandPalette({ isOpen, onClose }: CommandPaletteProps) {
   const [search, setSearch] = useState('')
   const [selectedIndex, setSelectedIndex] = useState(0)
-  const [isDesktop, setIsDesktop] = useState(
-    () =>
-      typeof window === 'undefined' || window.innerWidth >= desktopBreakpoint,
+  const [keyboardCapable, setKeyboardCapable] = useState(() =>
+    isKeyboardCapableDevice(),
   )
   const inputRef = useRef<HTMLInputElement>(null)
   const selectedItemRef = useRef<HTMLButtonElement>(null)
@@ -30,13 +28,13 @@ export function CommandPalette({ isOpen, onClose }: CommandPaletteProps) {
   const location = useLocation()
 
   useEffect(() => {
-    const updateIsDesktop = () => {
-      setIsDesktop(window.innerWidth >= desktopBreakpoint)
+    const updateKeyboardCapability = () => {
+      setKeyboardCapable(isKeyboardCapableDevice())
     }
 
-    updateIsDesktop()
-    window.addEventListener('resize', updateIsDesktop)
-    return () => window.removeEventListener('resize', updateIsDesktop)
+    updateKeyboardCapability()
+    window.addEventListener('resize', updateKeyboardCapability)
+    return () => window.removeEventListener('resize', updateKeyboardCapability)
   }, [])
 
   const commands: Command[] = [
@@ -130,7 +128,7 @@ export function CommandPalette({ isOpen, onClose }: CommandPaletteProps) {
     },
   ]
 
-  if (isDesktop) {
+  if (keyboardCapable) {
     commands.push({
       id: 'terminal',
       label: 'Terminal',

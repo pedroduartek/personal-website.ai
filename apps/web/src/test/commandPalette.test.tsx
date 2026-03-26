@@ -23,16 +23,23 @@ function TestUseCommandPalette() {
 describe('useCommandPalette', () => {
   beforeEach(() => {
     localStorage.clear()
+    Object.defineProperty(window, 'matchMedia', {
+      configurable: true,
+      writable: true,
+      value: (query: string) => ({
+        matches: query === '(any-hover: hover) and (any-pointer: fine)',
+        media: query,
+        onchange: null,
+        addEventListener: () => {},
+        removeEventListener: () => {},
+        addListener: () => {},
+        removeListener: () => {},
+        dispatchEvent: () => false,
+      }),
+    })
   })
 
   it('records localStorage flag when opened via keyboard shortcut', () => {
-    // ensure desktop breakpoint in test env
-    // (the hook only activates for innerWidth >= 1536)
-    // set before rendering so listener uses the right branch
-    // jsdom allows setting innerWidth directly
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    window.innerWidth = 1600
     render(<TestUseCommandPalette />)
     expect(localStorage.getItem('commandPaletteUsed')).toBeNull()
 
@@ -48,18 +55,27 @@ describe('useCommandPalette', () => {
 
 describe('CommandPalette', () => {
   beforeEach(() => {
-    Object.defineProperty(window, 'innerWidth', {
-      configurable: true,
-      writable: true,
-      value: 1600,
-    })
     Object.defineProperty(window.HTMLElement.prototype, 'scrollIntoView', {
       configurable: true,
       value: vi.fn(),
     })
+    Object.defineProperty(window, 'matchMedia', {
+      configurable: true,
+      writable: true,
+      value: (query: string) => ({
+        matches: query === '(any-hover: hover) and (any-pointer: fine)',
+        media: query,
+        onchange: null,
+        addEventListener: () => {},
+        removeEventListener: () => {},
+        addListener: () => {},
+        removeListener: () => {},
+        dispatchEvent: () => false,
+      }),
+    })
   })
 
-  it('shows the terminal command on desktop', () => {
+  it('shows the terminal command on keyboard-capable devices', () => {
     render(
       <MemoryRouter>
         <CommandPalette isOpen={true} onClose={() => {}} />
@@ -71,11 +87,20 @@ describe('CommandPalette', () => {
     ).toBeInTheDocument()
   })
 
-  it('hides the terminal command below the desktop breakpoint', () => {
-    Object.defineProperty(window, 'innerWidth', {
+  it('hides the terminal command on touch-only devices', () => {
+    Object.defineProperty(window, 'matchMedia', {
       configurable: true,
       writable: true,
-      value: 1280,
+      value: (query: string) => ({
+        matches: false,
+        media: query,
+        onchange: null,
+        addEventListener: () => {},
+        removeEventListener: () => {},
+        addListener: () => {},
+        removeListener: () => {},
+        dispatchEvent: () => false,
+      }),
     })
 
     render(
@@ -94,10 +119,19 @@ describe('CommandPaletteTip', () => {
   beforeEach(() => {
     localStorage.clear()
     vi.useFakeTimers()
-    Object.defineProperty(window, 'innerWidth', {
+    Object.defineProperty(window, 'matchMedia', {
       configurable: true,
       writable: true,
-      value: 1600,
+      value: (query: string) => ({
+        matches: query === '(any-hover: hover) and (any-pointer: fine)',
+        media: query,
+        onchange: null,
+        addEventListener: () => {},
+        removeEventListener: () => {},
+        addListener: () => {},
+        removeListener: () => {},
+        dispatchEvent: () => false,
+      }),
     })
   })
 
