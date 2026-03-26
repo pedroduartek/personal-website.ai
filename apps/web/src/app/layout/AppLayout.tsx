@@ -318,7 +318,7 @@ function Header({
         </div>
 
         <div
-          className="pointer-events-none absolute left-0 top-0 -z-10 invisible whitespace-nowrap"
+          className="pointer-events-none fixed left-0 top-0 -z-10 invisible whitespace-nowrap"
           aria-hidden="true"
         >
           <HeaderCommandButton ref={commandMeasureRef} isMac={isMac} measure />
