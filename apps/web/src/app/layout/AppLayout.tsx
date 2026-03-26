@@ -58,7 +58,12 @@ export default function AppLayout() {
                 </div>
               }
             >
-              <Outlet />
+              <div
+                key={location.pathname}
+                className="animate-route-panel-enter"
+              >
+                <Outlet />
+              </div>
             </Suspense>
           </div>
         ) : (
@@ -70,7 +75,12 @@ export default function AppLayout() {
                 </div>
               }
             >
-              <Outlet />
+              <div
+                key={location.pathname}
+                className="animate-route-panel-enter"
+              >
+                <Outlet />
+              </div>
             </Suspense>
           </SiteContainer>
         )}
