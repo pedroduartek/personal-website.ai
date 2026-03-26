@@ -1,5 +1,10 @@
 import { useEffect, useRef, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
+import cvPdf from '../../CV/Pedro_Duarte_CV.pdf'
+import { useTheme } from '../../app/theme/ThemeProvider'
+import { profile } from '../../content/profile'
+import { useChatAvailability } from '../../hooks/useChatAvailability'
+import { openChatWidget } from '../../utils/chatWidget'
 import { isKeyboardCapableDevice } from '../../utils/headerLayout'
 
 interface Command {
@@ -16,6 +21,49 @@ interface CommandPaletteProps {
   onClose: () => void
 }
 
+async function copyTextToClipboard(value: string) {
+  if (typeof navigator !== 'undefined' && navigator.clipboard?.writeText) {
+    await navigator.clipboard.writeText(value)
+    return
+  }
+
+  if (typeof document === 'undefined') {
+    return
+  }
+
+  const textarea = document.createElement('textarea')
+  textarea.value = value
+  textarea.setAttribute('readonly', 'true')
+  textarea.style.position = 'absolute'
+  textarea.style.left = '-9999px'
+  document.body.appendChild(textarea)
+  textarea.select()
+  document.execCommand?.('copy')
+  document.body.removeChild(textarea)
+}
+
+function openExternalUrl(url: string) {
+  if (typeof window === 'undefined') {
+    return
+  }
+
+  window.open(url, '_blank', 'noopener,noreferrer')
+}
+
+function downloadFile(url: string, fileName: string) {
+  if (typeof document === 'undefined') {
+    return
+  }
+
+  const link = document.createElement('a')
+  link.href = url
+  link.download = fileName
+  link.rel = 'noopener'
+  document.body.appendChild(link)
+  link.click()
+  document.body.removeChild(link)
+}
+
 export function CommandPalette({ isOpen, onClose }: CommandPaletteProps) {
   const [search, setSearch] = useState('')
   const [selectedIndex, setSelectedIndex] = useState(0)
@@ -26,6 +74,8 @@ export function CommandPalette({ isOpen, onClose }: CommandPaletteProps) {
   const selectedItemRef = useRef<HTMLButtonElement>(null)
   const navigate = useNavigate()
   const location = useLocation()
+  const chatAvailable = useChatAvailability()
+  const { toggleTheme } = useTheme()
 
   useEffect(() => {
     const updateKeyboardCapability = () => {
@@ -37,7 +87,81 @@ export function CommandPalette({ isOpen, onClose }: CommandPaletteProps) {
     return () => window.removeEventListener('resize', updateKeyboardCapability)
   }, [])
 
-  const commands: Command[] = [
+  const actionCommands: Command[] = [
+    {
+      id: 'toggle-theme',
+      label: 'Toggle Theme',
+      description: 'Switch between light and dark mode',
+      icon: '🌓',
+      action: () => {
+        toggleTheme()
+        onClose()
+      },
+      category: 'action',
+    },
+    {
+      id: 'copy-email',
+      label: 'Copy Email Address',
+      description: 'Copy pedroduartek@gmail.com to clipboard',
+      icon: '📋',
+      action: () => {
+        void copyTextToClipboard(profile.email)
+        onClose()
+      },
+      category: 'action',
+    },
+    {
+      id: 'open-github',
+      label: 'Open GitHub',
+      description: 'Open Pedro Duarte’s GitHub profile',
+      icon: '🐙',
+      action: () => {
+        if (profile.github) {
+          openExternalUrl(profile.github)
+        }
+        onClose()
+      },
+      category: 'action',
+    },
+    {
+      id: 'open-linkedin',
+      label: 'Open LinkedIn',
+      description: 'Open Pedro Duarte’s LinkedIn profile',
+      icon: '💙',
+      action: () => {
+        openExternalUrl(profile.linkedin)
+        onClose()
+      },
+      category: 'action',
+    },
+    {
+      id: 'download-cv-now',
+      label: 'Download CV Now',
+      description: 'Download the PDF directly',
+      icon: '⬇️',
+      action: () => {
+        downloadFile(cvPdf, `${profile.name.replace(/\s+/g, '_')}_CV.pdf`)
+        onClose()
+      },
+      category: 'action',
+    },
+  ]
+
+  if (chatAvailable === true) {
+    actionCommands.push({
+      id: 'start-ai-assistant',
+      label: 'Start AI Assistant Conversation',
+      description: 'Open the AI assistant chat widget',
+      icon: '🤖',
+      action: () => {
+        openChatWidget()
+        onClose()
+      },
+      category: 'action',
+    })
+  }
+
+  const navigationCommands: Command[] = [
     {
       id: 'home',
       label: 'Home',
@@ -129,7 +253,7 @@ export function CommandPalette({ isOpen, onClose }: CommandPaletteProps) {
   ]
 
   if (keyboardCapable) {
-    commands.push({
+    navigationCommands.push({
       id: 'terminal',
       label: 'Terminal',
       description: 'Open terminal-style shell',
@@ -144,6 +268,8 @@ export function CommandPalette({ isOpen, onClose }: CommandPaletteProps) {
       category: 'navigation',
     })
   }
+
+  const commands: Command[] = [...actionCommands, ...navigationCommands]
 
   const filteredCommands = commands.filter((command) => {
     const searchLower = search.toLowerCase()

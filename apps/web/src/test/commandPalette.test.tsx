@@ -1,9 +1,18 @@
 import { act, render, screen } from '@testing-library/react'
+import userEvent from '@testing-library/user-event'
 import { MemoryRouter } from 'react-router-dom'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
+import { ThemeProvider } from '../app/theme/ThemeProvider'
 import { CommandPalette } from '../components/CommandPalette'
 import CommandPaletteTip from '../components/CommandPalette/CommandPaletteTip'
+import { useChatAvailability } from '../hooks/useChatAvailability'
 import { useCommandPalette } from '../hooks/useCommandPalette'
+
+vi.mock('../hooks/useChatAvailability', () => ({
+  useChatAvailability: vi.fn(),
+}))
+
+const mockUseChatAvailability = vi.mocked(useChatAvailability)
 
 function TestUseCommandPalette() {
   const { isOpen, open, close } = useCommandPalette()
@@ -23,6 +32,7 @@ function TestUseCommandPalette() {
 describe('useCommandPalette', () => {
   beforeEach(() => {
     localStorage.clear()
+    mockUseChatAvailability.mockReturnValue(true)
     Object.defineProperty(window, 'matchMedia', {
       configurable: true,
       writable: true,
@@ -55,6 +65,7 @@ describe('useCommandPalette', () => {
 
 describe('CommandPalette', () => {
   beforeEach(() => {
+    mockUseChatAvailability.mockReturnValue(true)
     Object.defineProperty(window.HTMLElement.prototype, 'scrollIntoView', {
       configurable: true,
       value: vi.fn(),
@@ -73,17 +84,38 @@ describe('CommandPalette', () => {
         dispatchEvent: () => false,
       }),
     })
+    if (!navigator.clipboard) {
+      Object.defineProperty(navigator, 'clipboard', {
+        configurable: true,
+        value: {
+          writeText: vi.fn(),
+        },
+      })
+    } else {
+      vi.spyOn(navigator.clipboard, 'writeText').mockResolvedValue()
+    }
   })
 
   it('shows the terminal command on keyboard-capable devices', () => {
     render(
-      <MemoryRouter>
-        <CommandPalette isOpen={true} onClose={() => {}} />
-      </MemoryRouter>,
+      <ThemeProvider>
+        <MemoryRouter>
+          <CommandPalette isOpen={true} onClose={() => {}} />
+        </MemoryRouter>
+      </ThemeProvider>,
     )
 
     expect(
       screen.getByRole('button', { name: /terminal/i }),
+    ).toBeInTheDocument()
+    expect(
+      screen.getByRole('button', { name: /toggle theme/i }),
+    ).toBeInTheDocument()
+    expect(
+      screen.getByRole('button', { name: /copy email address/i }),
+    ).toBeInTheDocument()
+    expect(
+      screen.getByRole('button', { name: /start ai assistant conversation/i }),
     ).toBeInTheDocument()
   })
 
@@ -104,14 +136,76 @@ describe('CommandPalette', () => {
     })
 
     render(
-      <MemoryRouter>
-        <CommandPalette isOpen={true} onClose={() => {}} />
-      </MemoryRouter>,
+      <ThemeProvider>
+        <MemoryRouter>
+          <CommandPalette isOpen={true} onClose={() => {}} />
+        </MemoryRouter>
+      </ThemeProvider>,
     )
 
     expect(
       screen.queryByRole('button', { name: /terminal/i }),
     ).not.toBeInTheDocument()
+  })
+
+  it('hides the ai assistant action when the widget is unavailable', () => {
+    mockUseChatAvailability.mockReturnValue(false)
+
+    render(
+      <ThemeProvider>
+        <MemoryRouter>
+          <CommandPalette isOpen={true} onClose={() => {}} />
+        </MemoryRouter>
+      </ThemeProvider>,
+    )
+
+    expect(
+      screen.queryByRole('button', {
+        name: /start ai assistant conversation/i,
+      }),
+    ).not.toBeInTheDocument()
+  })
+
+  it('copies the email address when requested', async () => {
+    const user = userEvent.setup()
+    const writeTextSpy = vi
+      .spyOn(navigator.clipboard, 'writeText')
+      .mockResolvedValue()
+
+    render(
+      <ThemeProvider>
+        <MemoryRouter>
+          <CommandPalette isOpen={true} onClose={() => {}} />
+        </MemoryRouter>
+      </ThemeProvider>,
+    )
+
+    await user.click(
+      screen.getByRole('button', { name: /copy email address/i }),
+    )
+
+    expect(writeTextSpy).toHaveBeenCalledWith('pedroduartek@gmail.com')
+  })
+
+  it('opens the ai assistant from the command palette', async () => {
+    const user = userEvent.setup()
+    const dispatchEventSpy = vi.spyOn(window, 'dispatchEvent')
+
+    render(
+      <ThemeProvider>
+        <MemoryRouter>
+          <CommandPalette isOpen={true} onClose={() => {}} />
+        </MemoryRouter>
+      </ThemeProvider>,
+    )
+
+    await user.click(
+      screen.getByRole('button', { name: /start ai assistant conversation/i }),
+    )
+
+    expect(dispatchEventSpy).toHaveBeenCalledWith(
+      expect.objectContaining({ type: 'pedroduartek:open-chat-widget' }),
+    )
   })
 })
 
