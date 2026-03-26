@@ -6,7 +6,7 @@ import {
 } from 'react-router-dom'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import AppLayout from '../app/layout/AppLayout'
-import { ThemeProvider } from '../app/theme/ThemeProvider'
+import { THEME_STORAGE_KEY, ThemeProvider } from '../app/theme/ThemeProvider'
 import HomePage from '../features/home/HomePage'
 import { resetChatAvailabilityCache } from '../hooks/useChatAvailability'
 
@@ -14,6 +14,18 @@ async function settleChatAvailability() {
   await act(async () => {
     await Promise.resolve()
   })
+}
+
+function renderHomePage(theme: 'light' | 'dark' = 'dark') {
+  window.localStorage.setItem(THEME_STORAGE_KEY, theme)
+
+  return render(
+    <ThemeProvider>
+      <MemoryRouter>
+        <HomePage />
+      </MemoryRouter>
+    </ThemeProvider>,
+  )
 }
 
 describe('HomePage hero carousel', () => {
@@ -37,6 +49,7 @@ describe('HomePage hero carousel', () => {
 
   afterEach(() => {
     resetChatAvailabilityCache()
+    window.localStorage.removeItem(THEME_STORAGE_KEY)
     act(() => {
       vi.runOnlyPendingTimers()
     })
@@ -45,11 +58,7 @@ describe('HomePage hero carousel', () => {
   })
 
   it('renders the hero carousel with the first featured project', async () => {
-    render(
-      <MemoryRouter>
-        <HomePage />
-      </MemoryRouter>,
-    )
+    renderHomePage()
 
     await settleChatAvailability()
 
@@ -67,12 +76,20 @@ describe('HomePage hero carousel', () => {
     ).toBeInTheDocument()
   })
 
+  it('switches the personal website logo treatment in light mode', async () => {
+    renderHomePage('light')
+
+    await settleChatAvailability()
+
+    expect(
+      screen.getByRole('img', {
+        name: /Pedroduartek logo used as the visual mark for the personal website project/i,
+      }),
+    ).toHaveClass('brightness-0')
+  })
+
   it('auto-rotates to the next featured project', async () => {
-    render(
-      <MemoryRouter>
-        <HomePage />
-      </MemoryRouter>,
-    )
+    renderHomePage()
 
     await settleChatAvailability()
 
@@ -92,11 +109,7 @@ describe('HomePage hero carousel', () => {
   })
 
   it('keeps auto-rotating across the featured project slides', async () => {
-    render(
-      <MemoryRouter>
-        <HomePage />
-      </MemoryRouter>,
-    )
+    renderHomePage()
 
     await settleChatAvailability()
 
@@ -136,11 +149,7 @@ describe('HomePage hero carousel', () => {
   })
 
   it('pauses auto-rotation while hovered', async () => {
-    render(
-      <MemoryRouter>
-        <HomePage />
-      </MemoryRouter>,
-    )
+    renderHomePage()
 
     await settleChatAvailability()
 
@@ -162,11 +171,7 @@ describe('HomePage hero carousel', () => {
   })
 
   it('supports arrow key navigation when the carousel is focused', async () => {
-    render(
-      <MemoryRouter>
-        <HomePage />
-      </MemoryRouter>,
-    )
+    renderHomePage()
 
     await settleChatAvailability()
 
@@ -192,11 +197,7 @@ describe('HomePage hero carousel', () => {
   })
 
   it('includes a dedicated AI chat assistant slide', async () => {
-    render(
-      <MemoryRouter>
-        <HomePage />
-      </MemoryRouter>,
-    )
+    renderHomePage()
 
     await settleChatAvailability()
 
@@ -227,11 +228,7 @@ describe('HomePage hero carousel', () => {
       ),
     )
 
-    render(
-      <MemoryRouter>
-        <HomePage />
-      </MemoryRouter>,
-    )
+    renderHomePage()
 
     await settleChatAvailability()
 
@@ -302,11 +299,7 @@ describe('HomePage hero carousel', () => {
       value: 1600,
     })
 
-    render(
-      <MemoryRouter>
-        <HomePage />
-      </MemoryRouter>,
-    )
+    renderHomePage()
 
     await settleChatAvailability()
 
@@ -327,11 +320,7 @@ describe('HomePage hero carousel', () => {
   })
 
   it('does not include the terminal slide below the desktop breakpoint', async () => {
-    render(
-      <MemoryRouter>
-        <HomePage />
-      </MemoryRouter>,
-    )
+    renderHomePage()
 
     await settleChatAvailability()
 
@@ -360,11 +349,7 @@ describe('HomePage hero carousel', () => {
       value: 375,
     })
 
-    render(
-      <MemoryRouter>
-        <HomePage />
-      </MemoryRouter>,
-    )
+    renderHomePage()
 
     await settleChatAvailability()
 

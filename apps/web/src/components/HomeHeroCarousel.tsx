@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
+import { useTheme } from '../app/theme/ThemeProvider'
 import { aiChatHeroSlide, terminalHeroSlide } from '../content/homeHeroSlides'
 import type { Project } from '../content/types'
 import { useChatAvailability } from '../hooks/useChatAvailability'
@@ -129,6 +130,7 @@ export default function HomeHeroCarousel({ slides }: HomeHeroCarouselProps) {
     getInitialReducedMotionPreference,
   )
   const isChatAvailable = useChatAvailability()
+  const { theme: siteTheme } = useTheme()
   const touchStartX = useRef<number | null>(null)
 
   const projectSlides: CarouselSlide[] = slides
@@ -230,6 +232,9 @@ export default function HomeHeroCarousel({ slides }: HomeHeroCarouselProps) {
   const isContainedMedia = activeContent.media.fit === 'contain'
   const usesTerminalPreview = activeSlide.customMedia === 'terminal'
   const usesChatPreview = activeSlide.customMedia === 'chat'
+  const usesHeaderLogoTreatment =
+    activeContent.media.themeTreatment === 'header-logo' &&
+    siteTheme === 'light'
   const usesCompactMobileLayout = !usesTerminalPreview
   const slideTransitionClass = prefersReducedMotion
     ? ''
@@ -507,11 +512,15 @@ export default function HomeHeroCarousel({ slides }: HomeHeroCarouselProps) {
                   <img
                     src={activeContent.media.src}
                     alt={activeContent.media.alt}
-                    className={`transition-transform duration-500 group-hover:scale-[1.02] ${
+                    className={`duration-500 group-hover:scale-[1.02] ${
+                      usesHeaderLogoTreatment
+                        ? 'transition-[filter,transform]'
+                        : 'transition-transform'
+                    } ${
                       isContainedMedia
                         ? 'h-full max-w-full object-contain'
                         : 'h-full w-full object-cover'
-                    }`}
+                    } ${usesHeaderLogoTreatment ? 'brightness-0' : ''}`}
                     style={
                       activeContent.media.objectPosition
                         ? { objectPosition: activeContent.media.objectPosition }

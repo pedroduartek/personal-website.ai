@@ -35,6 +35,7 @@ function getProjects(): Project[] {
           src: '/pld_logo_header.webp',
           alt: 'Pedroduartek logo used as the visual mark for the personal website project',
           fit: 'contain',
+          themeTreatment: 'header-logo',
         },
       },
       featured: true,

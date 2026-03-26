@@ -17,6 +17,7 @@ export interface MediaAsset {
   alt: string
   objectPosition?: string
   fit?: 'cover' | 'contain'
+  themeTreatment?: 'header-logo'
 }
 
 export interface ProjectHeroContent {
