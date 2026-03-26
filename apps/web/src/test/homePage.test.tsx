@@ -59,7 +59,7 @@ describe('HomePage hero carousel', () => {
 
     expect(
       within(carousel).getByRole('link', {
-        name: /AI-Assisted Personal Website/i,
+        name: /Personal Website/i,
       }),
     ).toHaveAttribute('href', '/projects/personal-website')
     expect(
@@ -156,7 +156,7 @@ describe('HomePage hero carousel', () => {
 
     expect(
       within(carousel).getByRole('link', {
-        name: /AI-Assisted Personal Website/i,
+        name: /Personal Website/i,
       }),
     ).toHaveAttribute('href', '/projects/personal-website')
   })
@@ -186,7 +186,7 @@ describe('HomePage hero carousel', () => {
 
     expect(
       within(carousel).getByRole('link', {
-        name: /AI-Assisted Personal Website/i,
+        name: /Personal Website/i,
       }),
     ).toHaveAttribute('href', '/projects/personal-website')
   })
@@ -374,7 +374,7 @@ describe('HomePage hero carousel', () => {
 
     expect(
       within(carousel).getByRole('link', {
-        name: /AI-Assisted Personal Website/i,
+        name: /Personal Website/i,
       }),
     ).toHaveClass('h-[31rem]')
 
