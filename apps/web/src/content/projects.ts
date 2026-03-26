@@ -9,7 +9,7 @@ function getProjects(): Project[] {
   return [
     {
       slug: 'personal-website',
-      title: 'AI-Assisted Personal Website',
+      title: 'Personal Website',
       description:
         'The portfolio you are browsing right now: a content-driven personal website built through AI-assisted development, with an AI chat assistant, fast navigation, and interactive ways to explore my background.',
       problem: `I wanted a portfolio that did more than list technologies. It needed to explain my experience clearly to recruiters, feel like a real product, and give me a practical way to learn modern frontend development. As a backend engineer with ${experience.text} of C#/.NET experience, I also wanted to test how far AI-assisted development could accelerate the learning curve without lowering quality.`,
