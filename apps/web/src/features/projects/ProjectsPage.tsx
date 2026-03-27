@@ -26,12 +26,12 @@ export default function ProjectsPage() {
             building, and the kinds of systems I like to own end to end.
           </p>
         </div>
-        <div className="space-y-6">
+        <div className="grid gap-6 md:grid-cols-2">
           {projects.map((project) => (
             <Link
               key={project.slug}
               to={`/projects/${project.slug}`}
-              className="theme-card-hover group block p-6"
+              className="theme-card-hover group block h-full p-6"
             >
               <div className="flex-1">
                 <h2 className="mb-2 text-xl font-bold text-foreground md:text-2xl">
