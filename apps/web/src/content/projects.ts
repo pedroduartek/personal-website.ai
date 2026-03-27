@@ -1,5 +1,5 @@
 import haScreenshot from '../images/ha.webp'
-import ollamaIcon from '../images/ollama_icon.webp'
+import ollamaSlidePreview from '../images/ollama_slide.webp'
 import { getExperience } from '../utils/experience'
 import type { Project } from './types'
 
@@ -137,9 +137,10 @@ function getProjects(): Project[] {
         summary:
           'An ASP.NET Core API that keeps responses grounded with a local knowledge base, streams answers, and protects the contact flow with Turnstile verification.',
         media: {
-          src: ollamaIcon,
-          alt: 'Ollama icon representing the AI Chat API project',
-          fit: 'contain',
+          src: ollamaSlidePreview,
+          alt: 'Screenshot of the Ollama AI Chat API slide on the website',
+          fit: 'cover',
+          objectPosition: 'center',
         },
       },
       featured: true,

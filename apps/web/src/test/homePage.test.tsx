@@ -146,6 +146,11 @@ describe('HomePage hero carousel', () => {
         name: /AI Chat API/i,
       }),
     ).toHaveAttribute('href', '/projects/ai-chat-api')
+    expect(
+      within(carousel).getByRole('img', {
+        name: /Screenshot of the Ollama AI Chat API slide on the website/i,
+      }),
+    ).toBeInTheDocument()
   })
 
   it('pauses auto-rotation while hovered', async () => {
@@ -214,6 +219,11 @@ describe('HomePage hero carousel', () => {
     ).toBeInTheDocument()
     expect(
       within(carousel).getByText(/Interactive site feature/i),
+    ).toBeInTheDocument()
+    expect(
+      within(carousel).getByRole('img', {
+        name: /Screenshot of the Ollama AI assistant slide on the website/i,
+      }),
     ).toBeInTheDocument()
   })
 

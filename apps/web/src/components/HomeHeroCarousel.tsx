@@ -278,6 +278,7 @@ export default function HomeHeroCarousel({ slides }: HomeHeroCarouselProps) {
   const isContainedMedia = activeContent.media.fit === 'contain'
   const usesTerminalPreview = activeSlide.customMedia === 'terminal'
   const usesChatPreview = activeSlide.customMedia === 'chat'
+  const hasSlideImage = Boolean(activeContent.media.src)
   const usesHeaderLogoTreatment =
     activeContent.media.themeTreatment === 'header-logo' &&
     siteTheme === 'light'
@@ -423,7 +424,7 @@ export default function HomeHeroCarousel({ slides }: HomeHeroCarouselProps) {
                   isContainedMedia && !usesChatPreview ? 'p-5 md:p-6' : ''
                 }`}
               >
-                {usesChatPreview ? (
+                {usesChatPreview && !hasSlideImage ? (
                   <div className="flex h-full w-full flex-col rounded-[1.25rem] bg-[linear-gradient(180deg,rgba(15,23,42,0.08),rgba(15,23,42,0.22))] p-4 text-slate-900 dark:text-white md:p-5">
                     <div className="flex items-center justify-between border-b border-white/15 pb-3">
                       <div>
@@ -458,7 +459,7 @@ export default function HomeHeroCarousel({ slides }: HomeHeroCarouselProps) {
                     </div>
                   </div>
                 ) : null}
-                {!usesChatPreview ? (
+                {hasSlideImage ? (
                   <img
                     src={activeContent.media.src}
                     alt={activeContent.media.alt}

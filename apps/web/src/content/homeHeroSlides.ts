@@ -1,4 +1,5 @@
 import commandPalettePreview from '../images/command_pallete.webp'
+import ollamaSlidePreview from '../images/ollama_slide.webp'
 import type { ProjectHeroContent } from './types'
 
 export type HomeHeroFeatureSlide = {
@@ -95,9 +96,10 @@ export const aiChatHeroSlide: HomeHeroFeatureSlide = {
     summary:
       'A built-in assistant that lets visitors ask natural-language questions about experience, projects, and skills without digging through the whole site manually.',
     media: {
-      src: '',
-      alt: 'AI chat assistant preview',
-      fit: 'contain',
+      src: ollamaSlidePreview,
+      alt: 'Screenshot of the Ollama AI assistant slide on the website',
+      fit: 'cover',
+      objectPosition: 'center',
     },
   },
   preview: {
