@@ -453,4 +453,48 @@ describe('TerminalShell email command', () => {
       ).toBeInTheDocument()
     })
   })
+
+  it('autocompletes commands with tab', async () => {
+    const user = userEvent.setup()
+
+    renderTerminalShell()
+
+    await waitFor(() => {
+      expect(fetch).toHaveBeenCalledTimes(1)
+    })
+
+    const input = screen.getByPlaceholderText('type a command (help)')
+
+    await user.type(input, 'hel')
+    fireEvent.keyDown(input, { key: 'Tab' })
+
+    expect(input).toHaveValue('help')
+
+    await user.type(input, '{enter}')
+
+    expect(screen.getByText('Available commands:')).toBeInTheDocument()
+  })
+
+  it('autocompletes command arguments with the right arrow key', async () => {
+    const user = userEvent.setup()
+
+    renderTerminalShell()
+
+    await waitFor(() => {
+      expect(fetch).toHaveBeenCalledTimes(1)
+    })
+
+    const input = screen.getByPlaceholderText('type a command (help)')
+
+    await user.type(input, 'project ai')
+    fireEvent.keyDown(input, { key: 'ArrowRight' })
+
+    expect(input).toHaveValue('project ai-chat-api')
+
+    await user.type(input, '{enter}')
+
+    await waitFor(() => {
+      expect(screen.getByText(/AI Chat API/i)).toBeInTheDocument()
+    })
+  })
 })

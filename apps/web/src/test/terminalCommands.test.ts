@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { runCommand } from '../utils/terminalCommands'
+import { getTerminalAutocomplete, runCommand } from '../utils/terminalCommands'
 
 describe('terminalCommands', () => {
   it('lists the main content sections and help hints', async () => {
@@ -96,5 +96,19 @@ describe('terminalCommands', () => {
     expect(conferenceOutput.join('\n')).toContain(
       'Website: https://azuredevsummit.com/',
     )
+  })
+
+  it('suggests command and argument autocompletions', () => {
+    expect(getTerminalAutocomplete('dow')).toBe('download-cv')
+    expect(getTerminalAutocomplete('proj')).toBe('project')
+    expect(getTerminalAutocomplete('project ai')).toBe('project ai-chat-api')
+    expect(getTerminalAutocomplete('cat experience/enh')).toBe(
+      'cat experience/enhesa',
+    )
+  })
+
+  it('hides api-backed command autocompletions when the api is unavailable', () => {
+    expect(getTerminalAutocomplete('em', { apiAvailable: false })).toBeNull()
+    expect(getTerminalAutocomplete('cha', { apiAvailable: false })).toBeNull()
   })
 })

@@ -146,6 +146,45 @@ type ExperienceGroup = {
   roles: typeof experience
 }
 
+const terminalCommandCandidates = [
+  'ls',
+  'cat',
+  'whoami',
+  'about',
+  'bio',
+  'socials',
+  'contacts',
+  'contact',
+  'skills',
+  'experience',
+  'project',
+  'projects',
+  'education',
+  'conference',
+  'conferences',
+  'banner',
+  'sysinfo',
+  'download-cv',
+  'clear',
+  'help',
+  '?',
+] as const
+
+const apiTerminalCommandCandidates = ['email', 'chat'] as const
+
+const catSectionCandidates = [
+  'about',
+  'project',
+  'projects',
+  'experience',
+  'skills',
+  'education',
+  'conference',
+  'conferences',
+  'contact',
+  'contacts',
+] as const
+
 function safeWindowOpen(path: string) {
   if (typeof window !== 'undefined' && typeof window.open === 'function') {
     try {
@@ -213,6 +252,179 @@ function groupExperienceByCompany() {
   }
 
   return Array.from(grouped.values())
+}
+
+function getCommandAutocompleteCandidates(apiAvailable?: boolean) {
+  return apiAvailable === false
+    ? [...terminalCommandCandidates]
+    : [...terminalCommandCandidates, ...apiTerminalCommandCandidates]
+}
+
+function getConferenceAutocompleteCandidates() {
+  return conferences.map((item) => slugify(item.name))
+}
+
+function getEducationAutocompleteCandidates() {
+  return education.flatMap((item) => [
+    slugify(item.institution),
+    slugify(item.field),
+  ])
+}
+
+function getProjectAutocompleteCandidates() {
+  return projects.map((project) => project.slug)
+}
+
+function getSkillAutocompleteCandidates() {
+  return skills.map((group) => slugify(group.category))
+}
+
+function getExperienceAutocompleteCandidates() {
+  return groupExperienceByCompany().map((group) => slugify(group.company))
+}
+
+function getCatPathAutocompleteCandidates(section: string) {
+  switch (section) {
+    case 'project':
+    case 'projects':
+      return getProjectAutocompleteCandidates()
+    case 'experience':
+      return getExperienceAutocompleteCandidates()
+    case 'skills':
+      return getSkillAutocompleteCandidates()
+    case 'conference':
+    case 'conferences':
+      return getConferenceAutocompleteCandidates()
+    case 'education':
+      return getEducationAutocompleteCandidates()
+    default:
+      return []
+  }
+}
+
+function getLongestCommonPrefix(values: string[]) {
+  if (values.length === 0) return ''
+
+  let prefix = values[0]
+  for (const value of values.slice(1)) {
+    let index = 0
+    while (
+      index < prefix.length &&
+      index < value.length &&
+      prefix[index] === value[index]
+    ) {
+      index += 1
+    }
+    prefix = prefix.slice(0, index)
+    if (!prefix) return ''
+  }
+
+  return prefix
+}
+
+function getAutocompleteCandidate(partial: string, candidates: string[]) {
+  if (!partial) return null
+
+  const normalizedPartial = partial.toLowerCase()
+  const matches = candidates.filter((candidate) =>
+    candidate.toLowerCase().startsWith(normalizedPartial),
+  )
+
+  if (matches.length === 0) return null
+  if (matches.length === 1) return matches[0]
+
+  const commonPrefix = getLongestCommonPrefix(matches)
+  return commonPrefix.length > partial.length ? commonPrefix : null
+}
+
+function getCatAutocompleteCandidate(partial: string) {
+  if (!partial) return null
+
+  const slashIndex = partial.indexOf('/')
+  if (slashIndex === -1) {
+    return getAutocompleteCandidate(partial, [...catSectionCandidates])
+  }
+
+  const section = partial.slice(0, slashIndex).toLowerCase()
+  const itemPartial = partial.slice(slashIndex + 1)
+  const itemCandidates = getCatPathAutocompleteCandidates(section)
+  const itemSuggestion = getAutocompleteCandidate(itemPartial, itemCandidates)
+
+  return itemSuggestion ? `${section}/${itemSuggestion}` : null
+}
+
+export function getTerminalAutocomplete(input: string, _opts: RunOptions = {}) {
+  if (!input || /\s$/.test(input)) return null
+
+  const lastSpaceIndex = input.lastIndexOf(' ')
+  const prefix = lastSpaceIndex === -1 ? '' : input.slice(0, lastSpaceIndex + 1)
+  const currentToken =
+    lastSpaceIndex === -1 ? input : input.slice(lastSpaceIndex + 1)
+
+  if (!currentToken) return null
+
+  if (lastSpaceIndex === -1) {
+    const suggestion = getAutocompleteCandidate(
+      currentToken,
+      getCommandAutocompleteCandidates(_opts.apiAvailable),
+    )
+
+    return suggestion && suggestion !== currentToken
+      ? `${prefix}${suggestion}`
+      : null
+  }
+
+  const command = input
+    .slice(0, lastSpaceIndex)
+    .trim()
+    .split(/\s+/)[0]
+    ?.toLowerCase()
+
+  let suggestion: string | null = null
+
+  switch (command) {
+    case 'cat':
+      suggestion = getCatAutocompleteCandidate(currentToken)
+      break
+    case 'project':
+      suggestion = getAutocompleteCandidate(
+        currentToken,
+        getProjectAutocompleteCandidates(),
+      )
+      break
+    case 'experience':
+      suggestion = getAutocompleteCandidate(
+        currentToken,
+        getExperienceAutocompleteCandidates(),
+      )
+      break
+    case 'skills':
+      suggestion = getAutocompleteCandidate(
+        currentToken,
+        getSkillAutocompleteCandidates(),
+      )
+      break
+    case 'education':
+      suggestion = getAutocompleteCandidate(
+        currentToken,
+        getEducationAutocompleteCandidates(),
+      )
+      break
+    case 'conference':
+    case 'conferences':
+      suggestion = getAutocompleteCandidate(
+        currentToken,
+        getConferenceAutocompleteCandidates(),
+      )
+      break
+    default:
+      suggestion = null
+      break
+  }
+
+  return suggestion && suggestion !== currentToken
+    ? `${prefix}${suggestion}`
+    : null
 }
 
 function getCompanyTechnologies(roles: typeof experience) {

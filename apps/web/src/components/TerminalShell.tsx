@@ -11,7 +11,7 @@ import {
   isContactEmailRateLimited,
   sendContactEmail,
 } from '../utils/contactEmail'
-import { runCommand } from '../utils/terminalCommands'
+import { getTerminalAutocomplete, runCommand } from '../utils/terminalCommands'
 import { isTurnstileConfigured } from '../utils/turnstile'
 import ThinkingIndicator from './ThinkingIndicator'
 import TurnstileWidget from './TurnstileWidget'
@@ -141,6 +141,20 @@ export default function TerminalShell({ onClose }: TerminalShellProps) {
 
     return ensureApiAvailability()
   }, [apiAvailable])
+
+  const applyAutocomplete = useCallback((value: string) => {
+    setInput(value)
+    window.requestAnimationFrame(() => {
+      const inputElement = inputRef.current
+      if (!inputElement) return
+
+      inputElement.focus()
+
+      try {
+        inputElement.setSelectionRange(value.length, value.length)
+      } catch {}
+    })
+  }, [])
 
   const appendOutput = useCallback((text: string) => {
     setLines((current) => [
@@ -832,10 +846,36 @@ export default function TerminalShell({ onClose }: TerminalShellProps) {
     }
   }
 
+  const autocompleteValue =
+    pendingConfirm || chatMode || emailComposer
+      ? null
+      : getTerminalAutocomplete(input, {
+          apiAvailable: apiAvailable === true,
+          profile,
+        })
+
+  const autocompleteSuffix = autocompleteValue?.startsWith(input)
+    ? autocompleteValue.slice(input.length)
+    : ''
+  const promptTextClass =
+    'block h-6 w-full whitespace-pre px-0 py-0.5 text-sm leading-5 font-mono'
+  const promptInputClass = `${promptTextClass} appearance-none border-0 bg-transparent caret-white focus:outline-none`
+
   function handleKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
     if (emailSending || commandBusy) return
 
-    if (e.key === 'Enter') {
+    const selectionStart = e.currentTarget.selectionStart ?? input.length
+    const selectionEnd = e.currentTarget.selectionEnd ?? input.length
+    const cursorAtEnd =
+      selectionStart === input.length && selectionEnd === input.length
+
+    if (e.key === 'Tab' && autocompleteValue) {
+      e.preventDefault()
+      applyAutocomplete(autocompleteValue)
+    } else if (e.key === 'ArrowRight' && autocompleteValue && cursorAtEnd) {
+      e.preventDefault()
+      applyAutocomplete(autocompleteValue)
+    } else if (e.key === 'Enter') {
       e.preventDefault()
       void handleSubmit(input)
     } else if (e.key === 'ArrowUp') {
@@ -973,25 +1013,40 @@ export default function TerminalShell({ onClose }: TerminalShellProps) {
         )}
         <div className="flex items-center gap-3">
           <div className="font-mono text-terminal-green">$</div>
-          <input
-            ref={inputRef}
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            onKeyDown={handleKeyDown}
-            disabled={emailSending || commandBusy}
-            className="w-full bg-transparent text-sm text-white placeholder:text-gray-500 focus:outline-none font-mono"
-            placeholder={
-              commandBusy || emailSending
-                ? 'running... press Ctrl+C or Cmd+C twice to interrupt'
-                : emailComposer
-                  ? emailComposer.step === 'message'
-                    ? 'type your message'
-                    : emailComposer.step === 'confirm'
-                      ? 'type y or n'
-                      : 'answer the prompt'
-                  : 'type a command (help)'
-            }
-          />
+          <div className="relative flex-1">
+            {(input || autocompleteSuffix) && (
+              <div
+                aria-hidden="true"
+                className={`pointer-events-none absolute inset-0 ${promptTextClass}`}
+              >
+                <span className="text-white">{input}</span>
+                {autocompleteSuffix ? (
+                  <span className="text-terminal-green/35">
+                    {autocompleteSuffix}
+                  </span>
+                ) : null}
+              </div>
+            )}
+            <input
+              ref={inputRef}
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              onKeyDown={handleKeyDown}
+              disabled={emailSending || commandBusy}
+              className={`relative z-10 ${promptInputClass} ${input || autocompleteSuffix ? 'text-transparent' : 'text-white'} placeholder:text-gray-500`}
+              placeholder={
+                commandBusy || emailSending
+                  ? 'running... press Ctrl+C or Cmd+C twice to interrupt'
+                  : emailComposer
+                    ? emailComposer.step === 'message'
+                      ? 'type your message'
+                      : emailComposer.step === 'confirm'
+                        ? 'type y or n'
+                        : 'answer the prompt'
+                    : 'type a command (help)'
+              }
+            />
+          </div>
         </div>
       </div>
     </section>
