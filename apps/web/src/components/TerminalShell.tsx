@@ -111,6 +111,13 @@ export default function TerminalShell({ onClose }: TerminalShellProps) {
   const interruptArmedAtRef = useRef(0)
   const turnstileAvailable = isTurnstileConfigured()
 
+  const scrollToBottom = useCallback(() => {
+    const container = containerRef.current
+    if (!container) return
+
+    container.scrollTop = container.scrollHeight
+  }, [])
+
   const focusPrompt = useCallback(() => {
     const inputElement = inputRef.current
     if (!inputElement || inputElement.disabled) return
@@ -303,12 +310,37 @@ export default function TerminalShell({ onClose }: TerminalShellProps) {
     return () => window.clearTimeout(timeoutId)
   }, [commandBusy, emailSending, focusPrompt])
 
-  // biome-ignore lint/correctness/useExhaustiveDependencies: intentionally only run when lines change
   useEffect(() => {
-    if (containerRef.current) {
-      containerRef.current.scrollTop = containerRef.current.scrollHeight
-    }
-  }, [lines])
+    const frameId = window.requestAnimationFrame(() => {
+      if (
+        lines.length === 0 &&
+        !chatAwaiting &&
+        emailComposer?.step === undefined
+      ) {
+        const container = containerRef.current
+        if (container) {
+          container.scrollTop = 0
+        }
+        return
+      }
+
+      scrollToBottom()
+    })
+
+    return () => window.cancelAnimationFrame(frameId)
+  }, [chatAwaiting, emailComposer?.step, lines.length, scrollToBottom])
+
+  useEffect(() => {
+    const container = containerRef.current
+    if (!container || typeof ResizeObserver === 'undefined') return
+
+    const observer = new ResizeObserver(() => {
+      scrollToBottom()
+    })
+
+    observer.observe(container)
+    return () => observer.disconnect()
+  }, [scrollToBottom])
 
   useEffect(() => {
     function onKey(e: KeyboardEvent) {

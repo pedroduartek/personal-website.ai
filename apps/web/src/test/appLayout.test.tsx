@@ -41,13 +41,21 @@ describe('AppLayout terminal mode', () => {
 
     const appRoot = container.firstElementChild
     const main = container.querySelector('main')
-    expect(screen.getByLabelText('Terminal shell')).toBeInTheDocument()
+    const terminalShell = screen.getByLabelText('Terminal shell')
+    const routePanel = terminalShell.parentElement?.parentElement
+
+    expect(terminalShell).toBeInTheDocument()
     expect(appRoot).toHaveClass('h-screen', 'overflow-hidden')
     expect(main).toHaveClass('overflow-hidden')
-    expect(screen.getByLabelText('Terminal shell')).toHaveClass(
+    expect(routePanel).toHaveClass(
+      'animate-route-panel-enter',
+      'flex',
+      'min-h-0',
       'flex-1',
+      'flex-col',
       'overflow-hidden',
     )
+    expect(terminalShell).toHaveClass('flex-1', 'overflow-hidden')
     expect(screen.getByRole('link', { name: /pedroduartek/i })).toHaveAttribute(
       'href',
       '/',
