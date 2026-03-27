@@ -56,8 +56,18 @@
     @apply bg-background text-foreground antialiased transition-colors duration-200;
   }
 
-  * {
-    @apply focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 focus-visible:ring-offset-background;
+  :where(
+      a,
+      button,
+      input,
+      textarea,
+      select,
+      summary,
+      [role="button"],
+      [role="link"],
+      [tabindex]:not([tabindex="-1"])
+    ) {
+    @apply focus:outline-none focus-visible:ring-1 focus-visible:ring-foreground-subtle/25 focus-visible:ring-offset-1 focus-visible:ring-offset-background;
   }
 }
 
