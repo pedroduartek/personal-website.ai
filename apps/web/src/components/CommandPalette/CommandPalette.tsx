@@ -21,14 +21,19 @@ interface CommandPaletteProps {
   onClose: () => void
 }
 
+interface ClipboardNotice {
+  id: number
+  message: string
+}
+
 async function copyTextToClipboard(value: string) {
   if (typeof navigator !== 'undefined' && navigator.clipboard?.writeText) {
     await navigator.clipboard.writeText(value)
-    return
+    return true
   }
 
   if (typeof document === 'undefined') {
-    return
+    return false
   }
 
   const textarea = document.createElement('textarea')
@@ -38,8 +43,12 @@ async function copyTextToClipboard(value: string) {
   textarea.style.left = '-9999px'
   document.body.appendChild(textarea)
   textarea.select()
-  document.execCommand?.('copy')
-  document.body.removeChild(textarea)
+
+  try {
+    return document.execCommand?.('copy') ?? false
+  } finally {
+    document.body.removeChild(textarea)
+  }
 }
 
 function openExternalUrl(url: string) {
@@ -65,6 +74,8 @@ function downloadFile(url: string, fileName: string) {
 }
 
 export function CommandPalette({ isOpen, onClose }: CommandPaletteProps) {
+  const [clipboardNotice, setClipboardNotice] =
+    useState<ClipboardNotice | null>(null)
   const [search, setSearch] = useState('')
   const [selectedIndex, setSelectedIndex] = useState(0)
   const [keyboardCapable, setKeyboardCapable] = useState(() =>
@@ -76,6 +87,35 @@ export function CommandPalette({ isOpen, onClose }: CommandPaletteProps) {
   const location = useLocation()
   const chatAvailable = useChatAvailability()
   const { toggleTheme } = useTheme()
+
+  useEffect(() => {
+    if (!clipboardNotice) {
+      return
+    }
+
+    const timeoutId = window.setTimeout(() => {
+      setClipboardNotice((currentNotice) =>
+        currentNotice?.id === clipboardNotice.id ? null : currentNotice,
+      )
+    }, 4000)
+
+    return () => window.clearTimeout(timeoutId)
+  }, [clipboardNotice])
+
+  async function handleCopyEmail() {
+    try {
+      const didCopy = await copyTextToClipboard(profile.email)
+
+      if (didCopy) {
+        setClipboardNotice((currentNotice) => ({
+          id: (currentNotice?.id ?? 0) + 1,
+          message: `Email ${profile.email} was copied to your clipboard.`,
+        }))
+      }
+    } finally {
+      onClose()
+    }
+  }
 
   useEffect(() => {
     const updateKeyboardCapability = () => {
@@ -102,11 +142,10 @@ export function CommandPalette({ isOpen, onClose }: CommandPaletteProps) {
     {
       id: 'copy-email',
       label: 'Copy Email Address',
-      description: 'Copy pedroduartek@gmail.com to clipboard',
+      description: `Copy ${profile.email} to clipboard`,
       icon: '📋',
       action: () => {
-        void copyTextToClipboard(profile.email)
-        onClose()
+        void handleCopyEmail()
       },
       category: 'action',
     },
@@ -338,104 +377,119 @@ export function CommandPalette({ isOpen, onClose }: CommandPaletteProps) {
     return () => window.removeEventListener('keydown', handleKeyDown)
   }, [isOpen, filteredCommands, selectedIndex, onClose])
 
-  if (!isOpen) return null
+  if (!isOpen && !clipboardNotice) return null
 
   return (
-    // biome-ignore lint/a11y/useKeyWithClickEvents: Keyboard events handled by window listener in useEffect
-    <div
-      className="fixed inset-0 z-50 bg-overlay/55 backdrop-blur-sm"
-      onClick={onClose}
-      aria-label="Close command palette"
-    >
-      <div className="flex min-h-screen items-start justify-center p-4 pt-[20vh]">
-        {/* biome-ignore lint/a11y/useKeyWithClickEvents: Click handler only prevents event bubbling */}
-        <div
-          className="theme-card w-full max-w-2xl overflow-hidden shadow-2xl"
-          onClick={(e) => e.stopPropagation()}
-          aria-modal="true"
-          aria-label="Command palette"
-        >
-          {/* Search Input */}
-          <div className="p-4">
-            <input
-              ref={inputRef}
-              type="text"
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              placeholder="Go to a page or run a command..."
-              className="theme-input text-lg"
-            />
-          </div>
+    <>
+      {clipboardNotice ? (
+        <div className="pointer-events-none fixed inset-x-4 bottom-4 z-[60] flex justify-center sm:justify-end">
+          <output
+            aria-live="polite"
+            className="block w-full max-w-md rounded-lg border border-emerald-500/40 bg-emerald-500/10 px-4 py-3 text-sm text-emerald-800 shadow-lg backdrop-blur-sm dark:text-emerald-200"
+          >
+            {clipboardNotice.message}
+          </output>
+        </div>
+      ) : null}
 
-          {/* Commands List */}
-          <div className="custom-scrollbar max-h-96 overflow-y-auto border-t border-border p-2">
-            {filteredCommands.length === 0 ? (
-              <div className="px-4 py-8 text-center text-foreground-subtle">
-                No commands found
+      {isOpen ? (
+        // biome-ignore lint/a11y/useKeyWithClickEvents: Keyboard events handled by window listener in useEffect
+        <div
+          className="fixed inset-0 z-50 bg-overlay/55 backdrop-blur-sm"
+          onClick={onClose}
+          aria-label="Close command palette"
+        >
+          <div className="flex min-h-screen items-start justify-center p-4 pt-[20vh]">
+            {/* biome-ignore lint/a11y/useKeyWithClickEvents: Click handler only prevents event bubbling */}
+            <div
+              className="theme-card w-full max-w-2xl overflow-hidden shadow-2xl"
+              onClick={(e) => e.stopPropagation()}
+              aria-modal="true"
+              aria-label="Command palette"
+            >
+              {/* Search Input */}
+              <div className="p-4">
+                <input
+                  ref={inputRef}
+                  type="text"
+                  value={search}
+                  onChange={(e) => setSearch(e.target.value)}
+                  placeholder="Go to a page or run a command..."
+                  className="theme-input text-lg"
+                />
               </div>
-            ) : (
-              <div className="space-y-1">
-                {filteredCommands.map((command, index) => (
-                  <button
-                    key={command.id}
-                    type="button"
-                    ref={index === selectedIndex ? selectedItemRef : null}
-                    onClick={command.action}
-                    onMouseEnter={() => setSelectedIndex(index)}
-                    className={`flex w-full items-center gap-3 rounded-md px-4 py-3 text-left transition-colors ${
-                      index === selectedIndex
-                        ? 'bg-blue-600 text-white'
-                        : 'text-foreground-muted hover:bg-surface-muted hover:text-foreground'
-                    }`}
-                  >
-                    <span className="text-xl">{command.icon}</span>
-                    <div className="flex-1">
-                      <div className="font-medium">{command.label}</div>
-                      {command.description && (
-                        <div
-                          className={`text-sm ${
+
+              {/* Commands List */}
+              <div className="custom-scrollbar max-h-96 overflow-y-auto border-t border-border p-2">
+                {filteredCommands.length === 0 ? (
+                  <div className="px-4 py-8 text-center text-foreground-subtle">
+                    No commands found
+                  </div>
+                ) : (
+                  <div className="space-y-1">
+                    {filteredCommands.map((command, index) => (
+                      <button
+                        key={command.id}
+                        type="button"
+                        ref={index === selectedIndex ? selectedItemRef : null}
+                        onClick={command.action}
+                        onMouseEnter={() => setSelectedIndex(index)}
+                        className={`flex w-full items-center gap-3 rounded-md px-4 py-3 text-left transition-colors ${
+                          index === selectedIndex
+                            ? 'bg-blue-600 text-white'
+                            : 'text-foreground-muted hover:bg-surface-muted hover:text-foreground'
+                        }`}
+                      >
+                        <span className="text-xl">{command.icon}</span>
+                        <div className="flex-1">
+                          <div className="font-medium">{command.label}</div>
+                          {command.description && (
+                            <div
+                              className={`text-sm ${
+                                index === selectedIndex
+                                  ? 'text-blue-200'
+                                  : 'text-foreground-subtle'
+                              }`}
+                            >
+                              {command.description}
+                            </div>
+                          )}
+                        </div>
+                        <span
+                          className={`text-xs ${
                             index === selectedIndex
                               ? 'text-blue-200'
                               : 'text-foreground-subtle'
                           }`}
                         >
-                          {command.description}
-                        </div>
-                      )}
-                    </div>
-                    <span
-                      className={`text-xs ${
-                        index === selectedIndex
-                          ? 'text-blue-200'
-                          : 'text-foreground-subtle'
-                      }`}
-                    >
-                      {command.category}
-                    </span>
-                  </button>
-                ))}
+                          {command.category}
+                        </span>
+                      </button>
+                    ))}
+                  </div>
+                )}
               </div>
-            )}
-          </div>
 
-          {/* Footer */}
-          <div className="border-t border-border px-4 py-2">
-            <div className="flex items-center justify-between text-xs text-foreground-subtle">
-              <div className="flex gap-4">
-                <span>
-                  <kbd className="theme-kbd">↑↓</kbd> Navigate
-                </span>
-                <span>
-                  <kbd className="theme-kbd">Enter</kbd> Select
-                </span>
-                <span>
-                  <kbd className="theme-kbd">Esc</kbd> Close
-                </span>
+              {/* Footer */}
+              <div className="border-t border-border px-4 py-2">
+                <div className="flex items-center justify-between text-xs text-foreground-subtle">
+                  <div className="flex gap-4">
+                    <span>
+                      <kbd className="theme-kbd">↑↓</kbd> Navigate
+                    </span>
+                    <span>
+                      <kbd className="theme-kbd">Enter</kbd> Select
+                    </span>
+                    <span>
+                      <kbd className="theme-kbd">Esc</kbd> Close
+                    </span>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
-    </div>
+      ) : null}
+    </>
   )
 }

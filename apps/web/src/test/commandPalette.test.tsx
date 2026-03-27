@@ -166,16 +166,17 @@ describe('CommandPalette', () => {
     ).not.toBeInTheDocument()
   })
 
-  it('copies the email address when requested', async () => {
+  it('copies the email address and shows a success prompt', async () => {
     const user = userEvent.setup()
     const writeTextSpy = vi
       .spyOn(navigator.clipboard, 'writeText')
       .mockResolvedValue()
+    const onClose = vi.fn()
 
     render(
       <ThemeProvider>
         <MemoryRouter>
-          <CommandPalette isOpen={true} onClose={() => {}} />
+          <CommandPalette isOpen={true} onClose={onClose} />
         </MemoryRouter>
       </ThemeProvider>,
     )
@@ -185,6 +186,12 @@ describe('CommandPalette', () => {
     )
 
     expect(writeTextSpy).toHaveBeenCalledWith('pedroduartek@gmail.com')
+    expect(onClose).toHaveBeenCalledTimes(1)
+    expect(
+      await screen.findByText(
+        'Email pedroduartek@gmail.com was copied to your clipboard.',
+      ),
+    ).toBeInTheDocument()
   })
 
   it('opens the ai assistant from the command palette', async () => {
