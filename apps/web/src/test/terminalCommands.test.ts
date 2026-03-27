@@ -25,7 +25,7 @@ describe('terminalCommands', () => {
       '  project <slug>      Show one project in detail',
     )
     expect(helpOutput).toContain(
-      '  close               Close the terminal window',
+      '  close               Close the terminal',
     )
   })
 
