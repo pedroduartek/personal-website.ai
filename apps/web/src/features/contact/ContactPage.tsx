@@ -168,7 +168,8 @@ export default function ContactPage() {
                     Send a message
                   </h2>
                   <p className="mt-2 text-sm text-foreground-subtle">
-                    This sends a message directly to my inbox at {profile.email}.
+                    This sends a message directly to my inbox at {profile.email}
+                    .
                   </p>
                 </div>
                 <button

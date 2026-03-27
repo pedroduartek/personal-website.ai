@@ -413,10 +413,14 @@ describe('TerminalShell email command', () => {
     await user.type(input, 'help{enter}')
 
     expect(
-      screen.queryByText('  email               Compose and send an email from the terminal'),
+      screen.queryByText(
+        '  email               Compose and send an email from the terminal',
+      ),
     ).not.toBeInTheDocument()
     expect(
-      screen.queryByText('  chat <message>      Ask the chat API and return a response'),
+      screen.queryByText(
+        '  chat <message>      Ask the chat API and return a response',
+      ),
     ).not.toBeInTheDocument()
   })
 
