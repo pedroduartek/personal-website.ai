@@ -2,7 +2,10 @@ import type React from 'react'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import cvPdf from '../CV/Pedro_Duarte_CV.pdf'
 import { profile } from '../content/profile'
-import { CHAT_API_HEALTH_URL, checkApiHealth } from '../utils/apiClient'
+import {
+  ensureApiAvailability,
+  useApiAvailability,
+} from '../hooks/useApiAvailability'
 import {
   type ContactEmailValues,
   isContactEmailRateLimited,
@@ -109,6 +112,7 @@ export default function TerminalShell({ onClose }: TerminalShellProps) {
   const activeExecutionRef = useRef<ActiveExecution | null>(null)
   const nextExecutionIdRef = useRef(0)
   const interruptArmedAtRef = useRef(0)
+  const apiAvailable = useApiAvailability()
   const turnstileAvailable = isTurnstileConfigured()
 
   const scrollToBottom = useCallback(() => {
@@ -129,6 +133,14 @@ export default function TerminalShell({ onClose }: TerminalShellProps) {
       inputElement.setSelectionRange(valueLength, valueLength)
     } catch {}
   }, [])
+
+  const resolveApiAvailability = useCallback(async () => {
+    if (apiAvailable !== null) {
+      return apiAvailable
+    }
+
+    return ensureApiAvailability()
+  }, [apiAvailable])
 
   const appendOutput = useCallback((text: string) => {
     setLines((current) => [
@@ -603,17 +615,27 @@ export default function TerminalShell({ onClose }: TerminalShellProps) {
     if (commandBusy) return
     if (!cmd) return
     const parts = cmd.split(/\s+/).filter(Boolean)
+    const commandName = parts[0]?.toLowerCase() ?? ''
     setLines((l) => [...l, { id: Date.now(), text: `> ${cmd}`, type: 'in' }])
     setHistory((h) => [...h, cmd])
     setHistIdx(null)
     setInput('')
+    let apiFeatureAvailable = apiAvailable === true
 
     if (cmd === 'clear') {
       setLines([])
       return
     }
 
-    if (cmd === 'email' && parts.length === 1) {
+    if (commandName === 'email' && parts.length === 1) {
+      apiFeatureAvailable = await resolveApiAvailability()
+      if (!apiFeatureAvailable) {
+        appendOutput(
+          'Email from the terminal is unavailable right now. Please use the direct email link instead.',
+        )
+        return
+      }
+
       clearEmailComposer()
       setEmailComposer({
         step: 'name',
@@ -633,22 +655,18 @@ export default function TerminalShell({ onClose }: TerminalShellProps) {
       return
     }
 
+    if (!chatMode && commandName === 'chat') {
+      apiFeatureAvailable = await resolveApiAvailability()
+      if (!apiFeatureAvailable) {
+        appendOutput('Chat is not available right now. Please try again later.')
+        return
+      }
+    }
+
     // Enter interactive chat mode
-    if (cmd === 'chat' && parts.length === 1) {
+    if (commandName === 'chat' && parts.length === 1) {
       const execution = beginExecution('output')
       try {
-        const chatAvailable = await checkApiHealth(CHAT_API_HEALTH_URL)
-        if (execution.interrupted) {
-          return
-        }
-
-        if (!chatAvailable) {
-          appendOutput(
-            'Chat is not available right now. Please try again later.',
-          )
-          return
-        }
-
         setChatMode(true)
         setLines((l) => [
           ...l,
@@ -782,7 +800,10 @@ export default function TerminalShell({ onClose }: TerminalShellProps) {
 
     const execution = beginExecution('output')
     try {
-      const out = await runCommand(cmd, { profile })
+      const out = await runCommand(cmd, {
+        apiAvailable: apiFeatureAvailable,
+        profile,
+      })
       if (execution.interrupted) {
         return
       }

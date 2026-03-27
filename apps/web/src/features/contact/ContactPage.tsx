@@ -1,8 +1,9 @@
-import { type FormEvent, useState } from 'react'
+import { type FormEvent, useEffect, useState } from 'react'
 import StyledLink from '../../components/StyledLink'
 import TurnstileWidget from '../../components/TurnstileWidget'
 import PageSEO from '../../components/seo/PageSEO'
 import { profile } from '../../content/profile'
+import { useApiAvailability } from '../../hooks/useApiAvailability'
 import {
   type ContactEmailValues,
   isContactEmailRateLimited,
@@ -30,7 +31,15 @@ export default function ContactPage() {
   const [showMessageForm, setShowMessageForm] = useState(false)
   const [turnstileToken, setTurnstileToken] = useState<string | null>(null)
   const [turnstileResetSignal, setTurnstileResetSignal] = useState(0)
+  const apiAvailable = useApiAvailability()
   const turnstileAvailable = isTurnstileConfigured()
+  const messageFormAvailable = apiAvailable === true
+
+  useEffect(() => {
+    if (!messageFormAvailable) {
+      setShowMessageForm(false)
+    }
+  }, [messageFormAvailable])
 
   function updateField<K extends keyof ContactFormValues>(
     field: K,
@@ -143,170 +152,175 @@ export default function ContactPage() {
           <p className="text-base text-foreground-muted md:text-lg">
             I&apos;m always open to relevant opportunities, thoughtful
             conversations, and meeting other engineers. If you want to reach me,
-            use the message form or any of the direct contact options.
+            use {messageFormAvailable ? 'the message form or any of' : ''} the
+            direct contact options.
           </p>
         </div>
 
-        <div className="mt-10 grid items-start gap-6 lg:grid-cols-[minmax(0,1.25fr)_minmax(280px,0.9fr)]">
-          <section className="theme-card self-start p-6 md:p-8">
-            <button
-              type="button"
-              aria-expanded={showMessageForm}
-              aria-controls="contact-message-form"
-              onClick={() => setShowMessageForm((current) => !current)}
-              className="flex w-full items-start justify-between gap-4 text-left"
-            >
-              <div>
-                <h2 className="text-2xl font-semibold text-foreground">
-                  Send a message
-                </h2>
-                <p className="mt-2 text-sm text-foreground-subtle">
-                  This sends a message directly to my inbox at {profile.email}.
-                </p>
+        <div
+          className={`mt-10 ${messageFormAvailable ? 'grid items-start gap-6 lg:grid-cols-[minmax(0,1.25fr)_minmax(280px,0.9fr)]' : 'max-w-xl'}`}
+        >
+          {messageFormAvailable ? (
+            <section className="theme-card self-start p-6 md:p-8">
+              <div className="flex w-full items-start justify-between gap-4 text-left">
+                <div>
+                  <h2 className="text-2xl font-semibold text-foreground">
+                    Send a message
+                  </h2>
+                  <p className="mt-2 text-sm text-foreground-subtle">
+                    This sends a message directly to my inbox at {profile.email}.
+                  </p>
+                </div>
+                <button
+                  type="button"
+                  aria-expanded={showMessageForm}
+                  aria-controls="contact-message-form"
+                  onClick={() => setShowMessageForm((current) => !current)}
+                  className="theme-button-secondary"
+                >
+                  {showMessageForm ? 'Hide form' : 'Open form'}
+                </button>
               </div>
-              <span className="theme-button-secondary">
-                {showMessageForm ? 'Hide form' : 'Open form'}
-              </span>
-            </button>
 
-            {showMessageForm && (
-              <form
-                id="contact-message-form"
-                className="mt-6 space-y-5 border-t border-border pt-6"
-                onSubmit={handleSubmit}
-              >
-                <div className="grid gap-5 md:grid-cols-2">
+              {showMessageForm && (
+                <form
+                  id="contact-message-form"
+                  className="mt-6 space-y-5 border-t border-border pt-6"
+                  onSubmit={handleSubmit}
+                >
+                  <div className="grid gap-5 md:grid-cols-2">
+                    <label className="block">
+                      <span className="mb-2 block text-sm font-medium text-foreground">
+                        Name
+                      </span>
+                      <input
+                        type="text"
+                        name="name"
+                        autoComplete="name"
+                        required
+                        maxLength={100}
+                        value={formValues.name}
+                        onChange={(event) =>
+                          updateField('name', event.target.value)
+                        }
+                        className="theme-input"
+                      />
+                    </label>
+
+                    <label className="block">
+                      <span className="mb-2 block text-sm font-medium text-foreground">
+                        Email
+                      </span>
+                      <input
+                        type="email"
+                        name="email"
+                        autoComplete="email"
+                        required
+                        maxLength={254}
+                        value={formValues.email}
+                        onChange={(event) =>
+                          updateField('email', event.target.value)
+                        }
+                        className="theme-input"
+                      />
+                    </label>
+                  </div>
+
                   <label className="block">
                     <span className="mb-2 block text-sm font-medium text-foreground">
-                      Name
+                      Subject
                     </span>
                     <input
                       type="text"
-                      name="name"
-                      autoComplete="name"
+                      name="subject"
                       required
-                      maxLength={100}
-                      value={formValues.name}
+                      maxLength={160}
+                      value={formValues.subject}
                       onChange={(event) =>
-                        updateField('name', event.target.value)
+                        updateField('subject', event.target.value)
                       }
                       className="theme-input"
                     />
                   </label>
+
+                  <input
+                    type="text"
+                    name="company"
+                    tabIndex={-1}
+                    autoComplete="off"
+                    aria-hidden="true"
+                    value={formValues.company ?? ''}
+                    onChange={(event) =>
+                      updateField('company', event.target.value)
+                    }
+                    className="hidden"
+                  />
 
                   <label className="block">
                     <span className="mb-2 block text-sm font-medium text-foreground">
-                      Email
+                      Message
                     </span>
-                    <input
-                      type="email"
-                      name="email"
-                      autoComplete="email"
+                    <textarea
+                      name="message"
                       required
-                      maxLength={254}
-                      value={formValues.email}
+                      rows={8}
+                      maxLength={4000}
+                      value={formValues.message}
                       onChange={(event) =>
-                        updateField('email', event.target.value)
+                        updateField('message', event.target.value)
                       }
-                      className="theme-input"
+                      className="theme-input min-h-48"
                     />
                   </label>
-                </div>
 
-                <label className="block">
-                  <span className="mb-2 block text-sm font-medium text-foreground">
-                    Subject
-                  </span>
-                  <input
-                    type="text"
-                    name="subject"
-                    required
-                    maxLength={160}
-                    value={formValues.subject}
-                    onChange={(event) =>
-                      updateField('subject', event.target.value)
-                    }
-                    className="theme-input"
-                  />
-                </label>
-
-                <input
-                  type="text"
-                  name="company"
-                  tabIndex={-1}
-                  autoComplete="off"
-                  aria-hidden="true"
-                  value={formValues.company ?? ''}
-                  onChange={(event) =>
-                    updateField('company', event.target.value)
-                  }
-                  className="hidden"
-                />
-
-                <label className="block">
-                  <span className="mb-2 block text-sm font-medium text-foreground">
-                    Message
-                  </span>
-                  <textarea
-                    name="message"
-                    required
-                    rows={8}
-                    maxLength={4000}
-                    value={formValues.message}
-                    onChange={(event) =>
-                      updateField('message', event.target.value)
-                    }
-                    className="theme-input min-h-48"
-                  />
-                </label>
-
-                <div className="rounded-lg border border-border bg-surface-muted p-4">
-                  <p className="mb-3 text-sm text-foreground-muted">
-                    Complete the spam check before sending.
-                  </p>
-                  {turnstileAvailable ? (
-                    <TurnstileWidget
-                      action="contact_form"
-                      onTokenChange={setTurnstileToken}
-                      resetSignal={turnstileResetSignal}
-                    />
-                  ) : (
-                    <p
-                      className="text-sm text-red-700 dark:text-red-300"
-                      role="alert"
-                    >
-                      Spam verification is not configured right now. Please use
-                      the direct email link instead.
+                  <div className="rounded-lg border border-border bg-surface-muted p-4">
+                    <p className="mb-3 text-sm text-foreground-muted">
+                      Complete the spam check before sending.
                     </p>
-                  )}
-                </div>
-
-                {submitState !== 'idle' && statusMessage && (
-                  <div
-                    role={submitState === 'error' ? 'alert' : 'status'}
-                    aria-live="polite"
-                    className={`rounded-lg border px-4 py-3 text-sm ${statusClasses}`}
-                  >
-                    {statusMessage}
+                    {turnstileAvailable ? (
+                      <TurnstileWidget
+                        action="contact_form"
+                        onTokenChange={setTurnstileToken}
+                        resetSignal={turnstileResetSignal}
+                      />
+                    ) : (
+                      <p
+                        className="text-sm text-red-700 dark:text-red-300"
+                        role="alert"
+                      >
+                        Spam verification is not configured right now. Please
+                        use the direct email link instead.
+                      </p>
+                    )}
                   </div>
-                )}
 
-                <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-                  <p className="text-xs text-foreground-subtle">
-                    Include enough detail for context. Your own email address is
-                    included in the message body so I can reply directly.
-                  </p>
-                  <button
-                    type="submit"
-                    disabled={isSubmitting || !turnstileAvailable}
-                    className="inline-flex items-center justify-center rounded-lg bg-brand px-5 py-3 text-sm font-semibold text-white transition-all duration-200 hover:scale-[1.02] hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-brand/50 disabled:cursor-not-allowed disabled:opacity-70"
-                  >
-                    {isSubmitting ? 'Sending...' : 'Send email'}
-                  </button>
-                </div>
-              </form>
-            )}
-          </section>
+                  {submitState !== 'idle' && statusMessage && (
+                    <div
+                      role={submitState === 'error' ? 'alert' : 'status'}
+                      aria-live="polite"
+                      className={`rounded-lg border px-4 py-3 text-sm ${statusClasses}`}
+                    >
+                      {statusMessage}
+                    </div>
+                  )}
+
+                  <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                    <p className="text-xs text-foreground-subtle">
+                      Include enough detail for context. Your own email address
+                      is included in the message body so I can reply directly.
+                    </p>
+                    <button
+                      type="submit"
+                      disabled={isSubmitting || !turnstileAvailable}
+                      className="inline-flex items-center justify-center rounded-lg bg-brand px-5 py-3 text-sm font-semibold text-white transition-all duration-200 hover:scale-[1.02] hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-brand/50 disabled:cursor-not-allowed disabled:opacity-70"
+                    >
+                      {isSubmitting ? 'Sending...' : 'Send email'}
+                    </button>
+                  </div>
+                </form>
+              )}
+            </section>
+          ) : null}
 
           <div className="space-y-6">
             <div className="theme-card group p-6 transition-colors hover:border-border-strong">

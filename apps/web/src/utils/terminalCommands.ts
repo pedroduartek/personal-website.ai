@@ -139,7 +139,7 @@ async function imageToAscii(url: string, charsWide?: number) {
   }
 }
 
-type RunOptions = { profile?: Partial<Profile> }
+type RunOptions = { apiAvailable?: boolean; profile?: Partial<Profile> }
 
 type ExperienceGroup = {
   company: string
@@ -388,8 +388,12 @@ export async function runCommand(
       '  sysinfo             Show basic system / navigator info',
       '  download-cv         Navigate to /cv to download the CV',
       '  clear               Clear the terminal (client-side)',
-      '  email               Compose and send an email from the terminal',
-      '  chat <message>      Ask the chat API and return a response',
+      ...(_opts.apiAvailable === false
+        ? []
+        : [
+            '  email               Compose and send an email from the terminal',
+            '  chat <message>      Ask the chat API and return a response',
+          ]),
       '  help                Show this help message',
     ]
   }
@@ -673,6 +677,10 @@ export async function runCommand(
   // `open` command removed: navigation via terminal is intentionally disabled.
 
   if (name === 'chat') {
+    if (_opts.apiAvailable === false) {
+      return ['Chat is not available right now. Please try again later.']
+    }
+
     const message = args.join(' ').trim()
     if (!message) return ['Usage: chat <message>']
 

@@ -4,19 +4,32 @@ import { MemoryRouter } from 'react-router-dom'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { ThemeProvider } from '../app/theme/ThemeProvider'
 import ContactPage from '../features/contact/ContactPage'
+import { resetApiAvailabilityCache } from '../hooks/useApiAvailability'
+import { CHAT_API_HEALTH_URL } from '../utils/apiClient'
 import { CONTACT_EMAIL_ENDPOINT } from '../utils/contactEmail'
 
 describe('ContactPage', () => {
   beforeEach(() => {
+    resetApiAvailabilityCache()
     vi.stubGlobal(
       'fetch',
-      vi.fn().mockResolvedValue({
-        ok: true,
-      }),
+      vi
+        .fn()
+        .mockResolvedValueOnce(
+          new Response(null, {
+            status: 200,
+          }),
+        )
+        .mockResolvedValueOnce(
+          new Response(null, {
+            status: 200,
+          }),
+        ),
     )
   })
 
   afterEach(() => {
+    resetApiAvailabilityCache()
     vi.unstubAllGlobals()
   })
 
@@ -33,7 +46,7 @@ describe('ContactPage', () => {
 
     expect(screen.queryByLabelText('Name')).not.toBeInTheDocument()
 
-    await user.click(screen.getByRole('button', { name: /open form/i }))
+    await user.click(await screen.findByRole('button', { name: /open form/i }))
 
     await user.type(screen.getByLabelText('Name'), 'Ada Lovelace')
     await user.type(screen.getByLabelText('Email'), 'ada@example.com')
@@ -45,11 +58,16 @@ describe('ContactPage', () => {
     await user.click(screen.getByRole('button', { name: 'Send email' }))
 
     await waitFor(() => {
-      expect(fetch).toHaveBeenCalledTimes(1)
+      expect(fetch).toHaveBeenCalledTimes(2)
     })
 
-    const [url, options] = vi.mocked(fetch).mock.calls[0]
+    const [healthUrl, healthOptions] = vi.mocked(fetch).mock.calls[0]
+    const [url, options] = vi.mocked(fetch).mock.calls[1]
 
+    expect(healthUrl).toBe(CHAT_API_HEALTH_URL)
+    expect(healthOptions).toMatchObject({
+      method: 'GET',
+    })
     expect(url).toBe(CONTACT_EMAIL_ENDPOINT)
     expect(options).toMatchObject({
       method: 'POST',
@@ -79,19 +97,26 @@ describe('ContactPage', () => {
 
     vi.stubGlobal(
       'fetch',
-      vi.fn().mockResolvedValue(
-        new Response(
-          JSON.stringify({
-            error: 'Too many requests',
+      vi
+        .fn()
+        .mockResolvedValueOnce(
+          new Response(null, {
+            status: 200,
           }),
-          {
-            status: 429,
-            headers: {
-              'Content-Type': 'application/json',
+        )
+        .mockResolvedValueOnce(
+          new Response(
+            JSON.stringify({
+              error: 'Too many requests',
+            }),
+            {
+              status: 429,
+              headers: {
+                'Content-Type': 'application/json',
+              },
             },
-          },
+          ),
         ),
-      ),
     )
 
     render(
@@ -102,7 +127,7 @@ describe('ContactPage', () => {
       </ThemeProvider>,
     )
 
-    await user.click(screen.getByRole('button', { name: /open form/i }))
+    await user.click(await screen.findByRole('button', { name: /open form/i }))
 
     await user.type(screen.getByLabelText('Name'), 'Ada Lovelace')
     await user.type(screen.getByLabelText('Email'), 'ada@example.com')
@@ -120,5 +145,36 @@ describe('ContactPage', () => {
         ),
       ).toBeInTheDocument()
     })
+  })
+
+  it('hides the direct message form when the API health check is not 200', async () => {
+    vi.stubGlobal(
+      'fetch',
+      vi.fn().mockResolvedValue(
+        new Response(null, {
+          status: 503,
+        }),
+      ),
+    )
+
+    render(
+      <ThemeProvider>
+        <MemoryRouter>
+          <ContactPage />
+        </MemoryRouter>
+      </ThemeProvider>,
+    )
+
+    await waitFor(() => {
+      expect(screen.queryByText('Send a message')).not.toBeInTheDocument()
+    })
+
+    expect(
+      screen.queryByRole('button', { name: /open form/i }),
+    ).not.toBeInTheDocument()
+    expect(screen.queryByLabelText('Name')).not.toBeInTheDocument()
+    expect(
+      screen.getByText(/use the direct contact options/i),
+    ).toBeInTheDocument()
   })
 })

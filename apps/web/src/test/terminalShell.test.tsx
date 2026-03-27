@@ -4,6 +4,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { ThemeProvider } from '../app/theme/ThemeProvider'
 import TerminalShell from '../components/TerminalShell'
 import { profile } from '../content/profile'
+import { resetApiAvailabilityCache } from '../hooks/useApiAvailability'
 import { CONTACT_EMAIL_ENDPOINT } from '../utils/contactEmail'
 
 function renderTerminalShell() {
@@ -16,6 +17,7 @@ function renderTerminalShell() {
 
 describe('TerminalShell email command', () => {
   beforeEach(() => {
+    resetApiAvailabilityCache()
     vi.stubGlobal(
       'fetch',
       vi.fn().mockResolvedValue(
@@ -27,6 +29,7 @@ describe('TerminalShell email command', () => {
   })
 
   afterEach(() => {
+    resetApiAvailabilityCache()
     vi.unstubAllGlobals()
   })
 
@@ -34,6 +37,10 @@ describe('TerminalShell email command', () => {
     const user = userEvent.setup()
 
     renderTerminalShell()
+
+    await waitFor(() => {
+      expect(fetch).toHaveBeenCalledTimes(1)
+    })
 
     const input = screen.getByPlaceholderText('type a command (help)')
 
@@ -68,10 +75,10 @@ describe('TerminalShell email command', () => {
     await user.type(input, 'y{enter}')
 
     await waitFor(() => {
-      expect(fetch).toHaveBeenCalledTimes(1)
+      expect(fetch).toHaveBeenCalledTimes(2)
     })
 
-    const [url, options] = vi.mocked(fetch).mock.calls[0]
+    const [url, options] = vi.mocked(fetch).mock.calls[1]
 
     expect(url).toBe(CONTACT_EMAIL_ENDPOINT)
     const payload = JSON.parse(String(options?.body))
@@ -91,6 +98,10 @@ describe('TerminalShell email command', () => {
     const user = userEvent.setup()
 
     renderTerminalShell()
+
+    await waitFor(() => {
+      expect(fetch).toHaveBeenCalledTimes(1)
+    })
 
     const input = screen.getByPlaceholderText('type a command (help)')
 
@@ -119,15 +130,26 @@ describe('TerminalShell email command', () => {
 
     vi.stubGlobal(
       'fetch',
-      vi.fn(
-        () =>
-          new Promise<Response>((resolve) => {
-            resolveEmailRequest = resolve
+      vi
+        .fn()
+        .mockResolvedValueOnce(
+          new Response(null, {
+            status: 200,
           }),
-      ),
+        )
+        .mockImplementationOnce(
+          () =>
+            new Promise<Response>((resolve) => {
+              resolveEmailRequest = resolve
+            }),
+        ),
     )
 
     renderTerminalShell()
+
+    await waitFor(() => {
+      expect(fetch).toHaveBeenCalledTimes(1)
+    })
 
     const input = screen.getByPlaceholderText('type a command (help)')
 
@@ -139,7 +161,7 @@ describe('TerminalShell email command', () => {
     await user.type(input, 'y{enter}')
 
     await waitFor(() => {
-      expect(fetch).toHaveBeenCalledTimes(1)
+      expect(fetch).toHaveBeenCalledTimes(2)
     })
     expect(input).toBeDisabled()
 
@@ -198,6 +220,10 @@ describe('TerminalShell email command', () => {
     )
 
     renderTerminalShell()
+
+    await waitFor(() => {
+      expect(fetch).toHaveBeenCalledTimes(1)
+    })
 
     const input = screen.getByPlaceholderText('type a command (help)')
 
@@ -259,6 +285,10 @@ describe('TerminalShell email command', () => {
 
     renderTerminalShell()
 
+    await waitFor(() => {
+      expect(fetch).toHaveBeenCalledTimes(1)
+    })
+
     const input = screen.getByPlaceholderText('type a command (help)')
 
     await user.type(input, 'chat{enter}')
@@ -284,6 +314,10 @@ describe('TerminalShell email command', () => {
 
     renderTerminalShell()
 
+    await waitFor(() => {
+      expect(fetch).toHaveBeenCalledTimes(1)
+    })
+
     const input = screen.getByPlaceholderText('type a command (help)')
 
     await user.type(input, 'about{enter}')
@@ -304,22 +338,33 @@ describe('TerminalShell email command', () => {
 
     vi.stubGlobal(
       'fetch',
-      vi.fn().mockResolvedValue(
-        new Response(
-          JSON.stringify({
-            error: 'Too many requests',
+      vi
+        .fn()
+        .mockResolvedValueOnce(
+          new Response(null, {
+            status: 200,
           }),
-          {
-            status: 429,
-            headers: {
-              'Content-Type': 'application/json',
+        )
+        .mockResolvedValueOnce(
+          new Response(
+            JSON.stringify({
+              error: 'Too many requests',
+            }),
+            {
+              status: 429,
+              headers: {
+                'Content-Type': 'application/json',
+              },
             },
-          },
+          ),
         ),
-      ),
     )
 
     renderTerminalShell()
+
+    await waitFor(() => {
+      expect(fetch).toHaveBeenCalledTimes(1)
+    })
 
     const input = screen.getByPlaceholderText('type a command (help)')
 
@@ -343,5 +388,65 @@ describe('TerminalShell email command', () => {
     expect(
       screen.queryByText('Type y to try again or n to cancel.'),
     ).not.toBeInTheDocument()
+  })
+
+  it('hides API-backed terminal commands from help when the health check is not 200', async () => {
+    const user = userEvent.setup()
+
+    vi.stubGlobal(
+      'fetch',
+      vi.fn().mockResolvedValue(
+        new Response(null, {
+          status: 503,
+        }),
+      ),
+    )
+
+    renderTerminalShell()
+
+    await waitFor(() => {
+      expect(fetch).toHaveBeenCalledTimes(1)
+    })
+
+    const input = screen.getByPlaceholderText('type a command (help)')
+
+    await user.type(input, 'help{enter}')
+
+    expect(
+      screen.queryByText('  email               Compose and send an email from the terminal'),
+    ).not.toBeInTheDocument()
+    expect(
+      screen.queryByText('  chat <message>      Ask the chat API and return a response'),
+    ).not.toBeInTheDocument()
+  })
+
+  it('blocks terminal email when the health check is not 200', async () => {
+    const user = userEvent.setup()
+
+    vi.stubGlobal(
+      'fetch',
+      vi.fn().mockResolvedValue(
+        new Response(null, {
+          status: 503,
+        }),
+      ),
+    )
+
+    renderTerminalShell()
+
+    await waitFor(() => {
+      expect(fetch).toHaveBeenCalledTimes(1)
+    })
+
+    const input = screen.getByPlaceholderText('type a command (help)')
+    await user.type(input, 'email{enter}')
+
+    await waitFor(() => {
+      expect(
+        screen.getByText(
+          'Email from the terminal is unavailable right now. Please use the direct email link instead.',
+        ),
+      ).toBeInTheDocument()
+    })
   })
 })
