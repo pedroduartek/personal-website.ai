@@ -22,6 +22,10 @@ export default function TerminalPage() {
     navigate('/')
   }, [navigate, state])
 
+  const handleGoHome = useCallback(() => {
+    navigate('/')
+  }, [navigate])
+
   return (
     <>
       <PageSEO
@@ -35,7 +39,7 @@ export default function TerminalPage() {
         }
       />
       <div className="flex min-h-0 flex-1 flex-col overflow-hidden">
-        <TerminalShell onClose={handleClose} />
+        <TerminalShell onClose={handleClose} onGoHome={handleGoHome} />
       </div>
     </>
   )

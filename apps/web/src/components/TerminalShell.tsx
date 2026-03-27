@@ -21,6 +21,7 @@ import TurnstileWidget from './TurnstileWidget'
 
 interface TerminalShellProps {
   onClose: () => void
+  onGoHome: () => void
 }
 
 type EmailComposerStep = 'name' | 'email' | 'subject' | 'message' | 'confirm'
@@ -37,7 +38,7 @@ type EmailComposerState = {
 
 type ActiveExecution = {
   id: number
-  kind: 'chat' | 'email' | 'download-cv' | 'output'
+  kind: 'chat' | 'email' | 'download-cv' | 'output' | 'close'
   interrupted: boolean
 }
 
@@ -87,7 +88,10 @@ function AsciiArt({
   )
 }
 
-export default function TerminalShell({ onClose }: TerminalShellProps) {
+export default function TerminalShell({
+  onClose,
+  onGoHome,
+}: TerminalShellProps) {
   const [lines, setLines] = useState<
     Array<{ id: number; text: string; type: 'out' | 'in' }>
   >([])
@@ -641,11 +645,43 @@ export default function TerminalShell({ onClose }: TerminalShellProps) {
     if (!cmd) return
     const parts = cmd.split(/\s+/).filter(Boolean)
     const commandName = parts[0]?.toLowerCase() ?? ''
+
     setLines((l) => [...l, { id: Date.now(), text: `> ${cmd}`, type: 'in' }])
     setHistory((h) => [...h, cmd])
     setHistIdx(null)
     setInput('')
     let apiFeatureAvailable = apiAvailable === true
+
+    if (commandName === 'close' && parts.length === 1) {
+      const execution = beginExecution('close')
+      appendOutputs([
+        'Closing terminal in 3...',
+        'Press Ctrl+C or Cmd+C twice to stay here.',
+      ])
+
+      try {
+        for (const remainingSeconds of [2, 1]) {
+          // eslint-disable-next-line no-await-in-loop
+          await sleep(1000)
+          if (execution.interrupted) {
+            return
+          }
+          appendOutput(`Closing terminal in ${remainingSeconds}...`)
+        }
+
+        await sleep(1000)
+        if (execution.interrupted) {
+          return
+        }
+
+        onGoHome()
+      } finally {
+        if (isExecutionCurrent(execution)) {
+          finishExecution(execution)
+        }
+      }
+      return
+    }
 
     if (cmd === 'clear') {
       setLines([])
@@ -934,9 +970,11 @@ export default function TerminalShell({ onClose }: TerminalShellProps) {
     const historyShortcut = (e.ctrlKey || e.metaKey) && !e.altKey && !e.shiftKey
     const lowerKey = e.key.toLowerCase()
 
-    if (e.key === 'Tab' && selectedSuggestion) {
+    if (e.key === 'Tab') {
       e.preventDefault()
-      applyAutocomplete(selectedSuggestion)
+      if (selectedSuggestion && !e.shiftKey) {
+        applyAutocomplete(selectedSuggestion)
+      }
     } else if (e.key === 'ArrowRight' && selectedSuggestion && cursorAtEnd) {
       e.preventDefault()
       applyAutocomplete(selectedSuggestion)

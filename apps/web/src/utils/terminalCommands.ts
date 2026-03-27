@@ -165,6 +165,7 @@ const terminalCommandCandidates = [
   'sysinfo',
   'download-cv',
   'clear',
+  'close',
   'help',
   '?',
 ] as const
@@ -752,6 +753,7 @@ export async function runCommand(
       '  sysinfo             Show basic system / navigator info',
       '  download-cv         Navigate to /cv to download the CV',
       '  clear               Clear the terminal (client-side)',
+      '  close               Return to the homepage',
       ...(_opts.apiAvailable === false
         ? []
         : [
@@ -1022,6 +1024,10 @@ export async function runCommand(
     return ok
       ? [`Navigating to ${path}...`]
       : [`Navigation not available. Visit ${path}`]
+  }
+
+  if (name === 'close') {
+    return ['Closing terminal...']
   }
 
   // `open` command removed: navigation via terminal is intentionally disabled.

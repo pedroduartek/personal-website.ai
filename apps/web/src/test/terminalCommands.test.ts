@@ -19,6 +19,7 @@ describe('terminalCommands', () => {
     expect(helpOutput).toContain(
       '  project <slug>      Show one project in detail',
     )
+    expect(helpOutput).toContain('  close               Return to the homepage')
   })
 
   it('shows a project in detail', async () => {
@@ -105,6 +106,7 @@ describe('terminalCommands', () => {
   it('suggests command and argument autocompletions', () => {
     expect(getTerminalAutocomplete('dow')).toBe('download-cv')
     expect(getTerminalAutocomplete('proj')).toBe('project')
+    expect(getTerminalAutocomplete('clo')).toBe('close')
     expect(getTerminalAutocomplete('ls ab')).toBe('ls about')
     expect(getTerminalAutocomplete('project ai')).toBe('project ai-chat-api')
     expect(getTerminalAutocomplete('cat experience enh')).toBe(

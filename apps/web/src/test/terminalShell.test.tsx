@@ -7,10 +7,16 @@ import { profile } from '../content/profile'
 import { resetApiAvailabilityCache } from '../hooks/useApiAvailability'
 import { CONTACT_EMAIL_ENDPOINT } from '../utils/contactEmail'
 
-function renderTerminalShell() {
+function renderTerminalShell({
+  onClose = () => {},
+  onGoHome = () => {},
+}: {
+  onClose?: () => void
+  onGoHome?: () => void
+} = {}) {
   return render(
     <ThemeProvider>
-      <TerminalShell onClose={() => {}} />
+      <TerminalShell onClose={onClose} onGoHome={onGoHome} />
     </ThemeProvider>,
   )
 }
@@ -29,6 +35,7 @@ describe('TerminalShell email command', () => {
   })
 
   afterEach(() => {
+    vi.useRealTimers()
     resetApiAvailabilityCache()
     vi.unstubAllGlobals()
   })
@@ -475,6 +482,28 @@ describe('TerminalShell email command', () => {
     expect(screen.getByText('Available commands:')).toBeInTheDocument()
   })
 
+  it('keeps focus on the terminal prompt when tab is pressed without a suggestion', async () => {
+    const user = userEvent.setup()
+
+    renderTerminalShell()
+
+    await waitFor(() => {
+      expect(fetch).toHaveBeenCalledTimes(1)
+    })
+
+    const input = screen.getByPlaceholderText('type a command (help)')
+    const clearButton = screen.getByRole('button', { name: 'clear' })
+
+    input.focus()
+    expect(input).toHaveFocus()
+
+    await user.type(input, 'help')
+    await user.tab()
+
+    expect(input).toHaveFocus()
+    expect(clearButton).not.toHaveFocus()
+  })
+
   it('shows suggestions before typing and lets arrow keys browse them', async () => {
     renderTerminalShell()
 
@@ -546,4 +575,80 @@ describe('TerminalShell email command', () => {
 
     expect(input).toHaveValue('project')
   })
+
+  it('counts down before the close command triggers homepage navigation', async () => {
+    const user = userEvent.setup()
+    const onGoHome = vi.fn()
+
+    renderTerminalShell({ onGoHome })
+
+    await waitFor(() => {
+      expect(fetch).toHaveBeenCalledTimes(1)
+    })
+
+    const input = screen.getByPlaceholderText('type a command (help)')
+
+    await user.type(input, 'close{enter}')
+
+    expect(screen.getByText('Closing terminal in 3...')).toBeInTheDocument()
+    expect(
+      screen.getByText('Press Ctrl+C or Cmd+C twice to stay here.'),
+    ).toBeInTheDocument()
+    expect(onGoHome).not.toHaveBeenCalled()
+
+    await waitFor(
+      () => {
+        expect(screen.getByText('Closing terminal in 2...')).toBeInTheDocument()
+      },
+      { timeout: 1500 },
+    )
+
+    await waitFor(
+      () => {
+        expect(screen.getByText('Closing terminal in 1...')).toBeInTheDocument()
+      },
+      { timeout: 1500 },
+    )
+
+    await waitFor(
+      () => {
+        expect(onGoHome).toHaveBeenCalledTimes(1)
+      },
+      { timeout: 1500 },
+    )
+  }, 10000)
+
+  it('cancels the close countdown when ctrl+c is pressed twice', async () => {
+    const user = userEvent.setup()
+    const onGoHome = vi.fn()
+
+    renderTerminalShell({ onGoHome })
+
+    await waitFor(() => {
+      expect(fetch).toHaveBeenCalledTimes(1)
+    })
+
+    const input = screen.getByPlaceholderText('type a command (help)')
+
+    await user.type(input, 'close{enter}')
+
+    await waitFor(
+      () => {
+        expect(screen.getByText('Closing terminal in 2...')).toBeInTheDocument()
+      },
+      { timeout: 1500 },
+    )
+
+    fireEvent.keyDown(document, { key: 'c', ctrlKey: true })
+    fireEvent.keyDown(document, { key: 'c', ctrlKey: true })
+
+    expect(screen.getByText('Command interrupted.')).toBeInTheDocument()
+
+    await new Promise((resolve) => {
+      setTimeout(resolve, 3200)
+    })
+
+    expect(onGoHome).not.toHaveBeenCalled()
+    expect(screen.getByPlaceholderText('type a command (help)')).toBeEnabled()
+  }, 10000)
 })
