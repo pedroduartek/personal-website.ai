@@ -1,3 +1,4 @@
+import commandPalettePreview from '../images/command_pallete.webp'
 import type { ProjectHeroContent } from './types'
 
 export type HomeHeroFeatureSlide = {
@@ -5,9 +6,10 @@ export type HomeHeroFeatureSlide = {
   title: string
   technologies: string[]
   href: string
-  customMedia: 'terminal' | 'chat'
+  customMedia: 'terminal' | 'chat' | 'command'
   desktopOnly?: boolean
   opensChatWidget?: boolean
+  opensCommandPalette?: boolean
   homeHero: ProjectHeroContent
   preview: {
     label: string
@@ -16,6 +18,38 @@ export type HomeHeroFeatureSlide = {
     lines: string[]
     footer: string
   }
+}
+
+export const commandPaletteHeroSlide: HomeHeroFeatureSlide = {
+  slug: 'command-palette',
+  title: 'Command Palette',
+  technologies: ['React 19', 'TypeScript 5', 'React Router'],
+  href: '/',
+  customMedia: 'command',
+  opensCommandPalette: true,
+  homeHero: {
+    eyebrow: 'Keyboard-first shortcut',
+    summary:
+      'A fast launcher for jumping to pages, opening the AI assistant, downloading the CV, and triggering quick site actions without breaking your flow.',
+    media: {
+      src: commandPalettePreview,
+      alt: 'Screenshot of the command palette open on the website',
+      fit: 'cover',
+      objectPosition: 'center top',
+    },
+  },
+  preview: {
+    label: 'Command palette',
+    title: 'Go anywhere or run a command',
+    status: 'ready',
+    lines: [
+      'pro',
+      'Projects  Browse featured builds and case studies',
+      'Start AI Assistant Conversation  Open the site assistant',
+      'Download CV  Save the latest PDF instantly',
+    ],
+    footer: 'press the shortcut to jump anywhere from the current page',
+  },
 }
 
 export const terminalHeroSlide: HomeHeroFeatureSlide = {

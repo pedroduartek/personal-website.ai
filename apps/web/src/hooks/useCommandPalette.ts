@@ -1,4 +1,8 @@
 import { useEffect, useState } from 'react'
+import {
+  OPEN_COMMAND_PALETTE_EVENT,
+  markCommandPaletteUsed,
+} from '../utils/commandPalette'
 import { isKeyboardCapableDevice } from '../utils/headerLayout'
 
 export function useCommandPalette() {
@@ -13,13 +17,8 @@ export function useCommandPalette() {
         e.preventDefault()
         setIsOpen((prev) => {
           const next = !prev
-          // if opening via keyboard, record that the user used the shortcut
           if (!prev) {
-            try {
-              localStorage.setItem('commandPaletteUsed', '1')
-            } catch (e) {
-              // ignore
-            }
+            markCommandPaletteUsed()
           }
           return next
         })
@@ -28,6 +27,25 @@ export function useCommandPalette() {
 
     window.addEventListener('keydown', handleKeyDown)
     return () => window.removeEventListener('keydown', handleKeyDown)
+  }, [])
+
+  useEffect(() => {
+    const handleOpenCommandPalette = () => {
+      markCommandPaletteUsed()
+      setIsOpen(true)
+    }
+
+    window.addEventListener(
+      OPEN_COMMAND_PALETTE_EVENT,
+      handleOpenCommandPalette,
+    )
+
+    return () => {
+      window.removeEventListener(
+        OPEN_COMMAND_PALETTE_EVENT,
+        handleOpenCommandPalette,
+      )
+    }
   }, [])
 
   return {

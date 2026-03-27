@@ -1,10 +1,15 @@
 import { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useTheme } from '../app/theme/ThemeProvider'
-import { aiChatHeroSlide, terminalHeroSlide } from '../content/homeHeroSlides'
+import {
+  aiChatHeroSlide,
+  commandPaletteHeroSlide,
+  terminalHeroSlide,
+} from '../content/homeHeroSlides'
 import type { Project } from '../content/types'
 import { useChatAvailability } from '../hooks/useChatAvailability'
 import { openChatWidget } from '../utils/chatWidget'
+import { openCommandPalette } from '../utils/commandPalette'
 import TechIcon from './TechIcon'
 
 type HomeHeroCarouselProps = {
@@ -17,8 +22,9 @@ type CarouselSlide = {
   technologies: string[]
   href: string
   homeHero: NonNullable<Project['homeHero']>
-  customMedia?: 'terminal' | 'chat'
+  customMedia?: 'terminal' | 'chat' | 'command'
   opensChatWidget?: boolean
+  opensCommandPalette?: boolean
   preview?: {
     label: string
     title: string
@@ -94,6 +100,15 @@ function getSlideTheme(slug: string) {
         mediaFrame:
           'bg-fuchsia-400/12 dark:bg-fuchsia-400/16 border-fuchsia-300/20 dark:border-fuchsia-300/20',
       }
+    case 'command-palette':
+      return {
+        shell:
+          'from-indigo-500/24 via-slate-500/10 to-transparent dark:from-indigo-500/18 dark:via-slate-500/8 dark:to-transparent',
+        halo: 'bg-indigo-400/14 dark:bg-indigo-400/18',
+        badge: 'border-indigo-400/30 bg-indigo-400/10 text-indigo-200',
+        mediaFrame:
+          'bg-indigo-400/12 dark:bg-indigo-400/16 border-indigo-300/20 dark:border-indigo-300/20',
+      }
     case 'terminal':
       return {
         shell:
@@ -118,6 +133,7 @@ export default function HomeHeroCarousel({ slides }: HomeHeroCarouselProps) {
   const [activeIndex, setActiveIndex] = useState(0)
   const [isPaused, setIsPaused] = useState(false)
   const [isDesktop, setIsDesktop] = useState(isDesktopViewport)
+  const [isCommandPaletteVisible, setIsCommandPaletteVisible] = useState(false)
   const [slideDirection, setSlideDirection] = useState<'forward' | 'backward'>(
     'forward',
   )
@@ -141,15 +157,16 @@ export default function HomeHeroCarousel({ slides }: HomeHeroCarouselProps) {
     }))
 
   const desktopTerminalSlide: CarouselSlide = terminalHeroSlide
+  const commandPaletteSlide: CarouselSlide = commandPaletteHeroSlide
   const chatFeatureSlide: CarouselSlide = aiChatHeroSlide
 
-  const carouselSlides: CarouselSlide[] = isDesktop
-    ? [
-        ...projectSlides,
-        ...(isChatAvailable ? [chatFeatureSlide] : []),
-        desktopTerminalSlide,
-      ]
-    : projectSlides.concat(isChatAvailable ? [chatFeatureSlide] : [])
+  const featureSlides: CarouselSlide[] = [
+    ...(isCommandPaletteVisible ? [commandPaletteSlide] : []),
+    ...(isChatAvailable ? [chatFeatureSlide] : []),
+    ...(isDesktop ? [desktopTerminalSlide] : []),
+  ]
+
+  const carouselSlides: CarouselSlide[] = projectSlides.concat(featureSlides)
 
   useEffect(() => {
     if (
@@ -188,6 +205,40 @@ export default function HomeHeroCarousel({ slides }: HomeHeroCarouselProps) {
 
     return () => {
       window.removeEventListener('resize', updateViewport)
+    }
+  }, [])
+
+  useEffect(() => {
+    if (typeof document === 'undefined') {
+      return
+    }
+
+    const updateVisibility = () => {
+      const nextVisibility = Boolean(
+        document.getElementById('command-palette-button'),
+      )
+
+      setIsCommandPaletteVisible((currentVisibility) =>
+        currentVisibility === nextVisibility
+          ? currentVisibility
+          : nextVisibility,
+      )
+    }
+
+    updateVisibility()
+
+    const observer =
+      typeof MutationObserver !== 'undefined'
+        ? new MutationObserver(updateVisibility)
+        : null
+
+    observer?.observe(document.body, {
+      childList: true,
+      subtree: true,
+    })
+
+    return () => {
+      observer?.disconnect()
     }
   }, [])
 
@@ -238,6 +289,21 @@ export default function HomeHeroCarousel({ slides }: HomeHeroCarouselProps) {
       : 'animate-carousel-slide-in-backward'
   const cardClasses =
     'group relative flex h-[31rem] overflow-hidden rounded-[2rem] border border-border bg-surface shadow-[0_24px_80px_rgba(15,23,42,0.18)] transition-transform duration-300 hover:-translate-y-1 md:h-[35rem]'
+  const ctaLabel = activeSlide.opensCommandPalette
+    ? 'Try Command Palette'
+    : activeSlide.opensChatWidget
+      ? 'Open AI Assistant'
+      : 'Go To Details Page'
+  const handleInteractiveSlideClick = () => {
+    if (activeSlide.opensCommandPalette) {
+      openCommandPalette()
+      return
+    }
+
+    if (activeSlide.opensChatWidget) {
+      openChatWidget()
+    }
+  }
 
   const goToPrevious = () => {
     setSlideDirection('backward')
@@ -326,11 +392,11 @@ export default function HomeHeroCarousel({ slides }: HomeHeroCarouselProps) {
         {activeSlide.title}
       </span>
 
-      {usesChatPreview ? (
+      {activeSlide.opensChatWidget || activeSlide.opensCommandPalette ? (
         <button
           key={activeSlide.slug}
           type="button"
-          onClick={() => openChatWidget()}
+          onClick={handleInteractiveSlideClick}
           className={`${cardClasses} ${slideTransitionClass}`}
           aria-label={`Open ${activeSlide.title}`}
         >
@@ -353,41 +419,63 @@ export default function HomeHeroCarousel({ slides }: HomeHeroCarouselProps) {
               }`}
             >
               <div
-                className={`flex h-full w-full items-center justify-center overflow-hidden rounded-[1.5rem] border shadow-[0_18px_45px_rgba(15,23,42,0.26)] ${theme.mediaFrame}`}
+                className={`flex h-full w-full items-center justify-center overflow-hidden rounded-[1.5rem] border shadow-[0_18px_45px_rgba(15,23,42,0.26)] ${theme.mediaFrame} ${
+                  isContainedMedia && !usesChatPreview ? 'p-5 md:p-6' : ''
+                }`}
               >
-                <div className="flex h-full w-full flex-col rounded-[1.25rem] bg-[linear-gradient(180deg,rgba(15,23,42,0.08),rgba(15,23,42,0.22))] p-4 text-slate-900 dark:text-white md:p-5">
-                  <div className="flex items-center justify-between border-b border-white/15 pb-3">
-                    <div>
-                      <div className="text-[11px] font-semibold uppercase tracking-[0.18em] text-fuchsia-700/80 dark:text-fuchsia-200/80">
-                        {activeSlide.preview?.label}
+                {usesChatPreview ? (
+                  <div className="flex h-full w-full flex-col rounded-[1.25rem] bg-[linear-gradient(180deg,rgba(15,23,42,0.08),rgba(15,23,42,0.22))] p-4 text-slate-900 dark:text-white md:p-5">
+                    <div className="flex items-center justify-between border-b border-white/15 pb-3">
+                      <div>
+                        <div className="text-[11px] font-semibold uppercase tracking-[0.18em] text-fuchsia-700/80 dark:text-fuchsia-200/80">
+                          {activeSlide.preview?.label}
+                        </div>
+                        <div className="mt-1 text-left text-sm font-semibold text-slate-900 dark:text-white">
+                          {activeSlide.preview?.title}
+                        </div>
                       </div>
-                      <div className="mt-1 text-left text-sm font-semibold text-slate-900 dark:text-white">
-                        {activeSlide.preview?.title}
+                      <div className="rounded-full border border-fuchsia-400/30 bg-fuchsia-400/12 px-2.5 py-1 text-[11px] font-medium text-fuchsia-700 dark:text-fuchsia-200">
+                        {activeSlide.preview?.status}
                       </div>
                     </div>
-                    <div className="rounded-full border border-fuchsia-400/30 bg-fuchsia-400/12 px-2.5 py-1 text-[11px] font-medium text-fuchsia-700 dark:text-fuchsia-200">
-                      {activeSlide.preview?.status}
+
+                    <div className="mt-4 flex flex-1 flex-col gap-3 text-left text-[13px] leading-5 md:text-sm md:leading-6">
+                      <div className="ml-auto max-w-[82%] rounded-2xl rounded-br-md bg-slate-950 px-4 py-2.5 text-white shadow-lg shadow-slate-950/15 dark:bg-slate-900">
+                        {activeSlide.preview?.lines[0]}
+                      </div>
+
+                      <div className="max-w-[88%] rounded-2xl rounded-bl-md border border-white/20 bg-white/75 px-4 py-2.5 text-slate-700 shadow-lg shadow-slate-900/8 backdrop-blur-sm dark:bg-white/10 dark:text-slate-100">
+                        {activeSlide.preview?.lines[1]}
+                      </div>
+
+                      <div className="max-w-[76%] rounded-2xl rounded-bl-md border border-fuchsia-300/20 bg-fuchsia-400/10 px-4 py-2 text-slate-700 shadow-lg shadow-fuchsia-950/5 backdrop-blur-sm dark:bg-fuchsia-400/8 dark:text-slate-100">
+                        {activeSlide.preview?.lines[2]}
+                      </div>
+                    </div>
+
+                    <div className="mt-3 rounded-2xl border border-white/15 bg-white/55 px-4 py-2.5 text-left text-[11px] leading-5 text-slate-600 backdrop-blur-sm dark:bg-white/8 dark:text-slate-200/80 md:text-xs">
+                      {activeSlide.preview?.footer}
                     </div>
                   </div>
-
-                  <div className="mt-4 flex flex-1 flex-col gap-3 text-left text-[13px] leading-5 md:text-sm md:leading-6">
-                    <div className="ml-auto max-w-[82%] rounded-2xl rounded-br-md bg-slate-950 px-4 py-2.5 text-white shadow-lg shadow-slate-950/15 dark:bg-slate-900">
-                      {activeSlide.preview?.lines[0]}
-                    </div>
-
-                    <div className="max-w-[88%] rounded-2xl rounded-bl-md border border-white/20 bg-white/75 px-4 py-2.5 text-slate-700 shadow-lg shadow-slate-900/8 backdrop-blur-sm dark:bg-white/10 dark:text-slate-100">
-                      {activeSlide.preview?.lines[1]}
-                    </div>
-
-                    <div className="max-w-[76%] rounded-2xl rounded-bl-md border border-fuchsia-300/20 bg-fuchsia-400/10 px-4 py-2 text-slate-700 shadow-lg shadow-fuchsia-950/5 backdrop-blur-sm dark:bg-fuchsia-400/8 dark:text-slate-100">
-                      {activeSlide.preview?.lines[2]}
-                    </div>
-                  </div>
-
-                  <div className="mt-3 rounded-2xl border border-white/15 bg-white/55 px-4 py-2.5 text-left text-[11px] leading-5 text-slate-600 backdrop-blur-sm dark:bg-white/8 dark:text-slate-200/80 md:text-xs">
-                    {activeSlide.preview?.footer}
-                  </div>
-                </div>
+                ) : null}
+                {!usesChatPreview ? (
+                  <img
+                    src={activeContent.media.src}
+                    alt={activeContent.media.alt}
+                    className={`duration-500 group-hover:scale-[1.02] transition-transform ${
+                      isContainedMedia
+                        ? 'h-full max-w-full object-contain'
+                        : 'h-full w-full object-cover'
+                    }`}
+                    style={
+                      activeContent.media.objectPosition
+                        ? { objectPosition: activeContent.media.objectPosition }
+                        : undefined
+                    }
+                    loading="eager"
+                    decoding="async"
+                  />
+                ) : null}
               </div>
             </div>
 
@@ -429,7 +517,7 @@ export default function HomeHeroCarousel({ slides }: HomeHeroCarouselProps) {
               </div>
 
               <div className="mt-auto inline-flex items-center gap-2 text-sm font-semibold text-white">
-                Open AI Assistant
+                {ctaLabel}
                 <span
                   className="transition-transform duration-200 group-hover:translate-x-1"
                   aria-hidden="true"
@@ -566,7 +654,7 @@ export default function HomeHeroCarousel({ slides }: HomeHeroCarouselProps) {
               </div>
 
               <div className="mt-auto inline-flex items-center gap-2 text-sm font-semibold text-white">
-                Go To Details Page
+                {ctaLabel}
                 <span
                   className="transition-transform duration-200 group-hover:translate-x-1"
                   aria-hidden="true"

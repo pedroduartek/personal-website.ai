@@ -8,7 +8,9 @@ import { projects } from '../../content/projects'
 import { getExperience } from '../../utils/experience'
 
 export default function HomePage() {
-  const featuredProjects = projects.filter((p) => p.featured)
+  const featuredProjects = projects.filter(
+    (p) => p.featured && p.slug !== 'personal-website',
+  )
   const experience = getExperience()
   const currentCompany = experienceItems[0]?.company
 

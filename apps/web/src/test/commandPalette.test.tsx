@@ -7,6 +7,7 @@ import { CommandPalette } from '../components/CommandPalette'
 import CommandPaletteTip from '../components/CommandPalette/CommandPaletteTip'
 import { useChatAvailability } from '../hooks/useChatAvailability'
 import { useCommandPalette } from '../hooks/useCommandPalette'
+import { openCommandPalette } from '../utils/commandPalette'
 
 vi.mock('../hooks/useChatAvailability', () => ({
   useChatAvailability: vi.fn(),
@@ -59,6 +60,17 @@ describe('useCommandPalette', () => {
       window.dispatchEvent(e)
     })
 
+    expect(localStorage.getItem('commandPaletteUsed')).toBe('1')
+  })
+
+  it('opens in response to the shared command palette event', () => {
+    render(<TestUseCommandPalette />)
+
+    act(() => {
+      openCommandPalette()
+    })
+
+    expect(screen.getByTestId('open')).toHaveTextContent('open')
     expect(localStorage.getItem('commandPaletteUsed')).toBe('1')
   })
 })
@@ -116,6 +128,22 @@ describe('CommandPalette', () => {
     ).toBeInTheDocument()
     expect(
       screen.getByRole('button', { name: /start ai assistant conversation/i }),
+    ).toBeInTheDocument()
+  })
+
+  it('shows the keyboard shortcut hint in the footer', () => {
+    render(
+      <ThemeProvider>
+        <MemoryRouter>
+          <CommandPalette isOpen={true} onClose={() => {}} />
+        </MemoryRouter>
+      </ThemeProvider>,
+    )
+
+    expect(
+      screen.getByText(
+        (_content, element) => element?.textContent === 'Ctrl+K Open',
+      ),
     ).toBeInTheDocument()
   })
 

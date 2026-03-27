@@ -87,6 +87,11 @@ export function CommandPalette({ isOpen, onClose }: CommandPaletteProps) {
   const location = useLocation()
   const chatAvailable = useChatAvailability()
   const { toggleTheme } = useTheme()
+  const shortcutLabel =
+    typeof navigator !== 'undefined' &&
+    /(Mac|iPhone|iPod|iPad)/i.test(navigator.platform)
+      ? '⌘K'
+      : 'Ctrl+K'
 
   useEffect(() => {
     if (!clipboardNotice) {
@@ -474,6 +479,9 @@ export function CommandPalette({ isOpen, onClose }: CommandPaletteProps) {
               <div className="border-t border-border px-4 py-2">
                 <div className="flex items-center justify-between text-xs text-foreground-subtle">
                   <div className="flex gap-4">
+                    <span>
+                      <kbd className="theme-kbd">{shortcutLabel}</kbd> Open
+                    </span>
                     <span>
                       <kbd className="theme-kbd">↑↓</kbd> Navigate
                     </span>

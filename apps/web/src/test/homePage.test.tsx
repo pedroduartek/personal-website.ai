@@ -16,6 +16,13 @@ async function settleChatAvailability() {
   })
 }
 
+function showCommandPaletteButton() {
+  const button = document.createElement('button')
+  button.id = 'command-palette-button'
+  document.body.appendChild(button)
+  return button
+}
+
 function renderHomePage(theme: 'light' | 'dark' = 'dark') {
   window.localStorage.setItem(THEME_STORAGE_KEY, theme)
 
@@ -45,11 +52,26 @@ describe('HomePage hero carousel', () => {
       writable: true,
       value: 1280,
     })
+    Object.defineProperty(window, 'matchMedia', {
+      configurable: true,
+      writable: true,
+      value: (query: string) => ({
+        matches: query === '(any-hover: hover) and (any-pointer: fine)',
+        media: query,
+        onchange: null,
+        addEventListener: () => {},
+        removeEventListener: () => {},
+        addListener: () => {},
+        removeListener: () => {},
+        dispatchEvent: () => false,
+      }),
+    })
   })
 
   afterEach(() => {
     resetChatAvailabilityCache()
     window.localStorage.removeItem(THEME_STORAGE_KEY)
+    document.getElementById('command-palette-button')?.remove()
     act(() => {
       vi.runOnlyPendingTimers()
     })
@@ -68,24 +90,12 @@ describe('HomePage hero carousel', () => {
 
     expect(
       within(carousel).getByRole('link', {
-        name: /Personal Website/i,
+        name: /Ourivesaria Rinchoa Website/i,
       }),
-    ).toHaveAttribute('href', '/projects/personal-website')
+    ).toHaveAttribute('href', '/projects/ourivesaria-rinchoa')
     expect(
-      within(carousel).getByText(/AI-assisted product build/i),
+      within(carousel).getByText(/Local business website/i),
     ).toBeInTheDocument()
-  })
-
-  it('switches the personal website logo treatment in light mode', async () => {
-    renderHomePage('light')
-
-    await settleChatAvailability()
-
-    expect(
-      screen.getByRole('img', {
-        name: /Pedroduartek logo used as the visual mark for the personal website project/i,
-      }),
-    ).toHaveClass('brightness-0')
   })
 
   it('auto-rotates to the next featured project', async () => {
@@ -103,9 +113,9 @@ describe('HomePage hero carousel', () => {
 
     expect(
       within(carousel).getByRole('link', {
-        name: /Ourivesaria Rinchoa Website/i,
+        name: /Home Assistant: Local-First Smart Home/i,
       }),
-    ).toHaveAttribute('href', '/projects/ourivesaria-rinchoa')
+    ).toHaveAttribute('href', '/projects/home-assistant')
   })
 
   it('keeps auto-rotating across the featured project slides', async () => {
@@ -116,16 +126,6 @@ describe('HomePage hero carousel', () => {
     const carousel = screen.getByRole('region', {
       name: /featured project carousel/i,
     })
-
-    act(() => {
-      vi.advanceTimersByTime(3600)
-    })
-
-    expect(
-      within(carousel).getByRole('link', {
-        name: /Ourivesaria Rinchoa Website/i,
-      }),
-    ).toHaveAttribute('href', '/projects/ourivesaria-rinchoa')
 
     act(() => {
       vi.advanceTimersByTime(3600)
@@ -165,9 +165,9 @@ describe('HomePage hero carousel', () => {
 
     expect(
       within(carousel).getByRole('link', {
-        name: /Personal Website/i,
+        name: /Ourivesaria Rinchoa Website/i,
       }),
-    ).toHaveAttribute('href', '/projects/personal-website')
+    ).toHaveAttribute('href', '/projects/ourivesaria-rinchoa')
   })
 
   it('supports arrow key navigation when the carousel is focused', async () => {
@@ -183,17 +183,17 @@ describe('HomePage hero carousel', () => {
 
     expect(
       within(carousel).getByRole('link', {
-        name: /Ourivesaria Rinchoa Website/i,
+        name: /Home Assistant: Local-First Smart Home/i,
       }),
-    ).toHaveAttribute('href', '/projects/ourivesaria-rinchoa')
+    ).toHaveAttribute('href', '/projects/home-assistant')
 
     fireEvent.keyDown(carousel, { key: 'ArrowLeft' })
 
     expect(
       within(carousel).getByRole('link', {
-        name: /Personal Website/i,
+        name: /Ourivesaria Rinchoa Website/i,
       }),
-    ).toHaveAttribute('href', '/projects/personal-website')
+    ).toHaveAttribute('href', '/projects/ourivesaria-rinchoa')
   })
 
   it('includes a dedicated AI chat assistant slide', async () => {
@@ -217,7 +217,54 @@ describe('HomePage hero carousel', () => {
     ).toBeInTheDocument()
   })
 
+  it('includes a dedicated command palette slide only when the button is visible', async () => {
+    showCommandPaletteButton()
+    renderHomePage()
+
+    await settleChatAvailability()
+
+    const carousel = screen.getByRole('region', {
+      name: /featured project carousel/i,
+    })
+
+    fireEvent.keyDown(carousel, { key: 'End' })
+    fireEvent.keyDown(carousel, { key: 'ArrowLeft' })
+
+    expect(
+      within(carousel).getByRole('button', {
+        name: /Open Command Palette/i,
+      }),
+    ).toBeInTheDocument()
+    expect(
+      within(carousel).getByText(/Keyboard-first shortcut/i),
+    ).toBeInTheDocument()
+    expect(
+      within(carousel).getByRole('img', {
+        name: /Screenshot of the command palette open on the website/i,
+      }),
+    ).toBeInTheDocument()
+  })
+
+  it('does not include the command palette slide when the button is hidden', async () => {
+    renderHomePage()
+
+    await settleChatAvailability()
+
+    const carousel = screen.getByRole('region', {
+      name: /featured project carousel/i,
+    })
+
+    fireEvent.keyDown(carousel, { key: 'End' })
+
+    expect(
+      within(carousel).queryByRole('button', {
+        name: /Open Command Palette/i,
+      }),
+    ).not.toBeInTheDocument()
+  })
+
   it('hides the AI chat assistant slide when the widget is unavailable', async () => {
+    showCommandPaletteButton()
     resetChatAvailabilityCache()
     vi.stubGlobal(
       'fetch',
@@ -239,15 +286,23 @@ describe('HomePage hero carousel', () => {
     fireEvent.keyDown(carousel, { key: 'End' })
 
     expect(
-      within(carousel).getByRole('link', {
-        name: /AI Chat API/i,
+      within(carousel).getByRole('button', {
+        name: /Open Command Palette/i,
       }),
-    ).toHaveAttribute('href', '/projects/ai-chat-api')
+    ).toBeInTheDocument()
     expect(
       within(carousel).queryByRole('button', {
         name: /AI Chat Assistant/i,
       }),
     ).not.toBeInTheDocument()
+
+    fireEvent.keyDown(carousel, { key: 'ArrowLeft' })
+
+    expect(
+      within(carousel).getByRole('link', {
+        name: /AI Chat API/i,
+      }),
+    ).toHaveAttribute('href', '/projects/ai-chat-api')
   })
 
   it('opens the chat widget when the AI chat slide is clicked', async () => {
@@ -290,6 +345,49 @@ describe('HomePage hero carousel', () => {
         name: /Close chat/i,
       }),
     ).toBeInTheDocument()
+  })
+
+  it('opens the command palette when the dedicated slide is clicked', async () => {
+    showCommandPaletteButton()
+    const router = createMemoryRouter(
+      [
+        {
+          path: '/',
+          element: (
+            <ThemeProvider>
+              <AppLayout />
+            </ThemeProvider>
+          ),
+          children: [{ index: true, element: <HomePage /> }],
+        },
+      ],
+      { initialEntries: ['/'] },
+    )
+
+    render(<RouterProvider router={router} />)
+
+    await settleChatAvailability()
+
+    const carousel = screen.getByRole('region', {
+      name: /featured project carousel/i,
+    })
+
+    fireEvent.keyDown(carousel, { key: 'End' })
+    fireEvent.keyDown(carousel, { key: 'ArrowLeft' })
+
+    await act(async () => {
+      fireEvent.click(
+        within(carousel).getByRole('button', {
+          name: /Open Command Palette/i,
+        }),
+      )
+      await Promise.resolve()
+    })
+
+    expect(
+      screen.getByPlaceholderText(/Go to a page or run a command/i),
+    ).toBeInTheDocument()
+    expect(localStorage.getItem('commandPaletteUsed')).toBe('1')
   })
 
   it('adds a terminal slide on desktop only', async () => {
@@ -342,6 +440,45 @@ describe('HomePage hero carousel', () => {
     ).not.toBeInTheDocument()
   })
 
+  it('does not include the command palette slide on touch-first devices', async () => {
+    Object.defineProperty(window, 'matchMedia', {
+      configurable: true,
+      writable: true,
+      value: (query: string) => ({
+        matches: false,
+        media: query,
+        onchange: null,
+        addEventListener: () => {},
+        removeEventListener: () => {},
+        addListener: () => {},
+        removeListener: () => {},
+        dispatchEvent: () => false,
+      }),
+    })
+
+    renderHomePage()
+
+    await settleChatAvailability()
+
+    const carousel = screen.getByRole('region', {
+      name: /featured project carousel/i,
+    })
+
+    fireEvent.keyDown(carousel, { key: 'End' })
+    fireEvent.keyDown(carousel, { key: 'ArrowLeft' })
+
+    expect(
+      within(carousel).getByRole('link', {
+        name: /AI Chat API/i,
+      }),
+    ).toHaveAttribute('href', '/projects/ai-chat-api')
+    expect(
+      within(carousel).queryByRole('button', {
+        name: /Open Command Palette/i,
+      }),
+    ).not.toBeInTheDocument()
+  })
+
   it('keeps a consistent card height and hides the media panel on mobile chat slide', async () => {
     Object.defineProperty(window, 'innerWidth', {
       configurable: true,
@@ -359,7 +496,7 @@ describe('HomePage hero carousel', () => {
 
     expect(
       within(carousel).getByRole('link', {
-        name: /Personal Website/i,
+        name: /Ourivesaria Rinchoa Website/i,
       }),
     ).toHaveClass('h-[31rem]')
 
