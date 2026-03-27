@@ -55,8 +55,6 @@ describe('AppLayout terminal window', () => {
   })
 
   it('opens the floating terminal on top of the current page', async () => {
-    vi.useFakeTimers()
-
     renderLayout(['/'])
 
     expect(screen.getByText('Home Content')).toBeInTheDocument()
@@ -75,25 +73,6 @@ describe('AppLayout terminal window', () => {
     expect(screen.getByLabelText('Terminal shell')).toBeInTheDocument()
 
     fireEvent.click(screen.getByRole('button', { name: 'close' }))
-
-    expect(
-      screen.getByText('Closing terminal in 3 seconds...'),
-    ).toBeInTheDocument()
-    expect(
-      screen.getByLabelText('Floating terminal window'),
-    ).toBeInTheDocument()
-
-    await act(async () => {
-      await vi.advanceTimersByTimeAsync(2999)
-    })
-
-    expect(
-      screen.getByLabelText('Floating terminal window'),
-    ).toBeInTheDocument()
-
-    await act(async () => {
-      await vi.advanceTimersByTimeAsync(1)
-    })
 
     expect(
       screen.queryByLabelText('Floating terminal window'),

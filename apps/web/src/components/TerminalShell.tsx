@@ -1119,9 +1119,7 @@ export default function TerminalShell({ onClose }: TerminalShellProps) {
           </button>
           <button
             type="button"
-            onClick={() => {
-              void startCloseCountdown()
-            }}
+            onClick={handleImmediateClose}
             className="text-xs text-gray-400 hover:text-white"
           >
             close
