@@ -18,6 +18,8 @@ import {
 import { useTheme } from '../theme/ThemeProvider'
 
 const logo = '/pld_logo_header.webp'
+// Keep this aligned with the HeaderCommandButton `ml-[7.5rem]` class.
+const HEADER_COMMAND_BUTTON_OFFSET = 120
 
 const desktopHeaderLinks = [
   { to: '/about', label: 'About', icon: 'profile' },
@@ -132,7 +134,8 @@ function Header({
 
       const nextLayout = resolveHeaderLayout({
         commandButtonWidth:
-          commandMeasureRef.current.getBoundingClientRect().width,
+          commandMeasureRef.current.getBoundingClientRect().width +
+          HEADER_COMMAND_BUTTON_OFFSET,
         containerWidth: navRowRef.current.clientWidth,
         desktopControlsWidth:
           desktopControlsMeasureRef.current.getBoundingClientRect().width,
@@ -527,7 +530,7 @@ const HeaderCommandButton = forwardRef<
       type="button"
       id={measure ? undefined : id}
       onClick={measure ? undefined : onClick}
-      className="ml-10 inline-flex w-[18rem] items-center gap-3 rounded-full border border-border bg-surface-muted/90 px-4 py-2.5 text-sm font-medium text-foreground-muted transition-colors hover:border-border-strong hover:bg-surface hover:text-foreground min-[1600px]:w-[21rem]"
+      className="ml-[7.5rem] inline-flex w-[18rem] items-center gap-3 rounded-full border border-border bg-surface-muted/90 px-4 py-2.5 text-sm font-medium text-foreground-muted transition-colors hover:border-border-strong hover:bg-surface hover:text-foreground min-[1600px]:w-[21rem]"
       aria-label={measure ? undefined : 'Open commands'}
     >
       <span className="flex min-w-0 flex-1 items-center gap-2">
