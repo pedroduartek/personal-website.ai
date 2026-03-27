@@ -454,6 +454,9 @@ describe('HomePage hero carousel', () => {
     expect(
       within(carousel).getByText(/Desktop-only experience/i),
     ).toBeInTheDocument()
+    expect(
+      within(carousel).getByText(/keyboard-first shell for desktop visitors/i),
+    ).toBeInTheDocument()
   })
 
   it('opens the floating terminal window when the terminal slide is clicked', async () => {

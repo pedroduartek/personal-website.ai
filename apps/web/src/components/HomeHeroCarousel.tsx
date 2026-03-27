@@ -433,9 +433,44 @@ export default function HomeHeroCarousel({ slides }: HomeHeroCarouselProps) {
             >
               <div
                 className={`flex h-full w-full items-center justify-center overflow-hidden rounded-[1.5rem] border shadow-[0_18px_45px_rgba(15,23,42,0.26)] ${theme.mediaFrame} ${
-                  isContainedMedia && !usesChatPreview ? 'p-5 md:p-6' : ''
+                  isContainedMedia && !usesTerminalPreview && !usesChatPreview
+                    ? 'p-5 md:p-6'
+                    : ''
                 }`}
               >
+                {usesTerminalPreview ? (
+                  <div className="flex h-full w-full flex-col overflow-hidden rounded-[1.25rem] bg-terminal-bg font-mono shadow-inner shadow-black/35">
+                    <div className="flex items-center justify-between border-b border-white/10 px-4 py-2 text-[11px] text-terminal-green/85">
+                      <span>terminal - pedroduartek</span>
+                      <div className="flex gap-1.5" aria-hidden="true">
+                        <span className="h-2.5 w-2.5 rounded-full bg-emerald-400/80" />
+                        <span className="h-2.5 w-2.5 rounded-full bg-sky-400/70" />
+                        <span className="h-2.5 w-2.5 rounded-full bg-slate-500/80" />
+                      </div>
+                    </div>
+
+                    <div className="flex flex-1 flex-col justify-between gap-3 px-4 py-4 text-terminal-green md:px-5 md:py-5">
+                      <div className="space-y-2 text-[12px] leading-5 md:text-[13px]">
+                        <div>
+                          <span className="text-terminal-accent">$</span> help
+                        </div>
+                        <div className="text-terminal-green/80">
+                          about experience projects contact
+                        </div>
+                        <div>
+                          <span className="text-terminal-accent">$</span> email
+                        </div>
+                        <div className="text-terminal-green/80">
+                          Turnstile-verified message flow ready.
+                        </div>
+                      </div>
+
+                      <div className="rounded-xl border border-[#1b3a31] bg-black/25 px-3 py-3 text-[11px] text-terminal-accent md:text-xs">
+                        keyboard-first shell for desktop visitors
+                      </div>
+                    </div>
+                  </div>
+                ) : null}
                 {usesChatPreview && !hasSlideImage ? (
                   <div className="flex h-full w-full flex-col rounded-[1.25rem] bg-[linear-gradient(180deg,rgba(15,23,42,0.08),rgba(15,23,42,0.22))] p-4 text-slate-900 dark:text-white md:p-5">
                     <div className="flex items-center justify-between border-b border-white/15 pb-3">
