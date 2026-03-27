@@ -1,5 +1,9 @@
 import { describe, expect, it } from 'vitest'
-import { getTerminalAutocomplete, runCommand } from '../utils/terminalCommands'
+import {
+  getTerminalAutocomplete,
+  getTerminalAutocompleteSuggestions,
+  runCommand,
+} from '../utils/terminalCommands'
 
 describe('terminalCommands', () => {
   it('lists the main content sections and help hints', async () => {
@@ -101,14 +105,31 @@ describe('terminalCommands', () => {
   it('suggests command and argument autocompletions', () => {
     expect(getTerminalAutocomplete('dow')).toBe('download-cv')
     expect(getTerminalAutocomplete('proj')).toBe('project')
+    expect(getTerminalAutocomplete('ls ab')).toBe('ls about')
     expect(getTerminalAutocomplete('project ai')).toBe('project ai-chat-api')
+    expect(getTerminalAutocomplete('cat experience enh')).toBe(
+      'cat experience enhesa',
+    )
     expect(getTerminalAutocomplete('cat experience/enh')).toBe(
       'cat experience/enhesa',
+    )
+  })
+
+  it('shows command suggestions before typing and filters them by input', () => {
+    expect(getTerminalAutocompleteSuggestions('')).toEqual(
+      expect.arrayContaining(['ls', 'cat', 'help']),
+    )
+    expect(getTerminalAutocompleteSuggestions('pro')).toEqual(['project'])
+    expect(getTerminalAutocompleteSuggestions('ls ')).toEqual(
+      expect.arrayContaining(['ls about', 'ls experience', 'ls projects']),
     )
   })
 
   it('hides api-backed command autocompletions when the api is unavailable', () => {
     expect(getTerminalAutocomplete('em', { apiAvailable: false })).toBeNull()
     expect(getTerminalAutocomplete('cha', { apiAvailable: false })).toBeNull()
+    expect(
+      getTerminalAutocompleteSuggestions('', { apiAvailable: false }),
+    ).not.toEqual(expect.arrayContaining(['email', 'chat']))
   })
 })

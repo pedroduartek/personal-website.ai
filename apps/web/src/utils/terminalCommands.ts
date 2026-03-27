@@ -158,7 +158,6 @@ const terminalCommandCandidates = [
   'skills',
   'experience',
   'project',
-  'projects',
   'education',
   'conference',
   'conferences',
@@ -171,6 +170,16 @@ const terminalCommandCandidates = [
 ] as const
 
 const apiTerminalCommandCandidates = ['email', 'chat'] as const
+
+const listSectionCandidates = [
+  'about',
+  'experience',
+  'projects',
+  'education',
+  'conferences',
+  'skills',
+  'contacts',
+] as const
 
 const catSectionCandidates = [
   'about',
@@ -325,16 +334,22 @@ function getLongestCommonPrefix(values: string[]) {
 function getAutocompleteCandidate(partial: string, candidates: string[]) {
   if (!partial) return null
 
-  const normalizedPartial = partial.toLowerCase()
-  const matches = candidates.filter((candidate) =>
-    candidate.toLowerCase().startsWith(normalizedPartial),
-  )
+  const matches = getAutocompleteMatches(partial, candidates)
 
   if (matches.length === 0) return null
   if (matches.length === 1) return matches[0]
 
   const commonPrefix = getLongestCommonPrefix(matches)
   return commonPrefix.length > partial.length ? commonPrefix : null
+}
+
+function getAutocompleteMatches(partial: string, candidates: string[]) {
+  const normalizedPartial = partial.toLowerCase()
+  return partial
+    ? candidates.filter((candidate) =>
+        candidate.toLowerCase().startsWith(normalizedPartial),
+      )
+    : [...candidates]
 }
 
 function getCatAutocompleteCandidate(partial: string) {
@@ -351,6 +366,185 @@ function getCatAutocompleteCandidate(partial: string) {
   const itemSuggestion = getAutocompleteCandidate(itemPartial, itemCandidates)
 
   return itemSuggestion ? `${section}/${itemSuggestion}` : null
+}
+
+function getCatAutocompleteSuggestions(partial: string) {
+  const slashIndex = partial.indexOf('/')
+  if (slashIndex === -1) {
+    return getAutocompleteMatches(partial, [...catSectionCandidates])
+  }
+
+  const section = partial.slice(0, slashIndex).toLowerCase()
+  const itemPartial = partial.slice(slashIndex + 1)
+  const itemCandidates = getAutocompleteMatches(
+    itemPartial,
+    getCatPathAutocompleteCandidates(section),
+  )
+
+  return itemCandidates.map((candidate) => `${section}/${candidate}`)
+}
+
+function getContextualAutocompleteCandidate(
+  command: string,
+  previousArgs: string[],
+  currentToken: string,
+) {
+  switch (command) {
+    case 'ls':
+      if (previousArgs.length === 0) {
+        return getAutocompleteCandidate(currentToken, [
+          ...listSectionCandidates,
+        ])
+      }
+
+      if (previousArgs.length === 1) {
+        return getAutocompleteCandidate(
+          currentToken,
+          getCatPathAutocompleteCandidates(previousArgs[0].toLowerCase()),
+        )
+      }
+
+      return null
+    case 'cat':
+      if (previousArgs.length === 0) {
+        return getCatAutocompleteCandidate(currentToken)
+      }
+
+      if (previousArgs.length === 1) {
+        return getAutocompleteCandidate(
+          currentToken,
+          getCatPathAutocompleteCandidates(previousArgs[0].toLowerCase()),
+        )
+      }
+
+      return null
+    case 'project':
+      return getAutocompleteCandidate(
+        currentToken,
+        getProjectAutocompleteCandidates(),
+      )
+    case 'experience':
+      return getAutocompleteCandidate(
+        currentToken,
+        getExperienceAutocompleteCandidates(),
+      )
+    case 'skills':
+      return getAutocompleteCandidate(
+        currentToken,
+        getSkillAutocompleteCandidates(),
+      )
+    case 'education':
+      return getAutocompleteCandidate(
+        currentToken,
+        getEducationAutocompleteCandidates(),
+      )
+    case 'conference':
+    case 'conferences':
+      return getAutocompleteCandidate(
+        currentToken,
+        getConferenceAutocompleteCandidates(),
+      )
+    default:
+      return null
+  }
+}
+
+function getContextualAutocompleteSuggestions(
+  command: string,
+  previousArgs: string[],
+  currentToken: string,
+) {
+  switch (command) {
+    case 'ls':
+      if (previousArgs.length === 0) {
+        return getAutocompleteMatches(currentToken, [...listSectionCandidates])
+      }
+
+      if (previousArgs.length === 1) {
+        return getAutocompleteMatches(
+          currentToken,
+          getCatPathAutocompleteCandidates(previousArgs[0].toLowerCase()),
+        )
+      }
+
+      return []
+    case 'cat':
+      if (previousArgs.length === 0) {
+        return getCatAutocompleteSuggestions(currentToken)
+      }
+
+      if (previousArgs.length === 1) {
+        return getAutocompleteMatches(
+          currentToken,
+          getCatPathAutocompleteCandidates(previousArgs[0].toLowerCase()),
+        )
+      }
+
+      return []
+    case 'project':
+      return getAutocompleteMatches(
+        currentToken,
+        getProjectAutocompleteCandidates(),
+      )
+    case 'experience':
+      return getAutocompleteMatches(
+        currentToken,
+        getExperienceAutocompleteCandidates(),
+      )
+    case 'skills':
+      return getAutocompleteMatches(
+        currentToken,
+        getSkillAutocompleteCandidates(),
+      )
+    case 'education':
+      return getAutocompleteMatches(
+        currentToken,
+        getEducationAutocompleteCandidates(),
+      )
+    case 'conference':
+    case 'conferences':
+      return getAutocompleteMatches(
+        currentToken,
+        getConferenceAutocompleteCandidates(),
+      )
+    default:
+      return []
+  }
+}
+
+export function getTerminalAutocompleteSuggestions(
+  input: string,
+  _opts: RunOptions = {},
+) {
+  const trimmedInput = input.trim()
+  const endsWithSpace = /\s$/.test(input)
+
+  if (!trimmedInput) {
+    return getCommandAutocompleteCandidates(_opts.apiAvailable)
+  }
+
+  const tokens = trimmedInput.split(/\s+/)
+
+  if (!endsWithSpace && tokens.length === 1) {
+    return getAutocompleteMatches(
+      tokens[0],
+      getCommandAutocompleteCandidates(_opts.apiAvailable),
+    )
+  }
+
+  const command = tokens[0]?.toLowerCase()
+  if (!command) return []
+
+  const previousArgs = endsWithSpace ? tokens.slice(1) : tokens.slice(1, -1)
+  const currentToken = endsWithSpace ? '' : (tokens.at(-1) ?? '')
+  const prefixParts = [tokens[0], ...previousArgs]
+  const prefix = prefixParts.length > 0 ? `${prefixParts.join(' ')} ` : ''
+
+  return getContextualAutocompleteSuggestions(
+    command,
+    previousArgs,
+    currentToken,
+  ).map((suggestion) => `${prefix}${suggestion}`)
 }
 
 export function getTerminalAutocomplete(input: string, _opts: RunOptions = {}) {
@@ -374,53 +568,12 @@ export function getTerminalAutocomplete(input: string, _opts: RunOptions = {}) {
       : null
   }
 
-  const command = input
-    .slice(0, lastSpaceIndex)
-    .trim()
-    .split(/\s+/)[0]
-    ?.toLowerCase()
-
-  let suggestion: string | null = null
-
-  switch (command) {
-    case 'cat':
-      suggestion = getCatAutocompleteCandidate(currentToken)
-      break
-    case 'project':
-      suggestion = getAutocompleteCandidate(
-        currentToken,
-        getProjectAutocompleteCandidates(),
-      )
-      break
-    case 'experience':
-      suggestion = getAutocompleteCandidate(
-        currentToken,
-        getExperienceAutocompleteCandidates(),
-      )
-      break
-    case 'skills':
-      suggestion = getAutocompleteCandidate(
-        currentToken,
-        getSkillAutocompleteCandidates(),
-      )
-      break
-    case 'education':
-      suggestion = getAutocompleteCandidate(
-        currentToken,
-        getEducationAutocompleteCandidates(),
-      )
-      break
-    case 'conference':
-    case 'conferences':
-      suggestion = getAutocompleteCandidate(
-        currentToken,
-        getConferenceAutocompleteCandidates(),
-      )
-      break
-    default:
-      suggestion = null
-      break
-  }
+  const tokens = input.trim().split(/\s+/)
+  const command = tokens[0]?.toLowerCase()
+  const previousArgs = tokens.slice(1, -1)
+  const suggestion = command
+    ? getContextualAutocompleteCandidate(command, previousArgs, currentToken)
+    : null
 
   return suggestion && suggestion !== currentToken
     ? `${prefix}${suggestion}`
@@ -537,7 +690,7 @@ async function handleCatCommand(
   if (normalizedSection === 'project' || normalizedSection === 'projects') {
     return remainder
       ? runCommand(`project ${remainder}`, opts)
-      : runCommand('projects', opts)
+      : runCommand('project', opts)
   }
   if (normalizedSection === 'experience') {
     return remainder
@@ -593,7 +746,6 @@ export async function runCommand(
       '  skills [category]   List skill groups or inspect one category',
       '  experience [name]   List companies or inspect one in detail',
       '  project <slug>      Show one project in detail',
-      '  projects            List notable projects or inspect one with `project <slug>`',
       '  education           Show education and certifications',
       '  conferences         Show conferences and community events',
       '  banner              Show a small ASCII header',
@@ -747,20 +899,6 @@ export async function runCommand(
       out.push('')
     }
 
-    return out
-  }
-
-  if (name === 'projects') {
-    if (!projects || projects.length === 0) return ['No projects available.']
-
-    const out: string[] = ['Projects:']
-    for (const project of projects) {
-      out.push(`  ${project.slug} - ${project.title}`)
-      out.push(`    ${project.description}`)
-      out.push(`    route: /projects/${project.slug}`)
-    }
-    out.push('')
-    out.push('Tip: run `project ai-chat-api` for a detailed view.')
     return out
   }
 

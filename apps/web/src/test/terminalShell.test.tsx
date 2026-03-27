@@ -475,6 +475,21 @@ describe('TerminalShell email command', () => {
     expect(screen.getByText('Available commands:')).toBeInTheDocument()
   })
 
+  it('shows suggestions before typing and lets arrow keys browse them', async () => {
+    renderTerminalShell()
+
+    await waitFor(() => {
+      expect(fetch).toHaveBeenCalledTimes(1)
+    })
+
+    const input = screen.getByPlaceholderText('type a command (help)')
+
+    fireEvent.keyDown(input, { key: 'ArrowDown' })
+    fireEvent.keyDown(input, { key: 'Tab' })
+
+    expect(input).toHaveValue('cat')
+  })
+
   it('autocompletes command arguments with the right arrow key', async () => {
     const user = userEvent.setup()
 
@@ -496,5 +511,39 @@ describe('TerminalShell email command', () => {
     await waitFor(() => {
       expect(screen.getByText(/AI Chat API/i)).toBeInTheDocument()
     })
+  })
+
+  it('autocompletes compound command sections with tab', async () => {
+    const user = userEvent.setup()
+
+    renderTerminalShell()
+
+    await waitFor(() => {
+      expect(fetch).toHaveBeenCalledTimes(1)
+    })
+
+    const input = screen.getByPlaceholderText('type a command (help)')
+
+    await user.type(input, 'ls ab')
+    fireEvent.keyDown(input, { key: 'Tab' })
+
+    expect(input).toHaveValue('ls about')
+  })
+
+  it('filters suggestion choices as the user types', async () => {
+    const user = userEvent.setup()
+
+    renderTerminalShell()
+
+    await waitFor(() => {
+      expect(fetch).toHaveBeenCalledTimes(1)
+    })
+
+    const input = screen.getByPlaceholderText('type a command (help)')
+
+    await user.type(input, 'pro')
+    fireEvent.keyDown(input, { key: 'Tab' })
+
+    expect(input).toHaveValue('project')
   })
 })

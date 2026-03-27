@@ -11,7 +11,10 @@ import {
   isContactEmailRateLimited,
   sendContactEmail,
 } from '../utils/contactEmail'
-import { getTerminalAutocomplete, runCommand } from '../utils/terminalCommands'
+import {
+  getTerminalAutocompleteSuggestions,
+  runCommand,
+} from '../utils/terminalCommands'
 import { isTurnstileConfigured } from '../utils/turnstile'
 import ThinkingIndicator from './ThinkingIndicator'
 import TurnstileWidget from './TurnstileWidget'
@@ -96,6 +99,7 @@ export default function TerminalShell({ onClose }: TerminalShellProps) {
   const [input, setInput] = useState('')
   const [history, setHistory] = useState<string[]>([])
   const [, setHistIdx] = useState<number | null>(null)
+  const [suggestionIndex, setSuggestionIndex] = useState(0)
   const inputRef = useRef<HTMLInputElement | null>(null)
   const containerRef = useRef<HTMLDivElement | null>(null)
   const [chatMode, setChatMode] = useState(false)
@@ -143,6 +147,7 @@ export default function TerminalShell({ onClose }: TerminalShellProps) {
   }, [apiAvailable])
 
   const applyAutocomplete = useCallback((value: string) => {
+    setHistIdx(null)
     setInput(value)
     window.requestAnimationFrame(() => {
       const inputElement = inputRef.current
@@ -355,6 +360,12 @@ export default function TerminalShell({ onClose }: TerminalShellProps) {
 
     return () => window.cancelAnimationFrame(frameId)
   }, [chatAwaiting, emailComposer?.step, lines.length, scrollToBottom])
+
+  useEffect(() => {
+    if (typeof input === 'string') {
+      setSuggestionIndex(0)
+    }
+  }, [input])
 
   useEffect(() => {
     const container = containerRef.current
@@ -846,20 +857,72 @@ export default function TerminalShell({ onClose }: TerminalShellProps) {
     }
   }
 
-  const autocompleteValue =
+  const autocompleteSuggestions =
     pendingConfirm || chatMode || emailComposer
-      ? null
-      : getTerminalAutocomplete(input, {
+      ? []
+      : getTerminalAutocompleteSuggestions(input, {
           apiAvailable: apiAvailable === true,
           profile,
         })
 
-  const autocompleteSuffix = autocompleteValue?.startsWith(input)
-    ? autocompleteValue.slice(input.length)
+  useEffect(() => {
+    setSuggestionIndex((current) => {
+      if (autocompleteSuggestions.length === 0) return 0
+      return Math.min(current, autocompleteSuggestions.length - 1)
+    })
+  }, [autocompleteSuggestions.length])
+
+  const selectedSuggestion =
+    autocompleteSuggestions[suggestionIndex] ??
+    autocompleteSuggestions[0] ??
+    null
+  const autocompleteSuffix = selectedSuggestion?.startsWith(input)
+    ? selectedSuggestion.slice(input.length)
     : ''
+  const suggestionsActive =
+    !commandBusy &&
+    !emailSending &&
+    pendingConfirm === null &&
+    !chatMode &&
+    emailComposer === null &&
+    autocompleteSuggestions.length > 0
   const promptTextClass =
     'block h-6 w-full whitespace-pre px-0 py-0.5 text-sm leading-5 font-mono'
   const promptInputClass = `${promptTextClass} appearance-none border-0 bg-transparent caret-white focus:outline-none`
+  const promptPlaceholder =
+    commandBusy || emailSending
+      ? 'running... press Ctrl+C or Cmd+C twice to interrupt'
+      : emailComposer
+        ? emailComposer.step === 'message'
+          ? 'type your message'
+          : emailComposer.step === 'confirm'
+            ? 'type y or n'
+            : 'answer the prompt'
+        : 'type a command (help)'
+
+  function navigateHistory(direction: 'next' | 'previous') {
+    setHistIdx((current) => {
+      if (history.length === 0) return null
+
+      if (direction === 'previous') {
+        const nextIndex =
+          current === null ? history.length - 1 : Math.max(0, current - 1)
+        setInput(history[nextIndex])
+        return nextIndex
+      }
+
+      if (current === null) return null
+
+      const nextIndex = current + 1
+      if (nextIndex >= history.length) {
+        setInput('')
+        return null
+      }
+
+      setInput(history[nextIndex])
+      return nextIndex
+    })
+  }
 
   function handleKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
     if (emailSending || commandBusy) return
@@ -868,31 +931,48 @@ export default function TerminalShell({ onClose }: TerminalShellProps) {
     const selectionEnd = e.currentTarget.selectionEnd ?? input.length
     const cursorAtEnd =
       selectionStart === input.length && selectionEnd === input.length
+    const historyShortcut = (e.ctrlKey || e.metaKey) && !e.altKey && !e.shiftKey
+    const lowerKey = e.key.toLowerCase()
 
-    if (e.key === 'Tab' && autocompleteValue) {
+    if (e.key === 'Tab' && selectedSuggestion) {
       e.preventDefault()
-      applyAutocomplete(autocompleteValue)
-    } else if (e.key === 'ArrowRight' && autocompleteValue && cursorAtEnd) {
+      applyAutocomplete(selectedSuggestion)
+    } else if (e.key === 'ArrowRight' && selectedSuggestion && cursorAtEnd) {
       e.preventDefault()
-      applyAutocomplete(autocompleteValue)
+      applyAutocomplete(selectedSuggestion)
     } else if (e.key === 'Enter') {
       e.preventDefault()
       void handleSubmit(input)
+    } else if (suggestionsActive && e.key === 'ArrowUp') {
+      e.preventDefault()
+      setSuggestionIndex((current) =>
+        autocompleteSuggestions.length === 0
+          ? 0
+          : current === 0
+            ? autocompleteSuggestions.length - 1
+            : current - 1,
+      )
+    } else if (suggestionsActive && e.key === 'ArrowDown') {
+      e.preventDefault()
+      setSuggestionIndex((current) =>
+        autocompleteSuggestions.length === 0
+          ? 0
+          : current >= autocompleteSuggestions.length - 1
+            ? 0
+            : current + 1,
+      )
+    } else if (historyShortcut && lowerKey === 'p') {
+      e.preventDefault()
+      navigateHistory('previous')
+    } else if (historyShortcut && lowerKey === 'n') {
+      e.preventDefault()
+      navigateHistory('next')
     } else if (e.key === 'ArrowUp') {
       e.preventDefault()
-      setHistIdx((prev) => {
-        const next = prev === null ? history.length - 1 : Math.max(0, prev - 1)
-        if (next >= 0) setInput(history[next])
-        return next
-      })
+      navigateHistory('previous')
     } else if (e.key === 'ArrowDown') {
       e.preventDefault()
-      setHistIdx((prev) => {
-        if (prev === null) return null
-        const next = Math.min(history.length - 1, prev + 1)
-        setInput(history[next] ?? '')
-        return next === history.length - 1 ? null : next
-      })
+      navigateHistory('next')
     } else if ((e.ctrlKey || e.metaKey) && e.key === 'l') {
       e.preventDefault()
       setLines([])
@@ -1011,41 +1091,44 @@ export default function TerminalShell({ onClose }: TerminalShellProps) {
             )}
           </div>
         )}
-        <div className="flex items-center gap-3">
-          <div className="font-mono text-terminal-green">$</div>
-          <div className="relative flex-1">
-            {(input || autocompleteSuffix) && (
-              <div
-                aria-hidden="true"
-                className={`pointer-events-none absolute inset-0 ${promptTextClass}`}
-              >
-                <span className="text-white">{input}</span>
-                {autocompleteSuffix ? (
-                  <span className="text-terminal-green/35">
-                    {autocompleteSuffix}
-                  </span>
-                ) : null}
-              </div>
-            )}
-            <input
-              ref={inputRef}
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
-              onKeyDown={handleKeyDown}
-              disabled={emailSending || commandBusy}
-              className={`relative z-10 ${promptInputClass} ${input || autocompleteSuffix ? 'text-transparent' : 'text-white'} placeholder:text-gray-500`}
-              placeholder={
-                commandBusy || emailSending
-                  ? 'running... press Ctrl+C or Cmd+C twice to interrupt'
-                  : emailComposer
-                    ? emailComposer.step === 'message'
-                      ? 'type your message'
-                      : emailComposer.step === 'confirm'
-                        ? 'type y or n'
-                        : 'answer the prompt'
-                    : 'type a command (help)'
-              }
-            />
+        <div className="flex items-start gap-3">
+          <div className="pt-0.5 font-mono text-terminal-green">$</div>
+          <div className="flex-1">
+            <div className="relative">
+              {(input || autocompleteSuffix) && (
+                <div
+                  aria-hidden="true"
+                  className={`pointer-events-none absolute inset-0 ${promptTextClass}`}
+                >
+                  <span className="text-white">{input}</span>
+                  {autocompleteSuffix ? (
+                    <span className="text-terminal-green/35">
+                      {autocompleteSuffix}
+                    </span>
+                  ) : null}
+                </div>
+              )}
+              <input
+                ref={inputRef}
+                value={input}
+                onChange={(e) => {
+                  setHistIdx(null)
+                  setInput(e.target.value)
+                }}
+                onKeyDown={handleKeyDown}
+                disabled={emailSending || commandBusy}
+                className={`relative z-10 ${promptInputClass} ${
+                  input || autocompleteSuffix
+                    ? 'text-transparent'
+                    : 'text-white'
+                } ${
+                  suggestionsActive && !input
+                    ? 'placeholder:text-transparent'
+                    : 'placeholder:text-gray-500'
+                }`}
+                placeholder={promptPlaceholder}
+              />
+            </div>
           </div>
         </div>
       </div>
