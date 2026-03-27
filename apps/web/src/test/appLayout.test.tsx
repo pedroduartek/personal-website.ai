@@ -1,10 +1,11 @@
-import { render, screen } from '@testing-library/react'
+import { act, fireEvent, render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { RouterProvider, createMemoryRouter } from 'react-router-dom'
-import { describe, expect, it, vi } from 'vitest'
+import { afterEach, describe, expect, it, vi } from 'vitest'
 import AppLayout from '../app/layout/AppLayout'
 import { ThemeProvider } from '../app/theme/ThemeProvider'
 import TerminalPage from '../features/terminal/TerminalPage'
+import { openTerminalWindow } from '../utils/terminalWindow'
 
 vi.mock('../components/ChatWidget', () => ({
   default: () => <div data-testid="chat-widget">Chat Widget</div>,
@@ -14,71 +15,197 @@ vi.mock('../components/CommandPalette/CommandPaletteTip', () => ({
   default: () => null,
 }))
 
-describe('AppLayout terminal mode', () => {
-  it('uses the main layout space when the terminal route is active', async () => {
-    const user = userEvent.setup()
-    const router = createMemoryRouter(
-      [
-        {
-          path: '/',
-          element: <AppLayout />,
-          children: [
-            { index: true, element: <div>Home Content</div> },
-            { path: 'terminal', element: <TerminalPage /> },
-          ],
-        },
-      ],
+function renderLayout(initialEntries: Array<string | { pathname: string }>) {
+  const router = createMemoryRouter(
+    [
       {
-        initialEntries: [{ pathname: '/terminal', state: { from: '/' } }],
+        path: '/',
+        element: <AppLayout />,
+        children: [
+          { index: true, element: <div>Home Content</div> },
+          { path: 'terminal', element: <TerminalPage /> },
+        ],
       },
-    )
+    ],
+    { initialEntries },
+  )
 
-    const { container } = render(
-      <ThemeProvider>
-        <RouterProvider router={router} />
-      </ThemeProvider>,
-    )
+  render(
+    <ThemeProvider>
+      <RouterProvider router={router} />
+    </ThemeProvider>,
+  )
 
-    const appRoot = container.firstElementChild
-    const main = container.querySelector('main')
-    const terminalShell = screen.getByLabelText('Terminal shell')
-    const routePanel = terminalShell.parentElement?.parentElement
+  return router
+}
 
-    expect(terminalShell).toBeInTheDocument()
-    expect(appRoot).toHaveClass('h-screen', 'overflow-hidden')
-    expect(main).toHaveClass('overflow-hidden')
-    expect(routePanel).toHaveClass(
-      'animate-route-panel-enter',
-      'flex',
-      'min-h-0',
-      'flex-1',
-      'flex-col',
-      'overflow-hidden',
-    )
-    expect(terminalShell).toHaveClass('flex-1', 'overflow-hidden')
-    expect(screen.getByRole('link', { name: /pedroduartek/i })).toHaveAttribute(
-      'href',
-      '/',
-    )
-    expect(
-      screen.queryByRole('button', { name: 'Open command palette' }),
-    ).not.toBeInTheDocument()
-    expect(
-      screen.queryByRole('button', { name: 'Toggle menu' }),
-    ).not.toBeInTheDocument()
-    expect(
-      screen.queryByRole('link', { name: 'About Me' }),
-    ).not.toBeInTheDocument()
-    expect(
-      screen.getByText('Welcome. Type "help" for available commands.'),
-    ).toBeInTheDocument()
-    expect(screen.queryByText('Home Content')).not.toBeInTheDocument()
-    expect(screen.queryByTestId('chat-widget')).not.toBeInTheDocument()
+describe('AppLayout terminal window', () => {
+  afterEach(() => {
+    vi.useRealTimers()
+    Object.defineProperty(window, 'innerWidth', {
+      configurable: true,
+      writable: true,
+      value: 1024,
+    })
+    Object.defineProperty(window, 'innerHeight', {
+      configurable: true,
+      writable: true,
+      value: 768,
+    })
+  })
 
-    await user.click(screen.getByRole('button', { name: 'close' }))
+  it('opens the floating terminal on top of the current page', async () => {
+    vi.useFakeTimers()
 
-    expect(screen.queryByLabelText('Terminal shell')).not.toBeInTheDocument()
+    renderLayout(['/'])
+
     expect(screen.getByText('Home Content')).toBeInTheDocument()
     expect(screen.getByTestId('chat-widget')).toBeInTheDocument()
+    expect(screen.queryByLabelText('Terminal shell')).not.toBeInTheDocument()
+
+    await act(async () => {
+      openTerminalWindow()
+      await Promise.resolve()
+    })
+
+    expect(screen.getByText('Home Content')).toBeInTheDocument()
+    expect(
+      screen.getByLabelText('Floating terminal window'),
+    ).toBeInTheDocument()
+    expect(screen.getByLabelText('Terminal shell')).toBeInTheDocument()
+
+    fireEvent.click(screen.getByRole('button', { name: 'close' }))
+
+    expect(
+      screen.getByText('Closing terminal in 3 seconds...'),
+    ).toBeInTheDocument()
+    expect(
+      screen.getByLabelText('Floating terminal window'),
+    ).toBeInTheDocument()
+
+    await act(async () => {
+      await vi.advanceTimersByTimeAsync(2999)
+    })
+
+    expect(
+      screen.getByLabelText('Floating terminal window'),
+    ).toBeInTheDocument()
+
+    await act(async () => {
+      await vi.advanceTimersByTimeAsync(1)
+    })
+
+    expect(
+      screen.queryByLabelText('Floating terminal window'),
+    ).not.toBeInTheDocument()
+    expect(screen.getByText('Home Content')).toBeInTheDocument()
+    expect(screen.getByTestId('chat-widget')).toBeInTheDocument()
+  })
+
+  it('keeps the terminal windowed and centered on desktop even with shorter viewport height', async () => {
+    Object.defineProperty(window, 'innerWidth', {
+      configurable: true,
+      writable: true,
+      value: 1280,
+    })
+    Object.defineProperty(window, 'innerHeight', {
+      configurable: true,
+      writable: true,
+      value: 640,
+    })
+
+    renderLayout(['/'])
+
+    await act(async () => {
+      openTerminalWindow()
+      await Promise.resolve()
+    })
+
+    const terminalWindow = screen.getByLabelText('Floating terminal window')
+
+    expect(terminalWindow).toHaveStyle({
+      width: '930px',
+      height: '520px',
+      left: '175px',
+      top: '60px',
+    })
+  })
+
+  it('closes the floating terminal when the backdrop is clicked', async () => {
+    const user = userEvent.setup()
+
+    renderLayout(['/'])
+
+    await act(async () => {
+      openTerminalWindow()
+      await Promise.resolve()
+    })
+
+    const terminalWindow = screen.getByLabelText('Floating terminal window')
+    const backdrop = terminalWindow.parentElement
+
+    expect(terminalWindow).toBeInTheDocument()
+    expect(backdrop).not.toBeNull()
+
+    await user.click(backdrop as HTMLElement)
+
+    expect(
+      screen.queryByLabelText('Floating terminal window'),
+    ).not.toBeInTheDocument()
+    expect(screen.getByText('Home Content')).toBeInTheDocument()
+  })
+
+  it('shows the close countdown when the close command is typed in the floating terminal', async () => {
+    vi.useFakeTimers()
+
+    renderLayout(['/'])
+
+    await act(async () => {
+      openTerminalWindow()
+      await Promise.resolve()
+    })
+
+    const input = screen.getByPlaceholderText('type a command (help)')
+
+    vi.advanceTimersByTime(1)
+
+    fireEvent.change(input, { target: { value: 'close' } })
+    fireEvent.keyDown(input, { key: 'Enter' })
+
+    expect(screen.getByText('> close')).toBeInTheDocument()
+    expect(
+      screen.getByText('Closing terminal in 3 seconds...'),
+    ).toBeInTheDocument()
+    expect(
+      screen.getByLabelText('Floating terminal window'),
+    ).toBeInTheDocument()
+
+    await act(async () => {
+      await vi.advanceTimersByTimeAsync(2999)
+    })
+
+    expect(
+      screen.getByLabelText('Floating terminal window'),
+    ).toBeInTheDocument()
+
+    await act(async () => {
+      await vi.advanceTimersByTimeAsync(1)
+    })
+
+    expect(
+      screen.queryByLabelText('Floating terminal window'),
+    ).not.toBeInTheDocument()
+  })
+
+  it('redirects the legacy /terminal route into the floating terminal window', async () => {
+    const router = renderLayout(['/terminal'])
+
+    await waitFor(() => {
+      expect(router.state.location.pathname).toBe('/')
+      expect(screen.getByText('Home Content')).toBeInTheDocument()
+      expect(
+        screen.getByLabelText('Floating terminal window'),
+      ).toBeInTheDocument()
+    })
   })
 })

@@ -109,7 +109,6 @@ export default function ChatWidget() {
     '/skills',
     '/contact',
     '/cv',
-    '/terminal',
   ])
 
   function isInternalRoute(pathname: string) {

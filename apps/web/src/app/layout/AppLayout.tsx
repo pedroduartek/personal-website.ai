@@ -9,8 +9,10 @@ import ChatWidget from '../../components/ChatWidget'
 import { CommandPalette } from '../../components/CommandPalette'
 import CommandPaletteTip from '../../components/CommandPalette/CommandPaletteTip'
 import SiteContainer from '../../components/SiteContainer'
+import TerminalWindow from '../../components/TerminalWindow'
 import ThemeToggle from '../../components/ThemeToggle'
 import { useCommandPalette } from '../../hooks/useCommandPalette'
+import { useTerminalWindow } from '../../hooks/useTerminalWindow'
 import {
   isKeyboardCapableDevice,
   resolveHeaderLayout,
@@ -41,70 +43,54 @@ const mobileHeaderLinks = [
 
 export default function AppLayout() {
   const { isOpen, close, open } = useCommandPalette()
+  const {
+    isOpen: isTerminalOpen,
+    open: openTerminal,
+    close: closeTerminal,
+  } = useTerminalWindow()
   const location = useLocation()
-  const isTerminalRoute = location.pathname === '/terminal'
+  const routeState = location.state as { openTerminalWindow?: boolean } | null
+
+  useEffect(() => {
+    if (!routeState?.openTerminalWindow) {
+      return
+    }
+
+    openTerminal()
+  }, [openTerminal, routeState?.openTerminalWindow])
 
   const lastUpdated = import.meta.env.VITE_LAST_UPDATED ?? null
   return (
-    <div
-      className={`flex flex-col bg-background ${
-        isTerminalRoute ? 'h-screen overflow-hidden' : 'min-h-screen'
-      }`}
-    >
-      <Header isTerminalRoute={isTerminalRoute} onOpenCommandPalette={open} />
-      <main
-        className={`flex flex-1 min-h-0 ${isTerminalRoute ? 'overflow-hidden' : ''}`}
-      >
-        {isTerminalRoute ? (
-          <div className="flex min-h-0 flex-1 flex-col overflow-hidden">
-            <Suspense
-              fallback={
-                <div className="flex flex-1 items-center justify-center py-16">
-                  <div className="text-foreground-muted">Loading...</div>
-                </div>
-              }
-            >
-              <div
-                key={location.pathname}
-                className="animate-route-panel-enter flex min-h-0 flex-1 flex-col overflow-hidden"
-              >
-                <Outlet />
+    <div className="flex min-h-screen flex-col bg-background">
+      <Header onOpenCommandPalette={open} />
+      <main className="flex flex-1 min-h-0">
+        <SiteContainer className="flex-1">
+          <Suspense
+            fallback={
+              <div className="flex items-center justify-center py-16">
+                <div className="text-foreground-muted">Loading...</div>
               </div>
-            </Suspense>
-          </div>
-        ) : (
-          <SiteContainer className="flex-1">
-            <Suspense
-              fallback={
-                <div className="flex items-center justify-center py-16">
-                  <div className="text-foreground-muted">Loading...</div>
-                </div>
-              }
-            >
-              <div
-                key={location.pathname}
-                className="animate-route-panel-enter"
-              >
-                <Outlet />
-              </div>
-            </Suspense>
-          </SiteContainer>
-        )}
+            }
+          >
+            <div key={location.pathname} className="animate-route-panel-enter">
+              <Outlet />
+            </div>
+          </Suspense>
+        </SiteContainer>
       </main>
       <footer className="bg-header py-4 text-center text-xs text-foreground-subtle">
         {lastUpdated ? `Last updated: ${lastUpdated}` : null}
       </footer>
       <CommandPalette isOpen={isOpen} onClose={close} />
-      {!isTerminalRoute && <ChatWidget />}
+      <ChatWidget />
+      {isTerminalOpen ? <TerminalWindow onClose={closeTerminal} /> : null}
     </div>
   )
 }
 
 function Header({
-  isTerminalRoute,
   onOpenCommandPalette,
 }: {
-  isTerminalRoute: boolean
   onOpenCommandPalette: () => void
 }) {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
@@ -207,33 +193,6 @@ function Header({
       setIsMenuOpen(false)
     }
   }, [headerLayout.showDesktopNav])
-
-  if (isTerminalRoute) {
-    return (
-      <header className="bg-header">
-        <nav className="flex items-center justify-between gap-4 px-3 py-2 2xl:px-6">
-          <Link
-            to="/"
-            className="flex items-center gap-3 text-xl font-bold text-foreground"
-          >
-            <img
-              src={logo}
-              alt="PLD Logo"
-              className={`h-[70px] w-auto transition-[filter] ${
-                theme === 'light' ? 'brightness-0' : ''
-              }`}
-              width={70}
-              height={70}
-              fetchPriority="high"
-              decoding="sync"
-            />
-            PEDRODUARTEK
-          </Link>
-          <ThemeToggle />
-        </nav>
-      </header>
-    )
-  }
 
   return (
     <header className="bg-header">

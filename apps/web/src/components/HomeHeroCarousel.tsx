@@ -10,6 +10,7 @@ import type { Project } from '../content/types'
 import { useChatAvailability } from '../hooks/useChatAvailability'
 import { openChatWidget } from '../utils/chatWidget'
 import { openCommandPalette } from '../utils/commandPalette'
+import { openTerminalWindow } from '../utils/terminalWindow'
 import TechIcon from './TechIcon'
 
 type HomeHeroCarouselProps = {
@@ -25,6 +26,7 @@ type CarouselSlide = {
   customMedia?: 'terminal' | 'chat' | 'command'
   opensChatWidget?: boolean
   opensCommandPalette?: boolean
+  opensTerminalWindow?: boolean
   preview?: {
     label: string
     title: string
@@ -267,11 +269,12 @@ export default function HomeHeroCarousel({ slides }: HomeHeroCarouselProps) {
   }, [activeIndex, carouselSlides.length, isPaused, prefersReducedMotion])
 
   const activeSlide = carouselSlides[activeIndex]
-  const activeContent = activeSlide.homeHero
 
-  if (!activeSlide || !activeContent) {
+  if (!activeSlide) {
     return null
   }
+
+  const activeContent = activeSlide.homeHero
 
   const theme = getSlideTheme(activeSlide.slug)
   const techPreview = activeSlide.technologies.slice(0, 3)
@@ -292,12 +295,19 @@ export default function HomeHeroCarousel({ slides }: HomeHeroCarouselProps) {
     'group relative flex h-[31rem] overflow-hidden rounded-[2rem] border border-border bg-surface shadow-[0_24px_80px_rgba(15,23,42,0.18)] transition-transform duration-300 hover:-translate-y-1 md:h-[35rem]'
   const ctaLabel = activeSlide.opensCommandPalette
     ? 'Try Command Palette'
-    : activeSlide.opensChatWidget
-      ? 'Open AI Assistant'
-      : 'Go To Details Page'
+    : activeSlide.opensTerminalWindow
+      ? 'Open Terminal Window'
+      : activeSlide.opensChatWidget
+        ? 'Open AI Assistant'
+        : 'Go To Details Page'
   const handleInteractiveSlideClick = () => {
     if (activeSlide.opensCommandPalette) {
       openCommandPalette()
+      return
+    }
+
+    if (activeSlide.opensTerminalWindow) {
+      openTerminalWindow()
       return
     }
 
@@ -393,7 +403,9 @@ export default function HomeHeroCarousel({ slides }: HomeHeroCarouselProps) {
         {activeSlide.title}
       </span>
 
-      {activeSlide.opensChatWidget || activeSlide.opensCommandPalette ? (
+      {activeSlide.opensChatWidget ||
+      activeSlide.opensCommandPalette ||
+      activeSlide.opensTerminalWindow ? (
         <button
           key={activeSlide.slug}
           type="button"

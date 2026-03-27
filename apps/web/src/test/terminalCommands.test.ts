@@ -19,7 +19,9 @@ describe('terminalCommands', () => {
     expect(helpOutput).toContain(
       '  project <slug>      Show one project in detail',
     )
-    expect(helpOutput).toContain('  close               Return to the homepage')
+    expect(helpOutput).toContain(
+      '  close               Close the terminal window',
+    )
   })
 
   it('shows a project in detail', async () => {

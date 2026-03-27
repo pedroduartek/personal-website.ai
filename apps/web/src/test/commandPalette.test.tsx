@@ -242,6 +242,25 @@ describe('CommandPalette', () => {
       expect.objectContaining({ type: 'pedroduartek:open-chat-widget' }),
     )
   })
+
+  it('opens the terminal window from the command palette', async () => {
+    const user = userEvent.setup()
+    const dispatchEventSpy = vi.spyOn(window, 'dispatchEvent')
+
+    render(
+      <ThemeProvider>
+        <MemoryRouter>
+          <CommandPalette isOpen={true} onClose={() => {}} />
+        </MemoryRouter>
+      </ThemeProvider>,
+    )
+
+    await user.click(screen.getByRole('button', { name: /terminal/i }))
+
+    expect(dispatchEventSpy).toHaveBeenCalledWith(
+      expect.objectContaining({ type: 'pedroduartek:open-terminal-window' }),
+    )
+  })
 })
 
 describe('CommandPaletteTip', () => {

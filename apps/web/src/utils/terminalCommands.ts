@@ -753,7 +753,7 @@ export async function runCommand(
       '  sysinfo             Show basic system / navigator info',
       '  download-cv         Navigate to /cv to download the CV',
       '  clear               Clear the terminal (client-side)',
-      '  close               Return to the homepage',
+      '  close               Close the terminal window',
       ...(_opts.apiAvailable === false
         ? []
         : [

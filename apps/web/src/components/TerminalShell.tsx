@@ -21,7 +21,6 @@ import TurnstileWidget from './TurnstileWidget'
 
 interface TerminalShellProps {
   onClose: () => void
-  onGoHome: () => void
 }
 
 type EmailComposerStep = 'name' | 'email' | 'subject' | 'message' | 'confirm'
@@ -88,10 +87,7 @@ function AsciiArt({
   )
 }
 
-export default function TerminalShell({
-  onClose,
-  onGoHome,
-}: TerminalShellProps) {
+export default function TerminalShell({ onClose }: TerminalShellProps) {
   const [lines, setLines] = useState<
     Array<{ id: number; text: string; type: 'out' | 'in' }>
   >([])
@@ -118,8 +114,10 @@ export default function TerminalShell({
   )
   const [emailTurnstileResetSignal, setEmailTurnstileResetSignal] = useState(0)
   const activeExecutionRef = useRef<ActiveExecution | null>(null)
+  const closeCountdownTimerRef = useRef<number | null>(null)
   const nextExecutionIdRef = useRef(0)
   const interruptArmedAtRef = useRef(0)
+  const mountedRef = useRef(true)
   const apiAvailable = useApiAvailability()
   const turnstileAvailable = isTurnstileConfigured()
 
@@ -166,6 +164,8 @@ export default function TerminalShell({
   }, [])
 
   const appendOutput = useCallback((text: string) => {
+    if (!mountedRef.current) return
+
     setLines((current) => [
       ...current,
       { id: Date.now() + Math.random(), text, type: 'out' },
@@ -173,7 +173,7 @@ export default function TerminalShell({
   }, [])
 
   const appendOutputs = useCallback((texts: string[]) => {
-    if (texts.length === 0) return
+    if (!mountedRef.current || texts.length === 0) return
     setLines((current) => [
       ...current,
       ...texts.map((text, index) => ({
@@ -212,11 +212,30 @@ export default function TerminalShell({
     }
   }, [])
 
+  const clearCloseCountdownTimer = useCallback(() => {
+    if (closeCountdownTimerRef.current !== null) {
+      window.clearTimeout(closeCountdownTimerRef.current)
+      closeCountdownTimerRef.current = null
+    }
+  }, [])
+
   const interruptCurrentCommand = useCallback(() => {
     let interrupted = false
+    const activeExecution = activeExecutionRef.current
 
-    if (activeExecutionRef.current) {
-      activeExecutionRef.current.interrupted = true
+    if (activeExecution?.kind === 'close') {
+      clearCloseCountdownTimer()
+      activeExecution.interrupted = true
+      activeExecutionRef.current = null
+      setCommandBusy(false)
+      interruptArmedAtRef.current = 0
+      appendOutputs(['^C', 'Command interrupted.'])
+      globalThis.setTimeout(() => focusPrompt(), 0)
+      return true
+    }
+
+    if (activeExecution) {
+      activeExecution.interrupted = true
       activeExecutionRef.current = null
       setCommandBusy(false)
       setChatAwaiting(false)
@@ -256,6 +275,7 @@ export default function TerminalShell({
   }, [
     appendOutputs,
     chatMode,
+    clearCloseCountdownTimer,
     clearEmailComposer,
     emailComposer,
     focusPrompt,
@@ -263,7 +283,7 @@ export default function TerminalShell({
     pendingConfirm,
   ])
 
-  const handleClose = useCallback(() => {
+  const handleImmediateClose = useCallback(() => {
     if (chatMode) {
       setChatMode(false)
       setLines((l) => [
@@ -273,6 +293,67 @@ export default function TerminalShell({
     }
     onClose()
   }, [chatMode, onClose])
+
+  const startCloseCountdown = useCallback(
+    ({
+      commandLine,
+    }: {
+      commandLine?: string
+    } = {}) => {
+      if (
+        commandBusy ||
+        emailSending ||
+        activeExecutionRef.current?.kind === 'close'
+      ) {
+        return false
+      }
+
+      const execution = beginExecution('close')
+      setLines((current) => [
+        ...current,
+        ...(commandLine
+          ? [
+              {
+                id: Date.now(),
+                text: `> ${commandLine}`,
+                type: 'in' as const,
+              },
+            ]
+          : []),
+        {
+          id: Date.now() + Math.random(),
+          text: 'Closing terminal in 3 seconds...',
+          type: 'out',
+        },
+      ])
+
+      closeCountdownTimerRef.current = window.setTimeout(() => {
+        if (execution.interrupted) {
+          clearCloseCountdownTimer()
+          if (isExecutionCurrent(execution)) {
+            finishExecution(execution)
+          }
+          return
+        }
+
+        clearCloseCountdownTimer()
+        if (isExecutionCurrent(execution)) {
+          finishExecution(execution)
+        }
+        onClose()
+      }, 3000)
+      return true
+    },
+    [
+      beginExecution,
+      commandBusy,
+      clearCloseCountdownTimer,
+      emailSending,
+      finishExecution,
+      isExecutionCurrent,
+      onClose,
+    ],
+  )
 
   function renderLineText(text: string, id: number | string) {
     const urlRegex = /(https?:\/\/[^\s]+)/
@@ -319,6 +400,17 @@ export default function TerminalShell({
       message: state.draft.message,
     }
   }
+
+  useEffect(() => {
+    return () => {
+      mountedRef.current = false
+      clearCloseCountdownTimer()
+      if (activeExecutionRef.current) {
+        activeExecutionRef.current.interrupted = true
+        activeExecutionRef.current = null
+      }
+    }
+  }, [clearCloseCountdownTimer])
 
   useEffect(() => {
     const timeoutId = window.setTimeout(() => focusPrompt(), 50)
@@ -386,7 +478,7 @@ export default function TerminalShell({
   useEffect(() => {
     function onKey(e: KeyboardEvent) {
       if (e.key === 'Escape') {
-        handleClose()
+        handleImmediateClose()
         return
       }
 
@@ -423,7 +515,7 @@ export default function TerminalShell({
     commandBusy,
     emailComposer,
     emailSending,
-    handleClose,
+    handleImmediateClose,
     input.length,
     interruptCurrentCommand,
     pendingConfirm,
@@ -646,42 +738,19 @@ export default function TerminalShell({
     const parts = cmd.split(/\s+/).filter(Boolean)
     const commandName = parts[0]?.toLowerCase() ?? ''
 
+    if (commandName === 'close' && parts.length === 1) {
+      setHistory((h) => [...h, cmd])
+      setHistIdx(null)
+      setInput('')
+      startCloseCountdown({ commandLine: cmd })
+      return
+    }
+
     setLines((l) => [...l, { id: Date.now(), text: `> ${cmd}`, type: 'in' }])
     setHistory((h) => [...h, cmd])
     setHistIdx(null)
     setInput('')
     let apiFeatureAvailable = apiAvailable === true
-
-    if (commandName === 'close' && parts.length === 1) {
-      const execution = beginExecution('close')
-      appendOutputs([
-        'Closing terminal in 3...',
-        'Press Ctrl+C or Cmd+C twice to stay here.',
-      ])
-
-      try {
-        for (const remainingSeconds of [2, 1]) {
-          // eslint-disable-next-line no-await-in-loop
-          await sleep(1000)
-          if (execution.interrupted) {
-            return
-          }
-          appendOutput(`Closing terminal in ${remainingSeconds}...`)
-        }
-
-        await sleep(1000)
-        if (execution.interrupted) {
-          return
-        }
-
-        onGoHome()
-      } finally {
-        if (isExecutionCurrent(execution)) {
-          finishExecution(execution)
-        }
-      }
-      return
-    }
 
     if (cmd === 'clear') {
       setLines([])
@@ -908,20 +977,22 @@ export default function TerminalShell({
     })
   }, [autocompleteSuggestions.length])
 
-  const selectedSuggestion =
-    autocompleteSuggestions[suggestionIndex] ??
-    autocompleteSuggestions[0] ??
-    null
-  const autocompleteSuffix = selectedSuggestion?.startsWith(input)
-    ? selectedSuggestion.slice(input.length)
-    : ''
-  const suggestionsActive =
+  const autocompleteEnabled =
     !commandBusy &&
     !emailSending &&
     pendingConfirm === null &&
     !chatMode &&
-    emailComposer === null &&
-    autocompleteSuggestions.length > 0
+    emailComposer === null
+  const suggestionsActive =
+    autocompleteEnabled && autocompleteSuggestions.length > 0
+  const selectedSuggestion = suggestionsActive
+    ? (autocompleteSuggestions[suggestionIndex] ??
+      autocompleteSuggestions[0] ??
+      null)
+    : null
+  const autocompleteSuffix = selectedSuggestion?.startsWith(input)
+    ? selectedSuggestion.slice(input.length)
+    : ''
   const promptTextClass =
     'block h-6 w-full whitespace-pre px-0 py-0.5 text-sm leading-5 font-mono'
   const promptInputClass = `${promptTextClass} appearance-none border-0 bg-transparent caret-white focus:outline-none`
@@ -1027,11 +1098,17 @@ export default function TerminalShell({
       aria-label="Terminal shell"
       className="flex min-h-0 w-full flex-1 flex-col overflow-hidden bg-terminal-bg"
     >
-      <div className="flex items-center justify-between border-b border-gray-800 px-4 py-2">
+      <div
+        data-terminal-window-drag-handle="true"
+        className="flex items-center justify-between border-b border-gray-800 px-4 py-2"
+      >
         <div className="font-mono text-sm text-terminal-green">
           terminal — pedroduartek
         </div>
-        <div className="flex items-center gap-2">
+        <div
+          data-terminal-window-no-drag="true"
+          className="flex items-center gap-2"
+        >
           <button
             type="button"
             onMouseDown={handleClearMouseDown}
@@ -1042,7 +1119,9 @@ export default function TerminalShell({
           </button>
           <button
             type="button"
-            onClick={handleClose}
+            onClick={() => {
+              void startCloseCountdown()
+            }}
             className="text-xs text-gray-400 hover:text-white"
           >
             close
@@ -1056,7 +1135,7 @@ export default function TerminalShell({
       >
         {lines.length === 0 ? (
           <div className="text-terminal-green">
-            {profile.name} — {profile.role}
+            Type `help` to see available commands.
           </div>
         ) : (
           lines.map((ln) => {
@@ -1133,7 +1212,7 @@ export default function TerminalShell({
           <div className="pt-0.5 font-mono text-terminal-green">$</div>
           <div className="flex-1">
             <div className="relative">
-              {(input || autocompleteSuffix) && (
+              {(input || (suggestionsActive && autocompleteSuffix)) && (
                 <div
                   aria-hidden="true"
                   className={`pointer-events-none absolute inset-0 ${promptTextClass}`}

@@ -7,6 +7,8 @@ import {
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import AppLayout from '../app/layout/AppLayout'
 import { THEME_STORAGE_KEY, ThemeProvider } from '../app/theme/ThemeProvider'
+import HomeHeroCarousel from '../components/HomeHeroCarousel'
+import type { Project } from '../content/types'
 import HomePage from '../features/home/HomePage'
 import { resetChatAvailabilityCache } from '../hooks/useChatAvailability'
 
@@ -33,6 +35,32 @@ function renderHomePage(theme: 'light' | 'dark' = 'dark') {
       </MemoryRouter>
     </ThemeProvider>,
   )
+}
+
+function createHeroProject(
+  slug: string,
+  title: string,
+  summary: string,
+): Project {
+  return {
+    slug,
+    title,
+    description: summary,
+    problem: `${title} problem`,
+    approach: `${title} approach`,
+    technologies: ['React 19'],
+    featured: true,
+    startDate: '2025-01',
+    homeHero: {
+      eyebrow: `${title} eyebrow`,
+      summary,
+      media: {
+        src: '/test-preview.png',
+        alt: `${title} preview`,
+        fit: 'contain',
+      },
+    },
+  }
 }
 
 describe('HomePage hero carousel', () => {
@@ -419,13 +447,60 @@ describe('HomePage hero carousel', () => {
     fireEvent.keyDown(carousel, { key: 'End' })
 
     expect(
-      within(carousel).getByRole('link', {
-        name: /Terminal Shell/i,
+      within(carousel).getByRole('button', {
+        name: /Open Terminal Shell/i,
       }),
-    ).toHaveAttribute('href', '/terminal')
+    ).toBeInTheDocument()
     expect(
       within(carousel).getByText(/Desktop-only experience/i),
     ).toBeInTheDocument()
+  })
+
+  it('opens the floating terminal window when the terminal slide is clicked', async () => {
+    Object.defineProperty(window, 'innerWidth', {
+      configurable: true,
+      writable: true,
+      value: 1600,
+    })
+
+    const router = createMemoryRouter(
+      [
+        {
+          path: '/',
+          element: (
+            <ThemeProvider>
+              <AppLayout />
+            </ThemeProvider>
+          ),
+          children: [{ index: true, element: <HomePage /> }],
+        },
+      ],
+      { initialEntries: ['/'] },
+    )
+
+    render(<RouterProvider router={router} />)
+
+    await settleChatAvailability()
+
+    const carousel = screen.getByRole('region', {
+      name: /featured project carousel/i,
+    })
+
+    fireEvent.keyDown(carousel, { key: 'End' })
+
+    await act(async () => {
+      fireEvent.click(
+        within(carousel).getByRole('button', {
+          name: /Open Terminal Shell/i,
+        }),
+      )
+      await Promise.resolve()
+    })
+
+    expect(
+      screen.getByLabelText('Floating terminal window'),
+    ).toBeInTheDocument()
+    expect(screen.getByLabelText('Terminal shell')).toBeInTheDocument()
   })
 
   it('does not include the terminal slide below the desktop breakpoint', async () => {
@@ -445,8 +520,8 @@ describe('HomePage hero carousel', () => {
       }),
     ).toBeInTheDocument()
     expect(
-      within(carousel).queryByRole('link', {
-        name: /Terminal Shell/i,
+      within(carousel).queryByRole('button', {
+        name: /Open Terminal Shell/i,
       }),
     ).not.toBeInTheDocument()
   })
@@ -523,5 +598,63 @@ describe('HomePage hero carousel', () => {
       'hidden',
       'sm:flex',
     )
+  })
+
+  it('does not crash when the active slide index becomes out of range after slides shrink', async () => {
+    vi.stubGlobal(
+      'fetch',
+      vi.fn().mockResolvedValue(
+        new Response(null, {
+          status: 503,
+        }),
+      ),
+    )
+
+    const firstSlide = createHeroProject(
+      'first-project',
+      'First Project',
+      'First summary',
+    )
+    const secondSlide = createHeroProject(
+      'second-project',
+      'Second Project',
+      'Second summary',
+    )
+
+    const { rerender } = render(
+      <ThemeProvider>
+        <MemoryRouter>
+          <HomeHeroCarousel slides={[firstSlide, secondSlide]} />
+        </MemoryRouter>
+      </ThemeProvider>,
+    )
+
+    await settleChatAvailability()
+
+    const carousel = screen.getByRole('region', {
+      name: /featured project carousel/i,
+    })
+
+    fireEvent.keyDown(carousel, { key: 'ArrowRight' })
+
+    expect(
+      within(carousel).getByRole('link', {
+        name: /Second Project/i,
+      }),
+    ).toHaveAttribute('href', '/projects/second-project')
+
+    rerender(
+      <ThemeProvider>
+        <MemoryRouter>
+          <HomeHeroCarousel slides={[firstSlide]} />
+        </MemoryRouter>
+      </ThemeProvider>,
+    )
+
+    expect(
+      screen.getByRole('link', {
+        name: /First Project/i,
+      }),
+    ).toHaveAttribute('href', '/projects/first-project')
   })
 })

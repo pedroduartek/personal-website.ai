@@ -10,6 +10,7 @@ export type HomeHeroFeatureSlide = {
   desktopOnly?: boolean
   opensChatWidget?: boolean
   opensCommandPalette?: boolean
+  opensTerminalWindow?: boolean
   homeHero: ProjectHeroContent
   preview: {
     label: string
@@ -56,13 +57,14 @@ export const terminalHeroSlide: HomeHeroFeatureSlide = {
   slug: 'terminal',
   title: 'Terminal Shell',
   technologies: ['React 19', 'TypeScript 5'],
-  href: '/terminal',
+  href: '/',
   customMedia: 'terminal',
   desktopOnly: true,
+  opensTerminalWindow: true,
   homeHero: {
     eyebrow: 'Desktop-only experience',
     summary:
-      'A terminal-style route for navigating the site, exploring background details, and interacting with the portfolio through a focused command-driven UI.',
+      'A floating terminal window you can open on top of any page to explore the site, inspect background details, and stay in your current context.',
     media: {
       src: '',
       alt: 'Terminal interface preview',

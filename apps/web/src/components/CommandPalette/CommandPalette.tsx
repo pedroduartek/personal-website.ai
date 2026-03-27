@@ -1,11 +1,12 @@
 import { useEffect, useRef, useState } from 'react'
-import { useLocation, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import cvPdf from '../../CV/Pedro_Duarte_CV.pdf'
 import { useTheme } from '../../app/theme/ThemeProvider'
 import { profile } from '../../content/profile'
 import { useChatAvailability } from '../../hooks/useChatAvailability'
 import { openChatWidget } from '../../utils/chatWidget'
 import { isKeyboardCapableDevice } from '../../utils/headerLayout'
+import { openTerminalWindow } from '../../utils/terminalWindow'
 
 interface Command {
   id: string
@@ -84,7 +85,6 @@ export function CommandPalette({ isOpen, onClose }: CommandPaletteProps) {
   const inputRef = useRef<HTMLInputElement>(null)
   const selectedItemRef = useRef<HTMLButtonElement>(null)
   const navigate = useNavigate()
-  const location = useLocation()
   const chatAvailable = useChatAvailability()
   const { toggleTheme } = useTheme()
   const shortcutLabel =
@@ -300,13 +300,10 @@ export function CommandPalette({ isOpen, onClose }: CommandPaletteProps) {
     navigationCommands.push({
       id: 'terminal',
       label: 'Terminal',
-      description: 'Open terminal-style shell',
+      description: 'Open the floating terminal window',
       icon: '🖥️',
       action: () => {
-        const from = `${location.pathname}${location.search}${location.hash}`
-        navigate('/terminal', {
-          state: from !== '/terminal' ? { from } : undefined,
-        })
+        openTerminalWindow()
         onClose()
       },
       category: 'navigation',
