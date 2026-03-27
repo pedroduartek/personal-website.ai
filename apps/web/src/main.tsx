@@ -6,10 +6,6 @@ import { RouterProvider } from 'react-router-dom'
 import './index.css'
 import { router } from './app/router'
 import { ThemeProvider } from './app/theme/ThemeProvider'
-import {
-  vercelAnalyticsProps,
-  vercelSpeedInsightsProps,
-} from './utils/vercelObservability'
 
 const rootElement = document.getElementById('root')
 if (!rootElement) throw new Error('Root element not found')
@@ -19,7 +15,7 @@ createRoot(rootElement).render(
     <ThemeProvider>
       <RouterProvider router={router} />
     </ThemeProvider>
-    <Analytics {...vercelAnalyticsProps} />
-    <SpeedInsights {...vercelSpeedInsightsProps} />
+    <Analytics />
+    <SpeedInsights />
   </StrictMode>,
 )

@@ -121,6 +121,32 @@ export default function ChatWidget() {
     return false
   }
 
+  function getInternalRoutePath(candidate: string) {
+    if (candidate.startsWith('/')) {
+      const pathname = candidate.split(/[?#]/)[0]
+      return pathname && isInternalRoute(pathname) ? pathname : null
+    }
+
+    try {
+      const url = new URL(candidate)
+      const allowedOrigins = new Set([
+        window.location.origin,
+        'https://pedroduartek.com',
+        'https://www.pedroduartek.com',
+        'http://pedroduartek.com',
+        'http://www.pedroduartek.com',
+      ])
+
+      if (!allowedOrigins.has(url.origin)) {
+        return null
+      }
+
+      return isInternalRoute(url.pathname) ? url.pathname : null
+    } catch {
+      return null
+    }
+  }
+
   async function send() {
     if (awaitingReply) return
     if (!input.trim()) return
@@ -185,17 +211,7 @@ export default function ChatWidget() {
         if (matches.length > 0) {
           let hasInternal = false
           for (const matched of matches) {
-            let pathname = ''
-            if (matched.startsWith('/')) {
-              pathname = matched.split(/[?#]/)[0]
-            } else {
-              try {
-                pathname = new URL(matched).pathname
-              } catch {
-                pathname = ''
-              }
-            }
-            if (pathname && isInternalRoute(pathname)) {
+            if (getInternalRoutePath(matched)) {
               hasInternal = true
               break
             }
@@ -450,22 +466,12 @@ export default function ChatWidget() {
                                 )
                               }
                               const matched = match[0]
-                              let pathname = ''
-                              if (matched.startsWith('/')) {
-                                pathname = matched.split(/[?#]/)[0]
-                              } else {
-                                try {
-                                  const u = new URL(matched)
-                                  pathname = u.pathname
-                                } catch {
-                                  pathname = ''
-                                }
-                              }
-                              if (pathname && isInternalRoute(pathname)) {
+                              const internalPath = getInternalRoutePath(matched)
+                              if (internalPath) {
                                 nodes.push(
                                   <Link
                                     key={`${keyPrefix}-${nodes.length}`}
-                                    to={pathname}
+                                    to={internalPath}
                                     className="text-blue-600 underline dark:text-indigo-300"
                                     onClick={() => setOpen(false)}
                                   >
