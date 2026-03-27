@@ -33,6 +33,26 @@
       "destination": "/sitemap.xml"
     },
     {
+      "source": "/relay/insights/script.js",
+      "destination": "/_vercel/insights/script.js"
+    },
+    {
+      "source": "/relay/insights/view",
+      "destination": "/_vercel/insights/view"
+    },
+    {
+      "source": "/relay/insights/event",
+      "destination": "/_vercel/insights/event"
+    },
+    {
+      "source": "/relay/speed-insights/script.js",
+      "destination": "/_vercel/speed-insights/script.js"
+    },
+    {
+      "source": "/relay/speed-insights/vitals",
+      "destination": "/_vercel/speed-insights/vitals"
+    },
+    {
       "source": "/(.*)",
       "destination": "/index.html"
     }
