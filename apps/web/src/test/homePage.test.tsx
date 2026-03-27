@@ -221,9 +221,10 @@ describe('HomePage hero carousel', () => {
       within(carousel).getByText(/Interactive site feature/i),
     ).toBeInTheDocument()
     expect(
-      within(carousel).getByRole('img', {
-        name: /Screenshot of the Ollama AI assistant slide on the website/i,
-      }),
+      within(carousel).getByText(/Ask about Pedro's background/i),
+    ).toBeInTheDocument()
+    expect(
+      within(carousel).getByText(/What skills does pedro have\?/i),
     ).toBeInTheDocument()
   })
 
