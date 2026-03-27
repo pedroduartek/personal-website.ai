@@ -172,16 +172,6 @@ const terminalCommandCandidates = [
 
 const apiTerminalCommandCandidates = ['email', 'chat'] as const
 
-const listSectionCandidates = [
-  'about',
-  'experience',
-  'projects',
-  'education',
-  'conferences',
-  'skills',
-  'contacts',
-] as const
-
 const catSectionCandidates = [
   'about',
   'project',
@@ -391,21 +381,6 @@ function getContextualAutocompleteCandidate(
   currentToken: string,
 ) {
   switch (command) {
-    case 'ls':
-      if (previousArgs.length === 0) {
-        return getAutocompleteCandidate(currentToken, [
-          ...listSectionCandidates,
-        ])
-      }
-
-      if (previousArgs.length === 1) {
-        return getAutocompleteCandidate(
-          currentToken,
-          getCatPathAutocompleteCandidates(previousArgs[0].toLowerCase()),
-        )
-      }
-
-      return null
     case 'cat':
       if (previousArgs.length === 0) {
         return getCatAutocompleteCandidate(currentToken)
@@ -456,19 +431,6 @@ function getContextualAutocompleteSuggestions(
   currentToken: string,
 ) {
   switch (command) {
-    case 'ls':
-      if (previousArgs.length === 0) {
-        return getAutocompleteMatches(currentToken, [...listSectionCandidates])
-      }
-
-      if (previousArgs.length === 1) {
-        return getAutocompleteMatches(
-          currentToken,
-          getCatPathAutocompleteCandidates(previousArgs[0].toLowerCase()),
-        )
-      }
-
-      return []
     case 'cat':
       if (previousArgs.length === 0) {
         return getCatAutocompleteSuggestions(currentToken)
@@ -752,8 +714,8 @@ export async function runCommand(
       '  banner              Show a small ASCII header',
       '  sysinfo             Show basic system / navigator info',
       '  download-cv         Navigate to /cv to download the CV',
-      '  clear               Clear the terminal (client-side)',
-      '  close               Close the terminal window',
+      '  clear               Clear the terminal',
+      '  close               Close the terminal',
       ...(_opts.apiAvailable === false
         ? []
         : [
@@ -765,6 +727,10 @@ export async function runCommand(
   }
 
   if (name === 'ls') {
+    if (args.length > 0) {
+      return ['Usage: ls', 'Tip: use `cat <section>` to read content.']
+    }
+
     return listContentSections()
   }
 

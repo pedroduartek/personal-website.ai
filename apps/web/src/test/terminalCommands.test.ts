@@ -8,11 +8,16 @@ import {
 describe('terminalCommands', () => {
   it('lists the main content sections and help hints', async () => {
     const listOutput = await runCommand('ls')
+    const invalidListOutput = await runCommand('ls about')
     const helpOutput = await runCommand('help')
 
     expect(listOutput).toContain('Content sections:')
     expect(listOutput).toContain('  about')
     expect(listOutput).toContain('  experience')
+    expect(invalidListOutput).toEqual([
+      'Usage: ls',
+      'Tip: use `cat <section>` to read content.',
+    ])
     expect(helpOutput).toContain(
       '  cat <section>       Read a section or item (e.g. cat about)',
     )
@@ -109,7 +114,7 @@ describe('terminalCommands', () => {
     expect(getTerminalAutocomplete('dow')).toBe('download-cv')
     expect(getTerminalAutocomplete('proj')).toBe('project')
     expect(getTerminalAutocomplete('clo')).toBe('close')
-    expect(getTerminalAutocomplete('ls ab')).toBe('ls about')
+    expect(getTerminalAutocomplete('ls ab')).toBeNull()
     expect(getTerminalAutocomplete('project ai')).toBe('project ai-chat-api')
     expect(getTerminalAutocomplete('cat experience enh')).toBe(
       'cat experience enhesa',
@@ -124,9 +129,7 @@ describe('terminalCommands', () => {
       expect.arrayContaining(['ls', 'cat', 'help']),
     )
     expect(getTerminalAutocompleteSuggestions('pro')).toEqual(['project'])
-    expect(getTerminalAutocompleteSuggestions('ls ')).toEqual(
-      expect.arrayContaining(['ls about', 'ls experience', 'ls projects']),
-    )
+    expect(getTerminalAutocompleteSuggestions('ls ')).toEqual([])
   })
 
   it('hides api-backed command autocompletions when the api is unavailable', () => {

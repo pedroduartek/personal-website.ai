@@ -556,7 +556,7 @@ describe('TerminalShell email command', () => {
     })
   })
 
-  it('autocompletes compound command sections with tab', async () => {
+  it('does not autocomplete extra ls arguments', async () => {
     const user = userEvent.setup()
 
     renderTerminalShell()
@@ -570,7 +570,7 @@ describe('TerminalShell email command', () => {
     await user.type(input, 'ls ab')
     fireEvent.keyDown(input, { key: 'Tab' })
 
-    expect(input).toHaveValue('ls about')
+    expect(input).toHaveValue('ls ab')
   })
 
   it('filters suggestion choices as the user types', async () => {
