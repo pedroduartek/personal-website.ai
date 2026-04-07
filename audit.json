@@ -1,18 +1,7 @@
 {
-  "actions": [],
-  "advisories": {},
-  "muted": [],
-  "metadata": {
-    "vulnerabilities": {
-      "info": 0,
-      "low": 0,
-      "moderate": 0,
-      "high": 0,
-      "critical": 0
-    },
-    "dependencies": 509,
-    "devDependencies": 0,
-    "optionalDependencies": 0,
-    "totalDependencies": 509
+  "error": {
+    "code": "ENOLOCK",
+    "summary": "This command requires an existing lockfile.",
+    "detail": "Try creating one first with: npm i --package-lock-only\nOriginal error: loadVirtual requires existing shrinkwrap file"
   }
 }

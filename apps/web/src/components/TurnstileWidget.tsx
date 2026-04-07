@@ -1,9 +1,10 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { useTheme } from '../app/theme/ThemeProvider'
 import {
   TURNSTILE_SCRIPT_SRC,
   TURNSTILE_TEST_TOKEN,
   getTurnstileSiteKey,
+  getTurnstileWidgetSize,
 } from '../utils/turnstile'
 
 type TurnstileWidgetProps = {
@@ -70,6 +71,34 @@ export default function TurnstileWidget({
   const lastResetSignalRef = useRef(resetSignal)
   const [errorMessage, setErrorMessage] = useState('')
   const [isVerified, setIsVerified] = useState(false)
+  const [widgetSize, setWidgetSize] = useState<'compact' | 'flexible' | null>(
+    null,
+  )
+
+  useLayoutEffect(() => {
+    const container = containerRef.current
+    if (!container) return
+
+    const updateWidgetSize = () => {
+      const nextWidgetSize = getTurnstileWidgetSize(container.clientWidth)
+      setWidgetSize((current) =>
+        current === nextWidgetSize ? current : nextWidgetSize,
+      )
+    }
+
+    updateWidgetSize()
+
+    if (typeof ResizeObserver === 'undefined') {
+      return
+    }
+
+    const observer = new ResizeObserver(() => {
+      updateWidgetSize()
+    })
+
+    observer.observe(container)
+    return () => observer.disconnect()
+  }, [])
 
   useEffect(() => {
     if (!siteKey) {
@@ -83,6 +112,10 @@ export default function TurnstileWidget({
       setErrorMessage('')
       setIsVerified(true)
       onTokenChange(TURNSTILE_TEST_TOKEN)
+      return
+    }
+
+    if (!widgetSize) {
       return
     }
 
@@ -103,7 +136,7 @@ export default function TurnstileWidget({
           sitekey: siteKey,
           action,
           theme,
-          size: 'flexible',
+          size: widgetSize,
           callback: (token) => {
             if (disposed) return
             setErrorMessage('')
@@ -146,7 +179,7 @@ export default function TurnstileWidget({
         widgetIdRef.current = null
       }
     }
-  }, [action, onTokenChange, siteKey, theme])
+  }, [action, onTokenChange, siteKey, theme, widgetSize])
 
   useEffect(() => {
     if (lastResetSignalRef.current === resetSignal) {
@@ -194,8 +227,8 @@ export default function TurnstileWidget({
 
   const widgetFrameClassName =
     variant === 'terminal'
-      ? 'overflow-hidden rounded-md border border-gray-800 bg-black/30 p-2 shadow-[inset_0_1px_0_rgba(255,255,255,0.03)]'
-      : ''
+      ? 'min-w-0 overflow-hidden rounded-md border border-gray-800 bg-black/30 p-2 shadow-[inset_0_1px_0_rgba(255,255,255,0.03)]'
+      : 'min-w-0 overflow-hidden'
   const errorClassName =
     variant === 'terminal'
       ? 'mt-2 font-mono text-xs text-red-300'
