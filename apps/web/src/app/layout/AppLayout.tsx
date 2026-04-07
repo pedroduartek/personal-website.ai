@@ -32,14 +32,7 @@ const desktopHeaderLinks = [
   { to: '/contact', label: 'Contact', icon: 'chat' },
 ] as const
 
-const mobileHeaderLinks = [
-  { to: '/about', label: 'About Me' },
-  { to: '/experience', label: 'Professional Experience' },
-  { to: '/projects', label: 'Personal Projects' },
-  { to: '/education', label: 'Education' },
-  { to: '/skills', label: 'Skills' },
-  { to: '/contact', label: 'Contacts' },
-] as const
+const mobileHeaderLinks = desktopHeaderLinks
 
 export default function AppLayout() {
   const { isOpen, close, open } = useCommandPalette()
@@ -294,20 +287,21 @@ function Header({
         </div>
 
         {isMenuOpen && !headerLayout.showDesktopNav ? (
-          <div className="mt-4 rounded-[1.5rem] border border-border bg-surface p-3 shadow-lg shadow-slate-950/5">
+          <div className="absolute right-3 top-full z-30 mt-3 w-[min(22rem,calc(100vw-1.5rem))] rounded-[1.5rem] border border-border bg-surface p-3 shadow-xl shadow-slate-950/10 backdrop-blur-sm">
             <Link
               to="/cv"
               onClick={() => setIsMenuOpen(false)}
-              className="mb-2 inline-flex w-full items-center justify-start rounded-md px-2 py-2 text-sm font-semibold text-chat transition-colors duration-200 hover:text-blue-700"
+              className="mb-3 inline-flex min-h-[72px] w-full items-center justify-center rounded-2xl border border-blue-200/70 bg-blue-50/70 px-4 py-3 text-sm font-semibold text-chat transition-colors duration-200 hover:border-blue-300 hover:bg-blue-50 hover:text-blue-700 dark:border-blue-500/20 dark:bg-blue-500/10"
             >
               Download CV
             </Link>
 
-            <div className="flex flex-col gap-1">
+            <div className="grid grid-cols-2 gap-2">
               {mobileHeaderLinks.map((link) => (
                 <MobileNavLink
                   key={link.to}
                   to={link.to}
+                  icon={link.icon}
                   onClick={() => setIsMenuOpen(false)}
                 >
                   {link.label}
@@ -452,22 +446,35 @@ function HeaderNavIcon({
 
 function MobileNavLink({
   to,
+  icon,
   children,
   onClick,
-}: { to: string; children: React.ReactNode; onClick?: () => void }) {
+}: {
+  to: string
+  icon: (typeof mobileHeaderLinks)[number]['icon']
+  children: React.ReactNode
+  onClick?: () => void
+}) {
   return (
     <RouterNavLink
       to={to}
       onClick={onClick}
       className={({ isActive }) =>
-        `inline-flex items-center border-b border-transparent px-2 py-2.5 text-sm font-medium transition-colors duration-200 ${
+        `inline-flex min-h-[88px] flex-col items-center justify-center gap-2 rounded-2xl border px-3 py-3 text-center text-sm font-medium transition-all duration-200 ${
           isActive
-            ? 'border-border text-foreground'
-            : 'text-foreground-muted hover:text-foreground'
+            ? 'border-foreground bg-surface-muted text-foreground shadow-sm shadow-slate-950/5'
+            : 'border-transparent bg-surface text-foreground-muted hover:border-border hover:bg-surface-muted hover:text-foreground'
         }`
       }
     >
-      {children}
+      {({ isActive }) => (
+        <>
+          <span className="flex h-6 items-center justify-center">
+            <HeaderNavIcon icon={icon} isActive={isActive} />
+          </span>
+          <span className="leading-tight">{children}</span>
+        </>
+      )}
     </RouterNavLink>
   )
 }

@@ -187,4 +187,22 @@ describe('AppLayout terminal window', () => {
       ).toBeInTheDocument()
     })
   })
+
+  it('uses desktop-style labels in the mobile header menu', async () => {
+    const user = userEvent.setup()
+
+    renderLayout(['/'])
+
+    await user.click(
+      await screen.findByRole('button', { name: /toggle menu/i }),
+    )
+
+    expect(screen.getByRole('link', { name: 'Download CV' })).toBeVisible()
+    expect(screen.getByRole('link', { name: 'About' })).toBeVisible()
+    expect(screen.getByRole('link', { name: 'Experience' })).toBeVisible()
+    expect(screen.getByRole('link', { name: 'Projects' })).toBeVisible()
+    expect(screen.getByRole('link', { name: 'Education' })).toBeVisible()
+    expect(screen.getByRole('link', { name: 'Skills' })).toBeVisible()
+    expect(screen.getByRole('link', { name: 'Contact' })).toBeVisible()
+  })
 })
