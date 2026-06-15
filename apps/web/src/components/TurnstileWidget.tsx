@@ -78,26 +78,7 @@ export default function TurnstileWidget({
   useLayoutEffect(() => {
     const container = containerRef.current
     if (!container) return
-
-    const updateWidgetSize = () => {
-      const nextWidgetSize = getTurnstileWidgetSize(container.clientWidth)
-      setWidgetSize((current) =>
-        current === nextWidgetSize ? current : nextWidgetSize,
-      )
-    }
-
-    updateWidgetSize()
-
-    if (typeof ResizeObserver === 'undefined') {
-      return
-    }
-
-    const observer = new ResizeObserver(() => {
-      updateWidgetSize()
-    })
-
-    observer.observe(container)
-    return () => observer.disconnect()
+    setWidgetSize(getTurnstileWidgetSize(container.clientWidth))
   }, [])
 
   useEffect(() => {
