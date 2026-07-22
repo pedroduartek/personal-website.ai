@@ -38,10 +38,7 @@ export default function ErrorBoundary() {
           >
             Go Back
           </button>
-          <Link
-            to="/"
-            className="theme-button-primary"
-          >
+          <Link to="/" className="theme-button-primary">
             Go Home
           </Link>
         </div>
