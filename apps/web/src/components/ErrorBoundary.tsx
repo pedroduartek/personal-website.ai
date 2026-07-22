@@ -40,7 +40,7 @@ export default function ErrorBoundary() {
           </button>
           <Link
             to="/"
-            className="rounded-lg bg-blue-600 px-6 py-3 text-white hover:bg-blue-500 transition-colors"
+            className="theme-button-primary"
           >
             Go Home
           </Link>

@@ -2,19 +2,27 @@
 @tailwind components;
 @tailwind utilities;
 
+@font-face {
+  font-family: 'Space Grotesk';
+  font-style: normal;
+  font-weight: 300 700;
+  font-display: swap;
+  src: url('/fonts/SpaceGrotesk-variable.woff2') format('woff2');
+}
+
 @layer base {
   :root {
     color-scheme: light;
-    --color-background: 244 247 251;
+    --color-background: 246 248 251;
     --color-surface: 255 255 255;
-    --color-surface-muted: 235 241 248;
-    --color-surface-strong: 226 232 240;
+    --color-surface-muted: 238 242 247;
+    --color-surface-strong: 225 231 240;
     --color-header: 255 255 255;
-    --color-border: 203 213 225;
+    --color-border: 209 217 227;
     --color-border-strong: 148 163 184;
-    --color-foreground: 15 23 42;
-    --color-foreground-muted: 51 65 85;
-    --color-foreground-subtle: 100 116 139;
+    --color-foreground: 17 24 39;
+    --color-foreground-muted: 55 65 81;
+    --color-foreground-subtle: 107 116 132;
     --color-overlay: 15 23 42;
     --color-terminal-bg: 7 16 33;
     --color-terminal-green: 126 231 135;
@@ -24,21 +32,21 @@
 
   .dark {
     color-scheme: dark;
-    --color-background: 33 40 48;
-    --color-surface: 38 44 54;
-    --color-surface-muted: 29 36 46;
-    --color-surface-strong: 21 27 35;
-    --color-header: 21 27 35;
-    --color-border: 75 85 99;
-    --color-border-strong: 107 114 128;
-    --color-foreground: 248 250 252;
-    --color-foreground-muted: 203 213 225;
-    --color-foreground-subtle: 148 163 184;
-    --color-overlay: 2 6 23;
+    --color-background: 12 15 20;
+    --color-surface: 22 27 34;
+    --color-surface-muted: 17 21 28;
+    --color-surface-strong: 30 37 46;
+    --color-header: 15 19 25;
+    --color-border: 42 50 62;
+    --color-border-strong: 68 80 96;
+    --color-foreground: 237 241 246;
+    --color-foreground-muted: 176 186 199;
+    --color-foreground-subtle: 120 132 147;
+    --color-overlay: 2 6 12;
     --color-terminal-bg: 7 16 33;
     --color-terminal-green: 126 231 135;
     --color-terminal-accent: 154 209 255;
-    --color-scrollbar: 99 102 241;
+    --color-scrollbar: 16 185 129;
   }
 
   html,
@@ -50,10 +58,25 @@
   html {
     background-color: rgb(var(--color-background));
     overflow-y: scroll;
+    scroll-behavior: smooth;
+  }
+
+  ::selection {
+    background-color: rgb(16 185 129 / 0.28);
   }
 
   body {
     @apply bg-background text-foreground antialiased transition-colors duration-200;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: 'Space Grotesk', ui-sans-serif, system-ui, sans-serif;
+    letter-spacing: -0.015em;
   }
 
   :where(
@@ -67,7 +90,7 @@
       [role="link"],
       [tabindex]:not([tabindex="-1"])
     ) {
-    @apply focus:outline-none focus-visible:ring-1 focus-visible:ring-foreground-subtle/25 focus-visible:ring-offset-1 focus-visible:ring-offset-background;
+    @apply focus:outline-none focus-visible:ring-2 focus-visible:ring-brand/50 focus-visible:ring-offset-1 focus-visible:ring-offset-background;
   }
 }
 
@@ -77,7 +100,15 @@
   }
 
   .theme-card-hover {
-    @apply rounded-lg border border-border bg-surface shadow-sm shadow-slate-950/5 transition-all duration-300 hover:scale-[1.02] hover:border-border-strong hover:bg-surface-muted hover:shadow-lg;
+    @apply rounded-lg border border-border bg-surface shadow-sm shadow-slate-950/5 transition-all duration-300 hover:scale-[1.02] hover:border-brand/40 hover:bg-surface-muted hover:shadow-lg;
+  }
+
+  .theme-eyebrow {
+    @apply inline-flex items-center gap-2 rounded-full border border-brand/30 bg-brand/10 px-3 py-1 text-xs font-semibold uppercase tracking-wider text-brand;
+  }
+
+  .theme-button-primary {
+    @apply inline-flex items-center justify-center gap-2 rounded-lg bg-brand px-5 py-2.5 font-semibold text-white shadow-sm transition-all duration-200 hover:scale-[1.03] hover:bg-brand-700 hover:shadow-lg;
   }
 
   .theme-button-secondary {

@@ -207,7 +207,9 @@ function Header({
               fetchPriority="high"
               decoding="sync"
             />
-            <span className="text-lg sm:text-xl">PEDRODUARTEK</span>
+            <span className="font-display text-lg font-bold tracking-tight sm:text-xl">
+              PEDRODUARTEK
+            </span>
           </Link>
 
           {headerLayout.showCommandButton ? (
@@ -291,7 +293,7 @@ function Header({
             <Link
               to="/cv"
               onClick={() => setIsMenuOpen(false)}
-              className="mb-3 inline-flex min-h-[72px] w-full items-center justify-center rounded-2xl border border-blue-200/70 bg-blue-50/70 px-4 py-3 text-sm font-semibold text-chat transition-colors duration-200 hover:border-blue-300 hover:bg-blue-50 hover:text-blue-700 dark:border-blue-500/20 dark:bg-blue-500/10"
+              className="mb-3 inline-flex min-h-[72px] w-full items-center justify-center rounded-2xl border border-brand/30 bg-brand/10 px-4 py-3 text-sm font-semibold text-brand transition-colors duration-200 hover:border-brand/50 hover:bg-brand/15"
             >
               Download CV
             </Link>
@@ -553,7 +555,7 @@ function HeaderDesktopNavGroup({
           ))}
         </div>
 
-        <span className="inline-flex min-h-[72px] items-center rounded-2xl px-3 py-2 text-sm font-semibold text-chat">
+        <span className="inline-flex min-h-[72px] items-center rounded-2xl px-3 py-2 text-sm font-semibold text-brand">
           Download CV
         </span>
       </div>
@@ -572,7 +574,7 @@ function HeaderDesktopNavGroup({
 
       <Link
         to="/cv"
-        className="inline-flex min-h-[72px] items-center rounded-2xl px-3 py-2 text-sm font-semibold text-chat transition-colors duration-200 hover:text-blue-700"
+        className="inline-flex min-h-[72px] items-center rounded-2xl px-3 py-2 text-sm font-semibold text-brand transition-colors duration-200 hover:text-brand-700"
       >
         Download CV
       </Link>

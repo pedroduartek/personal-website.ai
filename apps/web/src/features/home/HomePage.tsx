@@ -30,7 +30,8 @@ export default function HomePage() {
         <section className="mb-12 lg:mb-16">
           <div className="grid gap-8 lg:grid-cols-[minmax(0,1.05fr)_minmax(320px,0.95fr)] lg:items-center lg:gap-12">
             <div>
-              <h1 className="mb-4 text-4xl font-bold text-foreground lg:text-6xl">
+              <p className="theme-eyebrow mb-4">C# · .NET · Microservices</p>
+              <h1 className="mb-4 font-display text-4xl font-bold tracking-tight text-foreground lg:text-6xl">
                 {profile.name}
               </h1>
               <p className="mb-4 text-xl text-foreground-muted lg:text-2xl">
@@ -72,6 +73,18 @@ export default function HomePage() {
                   development: accelerating learning and iteration without
                   giving up judgment, ownership, or quality.
                 </p>
+              </div>
+
+              <div className="flex flex-wrap items-center gap-3">
+                <Link to="/contact" className="theme-button-primary">
+                  Get in touch
+                </Link>
+                <Link
+                  to="/projects"
+                  className="theme-button-secondary-prominent"
+                >
+                  View projects
+                </Link>
               </div>
             </div>
 

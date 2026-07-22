@@ -120,7 +120,7 @@ export default function NewGuidPage() {
               <button
                 type="button"
                 onClick={() => setGuid(generateGuid())}
-                className="inline-flex items-center justify-center rounded-lg bg-blue-600 px-5 py-3 text-sm font-semibold text-white transition-all duration-200 hover:scale-[1.02] hover:bg-blue-700 hover:shadow-lg hover:shadow-blue-600/30"
+                className="theme-button-primary"
               >
                 Generate and copy another
               </button>

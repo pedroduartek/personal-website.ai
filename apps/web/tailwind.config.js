@@ -32,11 +32,19 @@ export default {
           accent: 'rgb(var(--color-terminal-accent) / <alpha-value>)',
         },
         brand: {
-          DEFAULT: '#347D39',
-          700: '#2e6e31',
+          DEFAULT: '#10B981',
+          700: '#059669',
         },
         chat: '#1D4ED8',
         linkedin: '#0077B5',
+      },
+      fontFamily: {
+        display: [
+          '"Space Grotesk"',
+          'ui-sans-serif',
+          'system-ui',
+          'sans-serif',
+        ],
       },
       keyframes: {
         slideDown: {

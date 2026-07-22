@@ -20,9 +20,9 @@ type Props = {
 const variantClasses: Record<StyledLinkVariant, string> = {
   card: 'inline-block rounded border border-border bg-surface-muted px-2 py-0.5 text-sm text-foreground no-underline transition-all duration-200 hover:translate-x-1 hover:border-border-strong hover:bg-surface-strong hover:shadow-lg',
   'inline-underline':
-    'inline font-medium text-foreground underline decoration-chat/55 decoration-2 underline-offset-[0.24em] transition-colors duration-200 hover:text-chat hover:decoration-chat',
+    'inline font-medium text-foreground underline decoration-brand/55 decoration-2 underline-offset-[0.24em] transition-colors duration-200 hover:text-brand hover:decoration-brand',
   'inline-accent':
-    'inline rounded-[0.35rem] px-1 py-0.5 font-medium text-foreground underline decoration-transparent decoration-2 underline-offset-4 shadow-[inset_0_-0.58em_0_0_rgba(52,125,57,0.14)] transition-all duration-200 hover:text-foreground hover:shadow-[inset_0_-0.95em_0_0_rgba(52,125,57,0.2)]',
+    'inline rounded-[0.35rem] px-1 py-0.5 font-medium text-foreground underline decoration-transparent decoration-2 underline-offset-4 shadow-[inset_0_-0.58em_0_0_rgba(16,185,129,0.16)] transition-all duration-200 hover:text-foreground hover:shadow-[inset_0_-0.95em_0_0_rgba(16,185,129,0.24)]',
   'inline-chip':
     'inline rounded-md border border-border bg-surface-muted px-2 py-0.5 text-[0.92em] font-medium text-foreground no-underline transition-all duration-200 hover:border-border-strong hover:bg-surface hover:shadow-sm',
 }
