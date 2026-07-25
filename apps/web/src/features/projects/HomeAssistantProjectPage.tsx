@@ -28,9 +28,34 @@ const capabilityCards = [
     description:
       'This setup is not just lights. The same Home Assistant instance coordinates gates, covers, climate, alarm, cameras, reminders, and a handful of background routines that make the house feel calmer without constantly demanding attention.',
   },
+  {
+    title: 'Solar and energy optimization',
+    description:
+      'A Deye inverter and battery drive a self-consumption layer. High-draw appliances switch on real solar surplus (derived from the inverter telemetry, since the raw cloud values are unreliable), the grid-charge window is tuned to the tariff, and a dashboard tracks production, consumption, and estimated savings.',
+  },
+  {
+    title: 'Pool on solar surplus',
+    description:
+      'Pool filtration runs a daily minimum but prefers hours with solar surplus, and the heat pump is coordinated the same way, so the pool costs less to run without any manual scheduling.',
+  },
+  {
+    title: 'AI cameras and security',
+    description:
+      'Reolink cameras add person and animal detection, floodlights, and sirens, integrated alongside a mailbox-open detector and the household alarm, all surfaced in the same room-based dashboard.',
+  },
+  {
+    title: 'Secure remote access',
+    description:
+      'The home is reachable from anywhere over a Cloudflare Tunnel with no open ports, plus 2FA, a WAF geo-block, and rate limiting, instead of exposing the server to the internet.',
+  },
 ]
 
 const standoutAutomations = [
+  {
+    title: 'Solar-surplus load shifting',
+    description:
+      'High-draw loads (pool pump, car charger) only run when the battery is charging from genuine solar surplus, never by discharging it, using derived power sensors. An office bulb doubles as a live grid-use indicator, turning green, yellow, or red so the state of the house is readable at a glance.',
+  },
   {
     title: 'Last-person-leaves routine',
     description:
@@ -155,11 +180,11 @@ export default function HomeAssistantProjectPage() {
               Standout Automations
             </h2>
             <p className="mb-4">
-              Among the live automations, these three best show the kind of
-              state coordination that makes the system feel intentional rather
-              than gimmicky.
+              Among the live automations, these four best show the kind of state
+              coordination that makes the system feel intentional rather than
+              gimmicky.
             </p>
-            <div className="grid gap-4 md:grid-cols-3">
+            <div className="grid gap-4 md:grid-cols-2">
               {standoutAutomations.map((automation) => (
                 <div key={automation.title} className="theme-card p-5">
                   <h3 className="mb-2 text-lg font-semibold text-foreground">

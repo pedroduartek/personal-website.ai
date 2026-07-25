@@ -118,23 +118,24 @@ function getProjects(): Project[] {
       slug: 'home-assistant',
       title: 'Home Assistant: Local-First Smart Home',
       description:
-        'Self-hosted smart home platform built on Home Assistant, with local automations, a room-first dashboard, and a focus on reliability over novelty.',
+        'My self-hosted Home Assistant setup: a local-first smart home that now spans 800+ entities across 14 rooms, with a room-first dashboard, solar and energy optimization, pool automation, AI cameras, and secure remote access, all favouring reliability over novelty.',
       problem:
-        'I wanted a smart home that removed friction from everyday life without turning the house into a gadget demo that only I could understand. That meant local control where possible, clear dashboards for non-technical users, and automations that had to earn their place through reliability rather than novelty.',
+        'I wanted a smart home that removed friction from everyday life without turning the house into a gadget demo that only I could understand. That meant local control where possible, dashboards the whole household can use, and automations, including the energy and solar layer, that earn their place through reliability rather than novelty.',
       approach:
-        'I built the setup around Home Assistant OS, a ZHA-based Zigbee network, mobile presence, and a Lovelace dashboard customized for everyday use. It coordinates lighting, covers, gates, climate, alarm, cameras, and household reminders, with the same rule across every automation: if it adds complexity without clearly improving daily life, it does not stay.',
+        'It runs on Home Assistant OS with a large ZHA Zigbee network, mobile presence, and a Lovelace dashboard organized around rooms. Beyond lighting, covers, gates, climate, alarm and reminders, it now runs a solar and energy layer on a Deye inverter and battery, shifting high-draw appliances (pool pump, car charger, water heater) onto real solar surplus and tracking the savings; pool filtration and heating on that same surplus; Reolink cameras with AI detection; and secure remote access over a Cloudflare Tunnel (no open ports, 2FA, geo-block, rate limiting). The rule across every automation stays the same: if it adds complexity without clearly improving daily life, it does not stay.',
       technologies: [
         'Home Assistant OS',
         'Zigbee (ZHA)',
-        'SkyConnect Coordinator',
+        'Deye Solar & Battery',
+        'Reolink',
+        'Cloudflare Tunnel',
         'Lovelace',
         'HACS',
-        'Nabu Casa',
       ],
       homeHero: {
-        eyebrow: 'Smart Home',
+        eyebrow: 'Smart home & energy',
         summary:
-          'A self-hosted dashboard and automation stack built around rooms, dependable state modeling, and local control instead of gadget-driven novelty.',
+          'A self-hosted, local-first home across 800+ entities and 14 rooms: a room-first dashboard, solar and energy optimization on a Deye inverter and battery, pool automation, and AI cameras.',
         media: {
           src: haScreenshot,
           alt: 'Home Assistant dashboard screenshot',
