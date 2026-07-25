@@ -7,69 +7,36 @@ import PageSEO from '../../components/seo/PageSEO'
 import { projects } from '../../content/projects'
 import duartekScreenshot from '../../images/duartek.webp'
 
-const clientValueCards = [
+const engineeringCards = [
   {
-    title: 'One app for everything',
+    title: 'Local-first automation platform',
     description:
-      'Lights, blinds, climate, TV, cameras, gates, and even the pool, brought into a single app whatever the brand, without replacing the hardware the client already owns.',
+      'Home Assistant OS with a ZHA Zigbee mesh coordinating lights, covers, climate, cameras, and gates. It runs on a server in the home and keeps working without internet, with vendor cloud used only where a device leaves no local option.',
   },
   {
-    title: 'Local and private',
+    title: 'Secure remote access',
     description:
-      'The system runs on a server in the client’s home. It keeps working without internet and does not depend on any vendor’s cloud, so control and data stay with the client.',
+      'Remote access is served over a Cloudflare Tunnel with no open ports, plus 2FA, a WAF geo-block, and rate limiting. One dedicated subdomain per install, so the home is reachable from anywhere without exposing it to the internet.',
   },
   {
-    title: 'Grows room by room',
+    title: 'Solar-driven energy automations',
     description:
-      'A low-risk fixed-price base package first, then budgeted expansions at the client’s pace. Land-and-expand instead of a large, all-at-once proprietary install.',
+      'High-draw appliances (water heater, pool pump, car charger) switch on real solar surplus using sensors derived from the inverter telemetry, since the raw cloud values are unreliable. The goal is measurable savings, not just monitoring.',
   },
   {
-    title: 'Solar and energy optimization',
+    title: 'Performance-tuned website',
     description:
-      'The signature vertical: run high-draw appliances on real solar surplus, tune battery and grid use, and report the savings. A capability most competitors cannot offer credibly.',
+      'duartek.pt is a React 19 + TypeScript + Vite SPA. The brand wall serves resized WebP logos, lazy-loaded and deliberately kept out of the JS bundle via a Vite inline-limit rule, so payload stays small and below-the-fold assets load on demand.',
   },
   {
-    title: 'Ongoing support',
+    title: 'SEO and social sharing',
     description:
-      'A light remote retainer keeps the system updated, backed up, secured, and reachable from anywhere, with one included visit per month and warranty visits at no cost.',
+      'Open Graph and Twitter metadata point at a generated 1200x630 share image, with canonical URLs resolved to the correct host so link previews render without a redirect.',
   },
   {
-    title: 'Personal, local service',
+    title: 'Asset and document tooling',
     description:
-      'Hardware sourced and installed directly, with close follow-up, priced for the Portuguese market and well below what proprietary installers like Control4 or KNX charge.',
-  },
-]
-
-const businessBuildCards = [
-  {
-    title: 'Brand and identity',
-    description:
-      'The DU•ARTEK wordmark, colour palette, favicon, and social/profile assets, all designed to read as a real, trustworthy small business.',
-  },
-  {
-    title: 'Marketing website',
-    description:
-      'duartek.pt, a React single-page site with the offer, FAQ, pricing, and a wall of the brands I can integrate, so a visitor immediately sees their own devices supported.',
-  },
-  {
-    title: 'Flyer, digital and print',
-    description:
-      'A door-to-door flyer produced both as a digital image and a print-ready A5 file with bleed and crop marks, kept in sync with the website copy.',
-  },
-  {
-    title: 'Quote and contract',
-    description:
-      'A fill-in quote and a service-and-retainer contract template covering warranty, support packs, travel, remote access, data protection, and cancellation.',
-  },
-  {
-    title: 'Quoting safeguard',
-    description:
-      'A living supported-integrations reference, checked against a client’s existing devices before any quote, so the “one app for everything” promise is never over-sold.',
-  },
-  {
-    title: 'Repeatable install kit',
-    description:
-      'A documented Home Assistant OS install process so setting up each new client’s server is fast, consistent, and low-risk.',
+      'Python scripts drive headless Chrome and Pillow to generate the brand, favicon, profile and social images, and print-ready flyers (A5 with 3mm bleed and crop marks) straight from source, so every surface stays consistent.',
   },
 ]
 
@@ -162,40 +129,17 @@ export default function DuartekProjectPage() {
 
           <section className="mb-12">
             <h2 className="mb-4 text-2xl font-semibold text-foreground">
-              How It Works
+              How It's Built
             </h2>
             <p className="mb-4">{project.approach}</p>
           </section>
 
           <section className="mb-12">
             <h2 className="mb-4 text-2xl font-semibold text-foreground">
-              What Clients Get
+              Engineering Highlights
             </h2>
-            <div className="grid gap-4 md:grid-cols-2">
-              {clientValueCards.map((card) => (
-                <div key={card.title} className="theme-card p-5">
-                  <h3 className="mb-2 text-lg font-semibold text-foreground">
-                    {card.title}
-                  </h3>
-                  <p className="text-sm text-foreground-muted">
-                    {card.description}
-                  </p>
-                </div>
-              ))}
-            </div>
-          </section>
-
-          <section className="mb-12">
-            <h2 className="mb-4 text-2xl font-semibold text-foreground">
-              A Complete Business
-            </h2>
-            <p className="mb-4">
-              DUARTEK is a full service business, not just a Home Assistant
-              install. Everything the offer needs is in place and consistent
-              across every client touchpoint.
-            </p>
             <div className="grid gap-4 md:grid-cols-3">
-              {businessBuildCards.map((card) => (
+              {engineeringCards.map((card) => (
                 <div key={card.title} className="theme-card p-5">
                   <h3 className="mb-2 text-lg font-semibold text-foreground">
                     {card.title}
@@ -214,10 +158,11 @@ export default function DuartekProjectPage() {
             </h2>
             <div className="theme-card p-6">
               <p className="mb-4 text-sm text-foreground-muted">
-                The marketing site leads with the everyday frustration (an app
-                per brand), then shows the single-app solution, the offer, and
-                the brands I can integrate. Built as a fast React SPA and
-                deployed on Vercel at duartek.pt.
+                duartek.pt is a React 19 + TypeScript + Vite single-page app on
+                Vercel. It is content-driven and fully responsive, and tuned for
+                performance: the brand wall serves optimized WebP logos, lazy
+                loaded and kept out of the JS bundle, alongside Open Graph
+                metadata and a generated social image.
               </p>
               <button
                 type="button"

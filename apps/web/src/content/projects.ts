@@ -12,19 +12,20 @@ function getProjects(): Project[] {
       slug: 'duartek',
       title: 'DUARTEK: Local-First Smart Homes',
       description:
-        'DUARTEK designs, installs, and supports local-first smart homes built on Home Assistant. It brings the devices a client already owns into a single app, without cloud lock-in, and runs as a real service business with a defined offer, pricing, support plans, and a signature focus on solar and energy optimization.',
+        'A local-first smart-home product I built end to end: a React marketing site, a Home Assistant based automation platform with secure remote access, and the Python tooling that generates its brand, favicon, social image, and print assets. Engineered for reliability and privacy over cloud lock-in.',
       problem:
-        'Most homeowners assume a real smart home means an expensive proprietary system or a drawer full of single-brand apps that never work together. DUARTEK offers a different path: a local-first smart home that unifies the devices people already own into one app, keeps working without internet, and grows at the client’s pace instead of demanding a large upfront system.',
+        'Taking a local-first smart home from a personal setup to something that runs reliably in other homes is an engineering problem more than a hardware one: a dependable Zigbee network, secure remote access with no open ports, automations driven by live solar and energy data, and a fast, well-built site to present it, all favouring reliability and privacy over cloud dependence.',
       approach:
-        'DUARTEK works on a land-and-expand model: a fixed-price base package (a home server plus consolidating the client’s existing devices into one app, installed and handed over), followed by budgeted expansions and a light support plan. The standout capability is solar and energy optimization: running high-draw appliances on real solar surplus and reporting the savings. Brand, website, pricing, quotes, and a service contract are all in place, so it operates as a complete business rather than a one-off install.',
+        'The platform runs on Home Assistant OS with a ZHA Zigbee network and secure remote access through a Cloudflare Tunnel (no open ports, 2FA, geo-blocking, and rate limiting). Energy automations shift high-draw appliances onto real solar surplus using sensors derived from the inverter telemetry. The public site at duartek.pt is a React 19, TypeScript, and Vite SPA on Vercel, with a performance-tuned brand wall (optimized WebP, lazy-loaded, kept out of the JS bundle) and Open Graph metadata. A set of Python scripts generates the brand, favicon, social image, and print-ready flyers programmatically via headless Chrome.',
       technologies: [
         'Home Assistant OS',
-        'Zigbee',
-        'Solar & Energy',
+        'Zigbee (ZHA)',
         'React 19',
         'TypeScript',
+        'Vite',
         'Tailwind CSS',
         'Cloudflare Tunnel',
+        'Python',
         'Vercel',
       ],
       links: {
@@ -32,9 +33,9 @@ function getProjects(): Project[] {
         demo: 'https://www.duartek.pt',
       },
       homeHero: {
-        eyebrow: 'Smart-home business',
+        eyebrow: 'Full-stack product',
         summary:
-          'A local-first smart-home service on Home Assistant: one app for the devices a client already owns, with support plans and a solar and energy optimization focus.',
+          'A local-first smart-home product on Home Assistant: a React site on Vercel, secure remote access over Cloudflare Tunnel, and solar-driven energy automations.',
         media: {
           src: duartekScreenshot,
           alt: 'DUARTEK marketing website homepage',

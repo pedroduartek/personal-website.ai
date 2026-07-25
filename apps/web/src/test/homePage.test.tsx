@@ -122,7 +122,7 @@ describe('HomePage hero carousel', () => {
       }),
     ).toHaveAttribute('href', '/projects/duartek')
     expect(
-      within(carousel).getByText(/Smart-home business/i),
+      within(carousel).getByText(/Full-stack product/i),
     ).toBeInTheDocument()
   })
 
