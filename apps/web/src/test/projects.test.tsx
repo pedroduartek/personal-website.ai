@@ -22,8 +22,8 @@ describe('DuartekProjectPage', () => {
       screen.getByRole('link', { name: /visit the duartek website/i }),
     ).toHaveAttribute('href', 'https://www.duartek.pt')
     expect(
-      screen.getByRole('link', { name: /duartek website source on github/i }),
-    ).toHaveAttribute('href', 'https://github.com/pedroduartek/duartek')
+      screen.queryByRole('link', { name: /source on github/i }),
+    ).not.toBeInTheDocument()
   })
 })
 

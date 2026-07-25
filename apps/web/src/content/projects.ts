@@ -29,7 +29,6 @@ function getProjects(): Project[] {
         'Vercel',
       ],
       links: {
-        github: 'https://github.com/pedroduartek/duartek',
         demo: 'https://www.duartek.pt',
       },
       homeHero: {
