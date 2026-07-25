@@ -10,13 +10,13 @@ function getProjects(): Project[] {
   return [
     {
       slug: 'duartek',
-      title: 'DUARTEK: Boutique Smart-Home Business',
+      title: 'DUARTEK: Local-First Smart Homes',
       description:
-        'A local-first smart-home business built on Home Assistant. I design, install, and support smart homes that bring everything a client already owns into a single app, and I built the whole thing end to end: the offer, the brand, the website, the flyer, the quote, and the service contract.',
+        'DUARTEK designs, installs, and supports local-first smart homes built on Home Assistant. It brings the devices a client already owns into a single app, without cloud lock-in, and runs as a real service business with a defined offer, pricing, support plans, and a signature focus on solar and energy optimization.',
       problem:
-        'After years running my own Home Assistant setup, I kept meeting people who assumed a real smart home meant an expensive proprietary system or a drawer full of one-brand apps that never talk to each other. I wanted to turn that experience into a small, deliberate side business: give regular homeowners a local-first smart home, with one app for the devices they already have and no cloud lock-in, and build every part of it myself rather than reselling someone else’s stack.',
+        'Most homeowners assume a real smart home means an expensive proprietary system or a drawer full of single-brand apps that never work together. DUARTEK offers a different path: a local-first smart home that unifies the devices people already own into one app, keeps working without internet, and grows at the client’s pace instead of demanding a large upfront system.',
       approach:
-        'DUARTEK is a land-and-expand service: a fixed-price base package (a home server plus consolidating the client’s existing devices into one app, installed and handed over) followed by budgeted expansions and a light support retainer. Around that I built the full stack: a React marketing site (duartek.pt), a print and digital flyer, a fill-in quote and a service and retainer contract, a supported-integrations reference used as a quoting safeguard, and a repeatable Home Assistant OS install kit. The signature differentiator is solar and energy optimization: running appliances on real solar surplus and reporting the savings.',
+        'DUARTEK works on a land-and-expand model: a fixed-price base package (a home server plus consolidating the client’s existing devices into one app, installed and handed over), followed by budgeted expansions and a light support plan. The standout capability is solar and energy optimization: running high-draw appliances on real solar surplus and reporting the savings. Brand, website, pricing, quotes, and a service contract are all in place, so it operates as a complete business rather than a one-off install.',
       technologies: [
         'Home Assistant OS',
         'Zigbee',
@@ -34,7 +34,7 @@ function getProjects(): Project[] {
       homeHero: {
         eyebrow: 'Smart-home business',
         summary:
-          'A boutique, local-first smart-home service built on Home Assistant, with the brand, website, pricing, and contract all designed end to end.',
+          'A local-first smart-home service on Home Assistant: one app for the devices a client already owns, with support plans and a solar and energy optimization focus.',
         media: {
           src: duartekScreenshot,
           alt: 'DUARTEK marketing website homepage',

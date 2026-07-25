@@ -34,9 +34,9 @@ const clientValueCards = [
       'A light remote retainer keeps the system updated, backed up, secured, and reachable from anywhere, with one included visit per month and warranty visits at no cost.',
   },
   {
-    title: 'Boutique, one client at a time',
+    title: 'Personal, local service',
     description:
-      'Concierge hardware sourcing and close follow-up, priced for the Portuguese market and well below what proprietary installers like Control4 or KNX charge.',
+      'Hardware sourced and installed directly, with close follow-up, priced for the Portuguese market and well below what proprietary installers like Control4 or KNX charge.',
   },
 ]
 
@@ -70,19 +70,6 @@ const businessBuildCards = [
     title: 'Repeatable install kit',
     description:
       'A documented Home Assistant OS install process so setting up each new client’s server is fast, consistent, and low-risk.',
-  },
-]
-
-const learningCards = [
-  {
-    title: 'The product is more than the software',
-    description:
-      'Pricing, a clear warranty, and a contract someone can actually sign shape trust as much as the dashboards do. Designing the offer was as much work as the tech, and it mattered just as much.',
-  },
-  {
-    title: 'Constraints make the offer',
-    description:
-      'A side business with limited evenings and weekends pushed every decision toward remote-first delivery and a base package that stays deliberately small, so quality and margin per client come before scale.',
   },
 ]
 
@@ -200,12 +187,12 @@ export default function DuartekProjectPage() {
 
           <section className="mb-12">
             <h2 className="mb-4 text-2xl font-semibold text-foreground">
-              Beyond the Code
+              A Complete Business
             </h2>
             <p className="mb-4">
-              DUARTEK is not just a Home Assistant install. To turn it into a
-              real business I designed and built everything around the service
-              too, keeping every surface consistent as decisions evolved.
+              DUARTEK is a full service business, not just a Home Assistant
+              install. Everything the offer needs is in place and consistent
+              across every client touchpoint.
             </p>
             <div className="grid gap-4 md:grid-cols-3">
               {businessBuildCards.map((card) => (
@@ -243,24 +230,6 @@ export default function DuartekProjectPage() {
                   className="w-full cursor-pointer rounded-lg border border-border-strong transition-opacity hover:opacity-90"
                 />
               </button>
-            </div>
-          </section>
-
-          <section className="mb-12">
-            <h2 className="mb-4 text-2xl font-semibold text-foreground">
-              What I Learned
-            </h2>
-            <div className="grid gap-4 md:grid-cols-2">
-              {learningCards.map((card) => (
-                <div key={card.title} className="theme-card p-5">
-                  <h3 className="mb-2 text-lg font-semibold text-foreground">
-                    {card.title}
-                  </h3>
-                  <p className="text-sm text-foreground-muted">
-                    {card.description}
-                  </p>
-                </div>
-              ))}
             </div>
           </section>
         </div>
