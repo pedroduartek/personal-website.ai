@@ -1,49 +1,49 @@
-import { useState } from 'react'
 import { Link } from 'react-router-dom'
-import Lightbox from 'yet-another-react-lightbox'
-import Zoom from 'yet-another-react-lightbox/plugins/zoom'
-import 'yet-another-react-lightbox/styles.css'
+import WebsitePeek from '../../components/WebsitePeek'
 import PageSEO from '../../components/seo/PageSEO'
 import { projects } from '../../content/projects'
-import duartekScreenshot from '../../images/duartek.webp'
 
-const engineeringCards = [
+const projectHighlights = [
   {
-    title: 'Local-first automation platform',
+    title: 'Content-driven architecture',
     description:
-      'Home Assistant OS with a ZHA Zigbee mesh coordinating lights, covers, climate, cameras, and gates. It runs on a server in the home and keeps working without internet, with vendor cloud used only where a device leaves no local option.',
+      'The copy, pricing, FAQ, and the list of integrable brands live in structured content files. That keeps the wording consistent across the site and makes future updates a data edit instead of a hunt through components.',
   },
   {
-    title: 'Secure remote access',
+    title: 'Performance-tuned brand wall',
     description:
-      'Remote access is served over a Cloudflare Tunnel with no open ports, plus 2FA, a WAF geo-block, and rate limiting. One dedicated subdomain per install, so the home is reachable from anywhere without exposing it to the internet.',
-  },
-  {
-    title: 'Solar-driven energy automations',
-    description:
-      'High-draw appliances (water heater, pool pump, car charger) switch on real solar surplus using sensors derived from the inverter telemetry, since the raw cloud values are unreliable. The goal is measurable savings, not just monitoring.',
-  },
-  {
-    title: 'Performance-tuned website',
-    description:
-      'duartek.pt is a React 19 + TypeScript + Vite SPA. The brand wall serves resized WebP logos, lazy-loaded and deliberately kept out of the JS bundle via a Vite inline-limit rule, so payload stays small and below-the-fold assets load on demand.',
+      'Dozens of brand logos are served as resized WebP, lazy-loaded and deliberately kept out of the JS bundle via a Vite inline-limit rule, so the payload stays small and below-the-fold assets only load when scrolled into view.',
   },
   {
     title: 'SEO and social sharing',
     description:
-      'Open Graph and Twitter metadata point at a generated 1200x630 share image, with canonical URLs resolved to the correct host so link previews render without a redirect.',
+      'Each page sets Open Graph and Twitter metadata pointing at a generated 1200x630 share image, with canonical URLs resolved to the correct host so link previews render cleanly without a redirect.',
   },
   {
-    title: 'Asset and document tooling',
+    title: 'Full CI/CD pipeline',
     description:
-      'Python scripts drive headless Chrome and Pillow to generate the brand, favicon, profile and social images, and print-ready flyers (A5 with 3mm bleed and crop marks) straight from source, so every surface stays consistent.',
+      'Every push runs automated checks: linting and formatting, unit tests, a dependency audit that blocks on high/critical advisories, a bundle-size budget, and Lighthouse budgets for desktop and mobile.',
+  },
+]
+
+const projectPriorities = [
+  {
+    title: 'Make a different idea obvious',
+    description:
+      'A local-first smart home is an unfamiliar concept for most homeowners. The site had to lead with the everyday frustration, an app per brand, and land the single-app solution in seconds, without feeling like a tech demo.',
+  },
+  {
+    title: 'Reliability over novelty',
+    description:
+      'I favoured a small, fast, maintainable stack (React and Vite, content-driven, fully CI-gated) so the site stays easy to evolve and every change ships behind the same quality checks.',
   },
 ]
 
 export default function DuartekProjectPage() {
-  const [lightboxOpen, setLightboxOpen] = useState(false)
   const project = projects.find((p) => p.slug === 'duartek')
   if (!project) return null
+  const liveSiteUrl = project.links?.demo
+
   return (
     <>
       <PageSEO
@@ -56,6 +56,7 @@ export default function DuartekProjectPage() {
             : `https://www.pedroduartek.com/projects/${project.slug}`
         }
       />
+
       <div className="container mx-auto px-4 py-8 animate-slide-down md:py-16">
         <Link
           to="/projects"
@@ -83,7 +84,21 @@ export default function DuartekProjectPage() {
           {project.description}
         </p>
 
-        <div className="mb-6 flex flex-wrap gap-2">
+        <div className="mb-8 flex flex-wrap items-center gap-4">
+          {liveSiteUrl && (
+            <a
+              href={liveSiteUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mr-5 inline-flex items-center gap-2 rounded-lg border border-brand-700 bg-brand px-4 py-2 text-center text-white font-semibold transition-all duration-200 hover:scale-105 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-brand/50 transform origin-left scale-110"
+              aria-label="Visit live site"
+            >
+              Visit live site
+            </a>
+          )}
+        </div>
+
+        <div className="mb-8 flex flex-wrap gap-2">
           {project.technologies.map((tech) => (
             <span
               key={tech}
@@ -92,31 +107,6 @@ export default function DuartekProjectPage() {
               {tech}
             </span>
           ))}
-        </div>
-
-        <div className="mb-8 flex flex-wrap gap-3">
-          {project.links?.demo && (
-            <a
-              href={project.links.demo}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="theme-button-primary inline-flex items-center gap-2"
-              aria-label="Visit the DUARTEK website"
-            >
-              Visit duartek.pt <span aria-hidden>→</span>
-            </a>
-          )}
-          {project.links?.github && (
-            <a
-              href={project.links.github}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="theme-button-secondary inline-flex items-center gap-2"
-              aria-label="DUARTEK website source on GitHub"
-            >
-              View source
-            </a>
-          )}
         </div>
 
         <div className="theme-prose">
@@ -129,17 +119,37 @@ export default function DuartekProjectPage() {
 
           <section className="mb-12">
             <h2 className="mb-4 text-2xl font-semibold text-foreground">
-              How It's Built
+              How I Built It
             </h2>
             <p className="mb-4">{project.approach}</p>
           </section>
 
           <section className="mb-12">
             <h2 className="mb-4 text-2xl font-semibold text-foreground">
-              Engineering Highlights
+              Live Homepage Preview
             </h2>
-            <div className="grid gap-4 md:grid-cols-3">
-              {engineeringCards.map((card) => (
+            <p className="mb-4">
+              This is a live embed of the production homepage. It is
+              intentionally non-interactive inside the portfolio, so clicking
+              anywhere on the preview opens the real site instead of interacting
+              with the iframe.
+            </p>
+            {liveSiteUrl && (
+              <WebsitePeek
+                href={liveSiteUrl}
+                domain="duartek.pt"
+                title="DUARTEK homepage"
+                className="mx-auto w-full md:max-w-[80%]"
+              />
+            )}
+          </section>
+
+          <section className="mb-12">
+            <h2 className="mb-4 text-2xl font-semibold text-foreground">
+              What It Includes
+            </h2>
+            <div className="grid gap-4 md:grid-cols-2">
+              {projectHighlights.map((card) => (
                 <div key={card.title} className="theme-card p-5">
                   <h3 className="mb-2 text-lg font-semibold text-foreground">
                     {card.title}
@@ -154,41 +164,29 @@ export default function DuartekProjectPage() {
 
           <section className="mb-12">
             <h2 className="mb-4 text-2xl font-semibold text-foreground">
-              The Website
+              What Mattered Most
             </h2>
-            <div className="theme-card p-6">
-              <p className="mb-4 text-sm text-foreground-muted">
-                duartek.pt is a React 19 + TypeScript + Vite single-page app on
-                Vercel. It is content-driven and fully responsive, and tuned for
-                performance: the brand wall serves optimized WebP logos, lazy
-                loaded and kept out of the JS bundle, alongside Open Graph
-                metadata and a generated social image.
-              </p>
-              <button
-                type="button"
-                onClick={() => setLightboxOpen(true)}
-                className="mt-2 w-full overflow-hidden rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-              >
-                <img
-                  src={duartekScreenshot}
-                  alt="DUARTEK marketing website homepage"
-                  className="w-full cursor-pointer rounded-lg border border-border-strong transition-opacity hover:opacity-90"
-                />
-              </button>
+            <p className="mb-4">
+              The interesting part was not technical novelty on its own. It was
+              using modern frontend tools to present a real service with a
+              specific tone and audience, and keeping the whole thing fast,
+              consistent, and easy to maintain.
+            </p>
+            <div className="grid gap-4 md:grid-cols-2">
+              {projectPriorities.map((card) => (
+                <div key={card.title} className="theme-card p-5">
+                  <h3 className="mb-2 text-lg font-semibold text-foreground">
+                    {card.title}
+                  </h3>
+                  <p className="text-sm text-foreground-muted">
+                    {card.description}
+                  </p>
+                </div>
+              ))}
             </div>
           </section>
         </div>
       </div>
-
-      <Lightbox
-        open={lightboxOpen}
-        close={() => setLightboxOpen(false)}
-        slides={[{ src: duartekScreenshot }]}
-        plugins={[Zoom]}
-        zoom={{ maxZoomPixelRatio: 3, scrollToZoom: true }}
-        carousel={{ finite: true }}
-        controller={{ closeOnBackdropClick: true }}
-      />
     </>
   )
 }

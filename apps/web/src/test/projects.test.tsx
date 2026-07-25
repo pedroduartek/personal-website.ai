@@ -19,7 +19,7 @@ describe('DuartekProjectPage', () => {
       screen.getByRole('heading', { name: /DUARTEK/i, level: 1 }),
     ).toBeInTheDocument()
     expect(
-      screen.getByRole('link', { name: /visit the duartek website/i }),
+      screen.getByRole('link', { name: /visit live site/i }),
     ).toHaveAttribute('href', 'https://www.duartek.pt')
     expect(
       screen.queryByRole('link', { name: /source on github/i }),

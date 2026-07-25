@@ -10,31 +10,30 @@ function getProjects(): Project[] {
   return [
     {
       slug: 'duartek',
-      title: 'DUARTEK: Local-First Smart Homes',
+      title: 'DUARTEK Website',
       description:
-        'A local-first smart-home product I built end to end: a React marketing site, a Home Assistant based automation platform with secure remote access, and the Python tooling that generates its brand, favicon, social image, and print assets. Engineered for reliability and privacy over cloud lock-in.',
+        'Public-facing website for DUARTEK, my local-first smart-home service built on Home Assistant. A fast, content-driven React site that presents the single-app value, the brands it can integrate, and how the service works, backed by a full CI/CD pipeline.',
       problem:
-        'Taking a local-first smart home from a personal setup to something that runs reliably in other homes is an engineering problem more than a hardware one: a dependable Zigbee network, secure remote access with no open ports, automations driven by live solar and energy data, and a fast, well-built site to present it, all favouring reliability and privacy over cloud dependence.',
+        'DUARTEK needed a site that could explain a genuinely different idea, a local-first smart home that unifies the devices people already own into one app, to non-technical homeowners, and do it in seconds without the generic-template feel. The site is the front door to the service, so it had to build trust and make the value obvious fast.',
       approach:
-        'The platform runs on Home Assistant OS with a ZHA Zigbee network and secure remote access through a Cloudflare Tunnel (no open ports, 2FA, geo-blocking, and rate limiting). Energy automations shift high-draw appliances onto real solar surplus using sensors derived from the inverter telemetry. The public site at duartek.pt is a React 19, TypeScript, and Vite SPA on Vercel, with a performance-tuned brand wall (optimized WebP, lazy-loaded, kept out of the JS bundle) and Open Graph metadata. A set of Python scripts generates the brand, favicon, social image, and print-ready flyers programmatically via headless Chrome.',
+        'I built it as a content-driven React 19, TypeScript, and Vite single-page app on Vercel. The copy, pricing, FAQ, and brand list live in structured content files; the brand wall serves resized WebP logos, lazy-loaded and deliberately kept out of the JS bundle; and Open Graph metadata plus a generated share image handle link previews. Everything is gated by CI (lint, tests, dependency audit, bundle size, and Lighthouse budgets), and a set of Python scripts generates the brand, favicon, social image, and print-ready flyers so every surface stays consistent.',
       technologies: [
-        'Home Assistant OS',
-        'Zigbee (ZHA)',
         'React 19',
         'TypeScript',
         'Vite',
         'Tailwind CSS',
-        'Cloudflare Tunnel',
-        'Python',
+        'React Router',
+        'Vitest',
+        'Biome',
         'Vercel',
       ],
       links: {
         demo: 'https://www.duartek.pt',
       },
       homeHero: {
-        eyebrow: 'Full-stack product',
+        eyebrow: 'Smart-home service website',
         summary:
-          'A local-first smart-home product on Home Assistant: a React site on Vercel, secure remote access over Cloudflare Tunnel, and solar-driven energy automations.',
+          'The marketing site for a local-first smart-home service: a fast, content-driven React SPA with a performance-tuned brand wall, Open Graph, and full CI/CD.',
         media: {
           src: duartekScreenshot,
           alt: 'DUARTEK marketing website homepage',

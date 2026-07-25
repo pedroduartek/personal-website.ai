@@ -118,11 +118,11 @@ describe('HomePage hero carousel', () => {
 
     expect(
       within(carousel).getByRole('link', {
-        name: /DUARTEK: Local-First Smart Homes/i,
+        name: /DUARTEK Website/i,
       }),
     ).toHaveAttribute('href', '/projects/duartek')
     expect(
-      within(carousel).getByText(/Full-stack product/i),
+      within(carousel).getByText(/Smart-home service website/i),
     ).toBeInTheDocument()
   })
 
@@ -208,7 +208,7 @@ describe('HomePage hero carousel', () => {
 
     expect(
       within(carousel).getByRole('link', {
-        name: /DUARTEK: Local-First Smart Homes/i,
+        name: /DUARTEK Website/i,
       }),
     ).toHaveAttribute('href', '/projects/duartek')
   })
@@ -234,7 +234,7 @@ describe('HomePage hero carousel', () => {
 
     expect(
       within(carousel).getByRole('link', {
-        name: /DUARTEK: Local-First Smart Homes/i,
+        name: /DUARTEK Website/i,
       }),
     ).toHaveAttribute('href', '/projects/duartek')
   })
@@ -595,7 +595,7 @@ describe('HomePage hero carousel', () => {
 
     expect(
       within(carousel).getByRole('link', {
-        name: /DUARTEK: Local-First Smart Homes/i,
+        name: /DUARTEK Website/i,
       }),
     ).toHaveClass('h-[31rem]')
 
