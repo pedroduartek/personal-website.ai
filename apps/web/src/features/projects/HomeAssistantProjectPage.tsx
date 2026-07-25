@@ -212,7 +212,7 @@ export default function HomeAssistantProjectPage() {
               <button
                 type="button"
                 onClick={() => setLightboxOpen(true)}
-                className="mt-2 w-full overflow-hidden rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="mt-2 block mx-auto w-full overflow-hidden rounded-lg md:max-w-[80%] focus:outline-none focus:ring-2 focus:ring-blue-500"
               >
                 <img
                   src={haScreenshot}
