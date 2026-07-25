@@ -58,20 +58,14 @@ export default function ProjectsPage() {
                   )}
                 </div>
                 <div className="flex flex-wrap gap-2">
-                  {project.technologies.slice(0, 3).map((tech) => {
-                    const displayTech =
-                      tech === 'SkyConnect Coordinator'
-                        ? 'IoT Automation'
-                        : tech
-                    return (
-                      <span key={tech} className="theme-chip">
-                        <span className="flex-shrink-0">
-                          <TechIcon tech={displayTech} className="w-5 h-5" />
-                        </span>
-                        <span className="leading-normal">{displayTech}</span>
+                  {project.technologies.slice(0, 3).map((tech) => (
+                    <span key={tech} className="theme-chip">
+                      <span className="flex-shrink-0">
+                        <TechIcon tech={tech} className="w-5 h-5" />
                       </span>
-                    )
-                  })}
+                      <span className="leading-normal">{tech}</span>
+                    </span>
+                  ))}
                 </div>
               </div>
             </Link>

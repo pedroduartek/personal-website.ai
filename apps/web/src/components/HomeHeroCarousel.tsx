@@ -548,20 +548,15 @@ export default function HomeHeroCarousel({ slides }: HomeHeroCarouselProps) {
               </p>
 
               <div className="mb-5 flex flex-wrap gap-2">
-                {techPreview.map((tech) => {
-                  const displayTech =
-                    tech === 'SkyConnect Coordinator' ? 'IoT Automation' : tech
-
-                  return (
-                    <span
-                      key={tech}
-                      className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/8 px-3 py-1.5 text-xs text-slate-100 backdrop-blur-sm"
-                    >
-                      <TechIcon tech={displayTech} className="h-5 w-5" />
-                      <span>{displayTech}</span>
-                    </span>
-                  )
-                })}
+                {techPreview.map((tech) => (
+                  <span
+                    key={tech}
+                    className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/8 px-3 py-1.5 text-xs text-slate-100 backdrop-blur-sm"
+                  >
+                    <TechIcon tech={tech} className="h-5 w-5" />
+                    <span>{tech}</span>
+                  </span>
+                ))}
               </div>
 
               <div className="mt-auto inline-flex items-center gap-2 text-sm font-semibold text-white">
@@ -685,20 +680,15 @@ export default function HomeHeroCarousel({ slides }: HomeHeroCarouselProps) {
               </p>
 
               <div className="mb-5 flex flex-wrap gap-2">
-                {techPreview.map((tech) => {
-                  const displayTech =
-                    tech === 'SkyConnect Coordinator' ? 'IoT Automation' : tech
-
-                  return (
-                    <span
-                      key={tech}
-                      className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/8 px-3 py-1.5 text-xs text-slate-100 backdrop-blur-sm"
-                    >
-                      <TechIcon tech={displayTech} className="h-5 w-5" />
-                      <span>{displayTech}</span>
-                    </span>
-                  )
-                })}
+                {techPreview.map((tech) => (
+                  <span
+                    key={tech}
+                    className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/8 px-3 py-1.5 text-xs text-slate-100 backdrop-blur-sm"
+                  >
+                    <TechIcon tech={tech} className="h-5 w-5" />
+                    <span>{tech}</span>
+                  </span>
+                ))}
               </div>
 
               <div className="mt-auto inline-flex items-center gap-2 text-sm font-semibold text-white">
