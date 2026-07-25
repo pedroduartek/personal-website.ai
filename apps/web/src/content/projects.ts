@@ -1,3 +1,4 @@
+import duartekScreenshot from '../images/duartek.webp'
 import haScreenshot from '../images/ha.webp'
 import ollamaSlidePreview from '../images/ollama_slide.webp'
 import { getExperience } from '../utils/experience'
@@ -7,6 +8,43 @@ function getProjects(): Project[] {
   const experience = getExperience()
 
   return [
+    {
+      slug: 'duartek',
+      title: 'DUARTEK: Boutique Smart-Home Business',
+      description:
+        'A local-first smart-home business built on Home Assistant. I design, install, and support smart homes that bring everything a client already owns into a single app, and I built the whole thing end to end: the offer, the brand, the website, the flyer, the quote, and the service contract.',
+      problem:
+        'After years running my own Home Assistant setup, I kept meeting people who assumed a real smart home meant an expensive proprietary system or a drawer full of one-brand apps that never talk to each other. I wanted to turn that experience into a small, deliberate side business: give regular homeowners a local-first smart home, with one app for the devices they already have and no cloud lock-in, and build every part of it myself rather than reselling someone else’s stack.',
+      approach:
+        'DUARTEK is a land-and-expand service: a fixed-price base package (a home server plus consolidating the client’s existing devices into one app, installed and handed over) followed by budgeted expansions and a light support retainer. Around that I built the full stack: a React marketing site (duartek.pt), a print and digital flyer, a fill-in quote and a service and retainer contract, a supported-integrations reference used as a quoting safeguard, and a repeatable Home Assistant OS install kit. The signature differentiator is solar and energy optimization: running appliances on real solar surplus and reporting the savings.',
+      technologies: [
+        'Home Assistant OS',
+        'Zigbee',
+        'Solar & Energy',
+        'React 19',
+        'TypeScript',
+        'Tailwind CSS',
+        'Cloudflare Tunnel',
+        'Vercel',
+      ],
+      links: {
+        github: 'https://github.com/pedroduartek/duartek',
+        demo: 'https://www.duartek.pt',
+      },
+      homeHero: {
+        eyebrow: 'Smart-home business',
+        summary:
+          'A boutique, local-first smart-home service built on Home Assistant, with the brand, website, pricing, and contract all designed end to end.',
+        media: {
+          src: duartekScreenshot,
+          alt: 'DUARTEK marketing website homepage',
+          fit: 'cover',
+          objectPosition: 'center top',
+        },
+      },
+      featured: true,
+      startDate: '2026-07',
+    },
     {
       slug: 'personal-website',
       title: 'Personal Website',

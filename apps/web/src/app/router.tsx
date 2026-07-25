@@ -11,6 +11,9 @@ const ExperienceDetail = lazy(
 )
 const Projects = lazy(() => import('../features/projects/ProjectsPage'))
 // ProjectDetail removed — dedicated pages are used instead
+const DuartekProject = lazy(
+  () => import('../features/projects/DuartekProjectPage'),
+)
 const HomeAssistantProject = lazy(
   () => import('../features/projects/HomeAssistantProjectPage'),
 )
@@ -45,6 +48,7 @@ export const router = createBrowserRouter([
       { path: 'experience', element: <Experience /> },
       { path: 'experience/:id', element: <ExperienceDetail /> },
       { path: 'projects', element: <Projects /> },
+      { path: 'projects/duartek', element: <DuartekProject /> },
       {
         path: 'projects/personal-website',
         element: <PersonalWebsiteProject />,

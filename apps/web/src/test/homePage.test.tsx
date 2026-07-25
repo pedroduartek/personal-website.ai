@@ -118,11 +118,11 @@ describe('HomePage hero carousel', () => {
 
     expect(
       within(carousel).getByRole('link', {
-        name: /Ourivesaria Rinchoa Website/i,
+        name: /DUARTEK: Boutique Smart-Home Business/i,
       }),
-    ).toHaveAttribute('href', '/projects/ourivesaria-rinchoa')
+    ).toHaveAttribute('href', '/projects/duartek')
     expect(
-      within(carousel).getByText(/Local business website/i),
+      within(carousel).getByText(/designed end to end/i),
     ).toBeInTheDocument()
   })
 
@@ -141,9 +141,9 @@ describe('HomePage hero carousel', () => {
 
     expect(
       within(carousel).getByRole('link', {
-        name: /Home Assistant: Local-First Smart Home/i,
+        name: /Ourivesaria Rinchoa Website/i,
       }),
-    ).toHaveAttribute('href', '/projects/home-assistant')
+    ).toHaveAttribute('href', '/projects/ourivesaria-rinchoa')
   })
 
   it('keeps auto-rotating across the featured project slides', async () => {
@@ -154,6 +154,16 @@ describe('HomePage hero carousel', () => {
     const carousel = screen.getByRole('region', {
       name: /featured project carousel/i,
     })
+
+    act(() => {
+      vi.advanceTimersByTime(3600)
+    })
+
+    expect(
+      within(carousel).getByRole('link', {
+        name: /Ourivesaria Rinchoa Website/i,
+      }),
+    ).toHaveAttribute('href', '/projects/ourivesaria-rinchoa')
 
     act(() => {
       vi.advanceTimersByTime(3600)
@@ -198,9 +208,9 @@ describe('HomePage hero carousel', () => {
 
     expect(
       within(carousel).getByRole('link', {
-        name: /Ourivesaria Rinchoa Website/i,
+        name: /DUARTEK: Boutique Smart-Home Business/i,
       }),
-    ).toHaveAttribute('href', '/projects/ourivesaria-rinchoa')
+    ).toHaveAttribute('href', '/projects/duartek')
   })
 
   it('supports arrow key navigation when the carousel is focused', async () => {
@@ -216,17 +226,17 @@ describe('HomePage hero carousel', () => {
 
     expect(
       within(carousel).getByRole('link', {
-        name: /Home Assistant: Local-First Smart Home/i,
+        name: /Ourivesaria Rinchoa Website/i,
       }),
-    ).toHaveAttribute('href', '/projects/home-assistant')
+    ).toHaveAttribute('href', '/projects/ourivesaria-rinchoa')
 
     fireEvent.keyDown(carousel, { key: 'ArrowLeft' })
 
     expect(
       within(carousel).getByRole('link', {
-        name: /Ourivesaria Rinchoa Website/i,
+        name: /DUARTEK: Boutique Smart-Home Business/i,
       }),
-    ).toHaveAttribute('href', '/projects/ourivesaria-rinchoa')
+    ).toHaveAttribute('href', '/projects/duartek')
   })
 
   it('includes a dedicated AI chat assistant slide', async () => {
@@ -585,7 +595,7 @@ describe('HomePage hero carousel', () => {
 
     expect(
       within(carousel).getByRole('link', {
-        name: /Ourivesaria Rinchoa Website/i,
+        name: /DUARTEK: Boutique Smart-Home Business/i,
       }),
     ).toHaveClass('h-[31rem]')
 

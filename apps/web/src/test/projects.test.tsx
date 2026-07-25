@@ -1,8 +1,31 @@
 import { render, screen } from '@testing-library/react'
 import { MemoryRouter, Route, Routes } from 'react-router-dom'
 import { describe, expect, it } from 'vitest'
+import DuartekProjectPage from '../features/projects/DuartekProjectPage'
 import HomeAssistantProjectPage from '../features/projects/HomeAssistantProjectPage'
 import OurivesariaRinchoaProjectPage from '../features/projects/OurivesariaRinchoaProjectPage'
+
+describe('DuartekProjectPage', () => {
+  it('renders DUARTEK project page with links', () => {
+    render(
+      <MemoryRouter initialEntries={['/projects/duartek']}>
+        <Routes>
+          <Route path="/projects/duartek" element={<DuartekProjectPage />} />
+        </Routes>
+      </MemoryRouter>,
+    )
+
+    expect(
+      screen.getByRole('heading', { name: /DUARTEK/i, level: 1 }),
+    ).toBeInTheDocument()
+    expect(
+      screen.getByRole('link', { name: /visit the duartek website/i }),
+    ).toHaveAttribute('href', 'https://www.duartek.pt')
+    expect(
+      screen.getByRole('link', { name: /duartek website source on github/i }),
+    ).toHaveAttribute('href', 'https://github.com/pedroduartek/duartek')
+  })
+})
 
 describe('HomeAssistantProjectPage', () => {
   it('renders Home Assistant project page', () => {
