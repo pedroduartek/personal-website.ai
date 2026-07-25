@@ -184,6 +184,29 @@ function getProjects(): Project[] {
       featured: true,
       startDate: '2026-02',
     },
+    {
+      slug: 'prod-monitor',
+      title: 'Production Monitor',
+      description:
+        'A synthetic-monitoring service that runs real end-to-end checks against all my production apps every day and emails a report: instantly when something breaks, and a weekly digest when everything is healthy.',
+      problem:
+        'I run several independent production apps (three public sites and a self-hosted API) and wanted to know they were actually working before a user told me otherwise, without paying for a monitoring SaaS or babysitting dashboards. The checks had to be real (a rendered page, a valid certificate, a live API) rather than a shallow ping, and the alerting had to stay quiet when all was well and be immediate when it was not.',
+      approach:
+        'I built it as a small, config-driven Playwright suite that GitHub Actions runs on a daily cron. It loads each site in a real browser and asserts it renders, verifies the Open Graph image resolves, checks that every TLS certificate still has at least two weeks of validity, and confirms the AI chat API is healthy indirectly through the chat launcher on the site, which only appears once the browser reaches the health endpoint. A Node reporter reads the results and sends email through the same Brevo account as the API: any failure alerts immediately, and a passing run only emails once a week.',
+      technologies: [
+        'Playwright',
+        'TypeScript',
+        'GitHub Actions',
+        'Node.js',
+        'Nodemailer',
+        'Brevo',
+      ],
+      links: {
+        github: 'https://github.com/pedroduartek/prod-monitor',
+      },
+      featured: false,
+      startDate: '2026-07',
+    },
   ]
 }
 

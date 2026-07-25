@@ -26,6 +26,9 @@ const OurivesariaRinchoaProject = lazy(
 const AiChatApiProject = lazy(
   () => import('../features/projects/AiChatApiProjectPage'),
 )
+const ProdMonitorProject = lazy(
+  () => import('../features/projects/ProdMonitorProjectPage'),
+)
 const Education = lazy(() => import('../features/education/EducationPage'))
 const Conferences = lazy(
   () => import('../features/conferences/ConferencesPage'),
@@ -59,6 +62,7 @@ export const router = createBrowserRouter([
       },
       { path: 'projects/home-assistant', element: <HomeAssistantProject /> },
       { path: 'projects/ai-chat-api', element: <AiChatApiProject /> },
+      { path: 'projects/prod-monitor', element: <ProdMonitorProject /> },
       { path: 'education', element: <Education /> },
       { path: 'conferences', element: <Conferences /> },
       { path: 'skills', element: <Skills /> },
