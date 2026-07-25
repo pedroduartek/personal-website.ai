@@ -126,7 +126,6 @@ function getProjects(): Project[] {
       technologies: [
         'Home Assistant OS',
         'Zigbee (ZHA)',
-        'Deye Solar & Battery',
         'Reolink',
         'Cloudflare Tunnel',
         'Lovelace',
@@ -196,7 +195,6 @@ function getProjects(): Project[] {
       technologies: [
         'Playwright',
         'TypeScript',
-        'GitHub Actions',
         'Node.js',
         'Nodemailer',
         'Brevo',
