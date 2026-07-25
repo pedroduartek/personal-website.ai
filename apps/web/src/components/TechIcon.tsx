@@ -3,6 +3,7 @@ import dockerIcon from '../images/docker_icon.png'
 import dotnetIcon from '../images/dotnet_icon.png'
 import homeAssIcon from '../images/homeassisant_icon.webp'
 import iotIcon from '../images/iot_icon.webp'
+import nodejsIcon from '../images/nodejs_icon.svg'
 import ollamaIcon from '../images/ollama_icon.webp'
 import playwrightIcon from '../images/playwright_icon.png'
 import reactIcon from '../images/react_icon.svg'
@@ -236,6 +237,21 @@ export default function TechIcon({ tech, className }: Props) {
             RR
           </text>
         </svg>
+      </span>
+    )
+  }
+
+  if (t.includes('node')) {
+    return (
+      <span
+        className={`${className ?? ''} inline-block rounded-md overflow-hidden`}
+      >
+        {/* eslint-disable-next-line jsx-a11y/alt-text */}
+        <img
+          src={nodejsIcon}
+          className="w-full h-full object-contain"
+          alt="Node.js"
+        />
       </span>
     )
   }
