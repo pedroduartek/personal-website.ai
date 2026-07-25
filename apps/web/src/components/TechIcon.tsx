@@ -4,6 +4,7 @@ import dotnetIcon from '../images/dotnet_icon.png'
 import homeAssIcon from '../images/homeassisant_icon.webp'
 import iotIcon from '../images/iot_icon.webp'
 import ollamaIcon from '../images/ollama_icon.webp'
+import playwrightIcon from '../images/playwright_icon.png'
 import reactIcon from '../images/react_icon.svg'
 import tsIcon from '../images/typescript_icon.webp'
 import viteIcon from '../images/vite_icon.webp'
@@ -235,6 +236,21 @@ export default function TechIcon({ tech, className }: Props) {
             RR
           </text>
         </svg>
+      </span>
+    )
+  }
+
+  if (t.includes('playwright')) {
+    return (
+      <span
+        className={`${className ?? ''} inline-block rounded-md overflow-hidden`}
+      >
+        {/* eslint-disable-next-line jsx-a11y/alt-text */}
+        <img
+          src={playwrightIcon}
+          className="w-full h-full object-cover"
+          alt="Playwright"
+        />
       </span>
     )
   }
