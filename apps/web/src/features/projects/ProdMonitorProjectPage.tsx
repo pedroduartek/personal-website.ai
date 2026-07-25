@@ -200,11 +200,11 @@ export default function ProdMonitorProjectPage() {
             </h2>
             <div className="theme-card p-6">
               <p className="text-foreground-muted">
-                GitHub Actions runs the suite on a daily cron with no servers to
-                maintain. Test targets live in a single config file, retries
+                GitHub Actions runs the .NET 10 console app on a daily cron,
+                with no servers to maintain. Targets live in one file, retries
                 absorb transient network blips so alerts stay trustworthy, and
-                the full Playwright HTML report is uploaded as an artifact for
-                any run worth inspecting.
+                the process exits non-zero on any failure so the pipeline itself
+                turns red.
               </p>
             </div>
           </section>

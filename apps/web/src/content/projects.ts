@@ -191,14 +191,8 @@ function getProjects(): Project[] {
       problem:
         'I run several independent production apps (three public sites and a self-hosted API) and wanted to know they were actually working before a user told me otherwise, without paying for a monitoring SaaS or babysitting dashboards. The checks had to be real (a rendered page, a valid certificate, a live API) rather than a shallow ping, and the alerting had to stay quiet when all was well and be immediate when it was not.',
       approach:
-        'I built it as a small, config-driven Playwright suite that GitHub Actions runs on a daily cron. It loads each site in a real browser and asserts it renders, verifies the Open Graph image resolves, checks that every TLS certificate still has at least two weeks of validity, and confirms the AI chat API is healthy indirectly through the chat launcher on the site, which only appears once the browser reaches the health endpoint. A Node reporter reads the results and sends email through the same Brevo account as the API: any failure alerts immediately, and a passing run only emails once a week.',
-      technologies: [
-        'Playwright',
-        'TypeScript',
-        'Node.js',
-        'Nodemailer',
-        'Brevo',
-      ],
+        'I built it as a small .NET 10 console app, using Playwright for .NET, that GitHub Actions runs on a daily cron. It loads each site in a real browser and asserts it renders, verifies the Open Graph image resolves, checks that every TLS certificate still has at least two weeks of validity, and confirms the AI chat API is healthy indirectly through the chat launcher on the site, which only appears once the browser reaches the health endpoint. It then emails a report through the same Brevo account as the API (via MailKit): any failure alerts immediately and exits non-zero, while a passing run only emails once a week.',
+      technologies: ['C#', '.NET 10', 'Playwright', 'MailKit', 'Brevo'],
       links: {
         github: 'https://github.com/pedroduartek/prod-monitor',
       },
