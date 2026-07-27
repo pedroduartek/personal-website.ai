@@ -7,7 +7,7 @@ import { skills } from '../content/skills'
 import type { Profile } from '../content/types'
 import myselfUrl from '../images/myself.webp'
 import { CHAT_API_URL, postJson, readApiError } from './apiClient'
-import { calculateYearsFromDate } from './experience'
+import { calculateMonthsFromDate, calculateYearsFromDate } from './experience'
 
 async function imageToAscii(url: string, charsWide?: number) {
   if (typeof document === 'undefined' || typeof window === 'undefined') {
@@ -810,11 +810,19 @@ export async function runCommand(
 
     return [
       `${group.category} skills:`,
-      ...group.skills.map((skill) => {
-        const years = calculateYearsFromDate(skill.startDate)
-        const yearsText = years === 1 ? '1 year' : `${years} years`
-        return `  ${skill.name} - ~${yearsText}`
-      }),
+      ...[...group.skills]
+        .sort((a, b) => a.startDate.localeCompare(b.startDate))
+        .map((skill) => {
+          const years = calculateYearsFromDate(skill.startDate)
+          let experienceText: string
+          if (years >= 1) {
+            experienceText = years === 1 ? '1 year' : `${years} years`
+          } else {
+            const months = Math.max(1, calculateMonthsFromDate(skill.startDate))
+            experienceText = months === 1 ? '1 month' : `${months} months`
+          }
+          return `  ${skill.name} - ~${experienceText}`
+        }),
     ]
   }
 

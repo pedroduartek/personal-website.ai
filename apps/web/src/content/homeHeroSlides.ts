@@ -109,7 +109,8 @@ export const aiChatHeroSlide: HomeHeroFeatureSlide = {
     lines: [
       'What skills does pedro have?',
       'Backend: C#, .NET 6-10, REST APIs, ASP.NET Core, microservices, event-driven systems, and domain-driven design.',
-      'Data and platform: SQL Server, Kafka, PostgreSQL, Elasticsearch, Redis, Docker, Kubernetes, Azure DevOps, plus Home Assistant and Zigbee.',
+      'Data and platform: SQL Server, Kafka, PostgreSQL, Elasticsearch, Redis, Docker, Kubernetes, ArgoCD, Azure DevOps, plus Home Assistant and Zigbee.',
+      'Testing and AI: xUnit, Stryker, Vitest, Playwright, plus Claude, Codex, GitHub Copilot, and Llama.',
     ],
     footer:
       'grounded answers, route-aware links, and Turnstile-protected contact flows',
