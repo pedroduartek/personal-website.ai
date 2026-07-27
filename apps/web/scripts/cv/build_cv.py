@@ -15,6 +15,8 @@ from datetime import datetime
 
 from docx import Document
 from docx.enum.table import WD_TABLE_ALIGNMENT
+from docx.oxml import OxmlElement
+from docx.oxml.ns import qn
 from docx.shared import Inches, Pt, RGBColor
 from PIL import Image
 
@@ -29,8 +31,8 @@ TEAL = RGBColor(0x46, 0x78, 0x86)
 BODY = 12
 HEADER = 16
 NAME = 36
-LEFT_COL = Inches(1.7)
-RIGHT_COL = Inches(4.8)
+LEFT_COL = Inches(1.2)
+RIGHT_COL = Inches(5.3)
 LOGO_W = Inches(0.7)
 
 
@@ -90,6 +92,11 @@ def two_col(doc):
     table.alignment = WD_TABLE_ALIGNMENT.LEFT
     table.autofit = False
     table.allow_autofit = False
+    # Fixed layout so Word honours the narrow left column (forces the 2-word
+    # labels to wrap) instead of auto-sizing to content.
+    layout = OxmlElement("w:tblLayout")
+    layout.set(qn("w:type"), "fixed")
+    table._tbl.tblPr.append(layout)
     left, right = table.rows[0].cells
     left.width = LEFT_COL
     right.width = RIGHT_COL
