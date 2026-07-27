@@ -32,8 +32,8 @@ export default {
           accent: 'rgb(var(--color-terminal-accent) / <alpha-value>)',
         },
         brand: {
-          DEFAULT: '#10B981',
-          700: '#059669',
+          DEFAULT: '#3B8640',
+          700: '#2F6B33',
         },
         chat: '#1D4ED8',
         linkedin: '#0077B5',

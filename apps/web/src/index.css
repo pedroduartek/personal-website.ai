@@ -46,7 +46,7 @@
     --color-terminal-bg: 7 16 33;
     --color-terminal-green: 126 231 135;
     --color-terminal-accent: 154 209 255;
-    --color-scrollbar: 16 185 129;
+    --color-scrollbar: 59 134 64;
   }
 
   html,
@@ -62,7 +62,7 @@
   }
 
   ::selection {
-    background-color: rgb(16 185 129 / 0.28);
+    background-color: rgb(59 134 64 / 0.28);
   }
 
   body {
