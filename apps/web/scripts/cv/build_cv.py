@@ -81,6 +81,7 @@ def section_header(doc, text):
     p = doc.add_paragraph()
     p.paragraph_format.space_before = Pt(12)
     p.paragraph_format.space_after = Pt(4)
+    p.paragraph_format.keep_with_next = True  # header stays with its content
     add_run(p, text, bold=True, size=HEADER)
 
 
