@@ -28,6 +28,7 @@ export const experience: ExperienceItem[] = [
       'PostgreSQL',
       'Entity Framework',
       'Kubernetes',
+      'ArgoCD',
       'Redis',
       'Structurizr',
     ],
