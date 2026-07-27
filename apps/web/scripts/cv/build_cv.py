@@ -61,22 +61,20 @@ def add_rich(p, text, *, size=BODY):
             add_run(p, seg, bold=(i % 2 == 1), size=size)
 
 
-def add_logo(cell, path):
+def logo_png(path):
+    """Convert a source logo (webp) to a temp PNG python-docx can embed."""
     if not path or not os.path.exists(path):
-        return False
+        return None
     try:
         png = os.path.join(
             tempfile.gettempdir(),
             "_cvlogo_" + os.path.splitext(os.path.basename(path))[0] + ".png",
         )
         Image.open(path).convert("RGBA").save(png)
-        p = cell.paragraphs[0]
-        p.paragraph_format.space_after = Pt(3)
-        p.add_run().add_picture(png, width=LOGO_W)
-        return True
+        return png
     except Exception as e:  # noqa: BLE001
         print("logo skipped:", path, e)
-        return False
+        return None
 
 
 def section_header(doc, text):
@@ -98,16 +96,20 @@ def two_col(doc):
 
 
 def left_label(cell, name, logo=None, sub=None):
-    """Left column: optional logo, then bold name, then optional sub-line."""
-    if add_logo(cell, logo):
-        namep = cell.add_paragraph()
-    else:
-        namep = cell.paragraphs[0]
-    namep.paragraph_format.space_after = Pt(0)
-    add_run(namep, name, bold=True)
+    """Left column: logo + name in ONE paragraph (so a page break can never
+    separate them), then an optional sub-line."""
+    p = cell.paragraphs[0]
+    p.paragraph_format.space_after = Pt(0)
+    p.paragraph_format.keep_with_next = True
+    png = logo_png(logo)
+    if png:
+        p.add_run().add_picture(png, width=LOGO_W)
+        p.add_run().add_break()  # line break inside the same (unbreakable) paragraph
+    add_run(p, name, bold=True)
     if sub:
         sp = cell.add_paragraph()
         sp.paragraph_format.space_before = Pt(2)
+        sp.paragraph_format.keep_with_next = True
         add_run(sp, sub)
 
 
