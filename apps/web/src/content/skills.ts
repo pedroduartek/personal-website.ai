@@ -11,7 +11,6 @@ export const skills: SkillGroup[] = [
       { name: 'Microservices architecture', startDate: '2021-03-01' },
       { name: 'Event-driven systems', startDate: '2022-03-01' },
       { name: 'Domain-driven design', startDate: '2022-03-01' },
-      { name: 'Stryker Mutator', startDate: '2025-01-01' },
     ],
   },
   {
@@ -31,6 +30,13 @@ export const skills: SkillGroup[] = [
       { name: 'Kubernetes', startDate: '2023-03-01' },
       { name: 'Azure DevOps Pipelines', startDate: '2023-03-01' },
       { name: 'Structurizr', startDate: '2026-01-01' },
+    ],
+  },
+  {
+    category: 'Testing',
+    skills: [
+      { name: 'Stryker Mutator', startDate: '2025-01-01' },
+      { name: 'Playwright', startDate: '2026-07-01' },
     ],
   },
   {
