@@ -37,7 +37,7 @@ export const skills: SkillGroup[] = [
     category: 'AI',
     skills: [
       { name: 'Claude', startDate: '2026-02-01' },
-      { name: 'Codex', startDate: '2026-02-01' },
+      { name: 'Codex', startDate: '2024-03-01' },
       { name: 'GitHub Copilot', startDate: '2024-03-01' },
       { name: 'Llama', startDate: '2026-02-01' },
     ],
