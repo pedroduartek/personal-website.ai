@@ -47,3 +47,24 @@ export function calculateYearsFromDate(startDate: string): number {
 
   return Math.max(0, years)
 }
+
+/**
+ * Calculate full months from a given start date to current date.
+ * Used to display sub-year experience in months instead of "0 years".
+ * @param startDate - ISO date string (e.g., '2026-02-01')
+ * @returns Number of full months
+ */
+export function calculateMonthsFromDate(startDate: string): number {
+  const start = new Date(startDate)
+  const current = new Date()
+
+  let months =
+    (current.getFullYear() - start.getFullYear()) * 12 +
+    (current.getMonth() - start.getMonth())
+
+  if (current.getDate() < start.getDate()) {
+    months--
+  }
+
+  return Math.max(0, months)
+}

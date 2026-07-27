@@ -1,6 +1,9 @@
 import PageSEO from '../../components/seo/PageSEO'
 import { skills } from '../../content/skills'
-import { calculateYearsFromDate } from '../../utils/experience'
+import {
+  calculateMonthsFromDate,
+  calculateYearsFromDate,
+} from '../../utils/experience'
 
 function getYearsBadgeColor(years: number): string {
   if (years >= 6) return 'bg-blue-600 text-white'
@@ -42,7 +45,17 @@ export default function SkillsPage() {
               <div className="space-y-3">
                 {group.skills.map((skill) => {
                   const years = calculateYearsFromDate(skill.startDate)
-                  const yearsText = years === 1 ? '1 year' : `${years} years`
+                  let experienceText: string
+                  if (years >= 1) {
+                    experienceText = years === 1 ? '1 year' : `${years} years`
+                  } else {
+                    const months = Math.max(
+                      1,
+                      calculateMonthsFromDate(skill.startDate),
+                    )
+                    experienceText =
+                      months === 1 ? '1 month' : `${months} months`
+                  }
 
                   return (
                     <div
@@ -53,7 +66,7 @@ export default function SkillsPage() {
                       <span
                         className={`rounded px-2 py-1 text-xs font-medium ${getYearsBadgeColor(years)}`}
                       >
-                        {yearsText}
+                        {experienceText}
                       </span>
                     </div>
                   )

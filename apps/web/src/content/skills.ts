@@ -11,6 +11,7 @@ export const skills: SkillGroup[] = [
       { name: 'Microservices architecture', startDate: '2021-03-01' },
       { name: 'Event-driven systems', startDate: '2022-03-01' },
       { name: 'Domain-driven design', startDate: '2022-03-01' },
+      { name: 'Stryker Mutator', startDate: '2025-01-01' },
     ],
   },
   {
@@ -33,12 +34,20 @@ export const skills: SkillGroup[] = [
     ],
   },
   {
+    category: 'AI',
+    skills: [
+      { name: 'Claude', startDate: '2026-02-01' },
+      { name: 'Codex', startDate: '2026-02-01' },
+      { name: 'GitHub Copilot', startDate: '2024-03-01' },
+      { name: 'Llama', startDate: '2026-02-01' },
+    ],
+  },
+  {
     category: 'Other',
     skills: [
       { name: 'Tech Lead experience', startDate: '2023-03-01' },
       { name: 'Home Assistant', startDate: '2021-09-01' },
       { name: 'Zigbee', startDate: '2021-09-01' },
-      { name: 'GitHub Copilot', startDate: '2024-03-01' },
     ],
   },
 ]
