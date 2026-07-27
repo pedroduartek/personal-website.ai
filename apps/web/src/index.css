@@ -32,11 +32,11 @@
 
   .dark {
     color-scheme: dark;
-    --color-background: 12 15 20;
-    --color-surface: 22 27 34;
-    --color-surface-muted: 17 21 28;
-    --color-surface-strong: 30 37 46;
-    --color-header: 15 19 25;
+    --color-background: 21 27 35; /* #151B23 */
+    --color-surface: 33 40 48; /* #212830 */
+    --color-surface-muted: 27 33 42; /* #1B212A (intermediate, keeps muted fills/header visible) */
+    --color-surface-strong: 38 44 54; /* #262C36 */
+    --color-header: 27 33 42; /* #1B212A */
     --color-border: 42 50 62;
     --color-border-strong: 68 80 96;
     --color-foreground: 237 241 246;
