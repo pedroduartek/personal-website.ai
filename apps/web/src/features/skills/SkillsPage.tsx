@@ -49,7 +49,9 @@ export default function SkillsPage() {
                 {group.category}
               </h2>
               <div className="space-y-3">
-                {group.skills.map((skill) => {
+                {[...group.skills]
+                  .sort((a, b) => a.startDate.localeCompare(b.startDate))
+                  .map((skill) => {
                   const years = calculateYearsFromDate(skill.startDate)
                   let experienceText: string
                   if (years >= 1) {
