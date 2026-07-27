@@ -35,7 +35,9 @@ export const skills: SkillGroup[] = [
   {
     category: 'Testing',
     skills: [
+      { name: 'xUnit', startDate: '2021-03-01' },
       { name: 'Stryker Mutator', startDate: '2025-01-01' },
+      { name: 'Vitest', startDate: '2026-02-01' },
       { name: 'Playwright', startDate: '2026-07-01' },
     ],
   },
