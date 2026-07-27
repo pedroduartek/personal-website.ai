@@ -5,12 +5,18 @@ import {
   calculateYearsFromDate,
 } from '../../utils/experience'
 
+// Ordinal seniority ramp: every level gets its own colour, ordered as a
+// warm->cool spectrum (recent = warm, veteran = cool). The exact value is also
+// printed as text, so colour only reinforces it. Text colours are chosen for
+// contrast on each badge (dark ink on the light amber, white on the rest).
 function getYearsBadgeColor(years: number): string {
   if (years >= 6) return 'bg-blue-600 text-white'
   if (years === 5) return 'bg-teal-600 text-white'
   if (years === 4) return 'bg-green-600 text-white'
   if (years === 3) return 'bg-lime-600 text-white'
-  return 'bg-surface-muted text-foreground-muted'
+  if (years === 2) return 'bg-amber-500 text-amber-950'
+  if (years === 1) return 'bg-orange-600 text-white'
+  return 'bg-slate-500 text-white' // < 1 year (shown in months)
 }
 
 export default function SkillsPage() {
