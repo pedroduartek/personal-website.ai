@@ -52,33 +52,33 @@ export default function SkillsPage() {
                 {[...group.skills]
                   .sort((a, b) => a.startDate.localeCompare(b.startDate))
                   .map((skill) => {
-                  const years = calculateYearsFromDate(skill.startDate)
-                  let experienceText: string
-                  if (years >= 1) {
-                    experienceText = years === 1 ? '1 year' : `${years} years`
-                  } else {
-                    const months = Math.max(
-                      1,
-                      calculateMonthsFromDate(skill.startDate),
-                    )
-                    experienceText =
-                      months === 1 ? '1 month' : `${months} months`
-                  }
+                    const years = calculateYearsFromDate(skill.startDate)
+                    let experienceText: string
+                    if (years >= 1) {
+                      experienceText = years === 1 ? '1 year' : `${years} years`
+                    } else {
+                      const months = Math.max(
+                        1,
+                        calculateMonthsFromDate(skill.startDate),
+                      )
+                      experienceText =
+                        months === 1 ? '1 month' : `${months} months`
+                    }
 
-                  return (
-                    <div
-                      key={skill.name}
-                      className="flex items-center justify-between"
-                    >
-                      <span className="text-foreground">{skill.name}</span>
-                      <span
-                        className={`rounded px-2 py-1 text-xs font-medium ${getYearsBadgeColor(years)}`}
+                    return (
+                      <div
+                        key={skill.name}
+                        className="flex items-center justify-between"
                       >
-                        {experienceText}
-                      </span>
-                    </div>
-                  )
-                })}
+                        <span className="text-foreground">{skill.name}</span>
+                        <span
+                          className={`rounded px-2 py-1 text-xs font-medium ${getYearsBadgeColor(years)}`}
+                        >
+                          {experienceText}
+                        </span>
+                      </div>
+                    )
+                  })}
               </div>
             </section>
           ))}
