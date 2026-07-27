@@ -1,0 +1,40 @@
+{
+  "phone": "+351 962027094",
+  "summary": "Senior Software Engineer with {{years}} of experience building scalable backend platforms in C# / .NET, microservices, and event-driven architectures with Kafka. Proven track record as a Tech Lead, owning system design, delivery, and production reliability across SQL and NoSQL data stores. Passionate about developer productivity and automation, including running a self-hosted Home Assistant environment with 50+ Zigbee devices and custom automations to experiment with distributed systems and real-world IoT integration.",
+  "skills": [
+    {
+      "group": "Backend",
+      "items": "C# / .NET 6–10, ASP.NET Core, Microservices architecture, REST APIs, Event-driven systems, Domain-driven design."
+    },
+    {
+      "group": "Data & Messaging",
+      "items": "Kafka, SQL Server, PostgreSQL, Elasticsearch, Redis, NoSQL data modelling, High-volume indexing & query optimization."
+    },
+    {
+      "group": "Infrastructure & DevOps",
+      "items": "Docker, Kubernetes, Azure DevOps Pipelines, Cloud-ready architectures, CI/CD migration (GoCD → Azure DevOps)."
+    },
+    {
+      "group": "Architecture & Leadership",
+      "items": "Tech Lead experience, system design for scalable services, production reliability, security & vulnerability reduction to zero in production."
+    },
+    {
+      "group": "Automation & IoT (Personal Projects)",
+      "items": "Self-hosted Home Assistant server, Zigbee network integration (50+ devices), automation design and monitoring."
+    },
+    {
+      "group": "Modern AI",
+      "items": "Practical use of GitHub Copilot and agentic coding tools to improve code quality, automate test creation, and speed up delivery of .NET microservices."
+    }
+  ],
+  "experienceProse": {
+    "1": [
+      "Responsible for the maintenance, design and development of core microservices of the company like Identity Service, User Management, Export Service, Document Service and Home Page.",
+      "I tackled a major performance bottleneck in the Identity Service where the /connect/token endpoint was averaging around 1.5 seconds per request under concurrent load, slowing down authentication across the platform. I redesigned the flow by introducing a distributed cache using Redis with TTL aligned to token expiration and added a circuit breaker to protect the system from cascading failures if Identity or cache dependencies became unstable. This reduced token retrieval latency from about 1.5 seconds to under 100 milliseconds, roughly a 93% improvement, while significantly reducing database load and improving platform resilience and scalability.",
+      "In parallel, I addressed broader platform scalability and delivery challenges where integrations required code changes and release cycles, CI/CD pipelines were difficult to maintain, and several services carried production vulnerabilities. I designed and delivered an Integrations Service that enabled configuration-driven integrations without code changes, led a cross-service initiative that reduced production vulnerabilities to zero, and migrated pipelines from GoCD to Azure DevOps Pipelines to standardize and automate deployments. These changes reduced integration setup delivery time from weeks to hours or days, improved CI/CD reliability and strengthened security posture."
+    ],
+    "3": [
+      "Participated in the development of the initial microservices during the company's transition from a monolithic architecture to a microservice-based approach. I worked on building scalable backend services using C# .NET Core, SQL Server, and Entity Framework, contributing to the foundation of the new distributed platform and helping set patterns for future microservices."
+    ]
+  }
+}

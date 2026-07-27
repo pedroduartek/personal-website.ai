@@ -12,7 +12,8 @@
     "lint": "biome lint ./src",
     "format": "biome format --write ./src",
     "check": "biome check ./src",
-    "size": "size-limit"
+    "size": "size-limit",
+    "cv": "vite-node scripts/cv/export-cv-data.ts && python scripts/cv/build_cv.py"
   },
   "dependencies": {
     "@react-pdf/renderer": "^4.2.0",
@@ -44,6 +45,7 @@
     "tailwindcss": "^3.4.17",
     "typescript": "^5.7.2",
     "vite": "^7.3.5",
+    "vite-node": "^6.0.0",
     "vite-plugin-image-optimizer": "^2.0.3",
     "vitest": "^4.1.9"
   },
