@@ -12,7 +12,7 @@ interface PageSEOProps {
 // og:image in index.html: link-preview bots read the static tag, this component
 // re-applies the same value at runtime. Relative /src/... paths do NOT survive
 // the Vite build, so callers must pass an absolute URL or nothing at all.
-const DEFAULT_OG_IMAGE = 'https://pedroduartek.com/og-image.png'
+const DEFAULT_OG_IMAGE = 'https://www.pedroduartek.com/og-image.png'
 
 export default function PageSEO({
   title,

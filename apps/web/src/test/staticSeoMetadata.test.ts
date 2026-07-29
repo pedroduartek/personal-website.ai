@@ -65,7 +65,7 @@ describe('static SEO metadata in index.html', () => {
     ].map((match) => match[1])
     expect(urls.length).toBe(3)
     for (const url of urls) {
-      expect(url.startsWith('https://pedroduartek.com/')).toBe(true)
+      expect(url.startsWith('https://www.pedroduartek.com/')).toBe(true)
     }
   })
 })
