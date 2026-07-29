@@ -95,7 +95,6 @@ export default function HomeAssistantProjectPage() {
       <PageSEO
         title={project.title}
         description={project.description}
-        image="/src/images/ha.png"
         url={
           typeof window !== 'undefined'
             ? window.location.href

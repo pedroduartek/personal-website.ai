@@ -9,7 +9,6 @@ export default function ProjectsPage() {
       <PageSEO
         title="Projects"
         description="Portfolio of software projects and side projects"
-        image="/src/images/pld_logo_header.png"
         url={
           typeof window !== 'undefined'
             ? window.location.href

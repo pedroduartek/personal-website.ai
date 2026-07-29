@@ -12,7 +12,6 @@ export default function PersonalWebsiteProjectPage() {
       <PageSEO
         title={project.title}
         description={project.description}
-        image="/src/images/pld_logo_header.png"
         url={
           typeof window !== 'undefined'
             ? window.location.href

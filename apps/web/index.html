@@ -35,7 +35,43 @@
           ?.setAttribute('content', metaColors[theme])
       })()
     </script>
-    <title>PEDRODUARTEK</title>
+    <!--
+      Static SEO / social fallback. Crawlers such as the LinkedIn, WhatsApp,
+      Slack and X link-preview bots do not execute JavaScript, so these tags
+      must exist in the served HTML. At runtime PageSEO.tsx finds these exact
+      elements by selector and rewrites their content per route, so keep the
+      attribute forms below (name="..." / property="...") in sync with it.
+    -->
+    <title>Pedro Duarte - Senior Software Engineer, C#/.NET</title>
+    <meta
+      name="description"
+      content="Senior Software Engineer in Lisbon, Portugal, designing backend platforms in C#/.NET, microservices and event-driven systems. Tech lead and mentor."
+    />
+    <link rel="canonical" href="https://pedroduartek.com/" />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="PEDRODUARTEK" />
+    <meta property="og:locale" content="en_US" />
+    <meta property="og:title" content="Pedro Duarte - Senior Software Engineer, C#/.NET" />
+    <meta
+      property="og:description"
+      content="Senior Software Engineer in Lisbon, Portugal, designing backend platforms in C#/.NET, microservices and event-driven systems. Tech lead and mentor."
+    />
+    <meta property="og:url" content="https://pedroduartek.com/" />
+    <meta property="og:image" content="https://pedroduartek.com/og-image.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Pedro Duarte, Senior Software Engineer, pedroduartek.com" />
+
+    <!-- Twitter / X -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Pedro Duarte - Senior Software Engineer, C#/.NET" />
+    <meta
+      name="twitter:description"
+      content="Senior Software Engineer in Lisbon, Portugal, designing backend platforms in C#/.NET, microservices and event-driven systems. Tech lead and mentor."
+    />
+    <meta name="twitter:image" content="https://pedroduartek.com/og-image.png" />
   </head>
   <body>
     <div id="root"></div>

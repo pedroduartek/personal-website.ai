@@ -137,7 +137,6 @@ export default function ContactPage() {
       <PageSEO
         title="Contact"
         description="Get in touch with me"
-        image="/src/images/pld_logo_header.png"
         url={
           typeof window !== 'undefined'
             ? window.location.href

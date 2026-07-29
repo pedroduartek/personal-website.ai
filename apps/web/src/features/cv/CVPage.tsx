@@ -8,7 +8,6 @@ export default function CVPage() {
       <PageSEO
         title="Download CV"
         description="Download my CV as PDF"
-        image="/src/images/pld_logo_header.png"
         url={
           typeof window !== 'undefined'
             ? window.location.href

@@ -11,7 +11,6 @@ export default function AiChatApiProjectPage() {
       <PageSEO
         title={`${project.title} - Self-hosted Conversational AI`}
         description={project.description}
-        image="/src/images/pld_logo_header.png"
         url={
           typeof window !== 'undefined'
             ? window.location.href

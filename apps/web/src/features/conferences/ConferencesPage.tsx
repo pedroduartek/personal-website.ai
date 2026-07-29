@@ -27,7 +27,6 @@ export default function ConferencesPage() {
       <PageSEO
         title="Conferences & Events"
         description="Conferences, events, and community experiences"
-        image="/src/images/azure_dev_summit.png"
         url={
           typeof window !== 'undefined'
             ? window.location.href

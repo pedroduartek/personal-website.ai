@@ -116,7 +116,6 @@ export default function ExperiencePage() {
       <PageSEO
         title="Experience"
         description="Professional experience and work history"
-        image="/src/images/pld_logo_header.png"
         url={
           typeof window !== 'undefined'
             ? window.location.href

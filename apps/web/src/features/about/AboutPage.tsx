@@ -55,7 +55,6 @@ export default function AboutPage() {
       <PageSEO
         title="About"
         description={profile.bio}
-        image="/src/images/pld_logo_header.png"
         url={
           typeof window !== 'undefined'
             ? window.location.href

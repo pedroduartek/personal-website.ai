@@ -9,7 +9,6 @@ export default function EducationPage() {
       <PageSEO
         title="Education & Conferences"
         description="Academic background, certifications, and conference participation"
-        image="/src/images/pld_logo_header.png"
         url={
           typeof window !== 'undefined'
             ? window.location.href

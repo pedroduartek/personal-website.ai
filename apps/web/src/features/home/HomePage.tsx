@@ -19,7 +19,6 @@ export default function HomePage() {
       <PageSEO
         title="Home"
         description={`${profile.name} - ${profile.role}. ${profile.bio}`}
-        image="/src/images/pld_logo_header.png"
         url={
           typeof window !== 'undefined'
             ? window.location.href

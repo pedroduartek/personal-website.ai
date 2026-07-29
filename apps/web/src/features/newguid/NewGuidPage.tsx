@@ -72,7 +72,6 @@ export default function NewGuidPage() {
       <PageSEO
         title="New GUID"
         description="Generate and copy a fresh GUID."
-        image="/src/images/pld_logo_header.png"
         url={
           typeof window !== 'undefined'
             ? window.location.href

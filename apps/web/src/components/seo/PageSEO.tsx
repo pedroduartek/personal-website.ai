@@ -8,6 +8,12 @@ interface PageSEOProps {
   url?: string
 }
 
+// Absolute URL of the shared social card. Must stay in sync with the static
+// og:image in index.html: link-preview bots read the static tag, this component
+// re-applies the same value at runtime. Relative /src/... paths do NOT survive
+// the Vite build, so callers must pass an absolute URL or nothing at all.
+const DEFAULT_OG_IMAGE = 'https://pedroduartek.com/og-image.png'
+
 export default function PageSEO({
   title,
   description,
@@ -16,6 +22,7 @@ export default function PageSEO({
 }: PageSEOProps) {
   useEffect(() => {
     const siteTitle = `${title} | PEDRODUARTEK`
+    const resolvedImage = image ?? DEFAULT_OG_IMAGE
     document.title = siteTitle
 
     const ensureMeta = (
@@ -69,12 +76,10 @@ export default function PageSEO({
       property: 'og:url',
       content: canonicalHref,
     })
-    if (image) {
-      ensureMeta('meta[property="og:image"]', {
-        property: 'og:image',
-        content: image,
-      })
-    }
+    ensureMeta('meta[property="og:image"]', {
+      property: 'og:image',
+      content: resolvedImage,
+    })
 
     // Twitter
     ensureMeta('meta[name="twitter:card"]', {
@@ -93,11 +98,10 @@ export default function PageSEO({
       name: 'twitter:description',
       content: description,
     })
-    if (image)
-      ensureMeta('meta[name="twitter:image"]', {
-        name: 'twitter:image',
-        content: image,
-      })
+    ensureMeta('meta[name="twitter:image"]', {
+      name: 'twitter:image',
+      content: resolvedImage,
+    })
 
     // JSON-LD Person
     const ld = {
@@ -105,8 +109,7 @@ export default function PageSEO({
       '@type': 'Person',
       name: profile.name,
       url: url || window.location.origin,
-      image:
-        image || `${window.location.origin}/src/images/pld_logo_header.png`,
+      image: resolvedImage,
       sameAs: [profile.github, profile.linkedin].filter(Boolean),
     }
 

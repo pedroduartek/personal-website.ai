@@ -131,7 +131,6 @@ export default function ExperienceDetailPage() {
       <PageSEO
         title={`Experience at ${company}`}
         description={companyRoles[0].description[0]}
-        image="/src/images/pld_logo_header.png"
         url={
           typeof window !== 'undefined'
             ? window.location.href

@@ -25,7 +25,6 @@ export default function SkillsPage() {
       <PageSEO
         title="Skills"
         description="Technical skills and expertise across various technologies"
-        image="/src/images/pld_logo_header.png"
         url={
           typeof window !== 'undefined'
             ? window.location.href
